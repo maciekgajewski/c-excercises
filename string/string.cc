@@ -6,8 +6,9 @@
 
 String::String()
 {
-	_value = new char('\0');
+	// TODO: Cheap default constructor.
 	_size = 0;
+	_value = new char('\0');
 }
 
 String::~String()
