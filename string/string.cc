@@ -32,12 +32,14 @@ String::String(const char* s)
 template<typename It> String::String(It first, It last)
 {
 	_size = std::distance(first, last);
-	_value = new char[_size];
+	_value = new char[_size + 1];
 
 	for (std::size_t i = 0; i < _size; i++) {
 		_value[i] = *first;
 		first++;
 	}
+
+	_value[_size + 1] = '\0';
 }
 
 String::iterator String::begin()
