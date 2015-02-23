@@ -23,7 +23,7 @@ String::String(const char* s)
 	while (s[_size] != '\0')
 		_size++;
 
-	_value = new char(_size + 1);
+	_value = new char[_size + 1];
 
 	for (std::size_t i = 0; i <= _size; i++)
 		_value[i] = s[i];
