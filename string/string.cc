@@ -17,11 +17,7 @@ String::String(const char* s)
 	while (s[mSize] != '\0')
 		mSize++;
 
-<<<<<<< HEAD
 	mValue = std::unique_ptr<char[]>(new char[mSize + 1]);
-=======
-	_value = new char[_size + 1];
->>>>>>> c7ffbd50a0e1498c23174c73be62f2db01529059
 
 	for (std::size_t i = 0; i <= mSize; i++)
 		mValue[i] = s[i];
