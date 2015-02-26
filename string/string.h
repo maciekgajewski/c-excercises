@@ -1,6 +1,8 @@
 #pragma once
 
 #include <ostream>
+#include <memory>
+
 
 class String
 {
@@ -119,8 +121,8 @@ public:
 	bool operator==(const char* s) const;
 
 private:
-	value_type* _value;
-	std::size_t _size;
+	std::unique_ptr<value_type[] > mValue;
+	std::size_t mSize = 0;
 };
 
 // Other operators

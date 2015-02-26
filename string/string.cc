@@ -2,71 +2,69 @@
 
 #include <algorithm>
 #include <iterator>
+#include <memory>
 
+const char* EMPTY = "";
 
-String::String()
-{
-	// TODO: Cheap default constructor.
-	_size = 0;
-	_value = new char('\0');
-}
+String::String() {}
 
-String::~String()
-{
-	delete [] _value;
-}
+String::~String() {}
 
 String::String(const char* s)
 {
-	_size = 0;
+	mSize = 0;
 
-	while (s[_size] != '\0')
-		_size++;
+	while (s[mSize] != '\0')
+		mSize++;
 
-	_value = new char(_size + 1);
+	mValue = std::unique_ptr<char[]>(new char[mSize + 1]);
 
-	for (std::size_t i = 0; i <= _size; i++)
-		_value[i] = s[i];
+	for (std::size_t i = 0; i <= mSize; i++)
+		mValue[i] = s[i];
 }
 
 template<typename It> String::String(It first, It last)
 {
-	_size = std::distance(first, last);
-	_value = new char[_size + 1];
+	mSize = std::distance(first, last);
 
-	for (std::size_t i = 0; i < _size; i++) {
-		_value[i] = *first;
+	mValue = std::unique_ptr<char[]>(new char[mSize + 1]);
+
+	for (std::size_t i = 0; i < mSize; i++) {
+		mValue[i] = *first;
 		first++;
 	}
 
-	_value[_size + 1] = '\0';
+	mValue[mSize + 1] = '\0';
 }
 
 String::iterator String::begin()
 {
-	return _value;
+	return mValue.get();
 }
 
 String::iterator String::end()
 {
-	return _value + _size;
+	return mValue.get() + mSize;
 }
 
 std::size_t String::size() const
 {
-	return _size;
+	return mSize;
 }
 
 bool String::empty() const
 {
-	return _size == 0;
+	return mSize == 0;
 }
 
 const char* String::c_str() const
 {
-	return _value;
+	if (empty()) return EMPTY;
+
+	return mValue.get();
 }
 
-bool String::operator==(const char* s) const {
-	return std::equal(_value, _value + _size, s);
+bool String::operator==(const char* s) const
+{
+	return std::equal(mValue.get(), mValue.get() + mSize, s);
 }
