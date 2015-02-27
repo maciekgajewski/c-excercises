@@ -10,6 +10,17 @@ String::String() {}
 
 String::~String() {}
 
+String::String(const String& o)
+{
+	mSize = o.size();
+
+	mValue = std::unique_ptr<value_type[]>(new char[mSize + 1]);
+
+	std::copy_n(o.begin(), mSize, begin());
+
+	mValue[mSize + 1] = '\0';
+}
+
 String::String(const char* s)
 {
 	mSize = 0;
@@ -17,22 +28,18 @@ String::String(const char* s)
 	while (s[mSize] != '\0')
 		mSize++;
 
-	mValue = std::unique_ptr<char[]>(new char[mSize + 1]);
+	mValue = std::unique_ptr<value_type[]>(new char[mSize + 1]);
 
-	for (std::size_t i = 0; i <= mSize; i++)
-		mValue[i] = s[i];
+	std::copy_n(s, mSize + 1, mValue.get());
 }
 
 template<typename It> String::String(It first, It last)
 {
 	mSize = std::distance(first, last);
 
-	mValue = std::unique_ptr<char[]>(new char[mSize + 1]);
+	mValue = new char[mSize + 1]; // Why does direct assignment works here but not in constructors?
 
-	for (std::size_t i = 0; i < mSize; i++) {
-		mValue[i] = *first;
-		first++;
-	}
+	std::copy_n(first, mSize, mValue);
 
 	mValue[mSize + 1] = '\0';
 }
@@ -43,6 +50,16 @@ String::iterator String::begin()
 }
 
 String::iterator String::end()
+{
+	return mValue.get() + mSize;
+}
+
+String::const_iterator String::begin() const
+{
+	return mValue.get();
+}
+
+String::const_iterator String::end() const
 {
 	return mValue.get() + mSize;
 }
@@ -64,7 +81,14 @@ const char* String::c_str() const
 	return mValue.get();
 }
 
+bool String::operator==(const String& s) const
+{
+	return std::equal(begin(), end(), s.begin());
+}
+
 bool String::operator==(const char* s) const
 {
+	if (empty() and s == '\0') return true;
+
 	return std::equal(mValue.get(), mValue.get() + mSize, s);
 }
