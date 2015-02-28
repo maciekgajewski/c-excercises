@@ -103,7 +103,7 @@ bool String::operator==(const char* s) const
 {
 	if (empty() and s == '\0') return true;
 
-	return std::equal(mValue.get(), mValue.get() + mSize, s);
+	return std::equal(begin(), end(), s);
 }
 
 std::ostream& operator<<(std::ostream& stream, const String& s)
