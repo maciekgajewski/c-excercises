@@ -121,7 +121,8 @@ public:
 	bool operator==(const char* s) const;
 
 private:
-	std::unique_ptr<value_type[] > mValue;
+	using char_ptr = std::unique_ptr<value_type[]>;
+	char_ptr mValue;
 	std::size_t mSize = 0;
 };
 
@@ -132,4 +133,3 @@ String operator + (const String& a, const String& b);
 
 // Stream output operator
 std::ostream& operator<<(std::ostream& stream, const String& s);
-

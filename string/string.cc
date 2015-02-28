@@ -3,8 +3,22 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
+#include <string>
+
 
 const char* EMPTY = "";
+
+
+size_t strlen(const char* s)
+{
+	size_t len = 0;
+
+	while (s[len] != '\0')
+		len++;
+
+	return len;
+}
+
 
 String::String() {}
 
@@ -14,7 +28,7 @@ String::String(const String& o)
 {
 	mSize = o.size();
 
-	mValue = std::unique_ptr<value_type[]>(new char[mSize + 1]);
+	mValue = char_ptr(new char[mSize + 1]);
 
 	std::copy_n(o.begin(), mSize, begin());
 
@@ -23,26 +37,25 @@ String::String(const String& o)
 
 String::String(const char* s)
 {
-	mSize = 0;
+	mSize = strlen(s);
 
-	while (s[mSize] != '\0')
-		mSize++;
+	mValue = char_ptr(new char[mSize + 1]);
 
-	mValue = std::unique_ptr<value_type[]>(new char[mSize + 1]);
-
-	std::copy_n(s, mSize + 1, mValue.get());
+	std::copy_n(s, mSize + 1, begin());
 }
 
 template<typename It> String::String(It first, It last)
 {
 	mSize = std::distance(first, last);
 
-	mValue = new char[mSize + 1]; // Why does direct assignment works here but not in constructors?
+	mValue = char_ptr(new char[mSize + 1]);
 
-	std::copy_n(first, mSize, mValue);
+	std::copy_n(first, mSize, begin());
 
 	mValue[mSize + 1] = '\0';
 }
+
+template String::String(std::string::iterator first, std::string::iterator last);
 
 String::iterator String::begin()
 {
@@ -91,4 +104,10 @@ bool String::operator==(const char* s) const
 	if (empty() and s == '\0') return true;
 
 	return std::equal(mValue.get(), mValue.get() + mSize, s);
+}
+
+std::ostream& operator<<(std::ostream& stream, const String& s)
+{
+	for(auto c: s) stream << c;
+	return stream;
 }
