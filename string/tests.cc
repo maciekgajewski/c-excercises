@@ -49,6 +49,16 @@ void test_initialization()
 	assert(c == "7");
 }
 
+void test_empty_string()
+{
+	String a("");
+	String b("");
+	char c[] = {'\0'};
+
+	assert(a == b);
+	assert(a == c);
+}
+
 void test_writable_iterators()
 {
 	String s("abc");
@@ -75,7 +85,6 @@ void test_read_only_iterators()
 	// compare
 	bool eq = std::equal(s.begin(), s.end(), v.begin());
 	assert(eq);
-
 }
 
 void test_streaming_operator()
@@ -94,9 +103,10 @@ int main()
 {
 	test_default_construction();
 	test_initialization();
+	test_empty_string();
 	test_writable_iterators();
 	test_read_only_iterators();
 	test_streaming_operator();
-	
+
 	std::cout << "All OK" << std::endl;
 }
