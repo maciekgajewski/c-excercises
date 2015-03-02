@@ -4,58 +4,32 @@
 #include <iterator>
 #include <memory>
 #include <string>
+#include <cstring>
 
 
 const char* EMPTY = "";
 
 
-size_t strlen(const char* s)
-{
-	size_t len = 0;
+String::String() = default;
 
-	while (s[len] != '\0')
-		len++;
+String::~String() = default;
 
-	return len;
-}
+String::String(const String& o): String(o.begin(), o.end()) {}
 
+String::String(const char* s): String(s, s + std::strlen(s)) {}
 
-String::String() {}
-
-String::~String() {}
-
-String::String(const String& o)
-{
-	mSize = o.size();
-
-	mValue = char_ptr(new char[mSize + 1]);
-
-	std::copy_n(o.begin(), mSize, begin());
-
-	mValue[mSize + 1] = '\0';
-}
-
-String::String(const char* s)
-{
-	mSize = strlen(s);
-
-	mValue = char_ptr(new char[mSize + 1]);
-
-	std::copy_n(s, mSize + 1, begin());
-}
+template String::String(std::string::iterator first, std::string::iterator last);
 
 template<typename It> String::String(It first, It last)
 {
 	mSize = std::distance(first, last);
 
-	mValue = char_ptr(new char[mSize + 1]);
+	mValue.reset(new char[mSize + 1]);
 
 	std::copy_n(first, mSize, begin());
 
 	mValue[mSize + 1] = '\0';
 }
-
-template String::String(std::string::iterator first, std::string::iterator last);
 
 String::iterator String::begin()
 {
@@ -101,13 +75,12 @@ bool String::operator==(const String& s) const
 
 bool String::operator==(const char* s) const
 {
-	if (empty() and s == '\0') return true;
+	if (empty()) return *s == '\0';
 
 	return std::equal(begin(), end(), s);
 }
 
 std::ostream& operator<<(std::ostream& stream, const String& s)
 {
-	for(auto c: s) stream << c;
-	return stream;
+	return stream << s.c_str();
 }

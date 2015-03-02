@@ -121,8 +121,7 @@ public:
 	bool operator==(const char* s) const;
 
 private:
-	using char_ptr = std::unique_ptr<value_type[]>;
-	char_ptr mValue;
+	std::unique_ptr<value_type[]> mValue;
 	std::size_t mSize = 0;
 };
 
