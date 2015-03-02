@@ -1,129 +1,64 @@
 #pragma once
-
-#include <ostream>
+#include <iostream>
+#include <memory>
 
 class String
 {
 public:
+	using value_type = char;						// Every good behaving container should define 'value_type' type, which is the type of elements stored within
+	using iterator = char*;							// Iteratore types
+	using const_iterator = const char*;				// Feel free to use different types for iterators
 	
-	//////////////////////////
-	// Sub-types
-	
-	// Every good behaving container should define 'value_type' type, whihc is the type of elements stored within
-	using value_type = char;
-	
-	// Iteratore types
-	
-	// feel free to use different types for iterators
-	using iterator = char*;
-	using const_iterator = const char*;
-	
-	//////////////////////////
-	// Creation / Destruction
-	
-	// Default constructort, creates empty string.
-	// Should be cheap and perform no memory allocation
-	String();
-	
-	// Destructor should free all allocated memory
-	~String();
-	
-	// Performs deep-copy of another string
-	String(const String& o);
-	
-	// Moves content from another string
-	String(String&& o);
-	
-	// Initializes string with the content of c-string.
-	// Assumes 's' is not null.
-	// I repat: ASSUMES 's' IS NOT NULL. Do not check if s is null. You may use 'assert', but that's it.
-	String(const char* s);
-	
-	// Initializes string with a range (described by a pair of iterators).
-	// Allows for initializing with a content of another container containing characters (or compatible type)
-	template<typename It>
-	String(It first, It last);
-	
-	///////////////////////
-	// State querying
-	
-	// Returns length of the string, in characters.
-	std::size_t size() const;
-	
-	// Returns 'true' is string is empty, 'false' otherwise.
-	// If empty() => true, then size() => 0
-	// If empty() => false, then size() => >0
-	bool empty() const;
-	
-	// Returns a pointer to null-terminated character array, usable in C functions.
-	// The pointer may only be valid until the string is destroyed or modified.
-	const char* c_str() const;
-	
-	// returns a character at specified positon in the string.
-	// Assumes pos < size()
-	char operator[](std::size_t pos) const; 
-	
-	// returns a reference to a character at specified positon in the string.
-	// Assumes pos < size()
-	char& operator[](std::size_t pos);
+	String();										// Default constructor, creates empty string. Should be cheap and perform no memory allocation
+	~String();										// Destructor should free all allocated memory
 
-	//////////////////////
-	// Range base access
+	String(const String& o);						// Performs deep-copy of another string
+	String(String&& o);								// Moves content from another string
+	String(const char* s);							// Initializes string with the content of c-string. Assumes 's' is not null.
+													// I repeat: ASSUMES 's' IS NOT NULL. Do not check if s is null. You may use 'assert', but that's it.
+    String(const String& str, 						// Copies the portion of str that begins at the character position pos and spans len characters
+            size_t pos, size_t len);
+    String(const char* s, size_t n);				// Copies the null-terminated character sequence (C-string) pointed by s.
+    String(size_t n, char c);						// Fills the string with n consecutive copies of character c.
 	
-	// Returns writable iterator to the begining of sequence.
-	// In case of empty string, returns the same value as end()
-	iterator begin();
+    //template<typename It>							// Initializes string with a range (described by a pair of iterators).
+    //	String(It first, It last);					// Allows for initializing with a content of another container containing characters (or compatible type)
 	
-	// Returns past-the end iterator.
-	iterator end();
+	std::size_t size() const;						// Returns length of the string, in characters.
 	
-	// Returns read-only iterator to the beginning of the sequence.
-	// For empty string, returns the same as end() const
-	const_iterator begin() const;
+	bool empty() const;								// Returns 'true' is string is empty, 'false' otherwise.
+	const char* c_str() const;						// Returns a pointer to null-terminated character array, usable in C functions.
+													// The pointer may only be valid until the string is destroyed or modified.
+																
+	char operator[](std::size_t pos) const;			// Returns a character at specified positon in the string. Assumes pos < size()
+	char& operator[](std::size_t pos);				// Returns a reference to a character at specified positon in the string. Assumes pos < size()
 	
-	// Returns read-only past-the end iterator.
-	const_iterator end() const;
-	
-	
-	///////////////////////
-	// Modifying operations
-	
-	// Clears any content.
-	// After calling: empty() => true, size() => 0
-	void clear();
-	
-	// Swaps content with another instance.
-	// Should be fast, O(1) operation.
-	void swap(String& other);
-	
-	// Assigns content of another string
-	// returns *this
-	String& operator = (const String& s);
-	
-	// Assigns content of C-string.
-	// Assumes s is not null
-	// returns *this
-	String& operator = (const char* s);
-	
-	// Moves away content from another rvalue instance
-	String& operator = (String&& s);
-	
+	iterator begin();								// Returns writable iterator to the begining of sequence. In case of empty string, returns the same value as end()
+	iterator end();									// Returns past-the end iterator.
 
-	////////////////////////
-	// Comparison
+	const_iterator begin() const;					// Returns read-only iterator to the beginning of the sequence. For empty string, returns the same as end() const
+	const_iterator end() const;						// Returns read-only past-the end iterator.
 	
-	// Compares with another string
-	bool operator==(const String& s) const;
-	
-	// Compares with c-string. Assumes s is not null
-	bool operator==(const char* s) const;
+	void clear();									// Clears any content. After calling: empty() => true, size() => 0
+	void swap(String& other);						// Swaps content with another instance. Should be fast, O(1) operation.
+
+	String& operator = (const String& s);			// Assigns content of another string. Returns *this
+	String& operator = (const char* s);				// Assigns content of C-string. Assumes s is not null returns *this
+	String& operator = (String&& s);				// Moves away content from another rvalue instance
+
+	bool operator==(const String& s) const;			// Compares with another string
+	bool operator==(const char* s) const;			// Compares with c-string. Assumes s is not null
+
+    char at(size_t pos) const;                      // Returns a reference to the character at position pos in the string.
+
+private:
+    std::unique_ptr<char[]> DATA;                   // Main container
+    size_t len;                                     // Holds the size of the string
+    void allocate(size_t size);                     // Allocates necessary memory
+    void terminate();                               // Terminates string with zero char
+
+	friend std::ostream& operator << 				// Stream output operator
+		(std::ostream & stream, const String &str);	
+	friend String operator+ 						// Concatenates strings
+		(const String& a, const String& b);
 };
-
-// Other operators
-
-// Concatenates strings
-String operator + (const String& a, const String& b);
-
-// Stream output operator
-std::ostream& operator<<(std::ostream& stream, const String& s);
-
