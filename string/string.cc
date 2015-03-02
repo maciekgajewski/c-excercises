@@ -22,7 +22,8 @@ String::String(const String &o)
 
 String::String(String &&o)
 {
-    // TODO: Not implemented yet
+    DATA = std::move(o.DATA);
+    len = std::move(o.len);
 }
 
 String::String(const char *s)
@@ -139,9 +140,10 @@ String& String::operator = (const char* s)
     // TODO: Not implemented yet
 }
 
-String& String::operator = (String&& s)
+String& String::operator = (String&& that)
 {
-    // TODO: Not implemented yet
+    std::swap(DATA, that.DATA);
+    return *this;
 }
 
 bool String::operator==(const String& s) const

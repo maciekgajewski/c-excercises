@@ -108,6 +108,7 @@ int main()
     String str3 = String(str2);
     String str4 = String(str1,2,5);
     String str5 = String(5, 's');
+    String str6 = String(str2);
     std::cout << str1 << std::endl;
     std::cout << str2 << std::endl;
     std::cout << str3 << std::endl;
