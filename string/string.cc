@@ -3,7 +3,6 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
-#include <string>
 #include <cstring>
 
 const char* EMPTY = "";
@@ -18,19 +17,6 @@ String::String(const String& o): String(o.begin(), o.end()) {}
 
 String::String(const char* s): String(s, s + std::strlen(s)) {}
 
-template String::String(std::string::iterator first, std::string::iterator last);
-
-template<typename It> String::String(It first, It last)
-{
-	mSize = std::distance(first, last);
-	mValue.reset(new char[mSize + 1]);
-
-	std::copy_n(first, mSize, begin());
-
-	mValue[mSize + 1] = '\0';
-}
-
-// I don't see any other effective way to concatenate for the given API.
 String::String(const String& a, const String& b)
 {
 	mSize = a.size() + b.size();

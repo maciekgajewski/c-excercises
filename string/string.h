@@ -2,6 +2,7 @@
 
 #include <ostream>
 #include <memory>
+#include <algorithm>
 
 
 class String
@@ -120,7 +121,7 @@ public:
 	// Compares with c-string. Assumes s is not null
 	bool operator==(const char* s) const;
 
-protected:
+private:
 	std::size_t mSize = 0;
 	std::unique_ptr<value_type[]> mValue;
 
@@ -128,6 +129,17 @@ protected:
 
 	friend String operator + (const String& a, const String& b);
 };
+
+template<typename It> String::String(It first, It last)
+{
+	mSize = std::distance(first, last);
+
+	mValue.reset(new char[mSize + 1]);
+
+	std::copy_n(first, mSize, begin());
+
+	mValue[mSize + 1] = '\0';
+}
 
 // Other operators
 
