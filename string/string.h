@@ -24,7 +24,7 @@ public:
 	// I repeat: ASSUMES 's' IS NOT NULL. Do not check if s is null. You may use 'assert', but that's it.		
 	String(const char* s);							
 	// Copies the portion of str that begins at the character position pos and spans len characters			
-    String(const String& str, size_t pos, size_t len);
+    String(const String& str, size_t pos, size_t mSize);
 	// Copies the null-terminated character sequence (C-string) pointed by s.
     String(const char* s, size_t n);	
 	// Fills the string with n consecutive copies of character c.	
@@ -32,8 +32,7 @@ public:
 	
 	// Initializes string with a range (described by a pair of iterators).
 	// Allows for initializing with a content of another container containing characters (or compatible type)
-    //template<typename It>							
-    //	String(It first, It last);					
+    template<typename It>	String(It first, It last);
 	
 	// Returns length of the string, in characters.
 	std::size_t size() const;						
@@ -81,17 +80,19 @@ public:
 
 private:
 	// Main container
-    std::unique_ptr<char[]> DATA;
+    std::unique_ptr<char[]> mData;
 	// Holds the size of the string
-    size_t len;         
+    size_t mSize = 0;
 	// Allocates necessary array	
     void allocate(size_t size);     
 	// Terminates string with zero char	
-    void terminate();                               
+    void terminate();
 
-	// Stream output operator
-	friend std::ostream& operator << (std::ostream & stream, const String &str);
-
-	// Concatenates strings	
-	friend String operator+ (const String& a, const String& b);
+// Concatenates strings
+friend String operator+ (const String& a, const String& b);
 };
+
+// Stream output operator
+std::ostream& operator << (std::ostream & stream, const String &str);
+
+

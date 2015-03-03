@@ -2,11 +2,10 @@
 #include <cstring>
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 String::String()
 {
-    allocate(0);
-    terminate();
 }
 
 String::~String()
@@ -16,49 +15,47 @@ String::~String()
 String::String(const String &o)
 {
     allocate(o.size());
-    for (int i = 0; i < len; i++) DATA[i] = o.at(i);
-    terminate();
+    std::copy(o.begin(), o.end() + 1, begin());
 }
 
 String::String(String &&o)
 {
-    DATA = std::move(o.DATA);
-    len = std::move(o.len);
+    mData = std::move(o.mData);
+    mSize = std::move(o.mSize);
 }
 
 String::String(const char *s)
 {
     allocate(strlen(s));
-    for (int i = 0; i < len; i++) DATA[i] = s[i];
+    std::strcpy(mData.get(), s);
     terminate();
 }
 
-String::String(const String &str, size_t pos, size_t len)
+String::String(const String &o, size_t pos, size_t len)
 {
-    if (pos > str.size())
+    if (pos <= o.size())
     {
-        String();
-    }
-    else
-    {
-        if (pos + len > str.size()) len = str.size() - pos;
+        if (pos > o.size() - len)
+        {
+            len = o.size() - pos;
+        }
         allocate(len);
-        for (int i = 0; i < len; i++) DATA[i] = str.at(i + pos);
+        std::copy(o.begin() + pos, o.begin() + pos + len, begin());
         terminate();
     }
 }
 
 String::String(const char *s, size_t n)
 {
-    len = strlen(s);
-    if (len < n)
+    mSize = strlen(s);
+    if (mSize < n)
     {
         String(s);
     }
     else
     {
         allocate(n);
-        for (int i = 0; i < n; i++) DATA[i] = s[i];
+        std::strncpy(mData.get(), s, n);
         terminate();
     }
 }
@@ -66,33 +63,48 @@ String::String(const char *s, size_t n)
 String::String(size_t n, char c)
 {
     allocate(n);
-    for (int i = 0; i < n; i++) DATA[i] = c;
+    for (int i = 0; i < n; i++) mData[i] = c;
     terminate();
 }
 
-//template<typename It> String::String(It first, It last)
-//{
-//    // TODO: Not implemented yet
-//}
+template<typename It> String::String(It first, It last)
+{
+    std::size_t len = std::distance(first, last);
+    allocate(len);
+    std::copy(first, last, begin());
+    terminate();
+}
 
 std::size_t String::size() const
 {
-    return len;
+    return mSize;
 }
 
 bool String::empty() const
 {
-    // TODO: Not implemented yet
+    if (mSize == 0) {
+        return true;
+    } else {
+        return false;
+    }
+
 }
 
 const char* String::c_str() const
 {
-    // TODO: Not implemented yet
+    if (mSize == 0)
+    {
+        return "\0";
+    }
+    else
+    {
+        return mData.get();
+    }
 }
 
 char String::operator[](std::size_t pos) const
 {
-    // TODO: Not implemented yet
+    return mData[pos];
 }
 
 char& String::operator[](std::size_t pos)
@@ -102,32 +114,34 @@ char& String::operator[](std::size_t pos)
 
 String::iterator String::begin()
 {
-    // TODO: Not implemented yet
+    return mData.get();
 }
 
 String::iterator String::end()
 {
-    // TODO: Not implemented yet
+    return mData.get() + size();
 }
 
 String::const_iterator String::begin() const
 {
-    // TODO: Not implemented yet
+    return mData.get();
 }
 
 String::const_iterator String::end() const
 {
-    // TODO: Not implemented yet
+    return mData.get() + size();
 }
 
 void String::clear()
 {
-    // TODO: Not implemented yet
+    mData = nullptr;
+    mSize = 0;
 }
 
 void String::swap(String& other)
 {
-    // TODO: Not implemented yet
+    std::swap(mData, other.mData);
+    std::swap(mSize, other.mSize);
 }
 
 String& String::operator = (const String& s)
@@ -142,7 +156,7 @@ String& String::operator = (const char* s)
 
 String& String::operator = (String&& that)
 {
-    std::swap(DATA, that.DATA);
+    std::swap(mData, that.mData);
     return *this;
 }
 
@@ -158,30 +172,40 @@ bool String::operator==(const char* s) const
 
 char String::at(size_t pos) const
 {
-    if (pos > len) throw std::out_of_range ("Argument is out of range");
-    return DATA[pos];
+    if (pos > mSize) throw std::out_of_range ("Argument is out of range");
+    return mData[pos];
 }
 
 void String::allocate(size_t len)
 {
     if (len == 0)
     {
-        this->len = 0;
-        DATA = NULL;
+        mSize = 0;
+        mData = nullptr;
     }
     else {
-        this->len = len;
-        DATA = std::unique_ptr<char[]>(new char[len + 1]);
+        mSize = len;
+        mData = std::unique_ptr<char[]>(new char[len + 1]);
     }
 }
 
 void String::terminate()
 {
-    if (len > 0) DATA[len] = '\0';
+    if (mSize > 0) mData[mSize] = '\0';
+}
+
+String operator +(const String& a, const String& b)
+{
+    String result;
+    result.allocate(a.size() + b.size());
+    std::copy(a.begin(), a.end(), result.begin());
+    std::copy(b.begin(), b.end() + 1, result.begin() + a.size());
+
+    return result;
 }
 
 std::ostream& operator << (std::ostream & stream, const String &str)
 {
-    for (int i = 0; i < str.size(); i++) stream << str.DATA[i];
+    for (int i = 0; i < str.size(); i++) stream << str.at(i);
     return stream;
 }
