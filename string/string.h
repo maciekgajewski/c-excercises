@@ -120,9 +120,13 @@ public:
 	// Compares with c-string. Assumes s is not null
 	bool operator==(const char* s) const;
 
-private:
-	std::unique_ptr<value_type[]> mValue;
+protected:
 	std::size_t mSize = 0;
+	std::unique_ptr<value_type[]> mValue;
+
+	String(const String& a, const String& b);
+
+	friend String operator + (const String& a, const String& b);
 };
 
 // Other operators

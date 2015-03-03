@@ -49,16 +49,6 @@ void test_initialization()
 	assert(c == "7");
 }
 
-void test_empty_string()
-{
-	String a("");
-	String b("");
-	char c[] = {'\0'};
-
-	assert(a == b);
-	assert(a == c);
-}
-
 void test_writable_iterators()
 {
 	String s("abc");
@@ -98,15 +88,54 @@ void test_streaming_operator()
 	assert(ss.str() == "12345");
 }
 
+void test_empty_string()
+{
+	String s("");
+
+	assert(s == String(""));
+	assert(s == "");
+}
+
+void test_clear()
+{
+	String a("foo");
+	a.clear();
+
+	assert(a == "");
+}
+
+void test_swap()
+{
+	String a("foo");
+	String b("bar");
+
+	a.swap(b);
+
+	assert(a == "bar");
+	assert(b == "foo");
+}
+
+void test_concatenation()
+{
+	String a("foo");
+	String b("bar");
+	String c = a + b;
+
+	assert(c == "foobar");
+}
+
 
 int main()
 {
 	test_default_construction();
 	test_initialization();
-	test_empty_string();
 	test_writable_iterators();
 	test_read_only_iterators();
 	test_streaming_operator();
+	test_empty_string();
+	test_clear();
+	test_swap();
+	test_concatenation();
 
 	std::cout << "All OK" << std::endl;
 }
