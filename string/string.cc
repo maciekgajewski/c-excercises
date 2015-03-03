@@ -23,7 +23,6 @@ template String::String(std::string::iterator first, std::string::iterator last)
 template<typename It> String::String(It first, It last)
 {
 	mSize = std::distance(first, last);
-
 	mValue.reset(new char[mSize + 1]);
 
 	std::copy_n(first, mSize, begin());
@@ -35,6 +34,7 @@ template<typename It> String::String(It first, It last)
 String::String(const String& a, const String& b)
 {
 	mSize = a.size() + b.size();
+
 	mValue.reset(new char[mSize + 1]);
 
 	std::copy_n(a.begin(), a.size(), begin());
