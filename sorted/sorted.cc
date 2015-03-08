@@ -17,18 +17,27 @@
 #include <iterator>
 
 
+bool fold_case_cmp(std::string a, std::string b)
+{
+	std::transform(a.begin(), a.end(), a.begin(), tolower);
+	std::transform(b.begin(), b.end(), b.begin(), tolower);
+
+	return a < b;
+}
+
+
 int main(int argc, char** argv) {
 
 	if (argc <= 1) return 0;
 
-	std::vector<std::string> parameters (argv + 1, argv + argc);
+	std::vector<std::string> words (argv + 1, argv + argc);
 
-	std::sort(parameters.begin(), parameters.end());
+	std::sort(words.begin(), words.end(), fold_case_cmp);
 
 	std::ostream_iterator<std::string > out_it (std::cout, " ");
 
 	// No logic to avoid a delimiter after the last element
-	std::copy(parameters.begin(), parameters.end(), out_it);
+	std::copy(words.begin(), words.end(), out_it);
 
 	std::cout << std::endl;
 
