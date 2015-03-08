@@ -1,6 +1,9 @@
 #pragma once
 
 #include <ostream>
+#include <memory>
+#include <algorithm>
+
 
 class String
 {
@@ -9,10 +12,10 @@ public:
 	//////////////////////////
 	// Sub-types
 	
-	// Every good behaving container should define 'value_type' type, whihc is the type of elements stored within
+	// Every good behaving container should define 'value_type' type, which is the type of elements stored within
 	using value_type = char;
 	
-	// Iteratore types
+	// Iterator types
 	
 	// feel free to use different types for iterators
 	using iterator = char*;
@@ -21,7 +24,7 @@ public:
 	//////////////////////////
 	// Creation / Destruction
 	
-	// Default constructort, creates empty string.
+	// Default constructor, creates empty string.
 	// Should be cheap and perform no memory allocation
 	String();
 	
@@ -36,7 +39,7 @@ public:
 	
 	// Initializes string with the content of c-string.
 	// Assumes 's' is not null.
-	// I repat: ASSUMES 's' IS NOT NULL. Do not check if s is null. You may use 'assert', but that's it.
+	// I repeat: ASSUMES 's' IS NOT NULL. Do not check if s is null. You may use 'assert', but that's it.
 	String(const char* s);
 	
 	// Initializes string with a range (described by a pair of iterators).
@@ -59,18 +62,18 @@ public:
 	// The pointer may only be valid until the string is destroyed or modified.
 	const char* c_str() const;
 	
-	// returns a character at specified positon in the string.
+	// returns a character at specified position in the string.
 	// Assumes pos < size()
 	char operator[](std::size_t pos) const; 
 	
-	// returns a reference to a character at specified positon in the string.
+	// returns a reference to a character at specified position in the string.
 	// Assumes pos < size()
 	char& operator[](std::size_t pos);
 
 	//////////////////////
 	// Range base access
 	
-	// Returns writable iterator to the begining of sequence.
+	// Returns writable iterator to the beginning of sequence.
 	// In case of empty string, returns the same value as end()
 	iterator begin();
 	
@@ -117,7 +120,26 @@ public:
 	
 	// Compares with c-string. Assumes s is not null
 	bool operator==(const char* s) const;
+
+private:
+	std::size_t mSize = 0;
+	std::unique_ptr<value_type[]> mValue;
+
+	String(const String& a, const String& b);
+
+	friend String operator + (const String& a, const String& b);
 };
+
+template<typename It> String::String(It first, It last)
+{
+	mSize = std::distance(first, last);
+
+	mValue.reset(new char[mSize + 1]);
+
+	std::copy_n(first, mSize, begin());
+
+	mValue[mSize + 1] = '\0';
+}
 
 // Other operators
 
@@ -126,4 +148,3 @@ String operator + (const String& a, const String& b);
 
 // Stream output operator
 std::ostream& operator<<(std::ostream& stream, const String& s);
-
