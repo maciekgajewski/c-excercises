@@ -3,23 +3,46 @@
 #include <string>
 #include <iostream>
 
-class Person
+class IXmlWritable
 {
 public:
+	virtual void ToXml(std::ostream& o) const = 0;
+	virtual ~IXmlWritable() {}
+};
+
+class Person : public IXmlWritable
+{
+public:
+	Person(std::string name, int age)
+		: mName(std::move(name)), mAge(age)
+	{
+	}
 	
-	void SetName(std::string name) { mName = std::move(name); }
+	//Person(const Person& that)
+	//{
+	//}
+	
+	~Person()
+	{
+	}
+	
+	void SetName(const std::string& name) { mName = name; }
 	void SetAge(int age) { mAge = age; }
 	
-	const std::string GetName() const { return mName; }
+	const std::string& GetName() const { return mName; }
 	int GetAge() const { return mAge; }
+
+	virtual void ToXml(std::ostream& o) const
+	{
+		o << "<Person><Name>" << GetName() 
+		<< "</Name><Age>" << GetAge() << "</Age></Person>";
+		std::cout << std::endl;
+	}
+
 private:
 	
 	std::string mName;
-	int mAge;
+	int mAge = 7;
 };
 
-inline void ToXml(std::ostream& o, const Person& p)
-{
-	o << "<Person><Name>" << p.GetName() << "</Name><Age>" << p.GetAge() << "</Age></Person>";
-}
 
