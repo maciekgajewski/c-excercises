@@ -1,4 +1,3 @@
-add_executable(plot test
-	plot.cc plot.h
-	tests.cc
+add_executable(plot_test
+	tests.cc plot.h engine_csv.h
 )
