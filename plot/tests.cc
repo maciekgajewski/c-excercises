@@ -9,12 +9,15 @@
 void test_plot_csv()
 {
 	CsvEngine engine(std::cout);
-	Point* a = new Point[3];
-	a[0] = Point(0.0, 0.0);
-	a[1] = Point(1.0, 1.0);
-	a[2] = Point(2.0, 2.0);
 
-	engine.plot(a, a+3);
+	std::vector<Point> points;
+	points.push_back(Point(1, 0));
+	points.push_back(Point(2, 0.6931471805599453));
+	points.push_back(Point(3, 1.0986122886681098));
+
+    engine.plot(points);
+
+    // TODO: Check output
 }
 
 

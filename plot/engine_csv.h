@@ -5,7 +5,6 @@
 #include <iostream>
 #include <iterator>
 
-
 class CsvEngine: PlotEngine
 {
 public:
@@ -14,13 +13,13 @@ public:
 
 	~CsvEngine() = default;
 
-	virtual void plot(Point* begin, Point* end)
-	{
-		for (auto p = begin; p != end; p++)
-		{
-			std::cout << p->x << ", " << p->y << std::endl;
-		}
 
+	virtual void plot(const points_range& points)
+	{
+        for (auto point : points)
+        {
+        	std::cout << point.x << "," << point.y << std::endl;
+        }
 	}
 
 private:
