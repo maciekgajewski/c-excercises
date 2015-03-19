@@ -9,7 +9,11 @@
  */
 #pragma once
 
+#include <boost/function.hpp>
 #include <boost/range/any_range.hpp>
+
+// TODO: return points for the given function
+void evaluate(boost::function<double (int x)> func, double start, double stop, double step);
 
 
 class Point

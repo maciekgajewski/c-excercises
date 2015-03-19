@@ -6,6 +6,18 @@
 #include <vector>
 
 
+void test_parse()
+{
+	// "x * x"
+}
+
+
+void test_evaluate()
+{
+
+}
+
+
 void test_plot_csv()
 {
 	CsvEngine engine(std::cout);
@@ -21,8 +33,12 @@ void test_plot_csv()
 }
 
 
+
+
 int main()
 {
+	test_parse();
+	test_evaluate();
 	test_plot_csv();
 
 	std::cout << "All OK" << std::endl;
