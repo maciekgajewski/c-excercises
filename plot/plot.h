@@ -12,9 +12,6 @@
 #include <boost/function.hpp>
 #include <boost/range/any_range.hpp>
 
-// TODO: return points for the given function
-void evaluate(boost::function<double (int x)> func, double start, double stop, double step);
-
 
 class Point
 {
@@ -44,3 +41,6 @@ public:
 	virtual void plot(const points_range& points) = 0;
 
 };
+
+
+void plot(PlotEngine& engine, boost::function<double (double x)> func, double start, double stop, double step);
