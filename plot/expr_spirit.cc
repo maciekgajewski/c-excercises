@@ -1,127 +1,116 @@
-/*
- * Boost Spirit expression parsing. NOT READY
- *
- * Copy/pasted from an example for Boost.Spirit version 1.8.4.
- * http://www.boost.org/doc/libs/1_57_0/libs/spirit/doc/html/index.html
- *
- *
- */
-#include <boost/spirit.hpp>
-//#include <boost/spirit/tree/ast.hpp>
-#include <boost/spirit/include/classic_ast.hpp>
-#include <string>
-#include <cassert>
+// #define BOOST_SPIRIT_DEBUG
+
+#include <boost/config/warning_disable.hpp>
+#include <boost/spirit/include/support_utree.hpp>
+#include <boost/spirit/include/qi.hpp>
+#include <boost/spirit/include/phoenix_operator.hpp>
+#include <boost/spirit/include/phoenix_function.hpp>
+
 #include <iostream>
-#include <istream>
-#include <ostream>
+#include <string>
 
-using boost::spirit::rule;
-using boost::spirit::parser_tag;
-using boost::spirit::ch_p;
-using boost::spirit::real_p;
-
-using boost::spirit::tree_node;
-using boost::spirit::node_val_data;
-
-
-struct parser: public boost::spirit::grammar<parser>
+namespace client
 {
-	enum rule_
-	{
-		addsub_id, multdiv_id, value_id, real_id
-	};
+    namespace qi = boost::spirit::qi;
+    namespace ascii = boost::spirit::ascii;
+    namespace spirit = boost::spirit;
 
-	struct set_value
-	{
-		set_value(parser const& p) :
-				self(p) {
-		}
-		void operator()(
-				tree_node<node_val_data<std::string::iterator, double> >& node,
-				std::string::iterator begin, std::string::iterator end) const {
-			node.value.value(self.tmp);
-		}
-		parser const& self;
-	};
+    struct expr
+    {
+        template <typename T1, typename T2 = void>
+        struct result { typedef void type; };
 
-	mutable double tmp;
+        expr(char op) : op(op) {}
 
-	template<typename Scanner> struct definition
-	{
-		rule<Scanner, parser_tag<addsub_id> > addsub;
-		rule<Scanner, parser_tag<multdiv_id> > multdiv;
-		rule<Scanner, parser_tag<value_id> > value;
-		rule<Scanner, parser_tag<real_id> > real;
+        void operator()(spirit::utree& expr, spirit::utree const& rhs) const
+        {
+            spirit::utree lhs;
+            lhs.swap(expr);
+            expr.push_back(spirit::utf8_symbol_range_type(&op, &op+1));
+            expr.push_back(lhs);
+            expr.push_back(rhs);
+        }
 
-		definition(parser const& self)
-		{
-			using namespace boost::spirit;
-			addsub = multdiv
-					>> *((root_node_d[ch_p('+')] | root_node_d[ch_p('-')])
-							>> multdiv);
-			multdiv = value
-					>> *((root_node_d[ch_p('*')] | root_node_d[ch_p('/')])
-							>> value);
-			value = real | inner_node_d[('(' >> addsub >> ')')];
-			real =
-					leaf_node_d[access_node_d[real_p[assign_a(self.tmp)]][set_value(
-							self)]];
-		}
+        char const op;
+    };
+    boost::phoenix::function<expr> const plus = expr('+');
+    boost::phoenix::function<expr> const minus = expr('-');
+    boost::phoenix::function<expr> const times = expr('*');
+    boost::phoenix::function<expr> const divide = expr('/');
 
-		rule<Scanner, parser_tag<addsub_id> > const& start() const {
-			return addsub;
-		}
-	};
-};
+    struct negate_expr
+    {
+        template <typename T1, typename T2 = void>
+        struct result { typedef void type; };
 
-template<typename TreeIter>
-double evaluate(TreeIter const& i)
+        void operator()(spirit::utree& expr, spirit::utree const& rhs) const
+        {
+            char const op = '-';
+            expr.clear();
+            expr.push_back(spirit::utf8_symbol_range_type(&op, &op+1));
+            expr.push_back(rhs);
+        }
+    };
+    boost::phoenix::function<negate_expr> neg;
+
+    template <typename Iterator>
+    struct calculator : qi::grammar<Iterator, ascii::space_type, spirit::utree()>
+    {
+        calculator() : calculator::base_type(expression)
+        {
+            using qi::uint_;
+            using qi::_val;
+            using qi::_1;
+
+            expression =
+                term                            [_val = _1]
+                >> *(   ('+' >> term            [plus(_val, _1)])
+                    |   ('-' >> term            [minus(_val, _1)])
+                    )
+                ;
+
+            term =
+                factor                          [_val = _1]
+                >> *(   ('*' >> factor          [times(_val, _1)])
+                    |   ('/' >> factor          [divide(_val, _1)])
+                    )
+                ;
+
+            factor =
+                uint_                           [_val = _1]
+                |   '(' >> expression           [_val = _1] >> ')'
+                |   ('-' >> factor              [neg(_val, _1)])
+                |   ('+' >> factor              [_val = _1])
+                ;
+
+            BOOST_SPIRIT_DEBUG_NODE(expression);
+            BOOST_SPIRIT_DEBUG_NODE(term);
+            BOOST_SPIRIT_DEBUG_NODE(factor);
+        }
+
+        qi::rule<Iterator, ascii::space_type, spirit::utree()> expression, term, factor;
+    };
+}
+
+bool expr_parse(const std::string& str, boost::spirit::utree& ut)
 {
-	double op1, op2;
-	switch (i->value.id().to_long())
-	{
-		case parser::real_id:
-			return i->value.value();
-		case parser::value_id:
-		case parser::addsub_id:
-		case parser::multdiv_id:
-			op1 = evaluate(i->children.begin());
-			op2 = evaluate(i->children.begin() + 1);
-			switch (*i->value.begin())
-			{
-				case '+':
-					return op1 + op2;
-				case '-':
-					return op1 - op2;
-				case '*':
-					return op1 * op2;
-				case '/':
-					return op1 / op2;
-				default:
-					assert(!"Should not happen");
-			}
-		default:
-				assert(!"Should not happen");
-	}
+    using boost::spirit::ascii::space;
+
+    typedef std::string::const_iterator iterator_type;
+    typedef client::calculator<iterator_type> calculator;
+
+    calculator calc;
+
+	std::string::const_iterator iter = str.begin();
+	std::string::const_iterator end = str.end();
+
+	bool r = phrase_parse(iter, end, calc, space, ut);
+
+	return (r && iter == end);
+}
+
+double expr_evaluate(const boost::spirit::utree& ut)
+{
 	return 0;
 }
 
-
-void temp_parse_eval()
-{
-	parser eval;
-	std::string line = "1 + 1";
-
-	typedef boost::spirit::node_val_data_factory<double> factory_t;
-	boost::spirit::tree_parse_info<std::string::iterator, factory_t> info =
-			boost::spirit::ast_parse<factory_t>(line.begin(), line.end(), eval, boost::spirit::space_p);
-	if (info.full)
-	{
-	  std::cout << "Result: " << evaluate(info.trees.begin()) << std::endl;
-	}
-	else
-	{
-	  std::cout << "Error in expression." << std::endl;
-	}
-
-}
