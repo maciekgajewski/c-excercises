@@ -22,11 +22,9 @@ void test_spirit()
 {
 	boost::spirit::utree ut;
 
-	assert(expr_parse("2 * 2", ut));
+	assert(expr_parse("2 * 3.14 * x", ut));
 
-	std::cout << ut << std::endl;
-
-	expr_evaluate(ut);
+	assert(expr_evaluate(ut, 1.0) == 6.28);
 }
 
 
