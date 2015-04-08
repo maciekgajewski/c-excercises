@@ -9,9 +9,9 @@
 
 namespace client
 {
-    using boost::spirit::qi;
-    using boost::spirit::ascii;
-    using boost::spirit;
+    namespace qi = boost::spirit::qi;
+    namespace ascii =  boost::spirit::ascii;
+    namespace spirit = boost::spirit;
 
     struct expr {
         template<typename T1, typename T2 = void>
