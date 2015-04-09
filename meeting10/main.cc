@@ -1,58 +1,88 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include <functional>
+#include <vector>
+#include <cassert>
 
-struct ComplexData
+template<typename Cleanup>
+struct AtExit
 {
-    int i;
-    double d;
-    std::string s;
-    
-    ComplexData() {}
-    ComplexData(const ComplexData& o) : i(o.i), d(o.d), s(o.s) { std::cout << "copy" << std::endl; }
-    ComplexData(ComplexData&& o) : i(o.i), d(o.d), s(std::move(o.s)) { std::cout << "move" << std::endl; }
-    
-    ComplexData& operator=(const ComplexData& o) {
-        std::cout << "assignment" << std::endl; 
-        
-        i = o.i;
-        d = o.d;
-        s = o.s;
-        return *this; }
+    AtExit(Cleanup c) : mCleanup(c) {}
+    ~AtExit() { mCleanup(); }
+    Cleanup mCleanup;
 };
 
-ComplexData parse_args(int argc, char ** argv)
+template<typename Cleanup>
+AtExit<Cleanup> at_exit(Cleanup c) { return AtExit<Cleanup>(c); }
+
+class Signal
 {
-    if (argc > 5)
-    {
-        return ComplexData();
-    }
-    else
-    {
-        ComplexData result;
-        result.i = argc;
-        result.s = "parsed";
+public:
+    using Fun = std::function<void()>;
     
-        return result;
+    std::exception_ptr activate() noexcept
+    {
+        mIterating = true;
+        auto ae = at_exit([=] { mIterating = false; });
+        
+        for(const Fun& f : mFunctions)
+        {
+            try
+            {
+                f();
+            }
+            catch(...)
+            {
+                std::exception_ptr ex = std::current_exception();
+                return ex;
+            }
+        }
+        
+        return false;
     }
+    
+    void subscribe(const Fun& f)
+    {
+        assert(!mIterating);
+        mFunctions.push_back(f);
+    }
+    
+private:
+    std::vector<Fun> mFunctions;
+    bool mIterating = false;
+};
+
+void fun1()
+{
+    std::cout <<"this is fun1" << std::endl;
+    //throw std::runtime_error("Some exception");
+    throw 33;
 }
 
-void print(const ComplexData& d) { std::cout<< "i=" << d.i << ", s=" << d.s << std::endl;  }
+void fun2() { std::cout << "fun2" << std::endl;  }
 
 int main(int argc, char ** argv)
 {
-    ComplexData cd = parse_args(argc, argv);
-    ComplexData a = cd;
-    ComplexData b = std::move(cd);
+    Signal sig;
+    sig.subscribe(fun1);
+    sig.subscribe(fun2);
+    sig.subscribe(fun1);
     
-    ComplexData* ptr = &a;
-    ComplexData& ref = a;
-
-    ref = b;
-    *ptr = b;
-    a = b;
-    
-    print(*ptr);
-    print(ref);
-    print(a);
+    try
+    {
+        auto e = sig.activate();
+        if(e)
+        {
+            std::cout << "There were errors: ";
+            try{ std::rethrow_exception(e);  }
+            catch(const std::exception& ee) { std::cout << ee.what() << std::endl; }
+            catch(...) { std::cout << "unknown type" << std::endl; }
+        }
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "Error in 'activate' : " << e.what() << std::endl;
+    }
+    sig.subscribe(fun2);
 }
