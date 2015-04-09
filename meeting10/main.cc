@@ -2,40 +2,57 @@
 #include <stdexcept>
 #include <string>
 
-struct MyException
+struct ComplexData
 {
-    std::string msg;
+    int i;
+    double d;
+    std::string s;
+    
+    ComplexData() {}
+    ComplexData(const ComplexData& o) : i(o.i), d(o.d), s(o.s) { std::cout << "copy" << std::endl; }
+    ComplexData(ComplexData&& o) : i(o.i), d(o.d), s(std::move(o.s)) { std::cout << "move" << std::endl; }
+    
+    ComplexData& operator=(const ComplexData& o) {
+        std::cout << "assignment" << std::endl; 
+        
+        i = o.i;
+        d = o.d;
+        s = o.s;
+        return *this; }
 };
 
-void somefun()
+ComplexData parse_args(int argc, char ** argv)
 {
-    throw MyException{"oh noes!"};
-}
-
-void wrap() noexcept
-{
-    try
+    if (argc > 5)
     {
-        somefun();
+        return ComplexData();
     }
-    catch(MyException& e)
+    else
     {
-        std::cerr << "wrapper cougth exception : " << e.msg << std::endl;
-        e.msg = "wrapped: " + e.msg;
-        throw;
+        ComplexData result;
+        result.i = argc;
+        result.s = "parsed";
+    
+        return result;
     }
 }
 
-int main()
+void print(const ComplexData& d) { std::cout<< "i=" << d.i << ", s=" << d.s << std::endl;  }
+
+int main(int argc, char ** argv)
 {
-    std::cout << "Hello, world!" << std::endl;
-    try
-    {
-        //somefun();
-        wrap();
-    }
-    catch(MyException& e)
-    {
-        std::cerr << "Error: " << e.msg << std::endl;
-    }
+    ComplexData cd = parse_args(argc, argv);
+    ComplexData a = cd;
+    ComplexData b = std::move(cd);
+    
+    ComplexData* ptr = &a;
+    ComplexData& ref = a;
+
+    ref = b;
+    *ptr = b;
+    a = b;
+    
+    print(*ptr);
+    print(ref);
+    print(a);
 }
