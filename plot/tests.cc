@@ -41,29 +41,25 @@ void test_ast()
 {
     struct TestTokenizer: expr_ast::Tokenizer
     {
-        expr_ast::Token current()
-        {
-           std::cout << "current " << c.type << std::endl;
-           return c;
-        }
 
         expr_ast::Token next()
         {
-            c = *it;
+            expr_ast::Token token = *it;
+            std::cout << "next " << token.type << std::endl;
             it++;
-            std::cout << "next " << c.type << std::endl;
-            return c;
+            return token;
         }
 
         std::vector<expr_ast::Token> tokens =
         {
-                expr_ast::Token(expr_ast::TokenNumber),
+                expr_ast::Token(expr_ast::TokenDouble),
                 expr_ast::Token(expr_ast::TokenPlus),
-                expr_ast::Token(expr_ast::TokenNumber)
+                expr_ast::Token(expr_ast::TokenDouble),
+                expr_ast::Token(expr_ast::TokenPlus),
+                expr_ast::Token(expr_ast::TokenDouble)
         };
 
         std::vector<expr_ast::Token>::iterator it = tokens.begin();
-        expr_ast::Token c = *it;
     };
 
     TestTokenizer tokenizer;
@@ -71,11 +67,13 @@ void test_ast()
 
     expr_ast::Node* node = parser.expression();
 
-    //print_ast(node);
+    print_ast(node);
 
     assert(node->type == expr_ast::OperatorPlus);
-    assert(node->get_left()->type == expr_ast::Number);
-    assert(node->get_right()->type == expr_ast::Number);
+    assert(node->get_left()->type == expr_ast::OperatorPlus);
+    assert(node->get_left()->get_left()->type == expr_ast::Double);
+    assert(node->get_left()->get_right()->type == expr_ast::Double);
+    assert(node->get_right()->type == expr_ast::Double);
 }
 
 

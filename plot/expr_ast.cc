@@ -6,9 +6,9 @@ namespace expr_ast
 
 enum TokenType
 {
-    TokenError,
+    TokenUnknown,
     TokenEOF,
-    TokenNumber,
+    TokenDouble,
     TokenPlus,
     TokenMinus,
     TokenMul,
@@ -20,10 +20,13 @@ enum TokenType
 class Token
 {
 public:
-    TokenType type = TokenError;
+    TokenType type = TokenUnknown;
+
+    double value = 0;
 
     Token() = default;
     Token(TokenType type): type(type) {}
+    Token(TokenType type, double value): type(type), value(value) {}
 };
 
 class Tokenizer
@@ -31,13 +34,12 @@ class Tokenizer
 public:
     virtual ~Tokenizer() = default;
 
-    virtual Token current() = 0;
     virtual Token next() = 0;
 };
 
 enum NodeType
 {
-    Undefined, Number, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv,
+    Undefined, Double, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv,
 };
 
 
@@ -77,12 +79,14 @@ private:
     std::unique_ptr<Node> right;
 };
 
+
 class Parser
 {
 public:
     Parser(Tokenizer& tokenizer): tokenizer(tokenizer) {}
 
-    void match(TokenType);
+    void token_read();
+    void token_match(TokenType);
 
     Node* expression();
     Node* expression_r();
@@ -92,7 +96,18 @@ public:
 
 private:
     Tokenizer& tokenizer;
+    Token token;
 };
+
+void Parser::token_read()
+{
+    token = tokenizer.next();
+}
+
+void Parser::token_match(TokenType token_type)
+{
+    token_read();
+}
 
 Node* Parser::expression()
 {
@@ -101,32 +116,32 @@ Node* Parser::expression()
     Node* left = term();
     Node* node = expression_r();
 
-    if (node->type == Undefined)
-        return left;
-    else {
+    while (node->type != Undefined)
+    {
         node->set_left(left);
-        return node;
+        left = node;
+        node = expression_r();
     }
+
+    return left;
 }
 
 Node* Parser::expression_r()
 {
     std::cout << "expression_r" << std::endl;
 
-    //Token token = tokenizer.next();
-    Token token = tokenizer.current();
     Node* node = new Node();
 
     if (token.type == TokenPlus)
     {
         node->type = OperatorPlus;
-        node->set_right(factor());
+        node->set_right(term());
     }
     else
     if (token.type == TokenMinus)
     {
         node->type = OperatorMinus;
-        node->set_right(factor());
+        node->set_right(term());
     }
 
     return node;
@@ -137,23 +152,24 @@ Node* Parser::term()
     std::cout << "term" << std::endl;
 
     Node* left = factor();
-
     Node* node = term_r();
 
-    if (node->type == Undefined)
-        return left;
-    else
+    while (node->type != Undefined)
     {
         node->set_left(left);
-        return node;
+        left = node;
+        node = term_r();
     }
+
+    return left;
 }
 
 Node* Parser::term_r()
 {
     std::cout << "term_r" << std::endl;
 
-    Token token = tokenizer.next();
+    token_read();
+
     Node* node = new Node();
 
     if (token.type == TokenMul)
@@ -174,13 +190,14 @@ Node* Parser::term_r()
 Node* Parser::factor()
 {
     std::cout << "factor" << std::endl;
+
     Node* node = new Node();
 
-    Token token = tokenizer.next();
+    token_read();
 
-    if (token.type == TokenNumber)
+    if (token.type == TokenDouble)
     {
-        node->type = Number;
+        node->type = Double;
     }
     else
     if (token.type == TokenPlus)
@@ -192,15 +209,10 @@ Node* Parser::factor()
     if (token.type == TokenLP)
     {
         node = expression();
-        match(TokenRP);
+        token_match(TokenRP);
     }
 
     return node;
-}
-
-void Parser::match(TokenType token_type)
-{
-    tokenizer.next();
 }
 
 }
