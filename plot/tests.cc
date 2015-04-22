@@ -75,7 +75,6 @@ void test_ast()
     assert(node->get_right()->type == expr_ast::Double);
 }
 
-
 void test_plot_csv()
 {
 	CsvEngine engine(std::cout);
@@ -89,8 +88,6 @@ void test_plot_csv()
 
     // TODO: Check output
 }
-
-
 
 
 int main()
