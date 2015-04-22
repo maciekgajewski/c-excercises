@@ -1,5 +1,5 @@
 #include <memory>
-#include <iostream>
+
 
 namespace expr_ast
 {
@@ -111,8 +111,6 @@ void Parser::token_match(TokenType token_type)
 
 Node* Parser::expression()
 {
-    std::cout << "expression" << std::endl;
-
     Node* left = term();
     Node* node = expression_r();
 
@@ -128,8 +126,6 @@ Node* Parser::expression()
 
 Node* Parser::expression_r()
 {
-    std::cout << "expression_r" << std::endl;
-
     Node* node = new Node();
 
     if (token.type == TokenPlus)
@@ -149,8 +145,6 @@ Node* Parser::expression_r()
 
 Node* Parser::term()
 {
-    std::cout << "term" << std::endl;
-
     Node* left = factor();
     Node* node = term_r();
 
@@ -166,8 +160,6 @@ Node* Parser::term()
 
 Node* Parser::term_r()
 {
-    std::cout << "term_r" << std::endl;
-
     token_read();
 
     Node* node = new Node();
@@ -189,8 +181,6 @@ Node* Parser::term_r()
 
 Node* Parser::factor()
 {
-    std::cout << "factor" << std::endl;
-
     Node* node = new Node();
 
     token_read();

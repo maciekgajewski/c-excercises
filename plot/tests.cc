@@ -41,12 +41,11 @@ void test_ast()
 {
     struct TestTokenizer: expr_ast::Tokenizer
     {
-
         expr_ast::Token next()
         {
             expr_ast::Token token = *it;
-            std::cout << "next " << token.type << std::endl;
             it++;
+
             return token;
         }
 
@@ -60,9 +59,9 @@ void test_ast()
         };
 
         std::vector<expr_ast::Token>::iterator it = tokens.begin();
-    };
 
-    TestTokenizer tokenizer;
+    } tokenizer ;
+
     expr_ast::Parser parser(tokenizer);
 
     expr_ast::Node* node = parser.expression();
