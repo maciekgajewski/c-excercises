@@ -1,6 +1,5 @@
 #include <memory>
 
-
 namespace expr_ast
 {
 
@@ -39,9 +38,8 @@ public:
 
 enum NodeType
 {
-    Undefined, Double, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv,
+    Undefined, Double, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv, UnaryPlus, UnaryMinus
 };
-
 
 class Node
 {
@@ -74,11 +72,12 @@ public:
         return right.get();
     }
 
+    // TODO: Implement move
+
 private:
     std::unique_ptr<Node> left;
     std::unique_ptr<Node> right;
 };
-
 
 class Parser
 {
@@ -181,20 +180,27 @@ Node* Parser::term_r()
 
 Node* Parser::factor()
 {
-    Node* node = new Node();
+    Node* node = new Node(); // TODO: Use smart pointers
 
     token_read();
 
     if (token.type == TokenDouble)
     {
         node->type = Double;
+        node->value = token.value;
     }
     else
     if (token.type == TokenPlus)
-        node = factor();
+    {
+        node->type = UnaryPlus;
+        node->set_left(factor());
+    }
     else
     if (token.type == TokenMinus)
-        node = factor(); // TODO: Unary minus
+    {
+        node->type = UnaryMinus;
+        node->set_left(factor());
+    }
     else
     if (token.type == TokenLP)
     {
@@ -203,6 +209,41 @@ Node* Parser::factor()
     }
 
     return node;
+}
+
+void print(expr_ast::Node* node)
+{
+    std::cout << node->type << " " << node->value << std::endl;
+    if (node->get_left())
+        print(node->get_left());
+    if (node->get_right())
+        print(node->get_right());
+}
+
+double eval(Node* node)
+{
+    if (node->type == Double)
+        return node->value;
+
+    if (node->type == OperatorPlus)
+    {
+        return eval(node->get_left()) + eval(node->get_right());
+    }
+    else if (node->type == OperatorMinus)
+    {
+        return eval(node->get_left()) - eval(node->get_right());
+    }
+    else if (node->type == OperatorMul)
+    {
+        return eval(node->get_left()) * eval(node->get_right());
+    }
+    else if (node->type == OperatorDiv)
+    {
+        return eval(node->get_left()) / eval(node->get_right());
+    }
+
+    // TODO: Raise an exception
+    return 0;
 }
 
 }

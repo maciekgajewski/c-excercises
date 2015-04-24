@@ -8,17 +8,6 @@
 #include <vector>
 
 
-void test_parse()
-{
-	// "x * x"
-}
-
-
-void test_evaluate()
-{
-
-}
-
 void test_spirit()
 {
 	boost::spirit::utree ut;
@@ -26,15 +15,6 @@ void test_spirit()
 	assert(expr_parse("3.14 * x * x / 4", ut));
 
 	assert(expr_evaluate(ut, 4.0) == 12.56);
-}
-
-void print_ast(expr_ast::Node* node)
-{
-    std::cout << node->type << std::endl;
-    if (node->get_left())
-        print_ast(node->get_left());
-    if (node->get_right())
-        print_ast(node->get_right());
 }
 
 void test_ast()
@@ -51,11 +31,15 @@ void test_ast()
 
         std::vector<expr_ast::Token> tokens =
         {
-                expr_ast::Token(expr_ast::TokenDouble),
+                expr_ast::Token(expr_ast::TokenDouble, 2),
+                expr_ast::Token(expr_ast::TokenMul),
+                expr_ast::Token(expr_ast::TokenLP),
+                expr_ast::Token(expr_ast::TokenDouble, 1),
                 expr_ast::Token(expr_ast::TokenPlus),
-                expr_ast::Token(expr_ast::TokenDouble),
+                expr_ast::Token(expr_ast::TokenDouble, 2),
                 expr_ast::Token(expr_ast::TokenPlus),
-                expr_ast::Token(expr_ast::TokenDouble)
+                expr_ast::Token(expr_ast::TokenDouble, 3),
+                expr_ast::Token(expr_ast::TokenRP)
         };
 
         std::vector<expr_ast::Token>::iterator it = tokens.begin();
@@ -66,13 +50,9 @@ void test_ast()
 
     expr_ast::Node* node = parser.expression();
 
-    print_ast(node);
+    expr_ast::print(node);
 
-    assert(node->type == expr_ast::OperatorPlus);
-    assert(node->get_left()->type == expr_ast::OperatorPlus);
-    assert(node->get_left()->get_left()->type == expr_ast::Double);
-    assert(node->get_left()->get_right()->type == expr_ast::Double);
-    assert(node->get_right()->type == expr_ast::Double);
+    assert(expr_ast::eval(node) == 12);
 }
 
 void test_plot_csv()
@@ -92,8 +72,6 @@ void test_plot_csv()
 
 int main()
 {
-	test_parse();
-	test_evaluate();
 	test_spirit();
 	test_ast();
 	test_plot_csv();
