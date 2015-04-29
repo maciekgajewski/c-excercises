@@ -39,19 +39,19 @@ public:
 
 enum NodeType
 {
-    Undefined, Double, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv, UnaryPlus, UnaryMinus
+    Double, OperatorPlus, OperatorMinus, OperatorMul, OperatorDiv, UnaryPlus, UnaryMinus
 };
 
 class Node
 {
 public:
-    NodeType type = Undefined;
+    NodeType type;
 
     double value = 0;
+
     std::unique_ptr<Node> left;
     std::unique_ptr<Node> right;
 
-    Node() = default;
     Node(NodeType type): type(type) {}
     Node(NodeType type, double value): type(type), value(value) {}
 };
@@ -90,7 +90,7 @@ std::unique_ptr<Node> Parser::expression()
     std::unique_ptr<Node> left = term();
     std::unique_ptr<Node> node = expression_r();
 
-    while (node->type != Undefined)
+    while (node)
     {
         node->left = std::move(left);
         left = std::move(node);
@@ -102,17 +102,17 @@ std::unique_ptr<Node> Parser::expression()
 
 std::unique_ptr<Node> Parser::expression_r()
 {
-    std::unique_ptr<Node> node(new Node());
+    std::unique_ptr<Node> node;
 
     if (token.type == TokenPlus)
     {
-        node->type = OperatorPlus;
+        node.reset(new Node(OperatorPlus));
         node->right = term();
     }
     else
     if (token.type == TokenMinus)
     {
-        node->type = OperatorMinus;
+        node.reset(new Node(OperatorMinus));
         node->right = term();
     }
 
@@ -124,7 +124,7 @@ std::unique_ptr<Node> Parser::term()
     std::unique_ptr<Node> left = factor();
     std::unique_ptr<Node> node = term_r();
 
-    while (node->type != Undefined)
+    while (node)
     {
         node->left = std::move(left);
         left = std::move(node);
@@ -138,17 +138,17 @@ std::unique_ptr<Node> Parser::term_r()
 {
     token_read();
 
-    std::unique_ptr<Node> node(new Node());
+    std::unique_ptr<Node> node;
 
     if (token.type == TokenMul)
     {
-        node->type = OperatorMul;
+        node.reset(new Node(OperatorMul));
         node->right = factor();
     }
     else
     if (token.type == TokenDiv)
     {
-        node->type = OperatorDiv;
+        node.reset(new Node(OperatorDiv));
         node->right = factor();
     }
 
@@ -157,25 +157,24 @@ std::unique_ptr<Node> Parser::term_r()
 
 std::unique_ptr<Node> Parser::factor()
 {
-    std::unique_ptr<Node> node(new Node());
+    std::unique_ptr<Node> node;
 
     token_read();
 
     if (token.type == TokenDouble)
     {
-        node->type = Double;
-        node->value = token.value;
+        node.reset(new Node(Double, token.value));
     }
     else
     if (token.type == TokenPlus)
     {
-        node->type = UnaryPlus;
+        node.reset(new Node(UnaryPlus));
         node->left = factor();
     }
     else
     if (token.type == TokenMinus)
     {
-        node->type = UnaryMinus;
+        node.reset(new Node(UnaryMinus));
         node->left = factor();
     }
     else
@@ -197,12 +196,9 @@ void print(const std::unique_ptr<Node>& node)
         print(node->right);
 }
 
-struct EvalError : public std::exception
+class eval_exception: public std::exception
 {
-  const char * what () const throw ()
-  {
-    return "Evaluation error";
-  }
+    virtual const char* what() const throw() {return "Evaluation exception";}
 };
 
 double eval(const std::unique_ptr<Node>& node)
@@ -227,7 +223,7 @@ double eval(const std::unique_ptr<Node>& node)
         return eval(node->left) / eval(node->right);
     }
 
-    throw EvalError();
+    throw eval_exception();
 }
 
 }
