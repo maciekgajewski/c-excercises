@@ -1,4 +1,5 @@
 #include <memory>
+#include <exception>
 
 namespace expr_ast
 {
@@ -196,6 +197,14 @@ void print(const std::unique_ptr<Node>& node)
         print(node->right);
 }
 
+struct EvalError : public std::exception
+{
+  const char * what () const throw ()
+  {
+    return "Evaluation error";
+  }
+};
+
 double eval(const std::unique_ptr<Node>& node)
 {
     if (node->type == Double)
@@ -218,8 +227,7 @@ double eval(const std::unique_ptr<Node>& node)
         return eval(node->left) / eval(node->right);
     }
 
-    // TODO: Raise an exception
-    return 0;
+    throw EvalError();
 }
 
 }
