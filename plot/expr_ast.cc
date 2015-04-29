@@ -47,36 +47,12 @@ public:
     NodeType type = Undefined;
 
     double value = 0;
+    std::unique_ptr<Node> left;
+    std::unique_ptr<Node> right;
 
     Node() = default;
     Node(NodeType type): type(type) {}
     Node(NodeType type, double value): type(type), value(value) {}
-
-    void set_left(Node* node)
-    {
-        left.reset(node);
-    }
-
-    Node* get_left()
-    {
-        return left.get();
-    }
-
-    void set_right(Node* node)
-    {
-        right.reset(node);
-    }
-
-    Node* get_right()
-    {
-        return right.get();
-    }
-
-    // TODO: Implement move
-
-private:
-    std::unique_ptr<Node> left;
-    std::unique_ptr<Node> right;
 };
 
 class Parser
@@ -87,11 +63,11 @@ public:
     void token_read();
     void token_match(TokenType);
 
-    Node* expression();
-    Node* expression_r();
-    Node* term();
-    Node* term_r();
-    Node* factor();
+    std::unique_ptr<Node> expression();
+    std::unique_ptr<Node> expression_r();
+    std::unique_ptr<Node> term();
+    std::unique_ptr<Node> term_r();
+    std::unique_ptr<Node> factor();
 
 private:
     Tokenizer& tokenizer;
@@ -108,79 +84,79 @@ void Parser::token_match(TokenType token_type)
     token_read();
 }
 
-Node* Parser::expression()
+std::unique_ptr<Node> Parser::expression()
 {
-    Node* left = term();
-    Node* node = expression_r();
+    std::unique_ptr<Node> left = term();
+    std::unique_ptr<Node> node = expression_r();
 
     while (node->type != Undefined)
     {
-        node->set_left(left);
-        left = node;
+        node->left = std::move(left);
+        left = std::move(node);
         node = expression_r();
     }
 
     return left;
 }
 
-Node* Parser::expression_r()
+std::unique_ptr<Node> Parser::expression_r()
 {
-    Node* node = new Node();
+    std::unique_ptr<Node> node(new Node());
 
     if (token.type == TokenPlus)
     {
         node->type = OperatorPlus;
-        node->set_right(term());
+        node->right = term();
     }
     else
     if (token.type == TokenMinus)
     {
         node->type = OperatorMinus;
-        node->set_right(term());
+        node->right = term();
     }
 
     return node;
 }
 
-Node* Parser::term()
+std::unique_ptr<Node> Parser::term()
 {
-    Node* left = factor();
-    Node* node = term_r();
+    std::unique_ptr<Node> left = factor();
+    std::unique_ptr<Node> node = term_r();
 
     while (node->type != Undefined)
     {
-        node->set_left(left);
-        left = node;
+        node->left = std::move(left);
+        left = std::move(node);
         node = term_r();
     }
 
     return left;
 }
 
-Node* Parser::term_r()
+std::unique_ptr<Node> Parser::term_r()
 {
     token_read();
 
-    Node* node = new Node();
+    std::unique_ptr<Node> node(new Node());
 
     if (token.type == TokenMul)
     {
         node->type = OperatorMul;
-        node->set_right(factor());
+        node->right = factor();
     }
     else
     if (token.type == TokenDiv)
     {
         node->type = OperatorDiv;
-        node->set_right(factor());
+        node->right = factor();
     }
 
     return node;
 }
 
-Node* Parser::factor()
+std::unique_ptr<Node> Parser::factor()
 {
-    Node* node = new Node(); // TODO: Use smart pointers
+    std::unique_ptr<Node> node(new Node());
 
     token_read();
 
@@ -193,13 +169,13 @@ Node* Parser::factor()
     if (token.type == TokenPlus)
     {
         node->type = UnaryPlus;
-        node->set_left(factor());
+        node->left = factor();
     }
     else
     if (token.type == TokenMinus)
     {
         node->type = UnaryMinus;
-        node->set_left(factor());
+        node->left = factor();
     }
     else
     if (token.type == TokenLP)
@@ -211,35 +187,35 @@ Node* Parser::factor()
     return node;
 }
 
-void print(expr_ast::Node* node)
+void print(const std::unique_ptr<Node>& node)
 {
     std::cout << node->type << " " << node->value << std::endl;
-    if (node->get_left())
-        print(node->get_left());
-    if (node->get_right())
-        print(node->get_right());
+    if (node->left)
+        print(node->left);
+    if (node->right)
+        print(node->right);
 }
 
-double eval(Node* node)
+double eval(const std::unique_ptr<Node>& node)
 {
     if (node->type == Double)
         return node->value;
 
     if (node->type == OperatorPlus)
     {
-        return eval(node->get_left()) + eval(node->get_right());
+        return eval(node->left) + eval(node->right);
     }
     else if (node->type == OperatorMinus)
     {
-        return eval(node->get_left()) - eval(node->get_right());
+        return eval(node->left) - eval(node->right);
     }
     else if (node->type == OperatorMul)
     {
-        return eval(node->get_left()) * eval(node->get_right());
+        return eval(node->left) * eval(node->right);
     }
     else if (node->type == OperatorDiv)
     {
-        return eval(node->get_left()) / eval(node->get_right());
+        return eval(node->left) / eval(node->right);
     }
 
     // TODO: Raise an exception

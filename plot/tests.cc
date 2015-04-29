@@ -7,7 +7,6 @@
 #include <iostream>
 #include <vector>
 
-
 void test_spirit()
 {
 	boost::spirit::utree ut;
@@ -48,9 +47,7 @@ void test_ast()
 
     expr_ast::Parser parser(tokenizer);
 
-    expr_ast::Node* node = parser.expression();
-
-    expr_ast::print(node);
+    std::unique_ptr<expr_ast::Node> node = parser.expression();
 
     assert(expr_ast::eval(node) == 12);
 }
