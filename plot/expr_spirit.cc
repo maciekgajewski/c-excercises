@@ -13,17 +13,18 @@ namespace client
     namespace ascii =  boost::spirit::ascii;
     namespace spirit = boost::spirit;
 
-    struct expr {
+    struct expr
+    {
         template<typename T1, typename T2 = void>
-        struct result {
+        struct result
+        {
             typedef void type;
         };
 
-        expr(char op) :
-                op(op) {
-        }
+        expr(char op): op(op) {}
 
-        void operator()(spirit::utree& expr, spirit::utree const& rhs) const {
+        void operator()(spirit::utree& expr, spirit::utree const& rhs) const
+        {
             spirit::utree lhs;
             lhs.swap(expr);
             expr.push_back(spirit::utf8_symbol_range_type(&op, &op + 1));
@@ -38,13 +39,15 @@ namespace client
     boost::phoenix::function<expr> const times = expr('*');
     boost::phoenix::function<expr> const divide = expr('/');
 
-    struct negate_expr {
+    struct negate_expr
+    {
         template<typename T1, typename T2 = void>
         struct result {
             typedef void type;
         };
 
-        void operator()(spirit::utree& expr, spirit::utree const& rhs) const {
+        void operator()(spirit::utree& expr, spirit::utree const& rhs) const
+        {
             char const op = '-';
             expr.clear();
             expr.push_back(spirit::utf8_symbol_range_type(&op, &op + 1));
@@ -94,7 +97,8 @@ namespace client
     };
 }
 
-bool expr_parse(const std::string& str, boost::spirit::utree& ut) {
+bool expr_parse(const std::string& str, boost::spirit::utree& ut)
+{
     using boost::spirit::ascii::space;
 
     typedef std::string::const_iterator iterator_type;
@@ -110,7 +114,8 @@ bool expr_parse(const std::string& str, boost::spirit::utree& ut) {
     return (r && iter == end);
 }
 
-double expr_evaluate(const boost::spirit::utree& ut, double x) {
+double expr_evaluate(const boost::spirit::utree& ut, double x)
+{
     using boost::spirit::utree;
     using boost::spirit::utree_type;
     using boost::spirit::utf8_symbol_range_type;
