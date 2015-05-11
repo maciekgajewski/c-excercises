@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 
-namespace client
+namespace expr_spirit
 {
     namespace qi = boost::spirit::qi;
     namespace ascii =  boost::spirit::ascii;
@@ -95,66 +95,78 @@ namespace client
         qi::rule<Iterator, spirit::utf8_symbol_type()> symbol;
 
     };
+
+    bool parse(const std::string& str, boost::spirit::utree& ut)
+    {
+        using boost::spirit::ascii::space;
+
+        typedef std::string::const_iterator iterator_type;
+        typedef expr_spirit::parser<iterator_type> parser;
+
+        parser pr;
+
+        std::string::const_iterator iter = str.begin();
+        std::string::const_iterator end = str.end();
+
+        bool r = phrase_parse(iter, end, pr, space, ut);
+
+        return (r && iter == end);
+    }
+
+    double evaluate(const boost::spirit::utree& ut, double x)
+    {
+        using boost::spirit::utree;
+        using boost::spirit::utree_type;
+        using boost::spirit::utf8_symbol_range_type;
+
+        auto it = ut.begin();
+
+        auto node_operation = *it;
+        ++it;
+        auto node_left = *it;
+        ++it;
+        auto node_right = *it;
+
+        char operation = *(node_operation.get<utf8_symbol_range_type>().begin());
+        double a;
+        double b;
+
+        auto eval = [&] (const boost::spirit::utree& node)
+        {
+            if (node.which() == utree_type::list_type)
+                return evaluate(node, x);
+            if (node.which() == utree_type::symbol_type)
+                return x;
+            return node.get<double>();
+        };
+
+        a = eval(node_left);
+        b = eval(node_right);
+
+        if (operation == '*')
+            return a * b;
+        else if (operation == '/')
+            return a / b;
+        else if (operation == '+')
+            return a + b;
+        else if (operation == '-')
+            return a - b;
+
+        return 0;
+    }
+
+    double eval(const boost::spirit::utree& node, double x)
+    {
+        using boost::spirit::utree_type;
+
+        if (node.which() == utree_type::list_type)
+            return evaluate(node, x);
+
+        if (node.which() == utree_type::symbol_type)
+            return x;
+
+        return node.get<double>();
+    };
+
+
 }
-
-bool expr_parse(const std::string& str, boost::spirit::utree& ut)
-{
-    using boost::spirit::ascii::space;
-
-    typedef std::string::const_iterator iterator_type;
-    typedef client::parser<iterator_type> parser;
-
-    parser pr;
-
-    std::string::const_iterator iter = str.begin();
-    std::string::const_iterator end = str.end();
-
-    bool r = phrase_parse(iter, end, pr, space, ut);
-
-    return (r && iter == end);
-}
-
-double expr_evaluate(const boost::spirit::utree& ut, double x)
-{
-    using boost::spirit::utree;
-    using boost::spirit::utree_type;
-    using boost::spirit::utf8_symbol_range_type;
-
-    auto iter = ut.begin();
-
-    auto op = *iter;
-    ++iter;
-    auto l = *iter;
-    ++iter;
-    auto r = *iter;
-
-    char o = *(op.get<utf8_symbol_range_type>().begin());
-    double a;
-    double b;
-
-    if (l.which() == utree_type::list_type)
-        a = expr_evaluate(l, x);
-    else if (l.which() == utree_type::symbol_type)
-        a = x;
-    else
-        a = l.get<double>();
-
-    if (r.which() == utree_type::list_type)
-        b = expr_evaluate(r, x);
-    else if (r.which() == utree_type::symbol_type)
-        b = x;
-    else
-        b = r.get<double>();
-
-    if (o == '*')
-        return a * b;
-    else if (o == '/')
-        return a / b;
-    else if (o == '+')
-        return a + b;
-    else if (o == '-')
-        return a - b;
-
-    return 0;
-}
-
