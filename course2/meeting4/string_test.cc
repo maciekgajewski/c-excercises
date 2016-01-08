@@ -75,6 +75,22 @@ void stream_output_operator()
 	assert(stream.str() == "Test");
 }
 
+template<typename StringType>
+void concatenation_operator()
+{
+	StringType s1 = "aa";
+	StringType s2 = "bbb";
+	
+	// concatenation
+	StringType s3 = s1 + s2;
+	assert(s3 == "aabbb");
+	assert(s1 == "aa");
+	assert(s2 == "bbb");
+	
+	// appending
+	s3 += s1;
+	assert(s3 == "aabbbaa");
+}
 
 int main()
 {
@@ -82,6 +98,7 @@ int main()
 	basic_operators<std::string>();
 	indexing_operator<std::string>();
 	stream_output_operator<std::string>();
+	concatenation_operator<std::string>();
 	std::cout << "std::string tests passed" << std::endl;
 	
 	// TODO after implementing your string class, run the selected functions for your type here
