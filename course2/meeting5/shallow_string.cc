@@ -49,7 +49,7 @@ int main()
 
 	ShallowString s2 = s1;
 
-	//s1[0] = 'x';
+	s1[0] = 'x';
 
 	std::cout << "s1=" << s1 << std::endl;
 	std::cout << "s2=" << s2 << std::endl;
