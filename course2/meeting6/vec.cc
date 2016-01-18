@@ -1,6 +1,5 @@
 #include <iostream>
 
-template<typename T>
 class Vec
 {
 public:
@@ -14,19 +13,13 @@ public:
 		return Vec{x + o.x, y + o.y};
 	}
 
-	T x;
-	T y;
+	double x;
+	double y;
 };
-
-template<typename T>
-std::ostream& operator<<(std::ostream& o, const Vec<T>& vec)
-{
-	return o << "(" << vec.x << ", " << vec.y << ")";
-}
 
 int main()
 {
-	Vec<int> v = Vec<int>{1,1} + Vec<int>{4,5};
+	Vec v = Vec{1,1} + Vec{4,5};
 
-	std::cout << "v=" << v  << std::endl;
+	std::cout << "v=" << v.x << "," << v.y  << std::endl;
 }
