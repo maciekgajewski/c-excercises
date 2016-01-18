@@ -5,6 +5,9 @@
 #include <sstream>
 #include <vector>
 #include <algorithm>
+#include <memory>
+
+typedef std::unique_ptr<char[]> cstr_ptr;
 
 template<typename StringType>
 void basic_test()
@@ -104,10 +107,6 @@ public:
 		copyCharArray(str);
 	}
 
-	CustomString(std::vector<char> str) {
-		mChars = str;
-	}
-
 	int length() { return mChars.size(); }
 
 	/* operators on C-style strings */
@@ -151,7 +150,7 @@ public:
 		return mChars[i];
 	}
 
-	friend std::stringstream& operator<<(std::stringstream& os, const CustomString& str);
+	friend std::ostream& operator<<(std::ostream& os, const CustomString& str);
 
 
 private:
@@ -179,10 +178,100 @@ private:
 
 };
 
-std::stringstream& operator<<(std::stringstream& stream, const CustomString& str) {
-	for (std::vector<char>::const_iterator it = str.mChars.begin(); it != str.mChars.end(); ++it) {
-		stream << *it;
+std::ostream& operator<<(std::ostream& stream, const CustomString& str) {
+	stream.write(str.mChars.data(), str.mChars.size());
+	return stream;
+}
+
+
+class CustomString2
+{
+public:
+	CustomString2() {}
+
+	CustomString2(const char* str) {
+		initFromCstr(str);
 	}
+
+	CustomString2(const CustomString2& str) {
+		initFromCstr(str.mChars.get());
+	}
+
+	size_t length() { return mLength; }
+
+	/* operators on C-style strings */
+	CustomString2& operator=(const char* str) {
+		initFromCstr(str);
+		return *this;
+	}
+	bool operator==(const char* str) {
+		return std::strcmp(mChars.get(), str) == 0;
+	}
+	bool operator!=(const char* str) {
+		return std::strcmp(mChars.get(), str) != 0;
+	}
+
+	/* operators on CustomString2s */
+	CustomString2& operator=(const CustomString2& str) {
+		initFromCstr(str.mChars.get());
+		return *this;
+	}
+	const CustomString2 operator+(const CustomString2& str) {
+		CustomString2 r = *this;
+		r += str;
+		return r;
+	}
+	CustomString2& operator+=(const CustomString2& str) {
+		mLength += str.mLength;
+		cstr_ptr temp( new char[mLength + 1] );
+		std::strcpy(temp.get(), mChars.get());
+		std::strcat(temp.get(), str.mChars.get());
+		// I don't understand why I have to use move here while in initFromCstr
+		// I can use direct assignment; i.e. why is the operation in initFromCstr
+		// a move assignment while the below (without std::move) is a copy assignment?
+		mChars = std::move(temp);
+		return *this;
+	}
+	bool operator==(const CustomString2& str) {
+		return std::strcmp(mChars.get(), str.mChars.get()) == 0;
+	}
+	bool operator!=(const CustomString2& str) {
+		return std::strcmp(mChars.get(), str.mChars.get()) != 0;
+	}
+	bool operator<(const CustomString2& str) {
+		return std::strcoll(mChars.get(), str.mChars.get()) < 0;
+	}
+	char& operator[](int i) {
+		return mChars[i];
+	}
+
+	friend std::ostream& operator<<(std::ostream& os, const CustomString2& str);
+
+
+private:
+	cstr_ptr mChars;
+	size_t mLength = 0;
+
+	void initFromCstr(const char* str) {
+		mLength = std::strlen(str);
+		/* Can do this since = is overloaded for unique_ptr.
+		 * 1. Memory allocation for char array with length mLength+1
+		 * 2. Construction of array
+		 * 3. Memory allocation of cstr_ptr
+		 * 4. Construction of cstr_ptr, acquires ownership of memory in steps 1+2
+		 * 5. Memory owned by mChars is freed
+		 * 6. mChars acquires ownership of rhs
+		 * 7. rhs becomes nullpointer and is deleted once out of scope (function end)
+		 */
+		mChars = cstr_ptr( new char[mLength+1] );
+		std::strcpy(mChars.get(), str);
+	}
+};
+
+std::ostream& operator<<(std::ostream& stream, const CustomString2& str) {
+	// Originally I put str.mLength+1 here, but then the assertion failed. So
+	// apparently stream.str == "Bla" does not check null character?
+	stream.write(str.mChars.get(), str.mLength);
 	return stream;
 }
 
@@ -202,4 +291,15 @@ int main()
 	stream_output_operator<CustomString>();
 	concatenation_operator<CustomString>();
 	std::cout << "CustomString tests passed" << std::endl;
+
+	CustomString s("yoyo");
+	assert(s == CustomString("yoyo"));
+	assert(s == CustomString("yo") + CustomString("yo"));
+
+	basic_test<CustomString2>();
+	basic_operators<CustomString2>();
+	indexing_operator<CustomString2>();
+	stream_output_operator<CustomString2>();
+	concatenation_operator<CustomString2>();
+	std::cout << "CustomString2 tests passed" << std::endl;
 }
