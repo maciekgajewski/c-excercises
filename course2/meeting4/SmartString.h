@@ -119,12 +119,12 @@ protected:
 		// it's either this increment var or another if. not sure which is better
 		size_t increment = 0;
 		if ( mCapacity < len + 1 ) {
-			increment = (size_t) (INCREMENT_FACTOR-1)*len;
+			increment = (size_t) ((INCREMENT_FACTOR-1)*len);
 		}
 		if ( mLength == 0 ) {
 			mChars = cstr_ptr( new char[mCapacity + increment] );
 		} else if ( increment > 0 ) {
-			cstr_ptr temp( new char[mCapacity] );
+			cstr_ptr temp( new char[mCapacity + increment] );
 			std::strcpy(temp.get(), mChars.get());
 			mChars = std::move(temp);
 		}
