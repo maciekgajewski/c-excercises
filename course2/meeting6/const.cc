@@ -1,8 +1,17 @@
 #include "string.hh"
 
+
+void print_json(MyString s)
+{
+    std::cout
+        << "{string=\"" << s << "\", length="
+        << s.length() << "}" << std::endl;
+}
+
 int main()
 {
-    std::cout << "Hello, world" << std::endl;
-    
     test_string();
+    
+    MyString hello = "Hello, World";
+    print_json(hello);
 }
