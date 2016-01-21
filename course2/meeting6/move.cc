@@ -9,4 +9,6 @@ int main()
     std::cout << ab << std::endl;
     ab = b+a;
     std::cout << ab << std::endl;
+    ab = std::move(a);
+    std::cout << ab << std::endl;
 }

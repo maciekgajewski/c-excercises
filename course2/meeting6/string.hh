@@ -30,9 +30,16 @@ public:
 			std::strcpy(mChars.get(), other.mChars.get());
 		}
 	}
+	
+	MyString(MyString&& other) noexcept
+	{
+        // TODO
+    }
+	
 
 	MyString& operator=(const MyString& other)
 	{
+        std::cout << "copy assignment!" << std::endl;
 		mLength = other.mLength;
 		if (mLength > 0)
 		{
@@ -45,6 +52,15 @@ public:
 		}
 		return *this;
 	}
+	
+	
+	MyString& operator=(MyString&& other)
+    {
+        std::cout <<"move assigment" << std::endl;
+        mLength = other.mLength;
+        mChars.swap(other.mChars);
+        return *this;
+    }
 	
 	MyString& operator=(const char* str)
 	{
@@ -119,11 +135,16 @@ public:
 		return std::strcoll(c_str(), str.c_str()) < 0;
 	}
 	
+	const char& operator[](int i) const
+	{
+		return mChars.get()[i];
+	}
+		
 	char& operator[](int i)
 	{
-		return mChars[i];
-	}
-	
+		return mChars.get()[i];
+    }
+    
 	friend std::ostream& operator<<(std::ostream& os, const MyString& str)
 	{
 		if (str.mChars)
