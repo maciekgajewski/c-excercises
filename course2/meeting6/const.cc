@@ -4,8 +4,10 @@
 void print_json(MyString s)
 {
     std::cout
-        << "{string=\"" << s << "\", length="
-        << s.length() << "}" << std::endl;
+        << "{"
+        << "string=\"" << s << "\""
+        << "}"
+        << std::endl;
 }
 
 int main()
