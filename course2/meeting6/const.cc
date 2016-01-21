@@ -1,11 +1,12 @@
 #include "string.hh"
 
 
-void print_json(MyString s)
+void print_json(const MyString& s)
 {
     std::cout
         << "{"
-        << "string=\"" << s << "\""
+        << "string=\"" << s << "\","
+        << "length=" << s.length()
         << "}"
         << std::endl;
 }
@@ -15,5 +16,6 @@ int main()
     test_string();
     
     MyString hello = "Hello, World";
-    print_json(hello);
+    MyString suffix = ".com";
+    print_json(hello + suffix);
 }

@@ -22,6 +22,7 @@ public:
 
 	MyString(const MyString& other)
 	{
+        std::cout << "copy!" << std::endl;
 		mLength = other.mLength;
 		if (mLength > 0)
 		{
@@ -91,7 +92,7 @@ public:
 		return result;
 	}
 
-	size_t length() { return mLength; }
+	size_t length() const { return mLength; }
 
 	bool operator==(const char* str)
 	{
