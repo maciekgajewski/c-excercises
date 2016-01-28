@@ -14,8 +14,7 @@ const T& Max(const T& a, const T& b)
 		return b;
 }
 
-template<>
-const char*& Max<const char*&>(const char*& a, const char*& b)
+const char* Max(const char* a, const char* b)
 {
 	if (std::strcmp(a, b) > 0)
 		return a;
@@ -23,9 +22,31 @@ const char*& Max<const char*&>(const char*& a, const char*& b)
 		return b;
 }
 
+enum OrderSide { BID, ASK };
+
+
+
+template<OrderSide OS>
+double PickBetterPrice(double a, double b);
+
+
+template<>
+double PickBetterPrice<BID>(double a, double b)
+{
+		return std::min(a, b);
+}
+template<>
+double PickBetterPrice<ASK>(double a, double b)
+{
+		return Max(a, b);
+}
 
 int main()
 {
+
+	std::cout << "better price, 2, 5, BID: " << PickBetterPrice<BID>(2, 5) << std::endl;
+	std::cout << "better price, 2, 5, ASK: " << PickBetterPrice<ASK>(2, 5) << std::endl;
+
 	std::uint64_t a, b;
 	//std::int64_t a, b;
 	a = 12;
