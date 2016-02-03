@@ -1,2 +1,2 @@
-string_test: string_test.cc SmartString.h
-	g++ -o string_test -g -Wall -std=c++11 string_test.cc
+list_test: list_test.cc MyLinkedList.h
+	g++ -o list_test -g -Wall -std=c++11 list_test.cc

@@ -30,7 +30,6 @@ void basic_test()
 template<typename StringType>
 void basic_operators()
 {
-	StringType slong = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	StringType s1 = "aaaaaa";
 	StringType s2 = "zzzzz";
 	StringType s3 = s1;
@@ -80,7 +79,6 @@ void stream_output_operator()
 template<typename StringType>
 void concatenation_operator()
 {
-	StringType slong = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
 	StringType s1 = "aa";
 	StringType s2 = "bbb";
 	
@@ -93,9 +91,6 @@ void concatenation_operator()
 	// appending
 	s3 += s1;
 	assert(s3 == "aabbbaa");
-
-	s2 += slong;
-	assert(s2 == "bbbaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
 }
 
 int main()
@@ -105,5 +100,8 @@ int main()
 	indexing_operator<SmartString>();
 	stream_output_operator<SmartString>();
 	concatenation_operator<SmartString>();
-	std::cout << "SmartString tests passed" << std::endl;
+	std::cout << "std::string tests passed" << std::endl;
+
+	// TODO after implementing your string class, run the selected functions for your type here
 }
+

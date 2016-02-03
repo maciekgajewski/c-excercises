@@ -26,24 +26,35 @@ class StringBase
 public:
 	StringBase() {}
 
-	size_t length() { return mLength; }
+	size_t length() const { return mLength; }
 
 	/* operators on c string */
-	bool operator==(const char* str) {
+	bool operator==(const char* str) const {
+		if ( mLength == 0 ) { return false; }
 		return std::strcmp(mChars.get(), str) == 0;
 	}
-	bool operator!=(const char* str) {
+	bool operator!=(const char* str) const {
+		if ( mLength == 0 ) { return true; }
 		return std::strcmp(mChars.get(), str) != 0;
 	}
 
 	/* operators on StringBase */
-	bool operator==(const StringBase& str) {
+	bool operator==(const StringBase& str) const {
+		if ( mLength == 0 ) {
+			if ( str.mLength == 0 ) { return true; }
+			return false;
+		}
 		return std::strcmp(mChars.get(), str.mChars.get()) == 0;
 	}
-	bool operator!=(const StringBase& str) {
+	bool operator!=(const StringBase& str) const {
+		if ( mLength == 0 ) {
+			if ( str.mLength == 0 ) { return false; }
+			return true;
+		}
 		return std::strcmp(mChars.get(), str.mChars.get()) != 0;
 	}
-	bool operator<(const StringBase& str) {
+	bool operator<(const StringBase& str) const {
+		if ( mLength == 0 ) { return true; } //undefined?
 		return std::strcoll(mChars.get(), str.mChars.get()) < 0;
 	}
 	char& operator[](int i) {
@@ -59,7 +70,9 @@ protected:
 };
 
 std::ostream& operator<<(std::ostream& stream, const StringBase& str) {
-	stream.write(str.mChars.get(), str.mLength);
+	if ( str.mLength > 0 ) {
+		stream.write(str.mChars.get(), str.mLength);
+	}
 	return stream;
 }
 
@@ -76,8 +89,12 @@ public:
 	SmartString(const SmartString& str) {
 		initFromCstr(str.mChars.get(), str.mLength);
 	}
+	SmartString(SmartString&& str) {
+		mLength = str.mLength;
+		mChars.swap(str.mChars);
+	}
 
-	size_t capacity() { return mCapacity; }
+	size_t capacity() const { return mCapacity; }
 
 	/* operators on C-style strings */
 	SmartString& operator=(const char* str) {
@@ -92,7 +109,12 @@ public:
 		}
 		return *this;
 	}
-	const SmartString operator+(const SmartString& str) {
+	SmartString& operator=(SmartString&& str) {
+		mLength = str.mLength;
+		mChars.swap(str.mChars);
+		return *this;
+	}
+	const SmartString operator+(const SmartString& str) const {
 		SmartString r = *this;
 		r += str;
 		return r;
