@@ -12,7 +12,7 @@ template<typename T>
 class ListIterator
 {
 public:
-	ListIterator(Node<T>* c) : mCurrent(c) {}
+	ListIterator(Node<T>* c) : mCurrent(c) { }
 	
 	T& operator*() { return mCurrent->mValue; }
 	void operator++() { mCurrent = mCurrent->mNext.get(); }
@@ -62,8 +62,11 @@ int main()
 		l.push_front(i);
 	}
 
-	for(int i : l)
-	{
+        for(auto it = l.begin(); it != l.end(); ++it)
+        {
+            int i = *it;
+	//for(int i : l)
+	//{
 		std::cout << i << std::endl;
 	}
 }
