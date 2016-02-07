@@ -1,0 +1,10 @@
+Const correctness & Move semantics
+
+1. Performance consideretaion of const:
+ * pass-by-value vs pass-by-ptr
+ * temporaries. Use + operator
+2. Overloading on const
+3. Performance considerations of move (use+)
+4. Move semantics: unique ownership of resources
+
+
