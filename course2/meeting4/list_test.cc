@@ -58,7 +58,7 @@ void Populate(MyLinkedList& l)
 	std::vector<int> vec(NUM);
 	std::iota(vec.begin(), vec.end(), 0); // fill vector with 0 .. 9
 
-	// copy from vector to list
+	// Copy from vector to list
 	l.clear();
 	assert(l.empty());
 	std::copy(vec.begin(), vec.end(), std::front_inserter(l));

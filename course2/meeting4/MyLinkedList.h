@@ -25,7 +25,7 @@ template<typename T>
 class ListIterator
 {
 public:
-	//these are necessary in order to use std::copy in line 60
+	//These are necessary in order to use std::copy in line 60
 	typedef T value_type;
 	typedef T* pointer;
 	typedef T& reference;
