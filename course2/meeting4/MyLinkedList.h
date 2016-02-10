@@ -10,156 +10,139 @@
 
 #include <iostream>
 #include <memory>
+#include <algorithm>
+#include <iterator>
 
 template<typename T>
-class Node
+struct Node
 {
-	typedef std::shared_ptr<Node<T>> node_ptr;
+	T mValue;
+	Node* mPrev;
+	std::unique_ptr<Node> mNext;
+};
 
+template<typename T>
+class ListIterator
+{
 public:
-	Node() {}
+	//these are necessary in order to use std::copy in line 60
+	typedef T value_type;
+	typedef T* pointer;
+	typedef T& reference;
+	typedef std::ptrdiff_t difference_type;
+	typedef std::forward_iterator_tag iterator_category;
 
-	Node(const T& value) {
-		setValue(value);
-	}
+	ListIterator(Node<T>* c) : mCurrent(c) { }
 
-	void setValue(const T& value) {
-		mValue = value;
-	}
-	const T& getValue() const {
-		return mValue;
-	}
-	T& getValue() {
-		return mValue;
-	}
-
-	const node_ptr next() const {
-		return mRight;
-	}
-	void setNext(const node_ptr n) {
-		mRight = n;
-	}
-	const node_ptr previous() const {
-		return mLeft;
-	}
-	void setPrevious(const node_ptr p) {
-		mLeft = p;
+	T& operator*() { return mCurrent->mValue; }
+	void operator++() { mCurrent = mCurrent->mNext.get(); }
+	bool operator!=(const ListIterator& o) const
+	{
+		return mCurrent != o.mCurrent;
 	}
 
 private:
-	node_ptr mLeft;
-	node_ptr mRight;
-	T mValue;
+	Node<T>* mCurrent = nullptr;
 };
-
-
 
 template<typename T>
 class MyLinkedList
 {
-	typedef std::shared_ptr<Node<T>> node_ptr;
 
 public:
 
-    MyLinkedList<T>() {
-    	mFront.reset( new Node<T>() );
-    	mBack = mFront; //copy assign
+	typedef std::unique_ptr<Node<T>> node_ptr;
+	typedef T value_type;
+
+	MyLinkedList<T>() {}
+
+    MyLinkedList<T>(const MyLinkedList<T>& oldList) {
+    	std::copy(oldList.begin(), oldList.end(), std::front_inserter(*this));
     }
-    MyLinkedList<T>(const MyLinkedList<T>&); //TODO
-    //MyLinkedList<T>(MyLinkedList<T>); TODO: gives compiler error, no time to look into
+
+    std::size_t size() const {return mSize;}
 
     void push_front(const T& element) {
-    	if ( mSize == 0 ) {
-    		mFront->setValue(element);
-    	} else {
-    		node_ptr temp( new Node<T>() );
-    		//will do copy assignment, increasing shared ownership of new node
-    		mFront->setNext(temp);
-    		//will do copy assignment, increasing shared ownership of current front node
-    		temp->setPrevious(mFront);
-    		//copy assignment of new node to front. Ref count of old front decreased by 1, now the new node mLeft ptr is one of the owners
-    		mFront = temp;
-    		mFront->setValue(element);
-    	}
+		if ( mSize > 0 ) {
+			node_ptr newNode( new Node<T>{element} );
+			newNode->mPrev = mFront;
+			mFront = newNode.get();
+			mFront->mPrev->mNext = std::move(newNode);
+		} else {
+			mBack = node_ptr( new Node<T>{element} );
+			mFront = mBack.get();
+		}
     	mSize++;
     }
 
-    //shouldn't this also return the value of the front in addition to removing it?
     void pop_front() {
-    	if ( mSize > 0 ) {
-    		if ( mSize > 1 ) {
-    			mFront = mFront->previous();
-    		}
-    		mSize--;
-    	}
+		if ( mSize > 1 ) {
+			mFront = mFront->mPrev;
+			mFront->mNext.reset();
+		} else {
+			mBack.reset();
+		}
+		mSize = mSize == 0 ? 0 : mSize-1;
     }
-    std::size_t size() const {return mSize;}
 
     const T& front() const {
-    	if ( mSize == 0 ) {
-    		//exception? return null?
-    		std::cout << "Throw some exception here" << std::endl;
-    		//return NULL; doesn't compile
-    	}
-    	return mFront->getValue();
+    	//I'm gonna stick to std::list API: "Calling front on an empty container is undefined."
+    	return mFront->mValue;
     }
     T& front() {
-    	if ( mSize == 0 ) {
-			std::cout << "Throw some exception here" << std::endl;
-		}
-    	return mFront->getValue();
+    	return mFront->mValue;
     }
 
-
-    // more advanced:
     void push_back(const T& element) {
-		if ( mSize == 0 ) {
-			mBack->setValue(element);
+		if ( mSize > 0 ) {
+			node_ptr newNode( new Node<T>{element} );
+			mBack->mPrev = newNode.get();
+			newNode->mNext = std::move(mBack);
+			mBack = std::move(newNode);
 		} else {
-			node_ptr temp( new Node<T>() );
-			mBack->setPrevious(temp);
-			temp->setNext(mBack);
-			mBack = temp;
-			mBack->setValue(element);
+			mBack = node_ptr( new Node<T>{element} );
+			mFront = mBack.get();
 		}
 		mSize++;
 	}
 
-    void pop_back() {
-		if ( mSize > 0 ) {
-			if ( mSize > 1 ) {
-				mBack = mBack->next();
-			}
-			mSize--;
-		}
-	}
-
-    T& back() {return mBack->getValue();}
-    const T& back() const {return mBack->getValue();}
-
-    // extra:
-    // how would you provide access to all elements of the list?
-
-    T& operator[](int i) {
-    	//compiler requires a return value, so will leave out the check. How to throw exception?
-    	//if ( i >= 0 && i < mSize ) {
-		if ( i > int(0.5*mSize) ) {
-			Node<T>* temp = mBack.get();
-			for ( int j = 0; j < i; j++ ) {
-				temp = temp->next().get();
-			}
-			return temp->getValue();
+	void pop_back() {
+		if ( mSize > 1 ) {
+			mBack = std::move(mBack->mNext);
 		} else {
-			Node<T>* temp = mFront.get();
-			for ( int j = 0; j < i; j++ ) {
-				temp = temp->previous().get();
-			}
-			return temp->getValue();
+			mBack.reset();
 		}
+		mSize = mSize == 0 ? 0 : mSize-1;
 	}
+
+	const T& back() const {
+		return mBack->mValue;
+	}
+	T& back() {
+		return mBack->mValue;
+	}
+
+	void clear() {
+		mBack.reset();
+		mSize = 0;
+	}
+
+	bool empty() const {
+		return mSize == 0;
+	}
+
+	ListIterator<T> begin() const {
+		return ListIterator<T>(mBack.get());
+	}
+
+	ListIterator<T> end() const {
+		return ListIterator<T>(nullptr);
+	}
+
 
 private:
-    node_ptr mFront;
+    //need to use raw pointer for front, otherwise need shared pointer
+    Node<T>* mFront = nullptr;
     node_ptr mBack;
     size_t mSize = 0;
 };
