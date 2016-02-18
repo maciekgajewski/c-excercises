@@ -6,6 +6,28 @@
 #include <cstring>
 #include <sstream>
 
+template<typename T>
+class UP
+{
+public:
+    UP(T* p) : mPtr(p) {}
+    UP(const UP&) = delete;
+    UP(UP&& other)
+    {   
+        delete mPtr;
+        mPtr = other.mPtr;
+        other.mPtr = nullptr;
+    }
+    ~UP() { delete mPtr; }
+    
+    T* get() { return mPtr; }
+    const T* get() const { return mPtr; }
+    
+private:
+    T* mPtr = nullptr;
+};
+
+
 class MyString
 {
 public:
