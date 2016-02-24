@@ -29,7 +29,11 @@ int main(int argc, char** argv)
         std::string search = argv[1];
         std::cout << "Looking for a string: " << search << std::endl;
         
-        it = boost::find_if(data, [&](const auto& pair) { return pair.second == search; }); // O(n)
+        it = boost::find_if(data,
+            [&](const auto& pair)
+            {
+                return pair.second == search;
+            }); // O(n)
     }
         
     if (it == data.end())

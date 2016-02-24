@@ -1,28 +1,39 @@
 #include <iostream>
 #include <string>
 
-class Record
-{
-    int id;
-};
-
 class Person
 {
 public:
+
+    virtual ~Person() = default;
     
     std::string firstName;
     std::string lastName;
+    
+    virtual void ToStream(std::ostream& s) const
+    {
+        s << "f: "<<firstName << ", l:"<<lastName;
+    }
 };
 
-class Employee : public Record, public Person
+class Employee : Person
 {
 public:
     std::string role;
+    
+    void ToStream(std::ostream& s) const
+    {
+        Person::ToStream(s);
+        s << ", r: " << role;
+    }
+    
 };
 
 void PrintPerson(const Person& p)
 {
-    std::cout << "first: " << p.firstName << ", last: "<< p.lastName << std::endl;
+    p.ToStream(std::cout);
+    std::cout << std::endl;
+    
 }
 
 int main()
@@ -37,21 +48,15 @@ int main()
     mat.firstName = "Matthijs";
     mat.lastName = "S";
     
- 
-    Employee* ep = &maciek;
-    Person* pp = ep;
-    Record* rp = &maciek;
-    
-    Employee* ep2 = dynamic_cast<Employee*>(pp);
-
-    std::cout << "ep = " << ep << std::endl;
-    std::cout << "pp = " << pp << std::endl;
-    std::cout << "rp = " << rp << std::endl;
-    std::cout << "ep2= " << ep2 << std::endl;
-    
     PrintPerson(maciek);
     PrintPerson(mat);
+ 
+    Employee* e = new Employee;
+    e->role = "some text";
     
+    Person* p = e;
+    
+    delete p;
     
     
     std::cout << "sizeof(maciek) = " << sizeof(maciek) << std::endl;
