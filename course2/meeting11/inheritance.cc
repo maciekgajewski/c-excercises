@@ -1,7 +1,14 @@
 #include <iostream>
 #include <string>
 
-class Person
+class IStreamable
+{
+public:
+    virtual void ToStream(std::ostream& s) const = 0;
+    
+};
+
+class Person : public IStreamable
 {
 public:
 
@@ -10,18 +17,18 @@ public:
     std::string firstName;
     std::string lastName;
     
-    virtual void ToStream(std::ostream& s) const
+    void ToStream(std::ostream& s) const
     {
         s << "f: "<<firstName << ", l:"<<lastName;
     }
 };
 
-class Employee : Person
+class Employee : public Person
 {
 public:
     std::string role;
     
-    void ToStream(std::ostream& s) const
+    void ToStream(std::ostream& s) const override final
     {
         Person::ToStream(s);
         s << ", r: " << role;
@@ -29,7 +36,7 @@ public:
     
 };
 
-void PrintPerson(const Person& p)
+void PrintPerson(const IStreamable& p)
 {
     p.ToStream(std::cout);
     std::cout << std::endl;
@@ -51,13 +58,14 @@ int main()
     PrintPerson(maciek);
     PrintPerson(mat);
  
-    Employee* e = new Employee;
-    e->role = "some text";
+    Person* maciek_p = &maciek;
+    Person* mat_p = &mat;
     
-    Person* p = e;
+    Employee* maciek_ep = dynamic_cast<Employee*>(maciek_p);
+    Employee* mat_ep = dynamic_cast<Employee*>(mat_p);
     
-    delete p;
-    
+    std::cout << "maciek_ep = " << maciek_ep << std::endl;
+    std::cout << "mat_ep = " << mat_ep << std::endl;
     
     std::cout << "sizeof(maciek) = " << sizeof(maciek) << std::endl;
 }
