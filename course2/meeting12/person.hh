@@ -3,6 +3,7 @@
 #include "record.hh"
 
 
+// hello!
 class Person : public ReportingSystem::Record
 {
 public:

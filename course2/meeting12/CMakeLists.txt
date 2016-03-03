@@ -1,0 +1,1 @@
+add_executable(report_printer main.cc person.cc report.cc)
