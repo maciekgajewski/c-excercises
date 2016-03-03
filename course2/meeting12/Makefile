@@ -1,4 +1,4 @@
-CXXFLAGS=-g -std=c++14 -Wall
+CXXFLAGS=-g -std=c++14 -Wall -I/opt/optiver/boost/1.59.0/include/
 
 report_printer: main.o person.o report.o
 	g++ $(LDFLAGS) -o report_printer main.o person.o report.o

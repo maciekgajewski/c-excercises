@@ -4,10 +4,10 @@
 
 namespace ReportingSystem {
 
-void PrintReport(std::ostream& s, const std::vector<Record*>& records)
+void PrintReport(std::ostream& s, const std::vector<const Record*>& records)
 {
 	s << "======= Report begin =======" << std::endl;
-	for(Record* r : records)
+	for(const Record* r : records)
 	{
 		r->Print(s);
 	}

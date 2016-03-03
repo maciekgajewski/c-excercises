@@ -7,7 +7,7 @@ namespace ReportingSystem {
 
 class Record;
 
-void PrintReport(std::ostream& s, const std::vector<Record*>& records);
+void PrintReport(std::ostream& s, const std::vector<const Record*>& records);
 
 
 }
