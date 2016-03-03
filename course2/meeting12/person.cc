@@ -1,4 +1,4 @@
-#include "person.cc"
+#include "person.hh"
 
 Person::Person(const std::string& firstName, const std::string& lastName)
 	: mFirstName(firstName), mLastName(lastName)

@@ -11,7 +11,7 @@ void PrintReport(std::ostream& s, const std::vector<Record*>& records)
 	{
 		r->Print(s);
 	}
-	s << "=== Report end, " << record.size() << " records ===" << std::endl;
+	s << "=== Report end, " << records.size() << " records ===" << std::endl;
 }
 
 }

@@ -1,3 +1,5 @@
+CXXFLAGS=-g -std=c++14 -Wall
+
 report_printer: main.o person.o report.o
 	g++ $(LDFLAGS) -o report_printer main.o person.o report.o
 

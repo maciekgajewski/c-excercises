@@ -1,6 +1,6 @@
 #pragma once
 
-#include "report.hh"
+#include "record.hh"
 
 
 class Person : public ReportingSystem::Record
