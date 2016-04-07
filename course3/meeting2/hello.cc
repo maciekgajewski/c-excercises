@@ -1,5 +1,5 @@
 #include <iostream>
-#include <cstdint>
+#include <stdexcept>
 
 struct Vector
 {
@@ -12,19 +12,31 @@ struct Vector
 
 void PrintVector(Vector vec)
 {
+    throw std::runtime_error("I'm not printing this shit!");
     std::cout << "{x=" << vec.mX << ", d=" << vec.mD << "}" << std::endl;
 }
 
+void fun();
+
 int main(int argc, char** argv)
 {
+    try
+    {
+        fun();
+    }
+    catch(const std::exception& e)
+    {
+        std::cout << "ERROR: " << e.what() << std::endl;
+    }
+}
+
+void fun()
+{
+    std::cout << "main begin" << std::endl;
     Vector v;
     v.mX = 5;
     v.mD = 3.14;
     
-    for(int i = 0; i < 5; i++)
-    {
-        Vector v2 = v;
-    }
-    
     PrintVector(v);
+    std::cout << "main end" << std::endl;
 } 
