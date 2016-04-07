@@ -1,22 +1,30 @@
 #include <iostream>
 #include <cstdint>
 
+struct Vector
+{
+    Vector() { std::cout << "Vector(this="<< this << ")" << std::endl; }
+    Vector(const Vector& src) { std::cout << "Vector(this="<< this << ", src=" << &src << ")" << std::endl; }
+    ~Vector() { std::cout << "~Vector(" << this << ")" << std::endl; }
+    int mX;
+    double mD;
+};
+
+void PrintVector(Vector vec)
+{
+    std::cout << "{x=" << vec.mX << ", d=" << vec.mD << "}" << std::endl;
+}
+
 int main(int argc, char** argv)
 {
-    int64_t x = 7;
-    int64_t y = 77;
-    double d = 5;
-    const char* text = "Hello, world!";
-
-    int64_t* px = &x;
-    double* pd = &d;
+    Vector v;
+    v.mX = 5;
+    v.mD = 3.14;
     
-    int64_t& rx = *px;
-    double& rd = d;
+    for(int i = 0; i < 5; i++)
+    {
+        Vector v2 = v;
+    }
     
-    std::cout << "x=" << x << std::endl;
-    *px = 66;
-    std::cout << "x=" << x << std::endl;
-    rx = 123;
-    std::cout << "x=" << x << std::endl;
+    PrintVector(v);
 } 
