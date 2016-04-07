@@ -1,42 +1,50 @@
 #include <iostream>
 #include <stdexcept>
 
+
 struct Vector
 {
     Vector() { std::cout << "Vector(this="<< this << ")" << std::endl; }
     Vector(const Vector& src) { std::cout << "Vector(this="<< this << ", src=" << &src << ")" << std::endl; }
     ~Vector() { std::cout << "~Vector(" << this << ")" << std::endl; }
+    
+    Vector(int x, double d) : mX(x), mD(d)
+    {
+        std::cout << "init constructor" << std::endl;
+    }
+    
     int mX;
     double mD;
 };
 
-void PrintVector(Vector vec)
+struct Supervector
 {
-    throw std::runtime_error("I'm not printing this shit!");
-    std::cout << "{x=" << vec.mX << ", d=" << vec.mD << "}" << std::endl;
-}
+    Supervector() : a(6, 5.5) { std::cout << "Supervector(this="<< this << ")" << std::endl; }
+    ~Supervector() { std::cout << "~Supervector(this="<< this << ")" << std::endl; }
+    Vector a;
+    Vector b;
+};
 
-void fun();
+class VectorPrinter
+{
+public:
+    VectorPrinter(Vector& v) : mVec(v) {}
+    
+    void Print()
+    {
+        std::cout << "{x=" << mVec.mX << ", d=" << mVec.mD << "}" << std::endl;
+    }
+private:
+    Vector& mVec;
+};
+
+
+Vector global;
 
 int main(int argc, char** argv)
 {
-    try
-    {
-        fun();
-    }
-    catch(const std::exception& e)
-    {
-        std::cout << "ERROR: " << e.what() << std::endl;
-    }
-}
-
-void fun()
-{
-    std::cout << "main begin" << std::endl;
-    Vector v;
-    v.mX = 5;
-    v.mD = 3.14;
+    Vector x(4, 5.6);
+    VectorPrinter printer(x);
+    printer.Print();
     
-    PrintVector(v);
-    std::cout << "main end" << std::endl;
 } 
