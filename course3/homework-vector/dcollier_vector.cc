@@ -17,12 +17,6 @@ class Vector
     	     x = argX;
              y = argY;
 	};
-        //copy constructor
-        Vector(const Vector& vec){
-     	     cout << "Copy constructor" << endl;
-             x = vec.x;
-             y = vec.y;
-	};
         //destructor
 	~Vector(){
              cout << "Freeing memory this=" << this << endl;
