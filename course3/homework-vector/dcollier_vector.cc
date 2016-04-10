@@ -47,8 +47,8 @@ class Vector
 	double GetTheta(){ return Theta(x,y) ; };
 
    private:
-	int x;
-	int y;
+	double x;
+	double y;
 
 	double Radius(double x, double y){
 		double rad;
