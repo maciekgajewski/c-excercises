@@ -5,6 +5,7 @@ class SimpleString
   public:
     SimpleString()
     {
+    	mBuffer[0] = 0;
     }
 
     SimpleString(const char* ascii)
@@ -44,9 +45,13 @@ std::istream& operator>>(std::istream& is, SimpleString& target)
 
 int main(int argc, char** argv)
 {
-//  std::cout << "Hi There" << std::endl;
-//  SimpleString s("Hi Back");
-//  std::cout << s << std::endl;
+  SimpleString defaultConstructed;
+  std::cout << defaultConstructed;
+  defaultConstructed = "---------";
+  std::cout << defaultConstructed << std::endl;
+  std::cout << "Hi There" << std::endl;
+  SimpleString s("Hi Back");
+  std::cout << s << std::endl;
 
     SimpleString name;
     std::cout << "Whats your name? > ";
