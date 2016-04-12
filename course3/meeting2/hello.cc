@@ -8,16 +8,18 @@ class SimpleString
     	mBuffer[0] = 0;
     }
 
+    SimpleString(SimpleString& that):SimpleString(that.mBuffer)
+    {
+    }
+
     SimpleString(const char* ascii)
     {
       int lastCharacterIndex = BUFFER_SIZE - 1;
 
-      int i = 0;
-      while(i < lastCharacterIndex
-            && ascii[i] != 0)
+      int i;
+      for (i=0; i < lastCharacterIndex && ascii[i] != 0; ++i)
       {
         mBuffer[i] = ascii[i];
-	++i;
       }
       mBuffer[i] = 0;
     }
@@ -49,6 +51,7 @@ int main(int argc, char** argv)
   std::cout << defaultConstructed;
   defaultConstructed = "---------";
   std::cout << defaultConstructed << std::endl;
+  
   std::cout << "Hi There" << std::endl;
   SimpleString s("Hi Back");
   std::cout << s << std::endl;
@@ -58,4 +61,10 @@ int main(int argc, char** argv)
     std::cin >> name;
     std::cout << "Hello, " << name << std::endl;
     std::cout << "size of SimpleString is: " << sizeof(name) << std::endl;
+    
+    SimpleString a("hello");
+    SimpleString b = a;
+    SimpleString c;
+    c = a;
+    std::cout << b << "   " << c << std::endl;
 }
