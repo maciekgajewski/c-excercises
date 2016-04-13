@@ -7,7 +7,7 @@ class Vector
     Vector():Vector(0,0)
     {
     }
-    Vector(Vector& that) : Vector(that.mX, that.mY)
+    Vector(const Vector& that) : Vector(that.mX, that.mY)
     {
     }
     Vector(int x, int y) : mX(x), mY(y) 
@@ -30,7 +30,7 @@ class Vector
       mX = x;
     }
 
-    Vector& operator+(const Vector& that)
+    Vector operator+(const Vector& that) 
     {
       Vector result(mX + that.mX, mY + that.mY);
       return result;
@@ -48,6 +48,12 @@ bool operator==(const Vector& lhs, const Vector& rhs)
 bool operator!=(const Vector& lhs, const Vector& rhs)
 {
   return !(lhs == rhs);
+}
+
+std::ostream& operator<<(std::ostream& stream, const Vector& vect)
+{
+  stream << "Vector [x=" << vect.GetX() << ", y=" << vect.GetY() << "]";
+  return stream;
 }
 
 int main()
@@ -73,5 +79,5 @@ int main()
     assert(v3.GetX() == 10);
     assert(v3.GetY() == 13);
     
-//    std::cout << v1 << " + " << v2 << " = " << v3 << std::endl;
+    std::cout << v1 << " + " << v2 << " = " << v3 << std::endl;
 }
