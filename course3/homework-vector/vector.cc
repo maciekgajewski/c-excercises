@@ -29,22 +29,22 @@ class Vector
             return std::pow(std::pow(private_x, 2) + std::pow(private_y, 2), 0.5);
         }
 
-        friend std::ostream& operator<< (std::ostream& stream, Vector v) {
+        friend std::ostream& operator<< (std::ostream& stream, Vector& v) {
             stream << "{(" << v.GetX() << ", " << v.GetY() << "), (" << v.GetR() << "@" << v.GetTheta() << ")}";
             return stream;
         }
 
-        bool operator== (Vector rhs) {
+        bool operator== (Vector& rhs) {
             if (private_x == rhs.GetX() && private_y == rhs.GetY())
                 return true;
             return false;
         }
 
-        bool operator!= (Vector rhs) {
+        bool operator!= (Vector& rhs) {
             return !operator==(rhs);
         }
 
-        Vector operator+ (Vector rhs) {
+        Vector operator+ (Vector& rhs) {
             Vector result;
             result.SetX(private_x + rhs.GetX());
             result.SetY(private_y + rhs.GetY());
