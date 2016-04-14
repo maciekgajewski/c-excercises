@@ -5,15 +5,13 @@
 class Vector
 {
     private:
-        int private_x, private_y;
+        int private_x;
+        int private_y;
 
     public:
         // required constructors
         Vector(int x, int y): private_x(x), private_y(y) {}
-        Vector() {
-            private_x = 0;
-            private_y = 0;
-        }
+        Vector() = default;
 
         int GetX() { return private_x; }
         int GetY() { return private_y; }
