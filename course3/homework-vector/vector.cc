@@ -27,7 +27,7 @@ class Vector
             return std::pow(std::pow(private_x, 2) + std::pow(private_y, 2), 0.5);
         }
 
-        friend std::ostream& operator<< (std::ostream& stream, Vector& v) {
+        friend std::ostream& operator<< (std::ostream& stream, Vector v) {
             stream << "{(" << v.GetX() << ", " << v.GetY() << "), (" << v.GetR() << "@" << v.GetTheta() << ")}";
             return stream;
         }
@@ -74,4 +74,5 @@ int main()
     assert(v3.GetY() == 13);
     
     std::cout << v1 << " + " << v2 << " = " << v3 << std::endl;
+    std::cout << "The sum is: " << (v1+v2) << std::endl;
 }
