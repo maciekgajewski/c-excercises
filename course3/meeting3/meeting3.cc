@@ -1,18 +1,33 @@
 #include <iostream>
 
-int& hey()
+namespace maciek
 {
-    int x = 5;
-    x++;
-    std::cout << "x=" << x << std::endl;
-    //int* p = x;
     
-    return x;
+class Vector
+{
+    int x = 0;
+    int y = 0;
+};
+
 }
+
+
+namespace maciek
+{
+    class Square { int a; };
+}
+
+namespace Optiver { namespace IML { namespace Eurex {
+
+    class Square { double f; };
+    
+}}}
 
 int main()
 {
-    std::cout << "Hello, world!" << std::endl;
-    int& r = hey();
-    std::cout << "r=" << r << std::endl;
+    using namespace maciek;
+    //std::cout 
+    Vector v;
+    Square s;
 }
+
