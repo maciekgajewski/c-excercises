@@ -1,34 +1,29 @@
 #include <iostream>
 
-class Vector
+class Array
 {
 private:
-    int mX = 0;
-    int mY = 0;
-    
+    int mData[3];
 public:
-    Vector() = default;
-    Vector(int x, int y) : mX(x), mY(y) {}
     
-    int GetX() const { return mX; }
-    int GetY() const { return mY; }
-    void SetX(int x) { mX = x; }
-    
+    int& operator[](int index) {
+        std::cout<< "non const" << std::endl;
+        return mData[index];
+    }
+    int operator[](int index) const {
+        std::cout<< "const" << std::endl;
+        return mData[index];
+    }
 };
-
-std::ostream& operator<<(std::ostream& o, const Vector& v)
-{
-    return o << v.GetX() << ", " << v.GetY();
-}
-Vector operator+(const Vector& a, const Vector& o)
-{
-    return Vector(a.GetX()+o.GetX(), a.GetY()+o.GetY());
-}
 
 int main()
 {
-    Vector v1(3, 66);
-    Vector v2(6, 7);
-    std::cout << (v1 + v2) << std::endl;
+    Array a;
+    const Array& cr = a;
+    
+    a[1] = 5;
+    cr[2] = 5;
+    std::cout << a[1] << std::endl;
+    std::cout << cr[1] << std::endl;
 }
 
