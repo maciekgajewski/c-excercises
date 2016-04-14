@@ -5,8 +5,8 @@
 class Vector
 {
     private:
-        int private_x;
-        int private_y;
+        int private_x = 0;
+        int private_y = 0;
 
     public:
         // required constructors
