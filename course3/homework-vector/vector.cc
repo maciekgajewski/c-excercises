@@ -13,21 +13,21 @@ class Vector
         Vector(int x, int y): private_x(x), private_y(y) {}
         Vector() = default;
 
-        int GetX() { return private_x; }
-        int GetY() { return private_y; }
+        int GetX() const { return private_x; }
+        int GetY() const{ return private_y; }
 
         void SetX(int x) { private_x = x; }
         void SetY(int y) { private_y = y; }
 
-        float GetTheta() {
+        float GetTheta() const {
             return std::atan2(private_y, private_x) * 180 / M_PI;
         }
 
-        float GetR() {
+        float GetR() const {
             return std::pow(std::pow(private_x, 2) + std::pow(private_y, 2), 0.5);
         }
 
-        friend std::ostream& operator<< (std::ostream& stream, Vector v) {
+        friend std::ostream& operator<< (std::ostream& stream, const Vector& v) {
             stream << "{(" << v.GetX() << ", " << v.GetY() << "), (" << v.GetR() << "@" << v.GetTheta() << ")}";
             return stream;
         }
