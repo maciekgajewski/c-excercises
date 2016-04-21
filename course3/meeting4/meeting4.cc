@@ -10,20 +10,13 @@ struct MyType
     int x;
 };
 
-void print(std::unique_ptr<MyType> mt)
-//void print(const MyType& mt)
+int main(int argc, char** argv)
 {
-    std::cout << "MyType=" << mt->x << std::endl;
-}
-
-int main()
-{
-    //std::unique_ptr<MyType> p(new MyType(77));
-    std::unique_ptr<MyType> p = std::make_unique<MyType>(44);
-    std::unique_ptr<MyType> p2 = std::move(p);
-    auto local = MyType(66);
+    std::unique_ptr<MyType[]> p(new MyType[argc]);
     
-    print(std::make_unique<MyType>(1234));
+    std::shared_ptr<MyType> sp = std::make_shared<MyType>(666);
+    std::shared_ptr<MyType> sp2 = sp;
     
-    std::cout << p2->x  << std::endl;
+    p[1].x = 5;
+    
 }
