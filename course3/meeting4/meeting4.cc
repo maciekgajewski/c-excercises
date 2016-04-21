@@ -10,13 +10,13 @@ struct MyType
     int x;
 };
 
-int main(int argc, char** argv)
+int main()
 {
-    std::unique_ptr<MyType[]> p(new MyType[argc]);
+    std::array<char, sizeof(MyType)> buffer;
     
-    std::shared_ptr<MyType> sp = std::make_shared<MyType>(666);
-    std::shared_ptr<MyType> sp2 = sp;
+    new(buffer.data()) MyType(777); // placement new
     
-    p[1].x = 5;
+    MyType* obj = reinterpret_cast<MyType*>(buffer.data());
+    obj->~MyType();
     
 }
