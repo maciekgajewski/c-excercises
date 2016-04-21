@@ -1,25 +1,29 @@
 #include <iostream>
-#include <array>
+#include <memory>
 
-void fun(std::array<int, 5>& arr)
+struct MyType
 {
-    arr[3] = 333333;
-    std::cout << "sizeof(arr)=" << sizeof(arr) << std::endl;
+    MyType() { std::cout << "def constructor" << std::endl; }
+    MyType(int i) :x(i) {std::cout << "init constr, i=" << i << std::endl; }
+    ~MyType() { std::cout << "destructor x=" << x << std::endl; }
+    
+    int x;
+};
+
+void print(std::unique_ptr<MyType> mt)
+//void print(const MyType& mt)
+{
+    std::cout << "MyType=" << mt->x << std::endl;
 }
 
 int main()
 {
-    std::array<int, 6> a = { 1, 7, 11, 12, 99, 66};
+    //std::unique_ptr<MyType> p(new MyType(77));
+    std::unique_ptr<MyType> p = std::make_unique<MyType>(44);
+    std::unique_ptr<MyType> p2 = std::move(p);
+    auto local = MyType(66);
     
-    fun(a);
+    print(std::make_unique<MyType>(1234));
     
-    //a.at(88) = 6;
-    
-    std::cout << "[";
-    for(int i : a)
-    {
-        std::cout << i << ", ";
-    }
-    std::cout << "]" << std::endl;
-    std::cout << "sizeof(a)=" << sizeof(a) << std::endl;
+    std::cout << p2->x  << std::endl;
 }
