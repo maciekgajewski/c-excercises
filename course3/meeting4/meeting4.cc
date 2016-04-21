@@ -14,9 +14,8 @@ int main()
 {
     std::array<char, sizeof(MyType)> buffer;
     
-    new(buffer.data()) MyType(777); // placement new
+    MyType* obj = new(buffer.data()) MyType(777); // placement new
     
-    MyType* obj = reinterpret_cast<MyType*>(buffer.data());
     obj->~MyType();
     
 }
