@@ -40,9 +40,6 @@ int MyString::size() const
 
 bool MyString::operator==(const MyString& that) const
 {
-	// TODO: I'd guess that using a for-loop to validate equality would be potentially a lot more efficient,
-	// but the instructions specified no loops
-
 	return mLength == that.mLength
 		   && std::strcmp(mBuffer.get(), that.mBuffer.get()) == 0;
 }
