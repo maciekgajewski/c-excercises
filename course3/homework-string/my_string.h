@@ -1,19 +1,52 @@
 #pragma once
 #include <iostream>
 #include <memory>
+#include <cstring>
 
 class MyString
 {
-    private:
-        //unique_ptr<char*> buf;
+	private:
+		std::unique_ptr<char[]> buf;
 
-    public:
-        MyString(const char* my_string) {
-            std::cout << "Constructor" << std::endl;
-            //buf = new char[strlen(my_string)];;
-        }
+	public:
+		MyString(const char* my_string) {
+			std::cout << "String literal constructor" << std::endl;
+			buf = std::make_unique<char[]>(std::strlen(my_string));
+			strcpy(buf.get(), my_string);
+		}
 
-        ~MyString() {
-            std::cout << "Destructor" << std::endl;
-        }
+		MyString() {
+			std::cout << "Default constructor" << std::endl;
+			buf = std::make_unique<char[]>(0);
+		}
+
+		MyString(const MyString& obj){
+			std::cout << "Copy constructor" << std::endl;
+			buf = std::make_unique<char[]>(obj.size());
+			strcpy(buf.get(), obj.buf.get());
+		}
+
+		~MyString() {
+			std::cout << "Destructor" << std::endl;
+		}
+
+		bool operator== (const MyString& rhs) const {
+			return std::strcmp(buf.get(), rhs.buf.get()) == 0;
+		}
+
+		const char& operator[] (int i) const {
+			return buf.get()[i];
+		}
+
+		char& operator[] (int i) {
+			return buf.get()[i];
+		}
+
+		bool empty() const {
+			return std::strlen(buf.get()) == 0;
+		}
+
+		int size() const {
+			return std::strlen(buf.get());
+		}
 };
