@@ -9,10 +9,10 @@ class MyString
 		std::unique_ptr<char[]> buf;
 
 	public:
-		MyString(const char* my_string) {
+		MyString(const char* str) {
 			std::cout << "String literal constructor" << std::endl;
-			buf = std::make_unique<char[]>(std::strlen(my_string));
-			strcpy(buf.get(), my_string);
+			buf = std::make_unique<char[]>(std::strlen(str));
+			strcpy(buf.get(), str);
 		}
 
 		MyString() {
@@ -32,6 +32,10 @@ class MyString
 
 		bool operator== (const MyString& rhs) const {
 			return std::strcmp(buf.get(), rhs.buf.get()) == 0;
+		}
+
+		bool operator!= (const MyString& rhs) const {
+			return !operator==(rhs);
 		}
 
 		const char& operator[] (int i) const {
