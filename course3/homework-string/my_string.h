@@ -9,25 +9,14 @@ class MyString
 		std::unique_ptr<char[]> buf;
 
 	public:
-		MyString(const char* str) {
-			std::cout << "String literal constructor" << std::endl;
-			buf = std::make_unique<char[]>(std::strlen(str));
+		MyString() : buf(std::make_unique<char[]>(0)) {}
+
+		MyString(const char* str) : buf(std::make_unique<char[]>(std::strlen(str))) {
 			strcpy(buf.get(), str);
 		}
 
-		MyString() {
-			std::cout << "Default constructor" << std::endl;
-			buf = std::make_unique<char[]>(0);
-		}
-
-		MyString(const MyString& obj){
-			std::cout << "Copy constructor" << std::endl;
-			buf = std::make_unique<char[]>(obj.size());
+		MyString(const MyString& obj) : buf(std::make_unique<char[]>(obj.size())) {
 			strcpy(buf.get(), obj.buf.get());
-		}
-
-		~MyString() {
-			std::cout << "Destructor" << std::endl;
 		}
 
 		bool operator== (const MyString& rhs) const {
