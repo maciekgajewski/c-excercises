@@ -1,18 +1,12 @@
 #pragma once
+#include <iostream>
+#include <memory>
 
 class MyString
 {
 private:
     int length;
-    char * buff;
-
-    int strlen(const char *data) {
-        int i = 0;
-        while (*data++ != '\0')
-            i++;
-
-        return i;
-    }
+    std::unique_ptr<char []> buff;
 
 public:
     MyString() {
@@ -20,9 +14,9 @@ public:
     }
 
     MyString(const char *data) {
-        length = strlen(data);
+        length = std::strlen(data);
 
-        buff = new char[length];
+        buff = std::make_unique<char []>(length);        
 
         for (int i = 0; i < length; i++)
             buff[i] = data[i];
@@ -30,7 +24,7 @@ public:
 
     MyString(const MyString& rhs) {
         length = rhs.size();
-        buff = new char[length];
+        buff = std::make_unique<char []>(length);        
         for (int i = 0; i < length; i++)
             buff[i] = rhs[i];
     }
@@ -52,10 +46,11 @@ public:
     }
 
     bool operator!=(const MyString& rhs) {
-        return !(*this == rhs);
+        return !operator==(rhs);
     }
 
     bool operator==(const MyString& rhs) {
+//        return std::strcmp(buff, rhs);
         if (length != rhs.size())
             return false;
         for (int i = 0; i < length; i++)
