@@ -10,15 +10,13 @@ private:
 public:
 	MyString(): mBuffer(new char[1]) {}
 
-	MyString(const char* str)
+	MyString(const char* str): mBuffer(new char[std::strlen(str)])
 	{
-		mBuffer = std::unique_ptr<char[]>(new char[std::strlen(str)]); // can I make this more concise?
 		std::strcpy(mBuffer.get(), str);
 	}
 
-	MyString(const MyString& str)
+	MyString(const MyString& str): mBuffer(new char[str.size()])
 	{
-		mBuffer = std::unique_ptr<char[]>(new char[str.size()]);
 		std::strcpy(mBuffer.get(), str.mBuffer.get());
 	}
 
@@ -52,14 +50,14 @@ public:
 		return !operator==(str);
 	}
 
-	const char& operator[](const int idx) const
+	const char& operator[](int idx) const
 	{
 		return mBuffer.get()[idx];
 	}
 
-	char& operator[](const int idx)
+	char& operator[](int idx)
 	{
 		return mBuffer.get()[idx];
 	}
-	
+
 };
