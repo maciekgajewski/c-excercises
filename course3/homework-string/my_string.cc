@@ -26,11 +26,9 @@ bool MyString::empty() const {
 	return numberOfChars == 0 ? true : false ;
 }
 
-
 int MyString::size() const {
 	return numberOfChars;
 }	
-
 
 const bool MyString::operator == (const MyString& theString){
 	return std::strcmp(buffer.get(), theString.buffer.get()) == 0 ? true : false;
@@ -40,8 +38,6 @@ const bool MyString::operator != (const MyString& theString){
 	return buffer == theString.buffer ? false : true ;
 }
 
-
 char& MyString::operator[](int index) const{
 	return buffer[index]; 
 }
-
