@@ -3,31 +3,29 @@
 #include "my_string.h"
 
 MyString::MyString(){
-	numberOfChars = 0;
+	buffer = std::unique_ptr<char[]>(new char[0]);
 }
 
 MyString::MyString(const char* theString){
-	numberOfChars = std::strlen(theString);
-	buffer = std::unique_ptr<char[]>(new char[numberOfChars]);
-	for (int i = 0; i < numberOfChars; i++){
+	buffer = std::unique_ptr<char[]>(new char[std::strlen(theString)]);
+	for (int i = 0; i < std::strlen(theString); i++){
 		buffer[i] = theString[i];
 	}
 }
 
 MyString::MyString(const MyString& theString){
-	numberOfChars = theString.size();
-	buffer = std::unique_ptr<char[]>(new char[numberOfChars]);
-	for (int i = 0; i < numberOfChars; i++){
+	buffer = std::unique_ptr<char[]>(new char[theString.size()]);
+	for (int i = 0; i < theString.size(); i++){
 		buffer[i] = theString[i];
 	}
 }
 
 bool MyString::empty() const {
-	return numberOfChars == 0 ? true : false ;
+	return size() == 0 ? true : false ;
 }
 
 int MyString::size() const {
-	return numberOfChars;
+	return std::strlen(buffer.get());
 }	
 
 const bool MyString::operator == (const MyString& theString){

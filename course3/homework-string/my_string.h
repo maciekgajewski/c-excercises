@@ -24,6 +24,5 @@ class MyString
 
 	private:
 
-     	int numberOfChars;
 	std::unique_ptr<char[]> buffer;
 };
