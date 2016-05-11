@@ -8,7 +8,7 @@ class MyString
 public:
 	MyString()	
 	{ 
-		//std::cout << "Default constructor";
+		// default constructor	
 	}
 
 	MyString(MyString& other)
@@ -45,6 +45,11 @@ public:
 	}
 
 	char& operator[](int index)
+	{
+		return innerStorage[index];
+	}
+	
+	char operator[](int index) const
 	{
 		return innerStorage[index];
 	}
