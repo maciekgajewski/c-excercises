@@ -31,10 +31,6 @@ public:
        return length == 0 ? true : false;
     }
 
-    bool empty() {
-        return length == 0 ? true : false;
-    }
-
     int size() const {
         return length;
     }
