@@ -18,15 +18,13 @@ public:
 
         buff = std::make_unique<char []>(length);        
 
-        for (int i = 0; i < length; i++)
-            buff[i] = data[i];
+        std::strcpy(buff.get(), data);
     }
 
     MyString(const MyString& rhs) {
         length = rhs.size();
         buff = std::make_unique<char []>(length);        
-        for (int i = 0; i < length; i++)
-            buff[i] = rhs[i];
+        std::strcpy(buff.get(), rhs.buff.get());
     }
 
     bool empty() const {
@@ -41,22 +39,12 @@ public:
         return length;
     }
 
-    int size() {
-        return length;
-    }
-
     bool operator!=(const MyString& rhs) {
         return !operator==(rhs);
     }
 
     bool operator==(const MyString& rhs) {
-//        return std::strcmp(buff, rhs);
-        if (length != rhs.size())
-            return false;
-        for (int i = 0; i < length; i++)
-            if (buff[i] != rhs[i])
-                return false;
-        return true;
+        return std::strcmp(buff.get(), rhs.buff.get()) == 0;
     }
 
     char& operator[](int index) {
