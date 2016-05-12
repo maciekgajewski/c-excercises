@@ -15,7 +15,7 @@ class MyString
             std::strcpy(buf.get(), str);
 		}
 
-		MyString(const MyString& obj) : buf(std::make_unique<char[]>(obj.size())) {
+		MyString(const MyString& obj) : buf(std::make_unique<char[]>(obj.size()+1)) {
             std::strcpy(buf.get(), obj.buf.get());
 		}
 
