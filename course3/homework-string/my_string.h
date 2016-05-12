@@ -36,14 +36,14 @@ class MyString
 		}
 
 		bool empty() const {
-            if (!buf)
-                return true;
+			if (!buf)
+				return true;
 			return std::strlen(buf.get()) == 0;
 		}
 
 		int size() const {
-            if (!buf)
-                return 0;
+			if (!buf)
+				return 0;
 			return std::strlen(buf.get());
 		}
 };
