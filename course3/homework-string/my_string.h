@@ -1,6 +1,23 @@
 #pragma once
 
-class MyString
+#include <memory>
+
+namespace Maciek {
+
+class String
 {
-	// TODO
+public:
+
+	String() = default;
+	String(const char*);
+	
+	std::size_t size() const;
+	
+	bool empty() const;
+	
+private:
+
+	std::unique_ptr<char[]> mBuffer;
 };
+
+}
