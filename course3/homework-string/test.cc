@@ -20,20 +20,20 @@ void string_test()
 	assert(!string2.empty());
 	assert(string2.size() == 3);
 	
-	/*
 	// Copy-construction
 	StringType string3 = string2;
 	
-	assert(string2 == string3);
 	assert(string3.size() == 3);
+	assert(string2 == string3);
 	
 	// read-only character access
 	
+	/*
 	assert(string3[0] == 'H');
 	assert(string3[1] == 'e');
 	assert(string3[2] == 'y');
 	
-	// writable charactetr acess
+	// writable charactetr access
 	string2[2] = 'x';
 	assert(string2 == "Hex");
 	

@@ -10,10 +10,13 @@ public:
 
 	String() = default;
 	String(const char*);
+	String(const String&);
 	
 	std::size_t size() const;
 	
 	bool empty() const;
+	
+	bool operator==(const String& other);
 	
 private:
 
