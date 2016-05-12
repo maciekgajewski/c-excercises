@@ -1,9 +1,53 @@
 #include <iostream>
 #include <cassert>
+#include <cmath>
 
 class Vector
 {
-    // TODO
+    private:
+        int private_x = 0;
+        int private_y = 0;
+
+    public:
+        // required constructors
+        Vector(int x, int y): private_x(x), private_y(y) {}
+        Vector() = default;
+
+        int GetX() const { return private_x; }
+        int GetY() const{ return private_y; }
+
+        void SetX(int x) { private_x = x; }
+        void SetY(int y) { private_y = y; }
+
+        float GetTheta() const {
+            return std::atan2(private_y, private_x) * 180 / M_PI;
+        }
+
+        float GetR() const {
+            return std::pow(std::pow(private_x, 2) + std::pow(private_y, 2), 0.5);
+        }
+
+        friend std::ostream& operator<< (std::ostream& stream, const Vector& v) {
+            stream << "{(" << v.GetX() << ", " << v.GetY() << "), (" << v.GetR() << "@" << v.GetTheta() << ")}";
+            return stream;
+        }
+
+        bool operator== (Vector& rhs) {
+            if (private_x == rhs.GetX() && private_y == rhs.GetY())
+                return true;
+            return false;
+        }
+
+        bool operator!= (Vector& rhs) {
+            return !operator==(rhs);
+        }
+
+        Vector operator+ (Vector& rhs) {
+            Vector result;
+            result.SetX(private_x + rhs.GetX());
+            result.SetY(private_y + rhs.GetY());
+            return result;
+        }
 };
 
 int main()
@@ -30,4 +74,5 @@ int main()
     assert(v3.GetY() == 13);
     
     std::cout << v1 << " + " << v2 << " = " << v3 << std::endl;
+    std::cout << "The sum is: " << (v1+v2) << std::endl;
 }
