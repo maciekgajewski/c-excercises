@@ -9,14 +9,14 @@ class MyString
 		std::unique_ptr<char[]> buf;
 
 	public:
-		MyString() : buf(std::make_unique<char[]>(0)) {}
+		MyString() = default;
 
-		MyString(const char* str) : buf(std::make_unique<char[]>(std::strlen(str))) {
-			strcpy(buf.get(), str);
+		MyString(const char* str) : buf(std::make_unique<char[]>(std::strlen(str)+1)) {
+            std::strcpy(buf.get(), str);
 		}
 
 		MyString(const MyString& obj) : buf(std::make_unique<char[]>(obj.size())) {
-			strcpy(buf.get(), obj.buf.get());
+            std::strcpy(buf.get(), obj.buf.get());
 		}
 
 		bool operator== (const MyString& rhs) const {
@@ -36,10 +36,14 @@ class MyString
 		}
 
 		bool empty() const {
+            if (!buf)
+                return true;
 			return std::strlen(buf.get()) == 0;
 		}
 
 		int size() const {
+            if (!buf)
+                return 0;
 			return std::strlen(buf.get());
 		}
 };
