@@ -14,7 +14,7 @@ class MyString
 
 		bool empty() const;
 
-		int size() const;	
+		size_t size() const;	
 
 		const bool operator == (const MyString& theString);
 
