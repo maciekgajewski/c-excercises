@@ -16,15 +16,17 @@ public:
     MyString(const char *data) {
         length = std::strlen(data);
 
-        buff = std::make_unique<char []>(length);        
+        buff = std::make_unique<char []>(length + 1);        
 
         std::strcpy(buff.get(), data);
     }
 
     MyString(const MyString& rhs) {
         length = rhs.size();
-        buff = std::make_unique<char []>(length);        
-        std::strcpy(buff.get(), rhs.buff.get());
+        if (rhs.buff.get()) {
+            buff = std::make_unique<char []>(length + 1);        
+            std::strcpy(buff.get(), rhs.buff.get());
+        }
     }
 
     bool empty() const {
@@ -40,7 +42,10 @@ public:
     }
 
     bool operator==(const MyString& rhs) {
-        return std::strcmp(buff.get(), rhs.buff.get()) == 0;
+        if (buff.get() && rhs.buff.get())
+            return std::strcmp(buff.get(), rhs.buff.get()) == 0;
+        // if this or rhs is null this will return false
+        return buff.get() == rhs.buff.get() ? true : false;
     }
 
     char& operator[](int index) {

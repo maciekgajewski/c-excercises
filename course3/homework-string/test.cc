@@ -25,6 +25,9 @@ void string_test()
 	
 	assert(string2 == string3);
 	assert(string3.size() == 3);
+
+    assert(string2 != string1);
+    assert(string1 != string2);
 	
 	// read-only character access
 	
