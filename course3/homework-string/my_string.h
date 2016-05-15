@@ -5,7 +5,7 @@
 class MyString
 {
 private:
-    int length;
+    std::size_t length;
     std::unique_ptr<char []> buff;
 
 public:
@@ -33,7 +33,7 @@ public:
        return length == 0 ? true : false;
     }
 
-    int size() const {
+    std::size_t size() const {
         return length;
     }
 
