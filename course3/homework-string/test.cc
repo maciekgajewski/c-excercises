@@ -53,7 +53,6 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
