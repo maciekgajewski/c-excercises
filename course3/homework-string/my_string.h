@@ -7,6 +7,8 @@ class MyString
 
 	public:
 		MyString();
+
+		~MyString();
 		
 		MyString(const char* theString);
 
@@ -14,7 +16,7 @@ class MyString
 
 		bool empty() const;
 
-		int size() const;	
+		size_t size() const;	
 
 		const bool operator == (const MyString& theString);
 
