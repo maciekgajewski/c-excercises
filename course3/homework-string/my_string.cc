@@ -17,8 +17,7 @@ MyString::MyString(const char* theString){
 }
 
 MyString::MyString(const MyString& theString){
-	//buffer = std::unique_ptr<char[]>(new char[theString.size()]);
-	buffer = std::unique_ptr<char[]>(new char[std::strlen(theString.buffer.get()) + 1 ]);
+	buffer = std::unique_ptr<char[]>(new char[theString.size() + 1]);
 	int i;
 	for (i = 0; i < std::strlen(theString.buffer.get()); i++){
 		buffer[i] = theString[i];
@@ -42,7 +41,7 @@ size_t MyString::size() const {
 	if (buffer){
 		return std::strlen(buffer.get());
 	}
-	else return false;
+	else return 0;
 }	
 
 const bool MyString::operator == (const MyString& theString){
