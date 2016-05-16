@@ -24,11 +24,6 @@ MyString::MyString(const MyString& theString){
 	}
 	buffer[i] = '\0';
 }
-        
-MyString::~MyString(){
-	buffer.reset();
-}
-
    
 bool MyString::empty() const {
 	if (buffer){

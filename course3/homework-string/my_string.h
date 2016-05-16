@@ -8,8 +8,6 @@ class MyString
 	public:
 		MyString();
 
-		~MyString();
-		
 		MyString(const char* theString);
 
 		MyString(const MyString& theString);
