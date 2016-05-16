@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "my_string.h"
 
 #include <string>
@@ -28,7 +29,6 @@ void string_test()
 	
 	// read-only character access
 	
-	/*
 	assert(string3[0] == 'H');
 	assert(string3[1] == 'e');
 	assert(string3[2] == 'y');
@@ -36,7 +36,7 @@ void string_test()
 	// writable charactetr access
 	string2[2] = 'x';
 	assert(string2 == "Hex");
-	
+
 	// copy is deep, so string3 remains unchanged
 	assert(string3 == "Hey");
 	assert(string2 != string3);
@@ -46,7 +46,6 @@ void string_test()
 	assert(string_const_ref.empty() == false);
 	assert(string_const_ref.size() == 3);
 	assert(string_const_ref[0] == 'H');
-	*/
 }
 
 
