@@ -17,5 +17,5 @@ class MyString
 		MyString operator+(const MyString& rhs) const;
 		void operator=(const MyString& rhs);
 		bool empty() const;
-		int size() const;
+		size_t size() const;
 };

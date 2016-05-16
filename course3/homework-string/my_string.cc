@@ -56,7 +56,7 @@ bool MyString::empty() const {
 	return buf[0] == 0;
 }
 
-int MyString::size() const {
+size_t MyString::size() const {
 	if (!buf)
 		return 0;
 	return std::strlen(buf.get());
