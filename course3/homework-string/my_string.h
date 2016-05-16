@@ -7,6 +7,8 @@ class MyString
 
 	public:
 		MyString();
+
+		~MyString();
 		
 		MyString(const char* theString);
 
