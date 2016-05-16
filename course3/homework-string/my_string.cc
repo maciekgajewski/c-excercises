@@ -54,7 +54,7 @@ const bool MyString::operator != (const MyString& theString){
 		return std::strcmp(buffer.get(), theString.buffer.get()) == 0 ? false : true ;
 	}
 	else if ( buffer == nullptr && theString.buffer == nullptr ){
-		return true;
+		return false;
 	}
 	else return false;
 }
