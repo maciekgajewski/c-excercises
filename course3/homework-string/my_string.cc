@@ -28,7 +28,42 @@ bool MyString::empty() const
 
 std::size_t MyString::size() const
 {
-	return mBuffer ? std::strlen(mBuffer.get()): 0;
+	return empty() ? 0 : std::strlen(mBuffer.get());
+}
+
+const char* MyString::c_str() const
+{
+	return empty() ? "\0" : mBuffer.get();
+}
+
+MyString& MyString::operator=(const char* str)
+{
+	if (str[0] == '\0')
+	{
+		mBuffer = nullptr;
+	}
+	else
+	{
+		mBuffer.reset(new char[std::strlen(str) + 1]);
+		std::strcpy(mBuffer.get(), str);
+	}
+	
+	return *this;
+}
+
+MyString& MyString::operator=(const MyString& str)
+{
+	if (str.empty())
+	{
+		mBuffer = nullptr;
+	}
+	else
+	{
+		mBuffer.reset(new char[str.size() + 1]);
+		std::strcpy(mBuffer.get(), str.mBuffer.get());
+	}
+	
+	return *this;
 }
 
 bool MyString::operator==(const MyString& str) const
@@ -52,4 +87,19 @@ const char& MyString::operator[](int idx) const
 char& MyString::operator[](int idx)
 {
 	return mBuffer.get()[idx];
+}
+
+MyString MyString::operator+(const MyString& str) const
+{
+	MyString retStr;
+	retStr.mBuffer.reset(new char[size() + str.size() + 1]);
+	std::strcpy(retStr.mBuffer.get(), mBuffer.get());
+	std::strcpy(retStr.mBuffer.get() + size(), str.mBuffer.get());
+	return retStr;
+}
+
+MyString& MyString::operator+=(const MyString& str)
+{
+	*this = *this + str;
+	return *this;
 }
