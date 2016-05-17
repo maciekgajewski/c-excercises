@@ -3,6 +3,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+#include <cstring>
 
 template<typename StringType>
 void string_test()
@@ -35,17 +36,35 @@ void string_test()
 	// writable charactetr acess
 	string2[2] = 'x';
 	assert(string2 == "Hex");
-	
+
 	// copy is deep, so string3 remains unchanged
 	assert(string3 == "Hey");
 	assert(string2 != string3);
-	
+
 	// const-correctness test
 	const StringType& string_const_ref = string3;
 	assert(string_const_ref.empty() == false);
 	assert(string_const_ref.size() == 3);
 	assert(string_const_ref[0] == 'H');
+
+	// c_str test
+	assert(std::strcmp(string_const_ref.c_str(), "Hey") == 0);
+
+	// assignment operator test
+	string3 = "abc";
+	assert(string_const_ref == "abc");
 	
+	string3 = string2;
+	assert(string_const_ref == "Hex");
+	assert(string2 == "Hex");
+
+	// operator +=
+	StringType plusResult = string_const_ref + StringType("123");
+	assert(plusResult == "Hex123");
+
+	// operator +=
+	plusResult += string2;
+	assert(plusResult == "Hex123Hex");
 }
 
 
