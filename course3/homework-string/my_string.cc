@@ -5,11 +5,13 @@
 
 MyString::MyString(): mSize(0) { }
 
-MyString::MyString(const char *inchar)
-	:mSize(std::strlen(inchar)), 
-	mBuffer(new char[mSize + 1])
+MyString::MyString(const char *inchar) :mSize(std::strlen(inchar)), mBuffer(new char[mSize + 1])
 {
 	std::strcpy(mBuffer.get(), inchar);
+}
+
+MyString::MyString(const std::size_t size) :mSize(size), mBuffer(new char[mSize + 1])
+{
 }
 
 MyString::MyString(const MyString& str)
@@ -32,19 +34,19 @@ bool MyString::empty() const
 	return !mBuffer || mSize == 0;
 }
 
-bool MyString::operator==(const MyString& other)
+bool MyString::operator==(const MyString& other) const
 {
 	if (this->empty() && other.empty()) return true;
 	if (this->empty() != other.empty()) return false;
 	return std::strcmp(this->mBuffer.get(), other.mBuffer.get()) == 0;
 }
 
-bool MyString::operator!=(const MyString& other)
+bool MyString::operator!=(const MyString& other) const
 {
 	return !(*this == other);
 }
 
-char& MyString::operator[](const unsigned int i) const
+char& MyString::operator[](const std::size_t i) const
 {
 	if (i > mSize)
 	{
