@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <cstring>
 
 class MyString
 {
@@ -12,15 +13,24 @@ class MyString
 
 		MyString(const MyString& theString);
 
-		bool empty() const;
+		const bool empty() const;
 
-		size_t size() const;	
+		const size_t size() const;	
+		
+		const char* c_str() const;	
 
-		const bool operator == (const MyString& theString);
+		const bool operator == (const MyString& theString) const;
 
-		const bool operator != (const MyString& theString);
+		const bool operator != (const MyString& theString) const;
 
 		char& operator[](int index) const;
+		
+		MyString& operator=(const MyString& theString);
+		
+		MyString operator+(const MyString& theString) const;
+		
+		MyString& operator+=(const MyString& theString);
+		
 
 	private:
 
