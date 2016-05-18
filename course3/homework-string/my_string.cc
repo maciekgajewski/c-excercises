@@ -55,3 +55,47 @@ char& MyString::operator[](const std::size_t i) const
 	return mBuffer[i];
 }
 
+const char* MyString::c_str() const {
+    if (!this->mBuffer) return "";
+	return this->mBuffer.get();
+}
+
+void MyString::operator=(const char* inchar) {
+	this->mSize = std::strlen(inchar);
+	this->mBuffer.reset(new char[this->mSize + 1]);
+	std::strcpy(this->mBuffer.get(), inchar);
+}
+
+MyString MyString::operator+(const MyString &other) const {
+	auto str = MyString(this->mSize + other.mSize);
+	std::strcpy(str.mBuffer.get(), this->mBuffer.get());
+	std::strcpy(str.mBuffer.get() + this->mSize, other.mBuffer.get());
+	return str;
+}
+
+MyString& MyString::operator+=(const MyString &other) {
+	auto current_size = this->mSize;
+	this->mSize = current_size + other.mSize;
+	auto current = this->c_str();
+	this->mBuffer.reset(new char[this->mSize + 1]);
+	std::strcpy(this->mBuffer.get(), current);
+	std::strcpy(this->mBuffer.get() + current_size, other.c_str());
+	return *this;
+}
+
+MyString& MyString::operator=(const MyString &other) {
+	this->mBuffer.reset(new char[other.mSize + 1]);
+	std::strcpy(this->mBuffer.get(), other.c_str());
+	return *this;
+}
+
+
+
+
+
+
+
+
+
+
+
