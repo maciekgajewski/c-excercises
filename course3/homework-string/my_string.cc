@@ -91,14 +91,8 @@ char& MyString::operator[](int idx)
 
 MyString MyString::operator+(const MyString& str) const
 {
-	if (empty())
-	{
-		return MyString(str);
-	}
-	else if (str.empty())
-	{
-		return MyString(*this);
-	}
+	if (empty()) return MyString(str);
+	else if (str.empty()) return MyString(*this);
 	
 	MyString retStr;
 	retStr.mBuffer.reset(new char[size() + str.size() + 1]);
