@@ -33,14 +33,14 @@ std::size_t MyString::size() const
 
 const char* MyString::c_str() const
 {
-	return empty() ? "\0" : mBuffer.get();
+	return empty() ? "" : mBuffer.get();
 }
 
 MyString& MyString::operator=(const char* str)
 {
 	if (str[0] == '\0')
 	{
-		mBuffer = nullptr;
+		mBuffer.reset(nullptr);
 	}
 	else
 	{
@@ -55,7 +55,7 @@ MyString& MyString::operator=(const MyString& str)
 {
 	if (str.empty())
 	{
-		mBuffer = nullptr;
+		mBuffer.reset(nullptr);
 	}
 	else
 	{
@@ -91,6 +91,15 @@ char& MyString::operator[](int idx)
 
 MyString MyString::operator+(const MyString& str) const
 {
+	if (empty())
+	{
+		return MyString(str);
+	}
+	else if (str.empty())
+	{
+		return MyString(*this);
+	}
+	
 	MyString retStr;
 	retStr.mBuffer.reset(new char[size() + str.size() + 1]);
 	std::strcpy(retStr.mBuffer.get(), mBuffer.get());
