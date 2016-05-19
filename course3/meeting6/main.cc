@@ -2,27 +2,26 @@
 
 #include <iostream>
 
-int Max(int a, int b)
+template<typename T>
+T Max(T a, T b)
 {
 	return a > b ? a : b;
 }
 
-double Max(double a, double b)
+template<typename T>
+T* Max(T* a, T* b)
 {
-	return a > b ? a : b;
+	throw std::logic_error("Dunno how to compare pointers :(");
 }
 
-bool CanBeInstrumentId(const Maciek::String& s)
-{
-	return s.size() >= 6 && s[4] == ':';
-}
+// const char* Max(const char* a, const char* b)
+// {
+// 	return std::strcmp(a, b) > 0 ? a : b;
+// }
 
 int main()
 {
-	Maciek::String s = "abc";
-	//Maciek::String x = "123";
-	//s = std::move(x);
-	s = "1213";
-	std::cout << s.c_str() << std::endl;
-	
+	std::cout << Max(1u, 5u) << std::endl;
+	std::cout << Max(1.1, -4.5) << std::endl;
+	std::cout << Max("Willis", "Felix") << std::endl;
 }
