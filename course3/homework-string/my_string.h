@@ -14,9 +14,9 @@ public:
 	bool empty() const;
 	std::size_t size() const;
 	const char* c_str() const;
-		
-	MyString& operator=(const char* str);
+	
 	MyString& operator=(const MyString& str);
+	MyString& operator=(MyString&& str);
 	bool operator==(const MyString& str) const;
 	bool operator!=(const MyString& str) const;
 	const char& operator[](int idx) const;
