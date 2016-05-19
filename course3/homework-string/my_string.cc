@@ -36,31 +36,30 @@ const char* MyString::c_str() const
 	return empty() ? "" : mBuffer.get();
 }
 
-MyString& MyString::operator=(const char* str)
-{
-	if (str[0] == '\0')
-	{
-		mBuffer.reset(nullptr);
-	}
-	else
-	{
-		mBuffer.reset(new char[std::strlen(str) + 1]);
-		std::strcpy(mBuffer.get(), str);
-	}
-	
-	return *this;
-}
-
 MyString& MyString::operator=(const MyString& str)
 {
 	if (str.empty())
 	{
-		mBuffer.reset(nullptr);
+		mBuffer.reset();
 	}
 	else
 	{
 		mBuffer.reset(new char[str.size() + 1]);
 		std::strcpy(mBuffer.get(), str.mBuffer.get());
+	}
+	
+	return *this;
+}
+
+MyString& MyString::operator=(MyString&& str)
+{
+	if (str.empty())
+	{
+		mBuffer.reset();
+	}
+	else
+	{
+		mBuffer.swap(str.mBuffer);
 	}
 	
 	return *this;
@@ -91,8 +90,8 @@ char& MyString::operator[](int idx)
 
 MyString MyString::operator+(const MyString& str) const
 {
-	if (empty()) return MyString(str);
-	else if (str.empty()) return MyString(*this);
+	if (empty()) return str;
+	else if (str.empty()) return *this;
 	
 	MyString retStr;
 	retStr.mBuffer.reset(new char[size() + str.size() + 1]);
