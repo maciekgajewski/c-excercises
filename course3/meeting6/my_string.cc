@@ -89,7 +89,7 @@ String& String::operator+=(const String& other)
 
 String& String::operator=(const String& other)
 {
-	std::cout << "oper=, this=" << this << std::endl;
+	std::cout << "copy oper=, this=" << this << std::endl;
 	if (other.empty())
 	{
 		mBuffer.reset();
@@ -101,5 +101,15 @@ String& String::operator=(const String& other)
 	}
 	return *this;
 }
+
+String& String::operator=(String&& other)
+{
+	std::cout << "move oper=, this=" << this << std::endl;
+	
+	mBuffer = std::move(other.mBuffer);
+	
+	return *this;
+}
+
 
 }

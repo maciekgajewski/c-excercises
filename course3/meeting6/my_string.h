@@ -28,7 +28,8 @@ public:
 	String operator+(const String& other) const;
 	String& operator+=(const String& other);
 	
-	String& operator=(const String& other);
+	String& operator=(const String& other); // copy
+	String& operator=(String&& other); // move
 	
 private:
 
