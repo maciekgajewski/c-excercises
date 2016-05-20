@@ -16,7 +16,6 @@ public:
 	const char* c_str() const;
 	
 	MyString& operator=(const MyString& str);
-	MyString& operator=(MyString&& str);
 	bool operator==(const MyString& str) const;
 	bool operator!=(const MyString& str) const;
 	const char& operator[](int idx) const;
