@@ -51,20 +51,6 @@ MyString& MyString::operator=(const MyString& str)
 	return *this;
 }
 
-MyString& MyString::operator=(MyString&& str)
-{
-	if (str.empty())
-	{
-		mBuffer.reset();
-	}
-	else
-	{
-		mBuffer.swap(str.mBuffer);
-	}
-	
-	return *this;
-}
-
 bool MyString::operator==(const MyString& str) const
 {
 	if (empty() && str.empty()) return true;
