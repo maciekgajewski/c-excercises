@@ -58,13 +58,41 @@ void string_test()
 	assert(string_const_ref == "Hex");
 	assert(string2 == "Hex");
 
-	// operator +=
+	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
+        
+	StringType plusResultEmpty = StringType() + StringType();
+	assert(plusResultEmpty.empty());
+	assert(plusResultEmpty.size() == 0); 
+	
+	StringType plusResult2 = StringType() + StringType("777");
+	assert(plusResult2 == "777");
+	
+	StringType plusResult3 = StringType("888") + StringType();
+	assert(plusResult3 == "888");
 
 	// operator +=
+
+	plusResult += "";
+	assert(plusResult == "Hex123");
+
+	plusResult += StringType();
+	assert(plusResult == "Hex123");
+
 	plusResult += string2;
 	assert(plusResult == "Hex123Hex");
+
+	StringType emptyPlus;
+	emptyPlus += StringType();
+	assert(emptyPlus.empty());
+	assert(emptyPlus.size() == 0);
+	
+	// operator <
+	assert(StringType() < StringType("0"));
+	assert(StringType("0") < StringType("1"));
+	assert(!(StringType("1") < StringType("0")));
+	assert(!(StringType("1") < StringType()));
 }
 
 
