@@ -69,13 +69,13 @@ void string_test()
 
 	// move contructor and assignment operator tests
 	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
-	const char* string_c_str_pointer = string4.c_str();
+	const char* string_buffer = string4.c_str();
 	StringType string5 = std::move(string4);
-	assert(string_c_str_pointer == string5.c_str());
+	assert(string_buffer == string5.c_str());
 
 	StringType string6;
 	string6 = std::move(string5);
-	assert(string_c_str_pointer == string6.c_str());
+	assert(string_buffer == string6.c_str());
 
 }
 
