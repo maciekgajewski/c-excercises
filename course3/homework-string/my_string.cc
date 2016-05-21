@@ -21,6 +21,14 @@ MyString::MyString(const MyString& str)
 	}
 }
 
+MyString::MyString(MyString&& str)
+{
+	if (!str.empty())
+	{
+		mBuffer.swap(str.mBuffer);
+	}
+}
+
 bool MyString::empty() const
 {
 	return !mBuffer;
@@ -47,7 +55,21 @@ MyString& MyString::operator=(const MyString& str)
 		mBuffer.reset(new char[str.size() + 1]);
 		std::strcpy(mBuffer.get(), str.mBuffer.get());
 	}
-	
+
+	return *this;
+}
+
+MyString& MyString::operator=(MyString&& str)
+{
+	if (str.empty())
+	{
+		mBuffer.reset();
+	}
+	else
+	{
+		mBuffer.swap(str.mBuffer);
+	}
+
 	return *this;
 }
 
