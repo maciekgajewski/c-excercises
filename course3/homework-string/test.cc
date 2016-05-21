@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstring>
 
+
 template<typename StringType>
 void string_test()
 {
@@ -65,6 +66,16 @@ void string_test()
 	// operator +=
 	plusResult += string2;
 	assert(plusResult == "Hex123Hex");
+
+	// move contructor and assignment operator tests
+	const char* string_c_str_pointer = string3.c_str();
+	StringType string4 = std::move(string3);
+	assert(string_c_str_pointer == string4.c_str());
+
+	StringType string5;
+	string5 = std::move(string4);
+	assert(string_c_str_pointer == string5.c_str());
+
 }
 
 
@@ -75,9 +86,9 @@ int main()
 	// assert(false);
 	
 	// test fior std::string - works
-	std::cout << "Testing std::string..." << std::endl;
+	/*std::cout << "Testing std::string..." << std::endl;
 	string_test<std::string>();
-	std::cout << "std::string test passes" << std::endl;
+	std::cout << "std::string test passes" << std::endl;*/
 	
 	// test for your string - it should compile and pass pass
 	std::cout << "Testing MyString..." << std::endl;
