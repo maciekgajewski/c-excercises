@@ -24,6 +24,30 @@ bool MyString::operator!=(const MyString& rhs) const {
 	return !operator==(rhs);
 }
 
+bool MyString::operator>(const MyString& rhs) const{
+	if (!buf || !rhs.buf)
+		return false;
+	return strcmp(buf.get(), rhs.buf.get()) > 0;
+}
+
+bool MyString::operator>=(const MyString& rhs) const{
+	if (!buf || !rhs.buf)
+		return false;
+	return strcmp(buf.get(), rhs.buf.get()) >= 0;
+}
+
+bool MyString::operator<(const MyString& rhs) const{
+	if (!buf || !rhs.buf)
+		return false;
+	return !operator>=(rhs);
+}
+
+bool MyString::operator<=(const MyString& rhs) const{
+	if (!buf || !rhs.buf)
+		return false;
+	return !operator>(rhs);
+}
+
 const char& MyString::operator[](unsigned int i) const {
 	return buf.get()[i];
 }

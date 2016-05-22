@@ -12,6 +12,10 @@ class MyString
 		MyString(const MyString& obj);
 		bool operator==(const MyString& rhs) const;
 		bool operator!=(const MyString& rhs) const;
+		bool operator>(const MyString& rhs) const;
+		bool operator>=(const MyString& rhs) const;
+		bool operator<(const MyString& rhs) const;
+		bool operator<=(const MyString& rhs) const;
 		const char& operator[](unsigned int i) const;
 		char& operator[](unsigned int i);
 		const char& at(unsigned int i) const;
