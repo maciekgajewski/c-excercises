@@ -10,6 +10,7 @@ class MyString
 		MyString() = default;
 		MyString(const char* str);
 		MyString(const MyString& obj);
+		MyString(MyString&& obj);
 		bool operator==(const MyString& rhs) const;
 		bool operator!=(const MyString& rhs) const;
 		bool operator>(const MyString& rhs) const;
@@ -21,8 +22,9 @@ class MyString
 		const char& at(unsigned int i) const;
 		char& at(unsigned int i);
 		MyString operator+(const MyString& rhs) const;
-		void operator=(const MyString& rhs);
-		void operator+=(const MyString& rhs);
+		MyString& operator=(const MyString& rhs);
+		MyString& operator=(MyString&& rhs);
+		MyString& operator+=(const MyString& rhs);
 		bool empty() const;
 		size_t size() const;
 		const char* c_str() const;

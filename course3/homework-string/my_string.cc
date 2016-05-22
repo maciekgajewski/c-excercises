@@ -11,6 +11,40 @@ MyString::MyString(const MyString& obj) : buf(std::make_unique<char[]>(obj.size(
 		std::strcpy(buf.get(), obj.buf.get());
 }
 
+MyString::MyString(MyString&& obj) {
+	buf = std::move(obj.buf);
+}
+
+MyString& MyString::operator=(MyString&& rhs) {
+	buf = std::move(rhs.buf);
+	return *this;
+}
+
+MyString& MyString::operator=(const MyString& rhs) {
+	buf.reset();
+	if (rhs.buf) {
+		buf = std::make_unique<char[]>(rhs.size()+1);
+		std::strcpy(buf.get(), rhs.buf.get());
+	}
+	return *this;
+}
+
+MyString& MyString::operator+=(const MyString& rhs) {
+	if (rhs.buf) {
+		auto concat_string = std::make_unique<char[]>(size() + rhs.size() + 1);
+		if (buf) {
+			std::strcpy(concat_string.get(), buf.get());
+			std::strcat(concat_string.get(), rhs.buf.get());
+		}
+		else {
+			std::strcpy(concat_string.get(), rhs.buf.get());
+		}
+		buf = std::make_unique<char[]>(size() + rhs.size() + 1);
+		std::strcpy(buf.get(), concat_string.get());
+	}
+	return *this;
+}
+
 bool MyString::operator==(const MyString& rhs) const {
 	// This is a logical xor
 	if (!rhs.buf != !buf)
@@ -83,29 +117,6 @@ MyString MyString::operator+(const MyString& rhs) const {
 	if (!buf && rhs.buf)
 		std::strcpy(concat_string.get(), rhs.buf.get());
 	return MyString(concat_string.get());
-}
-
-void MyString::operator=(const MyString& rhs) {
-	buf.reset();
-	if (rhs.buf) {
-		buf = std::make_unique<char[]>(rhs.size()+1);
-		std::strcpy(buf.get(), rhs.buf.get());
-	}
-}
-
-void MyString::operator+=(const MyString& rhs) {
-	if (rhs.buf) {
-		auto concat_string = std::make_unique<char[]>(size() + rhs.size() + 1);
-		if (buf) {
-			std::strcpy(concat_string.get(), buf.get());
-			std::strcat(concat_string.get(), rhs.buf.get());
-		}
-		else {
-			std::strcpy(concat_string.get(), rhs.buf.get());
-		}
-		buf = std::make_unique<char[]>(size() + rhs.size() + 1);
-		std::strcpy(buf.get(), concat_string.get());
-	}
 }
 
 bool MyString::empty() const {
