@@ -39,8 +39,7 @@ MyString& MyString::operator+=(const MyString& rhs) {
 		else {
 			std::strcpy(concat_string.get(), rhs.buf.get());
 		}
-		buf = std::make_unique<char[]>(size() + rhs.size() + 1);
-		std::strcpy(buf.get(), concat_string.get());
+		buf = std::move(concat_string);
 	}
 	return *this;
 }
@@ -107,16 +106,8 @@ char& MyString::at(unsigned int i) {
 }
 
 MyString MyString::operator+(const MyString& rhs) const {
-	if (!buf && !rhs.buf)
-		return MyString();
-	auto concat_string = std::make_unique<char[]>(size() + rhs.size() + 1);
-	if (buf)
-		std::strcpy(concat_string.get(), buf.get());
-	if (buf && rhs.buf)
-		std::strcat(concat_string.get(), rhs.buf.get());
-	if (!buf && rhs.buf)
-		std::strcpy(concat_string.get(), rhs.buf.get());
-	return MyString(concat_string.get());
+	MyString result(*this);
+	return result+=rhs;
 }
 
 bool MyString::empty() const {
