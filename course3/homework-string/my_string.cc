@@ -42,17 +42,19 @@ MyString& MyString::operator= (const MyString& that)
 	
 	if (that.empty())
 	{
-		mBuffer = nullptr;
+		std::unique_ptr<char[]> oldBuffer = nullptr;
+		mBuffer.swap(oldBuffer);
 	}
 	else
 	{
-		mBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
-		std::strcpy(mBuffer.get(), that.mBuffer.get());
+		auto newBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
+		std::strcpy(newBuffer.get(), that.mBuffer.get());
+
+		mBuffer.swap(newBuffer);
 	}
 
 	return *this;
 }
-
 
 MyString MyString::operator+(const MyString& that) const
 {
@@ -86,6 +88,33 @@ MyString MyString::operator+(const MyString& that) const
 	}
 }
 
+MyString& MyString::operator+=(const MyString& that)
+{
+	auto thatSize = that.size();
+	
+	if (thatSize == 0)
+		return *this;
+	
+	if (mBuffer == nullptr)
+	{
+		mBuffer = std::make_unique<char[]>(thatSize + 1);
+		std::strcpy(mBuffer.get(), that.mBuffer.get());
+	}
+	else
+	{
+		auto thisSize = size();
+
+		auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
+
+		std::strcpy(combinedBuffer.get(), mBuffer.get());
+		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
+
+		mBuffer.swap(combinedBuffer);
+	}
+
+	return *this;
+}
+
 bool MyString::empty() const
 {
 	return mBuffer == nullptr || mBuffer[0] == '\0';
@@ -98,10 +127,13 @@ int MyString::size() const
 
 bool MyString::operator==(const MyString& that) const
 {
-	if (empty() && that.empty())
+	auto thisEmpty = empty();
+	auto thatEmpty = that.empty();
+
+	if (thisEmpty && thatEmpty)
 		return true;
 
-	if (empty() != that.empty())
+	if (thisEmpty != thatEmpty)
 		return false;
 
 	return std::strcmp(mBuffer.get(), that.mBuffer.get()) == 0;
@@ -110,6 +142,23 @@ bool MyString::operator==(const MyString& that) const
 bool MyString::operator!=(const MyString& that) const
 {
 	return !operator==(that);
+}
+
+bool MyString::operator<(const MyString& that) const
+{
+	auto thisEmpty = empty();
+	auto thatEmpty = that.empty();
+
+	if (thisEmpty && thatEmpty)
+		return false;
+
+	if (thisEmpty && !thatEmpty)
+		return true;
+
+	if (!thisEmpty && thatEmpty)
+		return false;
+	
+	return std::strcmp(mBuffer.get(), that.mBuffer.get()) < 1;
 }
 
 const char&	MyString::operator[](int index) const
@@ -121,7 +170,6 @@ char& MyString::operator[](int index)
 {
 	return mBuffer[index];
 }
-
 
 const char* MyString::c_str() const
 {

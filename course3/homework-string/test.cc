@@ -72,27 +72,27 @@ void string_test()
 	StringType plusResult3 = StringType("888") + StringType();
 	assert(plusResult3 == "888");
 
-	//// operator +=
+	// operator +=
 
-	//plusResult += "";
-	//assert(plusResult == "Hex123");
+	plusResult += "";
+	assert(plusResult == "Hex123");
 
-	//plusResult += StringType();
-	//assert(plusResult == "Hex123");
+	plusResult += StringType();
+	assert(plusResult == "Hex123");
 
-	//plusResult += string2;
-	//assert(plusResult == "Hex123Hex");
+	plusResult += string2;
+	assert(plusResult == "Hex123Hex");
 
-	//StringType emptyPlus;
-	//emptyPlus += StringType();
-	//assert(emptyPlus.empty());
-	//assert(emptyPlus.size() == 0);
-	//
-	//// operator <
-	//assert(StringType() < StringType("0"));
-	//assert(StringType("0") < StringType("1"));
-	//assert(!(StringType("1") < StringType("0")));
-	//assert(!(StringType("1") < StringType()));
+	StringType emptyPlus;
+	emptyPlus += StringType();
+	assert(emptyPlus.empty());
+	assert(emptyPlus.size() == 0);
+	
+	// operator <
+	assert(StringType() < StringType("0"));
+	assert(StringType("0") < StringType("1"));
+	assert(!(StringType("1") < StringType("0")));
+	assert(!(StringType("1") < StringType()));
 }
 
 
