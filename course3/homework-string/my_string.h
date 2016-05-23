@@ -5,7 +5,7 @@
 class MyString
 {
   public:
-	MyString();
+	MyString() = default;
 	MyString(const MyString& that);
 	MyString(MyString&& that);
 	MyString(const char* str);

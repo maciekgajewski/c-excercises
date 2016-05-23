@@ -3,12 +3,6 @@
 #include <cstring>
 #include <memory>
 
-MyString::MyString() 
-	:
-	mBuffer(nullptr)
-{
-}
-
 MyString::MyString(const MyString& that)
 {
 	if (that.empty())
@@ -29,11 +23,7 @@ MyString::MyString(MyString&& that)
 
 MyString::MyString(const char* str)
 {
-	if (str == nullptr || str[0] == '\0')
-	{
-		mBuffer = nullptr;
-	}
-	else
+	if (str != nullptr && str[0] != '\0')
 	{
 		mBuffer = std::make_unique<char[]>(std::strlen(str) + 1);
 		std::strcpy(mBuffer.get(), str);
@@ -47,15 +37,14 @@ MyString& MyString::operator=(const MyString& that)
 	
 	if (that.empty())
 	{
-		std::unique_ptr<char[]> oldBuffer = nullptr;
-		mBuffer.swap(oldBuffer);
+		mBuffer.reset();
 	}
 	else
 	{
 		auto newBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
 		std::strcpy(newBuffer.get(), that.mBuffer.get());
 
-		mBuffer.swap(newBuffer);
+		mBuffer = std::move(newBuffer);
 	}
 
 	return *this;
@@ -63,10 +52,7 @@ MyString& MyString::operator=(const MyString& that)
 
 MyString& MyString::operator=(MyString&& that)
 {
-	if (this == &that)
-		return *this;
-
-	mBuffer.swap(that.mBuffer);
+	mBuffer = std::move(that.mBuffer);
 
 	return *this;
 }
@@ -90,14 +76,14 @@ MyString MyString::operator+(const MyString& that) const
 	}
 	else
 	{
-		auto result = MyString();
+		MyString result;
 
 		auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
 
 		std::strcpy(combinedBuffer.get(), mBuffer.get());
 		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
 
-		result.mBuffer.swap(combinedBuffer);
+		result.mBuffer = std::move(combinedBuffer);
 
 		return result;
 	}
@@ -124,7 +110,7 @@ MyString& MyString::operator+=(const MyString& that)
 		std::strcpy(combinedBuffer.get(), mBuffer.get());
 		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
 
-		mBuffer.swap(combinedBuffer);
+		mBuffer = std::move(combinedBuffer);
 	}
 
 	return *this;
@@ -188,5 +174,8 @@ char& MyString::operator[](int index)
 
 const char* MyString::c_str() const
 {
+	if (mBuffer == nullptr)
+		return '\0';
+
 	return mBuffer.get();
 }
