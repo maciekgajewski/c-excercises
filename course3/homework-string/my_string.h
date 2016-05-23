@@ -8,6 +8,8 @@ class MyString
 	MyString();
 	MyString(const MyString& that);
 	MyString(const char* str);
+	MyString& operator=(const MyString& that);
+	MyString operator+(const MyString& that) const;
 	
 	bool empty() const;
 	int size() const;
@@ -17,9 +19,8 @@ class MyString
 	const char& operator[](int index) const;
 	char& operator[](int index);
 
-private:
-	MyString(const char* source, const int length);
+	const char* c_str() const;
 
-	int mLength;
+private:
 	std::unique_ptr<char[]> mBuffer;
 };

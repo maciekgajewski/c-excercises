@@ -5,43 +5,87 @@
 
 MyString::MyString() 
 	:
-	mLength(0),
 	mBuffer(nullptr)
 {
 }
 
-MyString::MyString(const MyString& that) 
-	: MyString::MyString(that.mBuffer.get(), that.mLength)
+MyString::MyString(const MyString& that)
 {
+	if (that.empty())
+	{
+		mBuffer = nullptr;
+	}
+	else
+	{
+		mBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
+		std::strcpy(mBuffer.get(), that.mBuffer.get());
+	}
 }
 
-MyString::MyString(const char* source)
-	: MyString::MyString(source, std::strlen(source))
+MyString::MyString(const char* str)
 {
+	if (str == nullptr || str[0] == '\0')
+	{
+		mBuffer = nullptr;
+	}
+	else
+	{
+		mBuffer = std::make_unique<char[]>(std::strlen(str) + 1);
+		std::strcpy(mBuffer.get(), str);
+	}
 }
 
-MyString::MyString(const char* source, const int length)
-	:
-	mLength(length),
-	mBuffer(new char[length + 1]) // +1 to allow for the '\0' terminator
+MyString& MyString::operator= (const MyString& that)
 {
-	std::strcpy(mBuffer.get(), source);
+	if (this == &that)
+		return *this;
+	
+	if (that.empty())
+	{
+		mBuffer = nullptr;
+	}
+	else
+	{
+		mBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
+		std::strcpy(mBuffer.get(), that.mBuffer.get());
+	}
+
+	return *this;
+}
+
+
+MyString MyString::operator+(const MyString& that) const
+{
+	auto length = size() + that.size();
+
+	if (length == 0)
+		return MyString();
+	else
+	{
+		// FIXME:
+		return MyString();
+	}
 }
 
 bool MyString::empty() const
 {
-	return mLength == 0;
+	return mBuffer == nullptr || mBuffer[0] == '\0';
 }
 
 int MyString::size() const
 {
-	return mLength;	
+	return empty() ? 0 : std::strlen(mBuffer.get());
 }
 
 bool MyString::operator==(const MyString& that) const
 {
-	return mLength == that.mLength
-		   && std::strcmp(mBuffer.get(), that.mBuffer.get()) == 0;
+	if (empty() && that.empty())
+		return true;
+
+	if (empty() != that.empty())
+		return false;
+
+	return std::strcmp(mBuffer.get(), that.mBuffer.get()) == 0;
 }
 
 bool MyString::operator!=(const MyString& that) const
@@ -49,13 +93,18 @@ bool MyString::operator!=(const MyString& that) const
 	return !operator==(that);
 }
 
+const char&	MyString::operator[](int index) const
+{
+	return mBuffer[index];
+}
+
 char& MyString::operator[](int index)
 {
 	return mBuffer[index];
 }
 
-const char& MyString::operator[](int index) const
+
+const char* MyString::c_str() const
 {
-	// TODO: For some reason the const version is not being used in "string3[0] == 'H'", I'm not sure why
-	return mBuffer[index];
+	return mBuffer.get();
 }
