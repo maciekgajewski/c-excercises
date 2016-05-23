@@ -74,18 +74,10 @@ bool MyString::operator>=(const MyString& rhs) const{
 }
 
 bool MyString::operator<(const MyString& rhs) const{
-	if (!buf)
-		return true;
-	if (!rhs.buf)
-		return false;
 	return !operator>=(rhs);
 }
 
 bool MyString::operator<=(const MyString& rhs) const{
-	if (!buf)
-		return true;
-	if (!rhs.buf)
-		return false;
 	return !operator>(rhs);
 }
 
