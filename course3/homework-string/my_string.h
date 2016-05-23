@@ -7,8 +7,10 @@ class MyString
   public:
 	MyString();
 	MyString(const MyString& that);
+	MyString(MyString&& that);
 	MyString(const char* str);
 	MyString& operator=(const MyString& that);
+	MyString& operator=(MyString&& that);
 
 	MyString operator+(const MyString& that) const;
 	

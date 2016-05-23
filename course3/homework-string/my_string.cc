@@ -22,6 +22,11 @@ MyString::MyString(const MyString& that)
 	}
 }
 
+MyString::MyString(MyString&& that)
+{
+	mBuffer.swap(that.mBuffer);
+}
+
 MyString::MyString(const char* str)
 {
 	if (str == nullptr || str[0] == '\0')
@@ -35,7 +40,7 @@ MyString::MyString(const char* str)
 	}
 }
 
-MyString& MyString::operator= (const MyString& that)
+MyString& MyString::operator=(const MyString& that)
 {
 	if (this == &that)
 		return *this;
@@ -52,6 +57,16 @@ MyString& MyString::operator= (const MyString& that)
 
 		mBuffer.swap(newBuffer);
 	}
+
+	return *this;
+}
+
+MyString& MyString::operator=(MyString&& that)
+{
+	if (this == &that)
+		return *this;
+
+	mBuffer.swap(that.mBuffer);
 
 	return *this;
 }
