@@ -15,6 +15,7 @@ public:
 	bool empty() const;
 	std::size_t size() const;
 	const char* c_str() const;
+	int compare(const MyString& str) const;
 	
 	MyString& operator=(const MyString& str);
 	MyString& operator=(MyString&& str);

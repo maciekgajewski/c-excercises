@@ -44,6 +44,11 @@ const char* MyString::c_str() const
 	return empty() ? "" : mBuffer.get();
 }
 
+int MyString::compare(const MyString& str) const
+{
+	return std::strcmp(c_str(), str.c_str());
+}
+
 MyString& MyString::operator=(const MyString& str)
 {
 	if (str.empty())
@@ -88,7 +93,7 @@ bool MyString::operator!=(const MyString& str) const
 
 bool MyString::operator<(const MyString& str) const
 {
-	return std::strcmp(c_str(), str.c_str()) < 0; 
+	return compare(str) < 0;
 }
 
 const char& MyString::operator[](int idx) const
