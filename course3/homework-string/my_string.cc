@@ -86,6 +86,11 @@ bool MyString::operator!=(const MyString& str) const
 	return !operator==(str);
 }
 
+bool MyString::operator<(const MyString& str) const
+{
+	return std::strcmp(c_str(), str.c_str()) < 0; 
+}
+
 const char& MyString::operator[](int idx) const
 {
 	return mBuffer.get()[idx];

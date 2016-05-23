@@ -90,10 +90,10 @@ void string_test()
 	assert(emptyPlus.size() == 0);
 	
 	// operator <
-	/*assert(StringType() < StringType("0"));
+	assert(StringType() < StringType("0"));
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
-	assert(!(StringType("1") < StringType()));*/
+	assert(!(StringType("1") < StringType()));
 	
 	// move contructor and assignment operator tests
 	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
