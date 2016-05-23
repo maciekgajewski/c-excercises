@@ -83,7 +83,7 @@ void string_test()
 
 	plusResult += string2;
 	assert(plusResult == "Hex123Hex");
-	
+
 	StringType emptyPlus;
 	emptyPlus += StringType();
 	assert(emptyPlus.empty());
@@ -94,7 +94,7 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
-	
+
 	// move contructor and assignment operator tests
 	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
 	const char* string_buffer = string4.c_str();
