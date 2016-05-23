@@ -56,14 +56,33 @@ MyString& MyString::operator= (const MyString& that)
 
 MyString MyString::operator+(const MyString& that) const
 {
-	auto length = size() + that.size();
-
-	if (length == 0)
+	auto thisSize = size();
+	auto thatSize = that.size();
+	
+	if (thisSize == 0 && thatSize == 0)
+	{
 		return MyString();
+	}
+	else if (thatSize == 0)
+	{
+		return MyString(mBuffer.get());
+	}
+	else if (thisSize == 0)
+	{
+		return MyString(that.mBuffer.get());
+	}
 	else
 	{
-		// FIXME:
-		return MyString();
+		auto result = MyString();
+
+		auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
+
+		std::strcpy(combinedBuffer.get(), mBuffer.get());
+		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
+
+		result.mBuffer.swap(combinedBuffer);
+
+		return result;
 	}
 }
 

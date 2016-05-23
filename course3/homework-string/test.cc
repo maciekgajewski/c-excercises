@@ -61,16 +61,16 @@ void string_test()
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
- //       
-	//StringType plusResultEmpty = StringType() + StringType();
-	//assert(plusResultEmpty.empty());
-	//assert(plusResultEmpty.size() == 0); 
-	//
-	//StringType plusResult2 = StringType() + StringType("777");
-	//assert(plusResult2 == "777");
-	//
-	//StringType plusResult3 = StringType("888") + StringType();
-	//assert(plusResult3 == "888");
+        
+	StringType plusResultEmpty = StringType() + StringType();
+	assert(plusResultEmpty.empty());
+	assert(plusResultEmpty.size() == 0); 
+	
+	StringType plusResult2 = StringType() + StringType("777");
+	assert(plusResult2 == "777");
+	
+	StringType plusResult3 = StringType("888") + StringType();
+	assert(plusResult3 == "888");
 
 	//// operator +=
 
