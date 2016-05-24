@@ -32,9 +32,6 @@ MyString::MyString(const char* str)
 
 MyString& MyString::operator=(const MyString& that)
 {
-	if (this == &that)
-		return *this;
-	
 	if (that.empty())
 	{
 		mBuffer.reset();
@@ -62,27 +59,22 @@ MyString MyString::operator+(const MyString& that) const
 	auto thisSize = size();
 	auto thatSize = that.size();
 	
-	if (thisSize == 0 && thatSize == 0)
+	if (thatSize == 0)
 	{
-		return MyString();
-	}
-	else if (thatSize == 0)
-	{
-		return MyString(mBuffer.get());
+		return *this;
 	}
 	else if (thisSize == 0)
 	{
-		return MyString(that.mBuffer.get());
+		return that;
 	}
 	else
 	{
-		MyString result;
-
 		auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
 
 		std::strcpy(combinedBuffer.get(), mBuffer.get());
 		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
 
+		MyString result;
 		result.mBuffer = std::move(combinedBuffer);
 
 		return result;
@@ -159,7 +151,7 @@ bool MyString::operator<(const MyString& that) const
 	if (!thisEmpty && thatEmpty)
 		return false;
 	
-	return std::strcmp(mBuffer.get(), that.mBuffer.get()) < 1;
+	return std::strcmp(mBuffer.get(), that.mBuffer.get()) < 0;
 }
 
 const char&	MyString::operator[](int index) const
@@ -175,7 +167,7 @@ char& MyString::operator[](int index)
 const char* MyString::c_str() const
 {
 	if (mBuffer == nullptr)
-		return '\0';
+		return "";
 
 	return mBuffer.get();
 }
