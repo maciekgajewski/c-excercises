@@ -52,29 +52,23 @@ MyString& MyString::operator=(MyString&& that)
 
 MyString MyString::operator+(const MyString& that) const
 {
-	auto thisSize = size();
 	auto thatSize = that.size();
-	
 	if (thatSize == 0)
-	{
 		return *this;
-	}
-	else if (thisSize == 0)
-	{
+
+	auto thisSize = size();
+	if (thisSize == 0)
 		return that;
-	}
-	else
-	{
-		auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
 
-		std::strcpy(combinedBuffer.get(), mBuffer.get());
-		std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
+	auto combinedBuffer = std::make_unique<char[]>(thisSize + thatSize + 1);
 
-		MyString result;
-		result.mBuffer = std::move(combinedBuffer);
+	std::strcpy(combinedBuffer.get(), mBuffer.get());
+	std::strcpy(combinedBuffer.get() + thisSize, that.mBuffer.get());
 
-		return result;
-	}
+	MyString result;
+	result.mBuffer = std::move(combinedBuffer);
+
+	return result;
 }
 
 MyString& MyString::operator+=(const MyString& that)
