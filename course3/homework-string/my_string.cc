@@ -129,7 +129,7 @@ bool MyString::operator<(const MyString& that) const
 	return std::strcmp(c_str(), that.c_str()) < 0;
 }
 
-const char&	MyString::operator[](int index) const
+const char& MyString::operator[](int index) const
 {
 	return mBuffer[index];
 }
