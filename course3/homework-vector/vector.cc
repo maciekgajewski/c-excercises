@@ -3,58 +3,8 @@
 
 class Vector
 {
-  public:
-    Vector():Vector(0,0)
-    {
-    }
-    Vector(const Vector& that) : Vector(that.mX, that.mY)
-    {
-    }
-    Vector(int x, int y) : mX(x), mY(y) 
-    {
-    }
-    int GetX () const
-    {
-      return mX;
-    }
-    int GetY() const
-    {
-      return mY;
-    }
-    void SetY(int y)
-    {
-      mY = y;
-    }
-    void SetX(int x)
-    {
-      mX = x;
-    }
-
-    Vector operator+(const Vector& that) 
-    {
-      Vector result(mX + that.mX, mY + that.mY);
-      return result;
-    }
-
-  private:
-    int mX;
-    int mY;
+    // TODO
 };
-
-bool operator==(const Vector& lhs, const Vector& rhs)
-{
-  return lhs.GetX() == rhs.GetX() && lhs.GetY() == rhs.GetY();
-}
-bool operator!=(const Vector& lhs, const Vector& rhs)
-{
-  return !(lhs == rhs);
-}
-
-std::ostream& operator<<(std::ostream& stream, const Vector& vect)
-{
-  stream << "Vector [x=" << vect.GetX() << ", y=" << vect.GetY() << "]";
-  return stream;
-}
 
 int main()
 {
