@@ -106,7 +106,7 @@ MyString& MyString::operator+=(const MyString& that)
 
 bool MyString::empty() const
 {
-	return mBuffer == nullptr || mBuffer[0] == '\0';
+	return !mBuffer;
 }
 
 int MyString::size() const
@@ -116,16 +116,7 @@ int MyString::size() const
 
 bool MyString::operator==(const MyString& that) const
 {
-	auto thisEmpty = empty();
-	auto thatEmpty = that.empty();
-
-	if (thisEmpty && thatEmpty)
-		return true;
-
-	if (thisEmpty != thatEmpty)
-		return false;
-
-	return std::strcmp(mBuffer.get(), that.mBuffer.get()) == 0;
+	return std::strcmp(c_str(), that.c_str()) == 0;
 }
 
 bool MyString::operator!=(const MyString& that) const
@@ -150,8 +141,5 @@ char& MyString::operator[](int index)
 
 const char* MyString::c_str() const
 {
-	if (mBuffer == nullptr)
-		return "";
-
-	return mBuffer.get();
+	return mBuffer ? mBuffer.get() : "";
 }
