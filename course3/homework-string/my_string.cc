@@ -5,11 +5,7 @@
 
 MyString::MyString(const MyString& that)
 {
-	if (that.empty())
-	{
-		mBuffer = nullptr;
-	}
-	else
+	if (!that.empty())
 	{
 		mBuffer = std::make_unique<char[]>(std::strlen(that.mBuffer.get()) + 1);
 		std::strcpy(mBuffer.get(), that.mBuffer.get());
@@ -18,7 +14,7 @@ MyString::MyString(const MyString& that)
 
 MyString::MyString(MyString&& that)
 {
-	mBuffer.swap(that.mBuffer);
+	mBuffer = std::move(that.mBuffer);
 }
 
 MyString::MyString(const char* str)
@@ -139,19 +135,7 @@ bool MyString::operator!=(const MyString& that) const
 
 bool MyString::operator<(const MyString& that) const
 {
-	auto thisEmpty = empty();
-	auto thatEmpty = that.empty();
-
-	if (thisEmpty && thatEmpty)
-		return false;
-
-	if (thisEmpty && !thatEmpty)
-		return true;
-
-	if (!thisEmpty && thatEmpty)
-		return false;
-	
-	return std::strcmp(mBuffer.get(), that.mBuffer.get()) < 0;
+	return std::strcmp(c_str(), that.c_str()) < 0;
 }
 
 const char&	MyString::operator[](int index) const
