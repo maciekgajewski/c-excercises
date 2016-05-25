@@ -27,11 +27,13 @@ void unique_ptr_test()
 	UniquePtrType<int> ptr4 = std::move(ptr3);
 	assert(*ptr4.get() == 42);
 	assert(ptr4.get() == i);
+	assert(!ptr3);
 	
 	// move assignment operator
 	ptr3 = std::move(ptr4);
 	assert(*ptr3.get() == 42);
 	assert(ptr3.get() == i);
+	assert(!ptr4);
 	
 	// nullptr assignment operator
 	ptr3 = nullptr;
@@ -52,6 +54,7 @@ void unique_ptr_test()
 	ptr.reset(new int(42));
 	i = ptr.release();
 	assert(*i == 42);
+	assert(!ptr);
 	
 	ptr.reset(i);
 	assert(*ptr.get() == 42);
@@ -59,6 +62,7 @@ void unique_ptr_test()
 	ptr.reset();
 	i = ptr.release();
 	assert(i == nullptr);
+	assert(!ptr);
 	
 	// swap
 	ptr2.reset(new int(42));
