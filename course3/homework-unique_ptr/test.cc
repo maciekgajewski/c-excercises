@@ -6,25 +6,25 @@
 #include <memory>
 
 
-template<typename UniquePtrType>
-void unique_ptr_int_test()
+template<template<class...> class UniquePtrType>
+void unique_ptr_test()
 {
 	// default contructor
-	UniquePtrType ptr;
+	UniquePtrType<int> ptr;
 	assert(!ptr);
 	assert(ptr.get() == nullptr);
 	
 	// initialization constructor
-	UniquePtrType ptr2(nullptr);
+	UniquePtrType<int> ptr2(nullptr);
 	assert(!ptr2);
 	
 	int* i = new int(42);
-	UniquePtrType ptr3(i);
+	UniquePtrType<int> ptr3(i);
 	assert(ptr3);
 	assert(*ptr3.get() == 42);
 	
 	// move constructor
-	UniquePtrType ptr4 = std::move(ptr3);
+	UniquePtrType<int> ptr4 = std::move(ptr3);
 	assert(*ptr4.get() == 42);
 	assert(ptr4.get() == i);
 	
@@ -66,17 +66,26 @@ void unique_ptr_int_test()
 	assert(!ptr2);
 	assert(*ptr.get() == 42);
 	
+	// operator*
+	struct S { int i = 42; };
+	UniquePtrType<S> ptr5(new S);
+	S s = *ptr5;
+	assert(s.i == 42);
+	
+	// operator->
+	assert(ptr5->i == 42);
+	
 }
 
 int main()
 {
 	// test fior std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
-	unique_ptr_int_test<std::unique_ptr<int>>();
+	unique_ptr_test<std::unique_ptr>();
 	std::cout << "std::unique_ptr test passes" << std::endl;
 	
 	// test for karun::unique_ptr
 	std::cout << "Testing karun::unique_ptr..." << std::endl;
-	unique_ptr_int_test<karun::unique_ptr<int>>();
+	unique_ptr_test<karun::unique_ptr>();
 	std::cout << "karun::unique_ptr test passes" << std::endl;
 }
