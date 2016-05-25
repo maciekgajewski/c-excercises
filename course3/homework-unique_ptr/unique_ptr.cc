@@ -95,3 +95,15 @@ T* karun::unique_ptr<T>::operator->() const
 {
 	return mPtr;
 }
+
+template<class T>
+bool karun::unique_ptr<T>::operator==(const unique_ptr<T>& ptr) const
+{
+	return mPtr == ptr.mPtr;
+}
+
+template<class T>
+bool karun::unique_ptr<T>::operator!=(const unique_ptr<T>& ptr) const
+{
+	return mPtr != ptr.mPtr;
+}
