@@ -66,6 +66,10 @@ void unique_ptr_test()
 	assert(!ptr2);
 	assert(*ptr.get() == 42);
 	
+	// operator== and operator!=
+	assert(ptr2 == ptr3);
+	assert(ptr != ptr2);
+	
 	// operator*
 	struct S { int i = 42; };
 	UniquePtrType<S> ptr5(new S);
