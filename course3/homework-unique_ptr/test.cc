@@ -11,30 +11,60 @@ void unique_ptr_int_test()
 {
 	// default contructor
 	UniquePtrType ptr;
+	assert(!ptr);
 	assert(ptr.get() == nullptr);
-	assert(!ptr);
 	
-	// reset
-	UniquePtrType ptr2;
-	ptr2.reset(new int(42));
-	assert(ptr2);
-	assert(*ptr2.get() == 42);
-	
-	// release
-	int* i = ptr.release();
-	assert(i == nullptr);
-	assert(!ptr);
-	int* i2 = ptr2.release();
-	assert(*i2 == 42);
+	// initialization constructor
+	UniquePtrType ptr2(nullptr);
 	assert(!ptr2);
 	
-	// swap
-	ptr.reset(i2);
-	ptr2.reset(i);
-	ptr.swap(ptr2);
+	int* i = new int(42);
+	UniquePtrType ptr3(i);
+	assert(ptr3);
+	assert(*ptr3.get() == 42);
+	
+	// move constructor
+	UniquePtrType ptr4 = std::move(ptr3);
+	assert(*ptr4.get() == 42);
+	assert(ptr4.get() == i);
+	
+	// move assignment operator
+	ptr3 = std::move(ptr4);
+	assert(*ptr3.get() == 42);
+	assert(ptr3.get() == i);
+	
+	// nullptr assignment operator
+	ptr3 = nullptr;
+	assert(!ptr3);
+	
+	// reset
+	ptr.reset(new int(42));
+	assert(*ptr.get() == 42);
+	
+	ptr.reset();
 	assert(!ptr);
-	assert(!ptr.get());
-	assert(*ptr2.get() == 42);
+	
+	ptr.reset(new int(42));
+	ptr.reset(nullptr);
+	assert(!ptr);
+	
+	// release
+	ptr.reset(new int(42));
+	i = ptr.release();
+	assert(*i == 42);
+	
+	ptr.reset(i);
+	assert(*ptr.get() == 42);
+	
+	ptr.reset();
+	i = ptr.release();
+	assert(i == nullptr);
+	
+	// swap
+	ptr2.reset(new int(42));
+	ptr.swap(ptr2);
+	assert(!ptr2);
+	assert(*ptr.get() == 42);
 	
 }
 
