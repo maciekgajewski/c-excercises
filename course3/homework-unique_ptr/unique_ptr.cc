@@ -85,6 +85,12 @@ karun::unique_ptr<T>::operator bool() const
 }
 
 template<class T>
+T karun::unique_ptr<T>::operator*() const
+{
+	return *mPtr;
+}
+
+template<class T>
 T* karun::unique_ptr<T>::operator->() const
 {
 	return mPtr;

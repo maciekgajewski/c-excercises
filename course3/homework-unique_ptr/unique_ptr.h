@@ -28,6 +28,7 @@ namespace karun
 		void swap(unique_ptr<T>& ptr);
 		
 		operator bool() const;
+		T operator*() const;
 		T* operator->() const;
 		
 		
