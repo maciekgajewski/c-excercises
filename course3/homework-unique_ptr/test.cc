@@ -87,7 +87,7 @@ void unique_ptr_test()
 
 int main()
 {
-	// test fior std::unique_ptr
+	// test for std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
 	unique_ptr_test<std::unique_ptr>();
 	std::cout << "std::unique_ptr test passes" << std::endl;
