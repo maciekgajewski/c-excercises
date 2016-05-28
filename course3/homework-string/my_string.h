@@ -84,14 +84,11 @@ public:
     }
 
     bool operator<(const MyString& rhs) {
-        if (size() != rhs.size())
-            return size() < rhs.size();
-
-        for (int n = 0; n < size(); n++)
-            if (buff[n] != rhs[n])
-                return buff[n] < rhs[n];
-
-        return false;
+        if (!buff)
+            return true;
+        if (!rhs.buff)
+            return false;
+        return strcmp(buff.get(), rhs.buff.get()) <= 0;
     }
 
     bool operator!=(const MyString& rhs) const {
