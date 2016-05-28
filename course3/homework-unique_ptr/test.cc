@@ -37,7 +37,7 @@ void unique_ptr_test()
 	
 	// nullptr assignment operator
 	ptr3 = nullptr;
-	assert(!ptr3);
+	assert(ptr3.get() == nullptr);
 	
 	// reset
 	ptr.reset(new int(42));
