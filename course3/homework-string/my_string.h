@@ -27,6 +27,8 @@ public:
         }
     }
 
+    MyString(MyString&& rhs) : length(rhs.size()), buff(std::move(rhs.buff)) { }
+
     bool empty() const {
         return length == 0;
     }
@@ -43,6 +45,7 @@ public:
     }
 
     MyString& operator=(const MyString& rhs) {
+        std::cout << "Copy oper" << std::endl;
         if (rhs.empty()) {
             buff.reset();
         }
@@ -50,6 +53,12 @@ public:
             buff = std::make_unique<char []>(rhs.length + 1);
             std::strcpy(buff.get(), rhs.buff.get());
         }
+        return *this;
+    }
+
+    MyString& operator=(MyString&& rhs) {
+        std::cout << "Move oper" << std::endl;
+        buff = std::move(rhs.buff);
         return *this;
     }
 
@@ -63,13 +72,26 @@ public:
         if (!rhs.empty()) {
             std::size_t currentSize = size();
             std::unique_ptr<char []> temp = std::make_unique<char []>(currentSize + rhs.size() + 1);
-            std::strcpy(temp.get(), buff.get());
-            std::strcpy(temp.get() + currentSize, rhs.buff.get());
+            if (size())
+                std::strcpy(temp.get(), buff.get());
+            if (rhs.size())
+                std::strcpy(temp.get() + currentSize, rhs.buff.get());
             buff.swap(temp);
             length += rhs.size();
         }
 
         return *this;
+    }
+
+    bool operator<(const MyString& rhs) {
+        if (size() != rhs.size())
+            return size() < rhs.size();
+
+        for (int n = 0; n < size(); n++)
+            if (buff[n] != rhs[n])
+                return buff[n] < rhs[n];
+
+        return false;
     }
 
     bool operator!=(const MyString& rhs) const {
