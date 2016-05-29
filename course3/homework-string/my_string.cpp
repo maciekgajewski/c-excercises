@@ -31,6 +31,14 @@
             return mBuffer == nullptr || mBuffer.get()[0] == 0;
         }
 
+        const char* MyString::c_str() const
+        {
+            if(!mBuffer)
+                return "";
+
+            return mBuffer.get();
+        }
+
         char MyString::operator[](std::size_t index) const
         {
             return mBuffer.get()[index];
@@ -42,7 +50,7 @@
 
         bool MyString::operator==(const MyString& other) const
         {
-            if(this->empty() && other.empty())
+            if(this -> empty() && other.empty())
                 //TODO: this is not completely right just yet. we need nullptr checks for later on.
                 return true;
 
@@ -51,6 +59,38 @@
         bool MyString::operator!=(const MyString& other) const
         {
             return !(*this==other);
+        }
+
+        bool MyString::operator<(const MyString& other) const
+        {
+            if(this->empty() && other.empty())
+                return false;
+
+            return std::strcmp(this->c_str(), other.c_str()) < 0;
+        }
+
+        bool MyString::operator<=(const MyString& other) const
+        {
+            if(this->empty() && other.empty())
+                return true;
+
+            return std::strcmp(this->c_str(), other.c_str()) <= 0;
+        }
+
+        bool MyString::operator>(const MyString& other) const
+        {
+            if(this->empty() && other.empty())
+                return true;
+
+            return std::strcmp(this->c_str(), other.c_str()) > 0;
+        }
+
+        bool MyString::operator>=(const MyString& other) const
+        {
+            if(this->empty() && other.empty())
+                return true;
+
+            return std::strcmp(this->c_str(), other.c_str()) >= 0;
         }
 
         MyString& MyString::operator=(const MyString& other)
@@ -86,14 +126,6 @@
             }
 
             return *this;
-        }
-
-        const char* MyString::c_str() const
-        {
-            if(!mBuffer)
-                return nullptr;
-
-            return mBuffer.get();
         }
 
         MyString& MyString::operator+=(const char* other)
@@ -173,3 +205,5 @@
             //TODO: what happens with the previous pointer?
             mBuffer = nullptr;
         }
+
+
