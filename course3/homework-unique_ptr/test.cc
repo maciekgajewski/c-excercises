@@ -75,6 +75,8 @@ void unique_ptr_test()
 	assert(ptr != ptr2);
 	
 	// operator*
+	assert(*ptr == 42);
+	
 	struct S { int i = 42; };
 	UniquePtrType<S> ptr5(new S);
 	S s = *ptr5;
