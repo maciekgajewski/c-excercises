@@ -21,10 +21,10 @@ public:
 	char& operator[](const int) const; // const indexing operator
 };
 
-MyString::MyString():MyString(""){};
+MyString::MyString(){};
 
 MyString::MyString(const char* inchar){
-	int n = std::strlen(inchar);
+	int n = std::strlen(inchar) + 1;
 	data = std::unique_ptr<char[]>(new char[n]);
  	std::strcpy(data.get(), inchar);
 };
@@ -39,7 +39,10 @@ bool MyString::empty() const{
 };
 
 int MyString::size() const{
-	return std::strlen(data.get());
+	if (data == 0)
+		return 0;
+	else
+		return std::strlen(data.get());
 };
 
 bool operator==(const MyString &s1, const MyString &s2){
@@ -56,8 +59,9 @@ char& MyString::operator[](const int i){
 }
 
 char& MyString::operator[](const int i) const{
-	char a = data.get()[i];
-	char &ref_a = a;
-	return ref_a;
+	char &copy_char = *new char;
+	copy_char = data.get()[i];
+
+	return copy_char;
 }
 
