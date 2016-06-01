@@ -15,7 +15,7 @@ goto build
 	cd build
 	rem cmake ../ -G "MSYS Makefiles"
 	rem make
-	c:\MinGW\bin\g++ -Wall -std=c++14 -pedantic -Werror ../test.cc ../my_unique_ptr.cc -o../test
+	c:\MinGW\bin\g++ -Wall -std=c++14 -pedantic -Werror ../test.cc -o../test
 	cd ..
 	goto end
 

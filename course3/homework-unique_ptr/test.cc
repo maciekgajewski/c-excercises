@@ -41,6 +41,6 @@ int main()
 	testptr4 = testptr3;
 
 	/*auto test = new TestClass();
-	MyUniquePtr<TestClass> testptr3(test);*/
+	MyUniquePtr<TestClass> testptr_invalid(test);*/
 
 }
