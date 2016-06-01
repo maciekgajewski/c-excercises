@@ -9,9 +9,11 @@ class MyString
 	public:
 		MyString();
 
-		MyString(const char* theString);
+		MyString(const char* argString);
 
-		MyString(const MyString& theString);
+		MyString(const MyString& argString);
+    
+        MyString(MyString&& argString);
 
 		const bool empty() const;
 
@@ -19,20 +21,24 @@ class MyString
 		
 		const char* c_str() const;	
 
-		const bool operator == (const MyString& theString) const;
+		const bool operator == (const MyString& argString) const;
 
-		const bool operator != (const MyString& theString) const;
+		const bool operator != (const MyString& argString) const;
 
-		char& operator[](int index) const;
+		char& operator[](size_t index) const;
 		
-		MyString& operator=(const MyString& theString);
+		MyString& operator=(const MyString& argString);
+    
+        //move operator
+        MyString& operator=(MyString&& argString);
 		
-		MyString operator+(const MyString& theString) const;
+		MyString operator+(const MyString& argString) const;
 		
-		MyString& operator+=(const MyString& theString);
+		MyString& operator+=(const MyString& argString);
 		
+        friend std::ostream& operator <<(std::ostream os, const MyString& argString);
 
 	private:
 
-	std::unique_ptr<char[]> buffer;
+        std::unique_ptr<char[]> buffer;
 };
