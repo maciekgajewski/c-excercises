@@ -51,12 +51,14 @@ public:
         else {
             buff = std::make_unique<char []>(rhs.length + 1);
             std::strcpy(buff.get(), rhs.buff.get());
+            length = rhs.length;
         }
         return *this;
     }
 
     MyString& operator=(MyString&& rhs) {
         buff = std::move(rhs.buff);
+        length = rhs.length;
         return *this;
     }
 

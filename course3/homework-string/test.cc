@@ -56,14 +56,23 @@ void string_test()
 	// assignment operator test
 	string3 = "abc";
 	assert(string_const_ref == "abc");
+    assert(string3.size() == 3);
 	
 	string3 = string2;
 	assert(string_const_ref == "Hex");
 	assert(string2 == "Hex");
 
+    StringType stringMau = "Maurice";
+    StringType stringCopy;
+
+    stringCopy = stringMau;
+    assert(stringCopy == "Maurice"); 
+    assert(stringCopy.size() == 7);
+
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
+    assert(plusResult.size() == 6);
         
 	StringType plusResultEmpty = StringType() + StringType();
 	assert(plusResultEmpty.empty());
