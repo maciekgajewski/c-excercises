@@ -45,7 +45,6 @@ public:
     }
 
     MyString& operator=(const MyString& rhs) {
-        std::cout << "Copy oper" << std::endl;
         if (rhs.empty()) {
             buff.reset();
         }
@@ -57,7 +56,6 @@ public:
     }
 
     MyString& operator=(MyString&& rhs) {
-        std::cout << "Move oper" << std::endl;
         buff = std::move(rhs.buff);
         return *this;
     }
