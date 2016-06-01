@@ -17,14 +17,13 @@ MyString::MyString(const MyString& argString)
 
 
 MyString::MyString(MyString&& argString){
-        std::cout << "MyString(MyString&& argString). Value: " << argString.c_str() << std::endl;
         *this = std::move(argString);
 }
 
 const bool MyString::empty() const
 {
         if (buffer){
-                return buffer[0] == '\0';
+                return buffer[0] == '\0' || buffer[0] == ' ';
         }
         else return true;
 }
@@ -73,12 +72,31 @@ const bool MyString::operator != (const MyString& argString) const
         else return false;
 }
 
-char& MyString::operator[](size_t index) const{
+const bool MyString::operator< (const MyString& argString) const
+{
+        if (buffer == nullptr && argString.buffer == nullptr){
+            return false;
+        }
+        else if (buffer && argString.buffer == nullptr ){
+            return false;
+        }
+        else if ( buffer == nullptr && argString.buffer){
+            return true;
+        }
+        else {
+            return std::strcmp(buffer.get(), argString.buffer.get()) < 0;
+        }
+
+}
+
+char& MyString::operator[](size_t index) const
+{
         return buffer[index];
 }
 
 
-MyString& MyString::operator = (const MyString& argString){
+MyString& MyString::operator = (const MyString& argString)
+{
         //std::cout << "Assignment operator invoked, value: " << argString.c_str() << std::endl;
         if (argString.empty()){
                 buffer.release();
@@ -90,7 +108,8 @@ MyString& MyString::operator = (const MyString& argString){
         return *this;
 }
 
-MyString& MyString::operator = (MyString&& argString){
+MyString& MyString::operator = (MyString&& argString)
+{
         //std::cout << "Move operator invoked, value: " << argString.c_str() << std::endl;
         if (argString.empty()){
                 buffer.release();
@@ -101,10 +120,18 @@ MyString& MyString::operator = (MyString&& argString){
         return *this;
 }
 
-MyString MyString::operator + (const MyString& argString) const {
+MyString MyString::operator + (const MyString& argString) const
+{
         MyString returnString;
-        if (argString.buffer == nullptr ){
+        if (buffer == nullptr && argString.buffer == nullptr){
+            return returnString;
+        }
+        else if (buffer && argString.buffer == nullptr ){
                 returnString = *this;
+        }
+        else if ( buffer == nullptr && argString.buffer){
+            returnString.buffer = std::unique_ptr<char[]>(new char[argString.size() + 1]);
+            std::strcpy(returnString.buffer.get(), argString.buffer.get());
         }
         else{
                 returnString.buffer = std::unique_ptr<char[]>(new char[size() + argString.size() + 1]);
@@ -116,12 +143,22 @@ MyString MyString::operator + (const MyString& argString) const {
 
 MyString& MyString::operator += (const MyString& argString)
 {
-         *this = *this + argString;
-         return *this;
+        if (buffer && argString.buffer){
+            *this = *this + argString;
+            return *this;
+        }
+        else if (!buffer && !argString.buffer){
+            return *this;
+        }
+        else if (buffer && !argString.buffer){
+            return *this;
+        }
+        else {
+            std::strcpy(buffer.get(), argString.buffer.get());
+            return *this;
+        }
 }
 
-std::ostream& operator << (std::ostream& os, const MyString& argString){
-                os << argString.c_str();
-               return os;
+
+                
     
-}

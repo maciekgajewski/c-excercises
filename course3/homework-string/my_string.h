@@ -24,6 +24,8 @@ class MyString
 		const bool operator == (const MyString& argString) const;
 
 		const bool operator != (const MyString& argString) const;
+    
+        const bool operator < (const MyString& argString) const;
 
 		char& operator[](size_t index) const;
 		
@@ -36,8 +38,6 @@ class MyString
 		
 		MyString& operator+=(const MyString& argString);
 		
-        friend std::ostream& operator <<(std::ostream os, const MyString& argString);
-
 	private:
 
         std::unique_ptr<char[]> buffer;
