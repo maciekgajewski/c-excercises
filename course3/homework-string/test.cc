@@ -22,7 +22,7 @@ void string_test()
 	
 	// Copy-construction
 	StringType string3 = string2;
-	
+    
 	assert(string2 == string3);
 	assert(string3.size() == 3);
 	
@@ -45,6 +45,46 @@ void string_test()
 	assert(string_const_ref.empty() == false);
 	assert(string_const_ref.size() == 3);
 	assert(string_const_ref[0] == 'H');
+
+	// c_str test
+	assert(std::strcmp(string_const_ref.c_str(), "Hey") == 0);
+
+	// assignment operator test
+	string3 = "abc";
+	assert(string_const_ref == "abc");
+	
+	string3 = string2;
+	assert(string_const_ref == "Hex");
+	assert(string2 == "Hex");
+
+	// operator +=
+	StringType plusResult = string_const_ref + StringType("123");
+	assert(plusResult == "Hex123");
+
+	// operator +=
+	plusResult += string2;
+	assert(plusResult == "Hex123Hex");
+    
+    // added
+    StringType x = "qqq";
+    StringType y = x + StringType();
+    assert(y == "qqq");
+    
+    //Test constructor MyString(const MyString& rhs){*this = otherString;}
+    StringType t1 = y; // y & t1 = qqq
+    StringType t2(t1); // t2 = &t1
+    t1 = "MyNewString";
+    assert( t2 == "qqq");
+    StringType t3;
+    if (true){
+        StringType c = "AnotherNew";
+        StringType temp = c + "String";
+        StringType temp2(temp);
+        t3 = temp2;
+    }
+    assert(t3 == "AnotherNewString");
+    
+    
 	
 }
 
@@ -53,11 +93,11 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+	//assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
-	string_test<std::string>();
+	//string_test<std::string>();
 	std::cout << "std::string test passes" << std::endl;
 	
 	// test for your string - it should compile and pass pass
