@@ -18,7 +18,7 @@ public:
 	friend bool operator== (const MyString &s1, const MyString &s2); // equality operator is friended
 	friend bool operator!=  (const MyString &s1, const MyString &s2);
 	char& operator[](const int); // indexing operator
-	char& operator[](const int) const; // const indexing operator
+	char operator[](const int) const; // const indexing operator
 };
 
 MyString::MyString(){};
@@ -29,7 +29,7 @@ MyString::MyString(const char* inchar){
  	std::strcpy(data.get(), inchar);
 };
 
-MyString::MyString(const MyString& that): data(new char[that.size()]){
+MyString::MyString(const MyString& that): data(new char[that.size()+1]){
 	std::strcpy(data.get(), that.data.get());
 }
 
@@ -58,10 +58,6 @@ char& MyString::operator[](const int i){
 	return data.get()[i];
 }
 
-char& MyString::operator[](const int i) const{
-	char &copy_char = *new char;
-	copy_char = data.get()[i];
-
-	return copy_char;
+char MyString::operator[](const int i) const{
+	return data.get()[i];
 }
-
