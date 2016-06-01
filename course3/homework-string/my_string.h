@@ -19,6 +19,8 @@ public:
 	friend bool operator!=  (const MyString &s1, const MyString &s2);
 	char& operator[](const int); // indexing operator
 	char operator[](const int) const; // const indexing operator
+
+	char* c_str() const; // c_string method?
 };
 
 MyString::MyString(){};
@@ -60,4 +62,10 @@ char& MyString::operator[](const int i){
 
 char MyString::operator[](const int i) const{
 	return data.get()[i];
+}
+
+char* MyString::c_str() const{
+	char* cstr = new char[size()+1];
+	std::strcpy(cstr,data.get());
+	return cstr;
 }
