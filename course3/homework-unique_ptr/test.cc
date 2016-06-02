@@ -98,10 +98,6 @@ void unique_ptr_test()
 	// operator== and operator!=
 	assert(u2 == u3);
 	assert(u1 != u2);
-	
-	// delete
-	delete u1;
-	assert(Number::ctr == 0);
 }
 
 int main()
@@ -109,10 +105,12 @@ int main()
 	// test for std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
 	unique_ptr_test<std::unique_ptr<Number>>();
+	assert(Number::ctr == 0);
 	std::cout << "std::unique_ptr test passes" << std::endl;
 	
 	// test for karun::unique_ptr
 	std::cout << "Testing karun::unique_ptr..." << std::endl;
 	unique_ptr_test<karun::unique_ptr<Number>>();
+	assert(Number::ctr == 0);
 	std::cout << "karun::unique_ptr test passes" << std::endl;
 }
