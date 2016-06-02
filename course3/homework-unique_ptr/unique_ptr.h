@@ -16,6 +16,12 @@ namespace karun
 		unique_ptr(unique_ptr&& ptr) : mPtr(ptr.mPtr) { ptr.mPtr = nullptr; }
 		~unique_ptr() { delete mPtr; }
 		
+		T& operator*() const { return *mPtr; }
+		T* operator->() const { return mPtr; }
+		operator bool() const { return mPtr != nullptr; }
+		bool operator==(const unique_ptr& ptr) const { return mPtr == ptr.mPtr; }
+		bool operator!=(const unique_ptr& ptr) const { return mPtr != ptr.mPtr; }
+		
 		unique_ptr& operator=(std::nullptr_t)
 		{
 			reset(nullptr);
@@ -50,12 +56,6 @@ namespace karun
 		}
 		
 		void swap(unique_ptr& ptr) { std::swap(mPtr, ptr.mPtr); }
-		
-		operator bool() const { return mPtr != nullptr; }
-		bool operator==(const unique_ptr<T>& ptr) const { return mPtr == ptr.mPtr; }
-		bool operator!=(const unique_ptr<T>& ptr) const { return mPtr != ptr.mPtr; }
-		T operator*() const { return *mPtr; }
-		T* operator->() const { return mPtr; }
 		
 	private:
 		T* mPtr = nullptr;

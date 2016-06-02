@@ -5,96 +5,114 @@
 #include <memory>
 
 
-template<template<class...> class UniquePtrType>
+struct Number
+{
+	int n;
+	static int ctr;
+	Number(int n) : n(n) { ctr++; }
+	Number(const Number& n) : n(n.n) { ctr++; }
+	~Number() { ctr--; }
+};
+int Number::ctr = 0;
+
+template<typename UniquePtr>
 void unique_ptr_test()
 {
 	// default contructor
-	UniquePtrType<int> ptr;
-	assert(!ptr);
-	assert(ptr.get() == nullptr);
+	UniquePtr u1;
+	assert(u1.get() == nullptr);
+	assert(!u1);
 	
 	// initialization constructor
-	UniquePtrType<int> ptr2(nullptr);
-	assert(!ptr2);
+	UniquePtr u2(nullptr);
+	assert(!u2);
+	assert(Number::ctr == 0);
 	
-	int* i = new int(42);
-	UniquePtrType<int> ptr3(i);
-	assert(ptr3);
-	assert(*ptr3.get() == 42);
+	Number* n_ptr = new Number(42);
+	UniquePtr u3(n_ptr);
+	assert(u3);
+	assert((*u3.get()).n == 42);
+	assert(Number::ctr == 1);
+	
+	// operator* and operator->
+	assert((*u3).n == 42);
+	assert(u3->n == 42);
 	
 	// move constructor
-	UniquePtrType<int> ptr4 = std::move(ptr3);
-	assert(*ptr4.get() == 42);
-	assert(ptr4.get() == i);
-	assert(!ptr3);
+	UniquePtr u4 = std::move(u3);
+	assert(u4->n == 42);
+	assert(u4.get() == n_ptr);
+	assert(!u3);
+	assert(Number::ctr == 1);
 	
 	// move assignment operator
-	ptr3 = std::move(ptr4);
-	assert(*ptr3.get() == 42);
-	assert(ptr3.get() == i);
-	assert(!ptr4);
+	u3 = std::move(u4);
+	assert(u3->n == 42);
+	assert(u3.get() == n_ptr);
+	assert(!u4);
+	assert(Number::ctr == 1);
 	
 	// nullptr assignment operator
-	ptr3 = nullptr;
-	assert(ptr3.get() == nullptr);
+	u3 = nullptr;
+	assert(u3.get() == nullptr);
+	assert(Number::ctr == 0);
 	
 	// reset
-	ptr.reset(new int(42));
-	assert(*ptr.get() == 42);
+	u1.reset(new Number(42));
+	assert(u1->n == 42);
+	assert(Number::ctr == 1);
 	
-	ptr.reset();
-	assert(!ptr);
+	u1.reset();
+	assert(!u1);
+	assert(Number::ctr == 0);
 	
-	ptr.reset(new int(42));
-	ptr.reset(nullptr);
-	assert(!ptr);
+	u1.reset(new Number(42));
+	u1.reset(nullptr);
+	assert(!u1);
+	assert(Number::ctr == 0);
 	
 	// release
-	ptr.reset(new int(42));
-	i = ptr.release();
-	assert(*i == 42);
-	assert(!ptr);
+	u1.reset(new Number(42));
+	n_ptr = u1.release();
+	assert(n_ptr->n == 42);
+	assert(!u1);
+	assert(Number::ctr == 1);
 	
-	ptr.reset(i);
-	assert(*ptr.get() == 42);
+	u1.reset(n_ptr);
+	assert(u1->n == 42);
+	assert(Number::ctr == 1);
 	
-	ptr.reset();
-	i = ptr.release();
-	assert(i == nullptr);
-	assert(!ptr);
+	u1.reset();
+	n_ptr = u1.release();
+	assert(n_ptr == nullptr);
+	assert(!u1);
+	assert(Number::ctr == 0);
 	
 	// swap
-	ptr2.reset(new int(42));
-	ptr.swap(ptr2);
-	assert(!ptr2);
-	assert(*ptr.get() == 42);
+	u2.reset(new Number(42));
+	u1.swap(u2);
+	assert(!u2);
+	assert(u1->n == 42);
+	assert(Number::ctr == 1);
 	
 	// operator== and operator!=
-	assert(ptr2 == ptr3);
-	assert(ptr != ptr2);
+	assert(u2 == u3);
+	assert(u1 != u2);
 	
-	// operator*
-	assert(*ptr == 42);
-	
-	struct S { int i = 42; };
-	UniquePtrType<S> ptr5(new S);
-	S s = *ptr5;
-	assert(s.i == 42);
-	
-	// operator->
-	assert(ptr5->i == 42);
-	
+	// delete
+	delete u1;
+	assert(Number::ctr == 0);
 }
 
 int main()
 {
 	// test for std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
-	unique_ptr_test<std::unique_ptr>();
+	unique_ptr_test<std::unique_ptr<Number>>();
 	std::cout << "std::unique_ptr test passes" << std::endl;
 	
 	// test for karun::unique_ptr
 	std::cout << "Testing karun::unique_ptr..." << std::endl;
-	unique_ptr_test<karun::unique_ptr>();
+	unique_ptr_test<karun::unique_ptr<Number>>();
 	std::cout << "karun::unique_ptr test passes" << std::endl;
 }
