@@ -1,33 +1,57 @@
 #include <iostream>
 #include <stdexcept>
 
-template<typename A, typename B>
-struct Pair
+template<typename T>
+class UniquePtr
 {
-	Pair() = default;
-	Pair(const A& f, const B& s) : first(f), second(s) {}
+public:
+	UniquePtr() = default;
+	UniquePtr(T* p) : mData(p) {}
+	UniquePtr(UniquePtr&& other) : mData(other.mData) { other.mData = nullptr; }
+	~UniquePtr() { delete mData; }
 	
-	template<typename U0, typename U1>
-	Pair(const Pair<U0, U1>& other) : first(other.first), second(other.second) {}
+	const T& operator*() const { return *mData; }
+	const T* operator->() const { return mData; }
 	
-	A first;
-	B second;
+	const T* get() const { mData; }
+	
+private:
+	T* mData = nullptr;
 };
 
-template<typename T0, typename T1>
-Pair<T0, T1> MakePair(const T0& a, const T1& b)
+template<typename T, typename... Args>
+UniquePtr<T> MakeUnique(const Args&... args) // 'const Args&... args' => 'const int& args0, const char& args1'
 {
-	return Pair<T0, T1>(a, b);
+	return UniquePtr<T>(new T(args...));// 'args...' => 'args0, args1'
 }
+
+template<typename U>
+class UniquePtr<U[]>
+{
+public:
+	UniquePtr(U* ptr) : mData(ptr) { }
+	UniquePtr() = default;
+	~UniquePtr() { delete[] mData; }
+	UniquePtr(UniquePtr&& other) : mData(other.mData) { other.mData = nullptr; }
+	
+	U& operator[](std::size_t index) { return mData[index]; }
+	
+private:
+	
+	U* mData = nullptr;
+};
 
 int main()
 {
-	std::string s = "Hello";
-	int i = 7;
-	const int ci = 8;
-	const int& cref = ci;
+	//UniquePtr<std::string> p(new std::string("Hello"));
+	auto p = MakeUnique<std::string>(7, 'x');
+	UniquePtr<std::string> copy = std::move(p);
 	
-	Pair<int, int> pair = MakePair(7, 6.6);
-	pair.first = 7;
-	pair.second = 6.6;
+	UniquePtr<std::string[]> array(new std::string[4]);
+	
+	std::cout << *copy << std::endl;
+	std::cout << "length=" << copy->length() << std::endl;
+	
+	array[0] = "yo";
+	std::cout << array[0] << std::endl;
 }
