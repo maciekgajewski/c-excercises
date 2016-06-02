@@ -1,5 +1,4 @@
 #include "unique_ptr.h"
-#include "unique_ptr.cc"
 
 #include <cassert>
 #include <iostream>

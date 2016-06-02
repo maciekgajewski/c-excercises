@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstddef>
+#include <utility>
 
 
 namespace karun
@@ -10,30 +11,54 @@ namespace karun
 	{	
 		
 	public:
-		unique_ptr();
-		unique_ptr(std::nullptr_t);
-		explicit unique_ptr(T*);
-		unique_ptr(unique_ptr<T>&&);
-		~unique_ptr();
+		unique_ptr() = default;
+		explicit unique_ptr(T* ptr) : mPtr(ptr) {}
+		unique_ptr(unique_ptr&& ptr) : mPtr(ptr.mPtr) { ptr.mPtr = nullptr; }
+		~unique_ptr() { delete mPtr; }
 		
-		unique_ptr<T>& operator=(std::nullptr_t);
-		unique_ptr<T>& operator=(unique_ptr<T>&& ptr);
+		unique_ptr& operator=(std::nullptr_t)
+		{
+			reset(nullptr);
+			return *this;
+		}
+		unique_ptr& operator=(unique_ptr&& ptr)
+		{
+			reset(ptr.mPtr);
+			ptr.mPtr = nullptr;
+			return *this;
+		}
 		
-		T* get() const;
-		void reset();
-		void reset(std::nullptr_t);
-		void reset(T* ptr);
-		T* release();
-		void swap(unique_ptr<T>& ptr);
+		T* get() const { return mPtr; }
 		
-		operator bool() const;
-		bool operator==(const unique_ptr<T>& ptr) const;
-		bool operator!=(const unique_ptr<T>& ptr) const;
-		T operator*() const;
-		T* operator->() const;
+		void reset() { reset(nullptr); }
+		void reset(std::nullptr_t) 
+		{ 
+			delete mPtr; 
+			mPtr = nullptr; 
+		}
+		void reset(T* ptr)
+		{
+			delete mPtr;
+			mPtr = ptr;
+		}
+		
+		T* release()
+		{
+			T* ptr = mPtr;
+			mPtr = nullptr;
+			return ptr;
+		}
+		
+		void swap(unique_ptr& ptr) { std::swap(mPtr, ptr.mPtr); }
+		
+		operator bool() const { return mPtr != nullptr; }
+		bool operator==(const unique_ptr<T>& ptr) const { return mPtr == ptr.mPtr; }
+		bool operator!=(const unique_ptr<T>& ptr) const { return mPtr != ptr.mPtr; }
+		T operator*() const { return *mPtr; }
+		T* operator->() const { return mPtr; }
 		
 	private:
-		T* mPtr;
+		T* mPtr = nullptr;
 		
 	};
 }
