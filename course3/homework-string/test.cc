@@ -49,14 +49,17 @@ void string_test()
 
 	// c_str test
 	assert(std::strcmp(string_const_ref.c_str(), "Hey") == 0);
-/*
+
 	// assignment operator test
-	string3 = "abc";
+std::cout << "pre copy-assignment operator";
+string3 = "abc";
+/*
 	assert(string_const_ref == "abc");
 	
 	string3 = string2;
 	assert(string_const_ref == "Hex");
 	assert(string2 == "Hex");
+
 
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
