@@ -1,10 +1,12 @@
 #pragma once
+#include "my_unique_ptr.h"
 #include <memory>
 
 class MyString
 {
 	private:
-		std::unique_ptr<char[]> buf;
+		//std::unique_ptr<char[]> buf;
+		MyUniquePtr<char[]> buf;
 
 	public:
 		MyString() = default;
