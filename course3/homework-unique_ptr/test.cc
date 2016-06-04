@@ -15,7 +15,7 @@ struct Number
 };
 int Number::ctr = 0;
 
-template<typename UniquePtr>
+template<typename UniquePtr, UniquePtr (*MakeUnique)(int&&)>
 void unique_ptr_test()
 {
 	// default contructor
@@ -104,19 +104,24 @@ void unique_ptr_test()
 	assert(!u2);
 	assert(u1->n == 42);
 	assert(Number::ctr == 1);
+	
+	// make unique
+	u2 = MakeUnique(u1->n * 10);
+	assert(u2->n == 420);
+	assert(Number::ctr == 2);
 }
 
 int main()
 {
 	// test for std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
-	unique_ptr_test<std::unique_ptr<Number>>();
+	unique_ptr_test<std::unique_ptr<Number>, std::make_unique<Number>>();
 	assert(Number::ctr == 0);
 	std::cout << "std::unique_ptr test passes" << std::endl;
 	
 	// test for karun::unique_ptr
 	std::cout << "Testing karun::unique_ptr..." << std::endl;
-	unique_ptr_test<karun::unique_ptr<Number>>();
+	unique_ptr_test<karun::unique_ptr<Number>, karun::make_unique<Number>>();
 	assert(Number::ctr == 0);
 	std::cout << "karun::unique_ptr test passes" << std::endl;
 }
