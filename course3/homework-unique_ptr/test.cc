@@ -38,6 +38,12 @@ void unique_ptr_test()
 	assert((*u3).n == 42);
 	assert(u3->n == 42);
 	
+	// operator== and operator!=
+	assert(u1 == u2);
+	assert(u2 != u3);
+	assert(u3 != UniquePtr(new Number(42)));
+	assert(Number::ctr == 1);
+	
 	// move constructor
 	UniquePtr u4 = std::move(u3);
 	assert(u4->n == 42);
@@ -46,15 +52,19 @@ void unique_ptr_test()
 	assert(Number::ctr == 1);
 	
 	// move assignment operator
-	u3 = std::move(u4);
-	assert(u3->n == 42);
-	assert(u3.get() == n_ptr);
+	UniquePtr u5(new Number(u4->n * 10));
+	assert(u5->n == 420);
+	assert(Number::ctr == 2);
+	u5 = std::move(u4);
+	assert(u5->n == 42);
+	assert(u5.get() == n_ptr);
 	assert(!u4);
 	assert(Number::ctr == 1);
 	
 	// nullptr assignment operator
-	u3 = nullptr;
-	assert(u3.get() == nullptr);
+	u5 = nullptr;
+	assert(u5.get() == nullptr);
+	assert(!u5);
 	assert(Number::ctr == 0);
 	
 	// reset
@@ -94,10 +104,6 @@ void unique_ptr_test()
 	assert(!u2);
 	assert(u1->n == 42);
 	assert(Number::ctr == 1);
-	
-	// operator== and operator!=
-	assert(u2 == u3);
-	assert(u1 != u2);
 }
 
 int main()

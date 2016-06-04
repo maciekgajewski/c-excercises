@@ -6,7 +6,7 @@
 
 namespace karun
 {
-	template <class T>
+	template <typename T>
 	class unique_ptr
 	{	
 		
