@@ -18,6 +18,7 @@ int Number::ctr = 0;
 template<typename UniquePtr, UniquePtr (*MakeUnique)(int&&)>
 void unique_ptr_test()
 {
+	{
 	// default contructor
 	UniquePtr u1;
 	assert(u1.get() == nullptr);
@@ -109,6 +110,10 @@ void unique_ptr_test()
 	u2 = MakeUnique(u1->n * 10);
 	assert(u2->n == 420);
 	assert(Number::ctr == 2);
+	}
+	
+	// UniquePtr objects out of scope
+	assert(Number::ctr == 0);
 }
 
 int main()
@@ -116,12 +121,10 @@ int main()
 	// test for std::unique_ptr
 	std::cout << "Testing std::unique_ptr..." << std::endl;
 	unique_ptr_test<std::unique_ptr<Number>, std::make_unique<Number>>();
-	assert(Number::ctr == 0);
 	std::cout << "std::unique_ptr test passes" << std::endl;
 	
 	// test for karun::unique_ptr
 	std::cout << "Testing karun::unique_ptr..." << std::endl;
 	unique_ptr_test<karun::unique_ptr<Number>, karun::make_unique<Number>>();
-	assert(Number::ctr == 0);
 	std::cout << "karun::unique_ptr test passes" << std::endl;
 }
