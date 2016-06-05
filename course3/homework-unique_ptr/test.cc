@@ -10,27 +10,28 @@ struct Number
 	int n;
 	static int ctr;
 	Number(int n) : n(n) { ctr++; }
+	Number(int n1, int n2) : n(n1 + n2) { ctr++; }
 	Number(const Number& n) : n(n.n) { ctr++; }
+	Number(Number& n) : n(n.n * 10) { ctr++; }
 	~Number() { ctr--; }
 };
 int Number::ctr = 0;
 
-template<typename UniquePtr, UniquePtr (*MakeUnique)(int&&)>
 void unique_ptr_test()
 {
 	{
 	// default contructor
-	UniquePtr u1;
+	karun::unique_ptr<Number> u1;
 	assert(u1.get() == nullptr);
 	assert(!u1);
 	
 	// initialization constructor
-	UniquePtr u2(nullptr);
+	karun::unique_ptr<Number> u2(nullptr);
 	assert(!u2);
 	assert(Number::ctr == 0);
 	
 	Number* n_ptr = new Number(42);
-	UniquePtr u3(n_ptr);
+	karun::unique_ptr<Number> u3(n_ptr);
 	assert(u3);
 	assert((*u3.get()).n == 42);
 	assert(Number::ctr == 1);
@@ -42,18 +43,18 @@ void unique_ptr_test()
 	// operator== and operator!=
 	assert(u1 == u2);
 	assert(u2 != u3);
-	assert(u3 != UniquePtr(new Number(42)));
+	assert(u3 != karun::unique_ptr<Number>(new Number(42)));
 	assert(Number::ctr == 1);
 	
 	// move constructor
-	UniquePtr u4 = std::move(u3);
+	karun::unique_ptr<Number> u4 = std::move(u3);
 	assert(u4->n == 42);
 	assert(u4.get() == n_ptr);
 	assert(!u3);
 	assert(Number::ctr == 1);
 	
 	// move assignment operator
-	UniquePtr u5(new Number(u4->n * 10));
+	karun::unique_ptr<Number> u5(new Number(u4->n * 10));
 	assert(u5->n == 420);
 	assert(Number::ctr == 2);
 	u5 = std::move(u4);
@@ -106,25 +107,30 @@ void unique_ptr_test()
 	assert(u1->n == 42);
 	assert(Number::ctr == 1);
 	
-	// make unique
-	u2 = MakeUnique(u1->n * 10);
+	// make_unique
+	u2 = karun::make_unique<Number>(u1->n * 10);
 	assert(u2->n == 420);
 	assert(Number::ctr == 2);
+	
+	// make_unique with multiple arguments
+	u3 = karun::make_unique<Number>(u1->n, u2->n);
+	assert(u3->n == 462);
+	assert(Number::ctr == 3);
+	
+	// make_unique with non-const reference
+	Number& n_ref = *u3;
+	u4 = karun::make_unique<Number>(n_ref);
+	assert(u4->n == 4620);
+	assert(Number::ctr == 4);
 	}
 	
-	// UniquePtr objects out of scope
+	// unique_ptr objects out of scope
 	assert(Number::ctr == 0);
 }
 
 int main()
 {
-	// test for std::unique_ptr
-	std::cout << "Testing std::unique_ptr..." << std::endl;
-	unique_ptr_test<std::unique_ptr<Number>, std::make_unique<Number>>();
-	std::cout << "std::unique_ptr test passes" << std::endl;
-	
-	// test for karun::unique_ptr
-	std::cout << "Testing karun::unique_ptr..." << std::endl;
-	unique_ptr_test<karun::unique_ptr<Number>, karun::make_unique<Number>>();
-	std::cout << "karun::unique_ptr test passes" << std::endl;
+	std::cout << "Testing karun::unique_ptr and karun::make_unique..." << std::endl;
+	unique_ptr_test();
+	std::cout << "Tests pass :)" << std::endl;
 }
