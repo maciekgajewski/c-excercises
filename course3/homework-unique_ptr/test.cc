@@ -9,10 +9,10 @@ struct Number
 {
 	int n;
 	static int ctr;
-	Number(int n) : n(n) { ctr++; }
-	Number(int n1, int n2) : n(n1 + n2) { ctr++; }
-	Number(const Number& n) : n(n.n) { ctr++; }
-	Number(Number& n) : n(n.n * 10) { ctr++; }
+	Number(int _n) : n(_n) { ctr++; }
+	Number(int _n1, int _n2) : n(_n1 + _n2) { ctr++; }
+	Number(const Number& _n) : n(_n.n) { ctr++; }
+	Number(Number& _n) : n(_n.n) { _n.n = 0; ctr++; }
 	~Number() { ctr--; }
 };
 int Number::ctr = 0;
@@ -118,9 +118,10 @@ void unique_ptr_test()
 	assert(Number::ctr == 3);
 	
 	// make_unique with non-const reference
-	Number& n_ref = *u3;
+	Number& n_ref = *u1;
 	u4 = karun::make_unique<Number>(n_ref);
-	assert(u4->n == 4620);
+	assert(u1->n == 0);
+	assert(u4->n == 42);
 	assert(Number::ctr == 4);
 	}
 	
