@@ -58,3 +58,9 @@ MyString& MyString::operator=(MyString&& other){
 	data = std::move(other.data);
 	return *this;
 }
+
+MyString& MyString::operator=(const MyString& other){
+	data.reset(new char[other.size()+1]);
+	std::strcpy(data.get(), other.c_str());
+	return *this;
+}

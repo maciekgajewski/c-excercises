@@ -23,7 +23,8 @@ public:
 	char* c_str() const; // c_string method?
 
 	MyString(MyString&&);
-	MyString& operator=(MyString&&);
+	MyString& operator=(MyString&&); //rvalue assignment copy operator, can steal its state
+	MyString& operator=(const MyString&); //non rvalue version
 };
 
 
