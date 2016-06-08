@@ -31,14 +31,14 @@ std::string s(const Foo &){
 
 int main()
 {
-    
+    {
     std::cout << "Testing std::unique_ptr..." << std::endl;
     std::unique_ptr<Foo> std_p1(new Foo);  // p1 owns Foo
     std::unique_ptr<Foo> std_p2(std::move(std_p1));  // now p2 owns Foo
+    /*
     assert(std_p1->ret6() == std_p2->ret6());
     assert( s(*std_p1) == "aString" );
     std_p1 = std::move(std_p2);  // ownership returns to p1
-    std::cout << "destroying std_p2...\n";
     std::unique_ptr<Foo> std_p3;
     assert (std_p3 == nullptr);
     std_p3.swap(std_p1);
@@ -49,7 +49,8 @@ int main()
     std::cout << "std_arr[1]=" << std_arr[1] << std::endl;
     assert(std_arr[1] == 2);
     std::cout << "std::unique_ptr test passes" << std::endl;
-    
+    */
+    }
     std::cout << " " << std::endl;
     
     std::cout << "Testing MyUniquePtr..." << std::endl;

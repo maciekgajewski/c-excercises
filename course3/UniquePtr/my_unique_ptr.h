@@ -7,40 +7,58 @@ template<class T>
 class MyUniquePtr
 {
 public:
-    MyUniquePtr() = default;
-    
-    ~MyUniquePtr(){}
-    
-    MyUniquePtr(T*&& ptr) : mData(ptr)
-    {
-        delete ptr;
+    MyUniquePtr(){
+        std::cout << "default constructor this= " << this << std::endl;
     }
     
-    MyUniquePtr(T& ptr) : mData(ptr)
+    MyUniquePtr(std::nullptr_t){
+        std::cout << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
+    }
+    
+    MyUniquePtr(T ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T ptr) this= " << this << std::endl;
+        ptr = nullptr;
+    }
+    
+    explicit MyUniquePtr(T* ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T* ptr) this= " << this << std::endl;
+        ptr = nullptr;
+        
+    }
+    
+    MyUniquePtr(T& ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        ptr = nullptr;
+    }
+    
+    MyUniquePtr(MyUniquePtr&& ptr)
     {
+        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
         mData = ptr.mData;
+        ptr.mData = nullptr;
     }
     
-    // move
-    MyUniquePtr(T&& ptr)
+    ~MyUniquePtr()
     {
-        std::move(mData, ptr.mData);
+        std::cout << "\n~this= " << this << std::endl;
+        delete mData;
     }
     
-    
-    MyUniquePtr& operator=(T& other)
+    MyUniquePtr& operator=(MyUniquePtr&& other)
     {
+        std::cout << "operator=(T& other) this= " << this << std::endl;
         mData = other.mData;
+        other.mData = nullptr;
+        return *this;
     }
 
-
-    T *get() const
+    T* get() const
     {
         return mData;
     }
 
     
-    T *operator->() const
+    T* operator->() const
     {
         return mData;
     }
@@ -50,30 +68,35 @@ public:
         return *mData;
     }
 
-    T& release()
+    T* release()
     {
         //Releases the ownership of the managed object if any. get() returns nullptr after the call.
-        auto tempData = mData;
+        auto retPtr = mData;
         mData = nullptr;
-        return *tempData;
+        return retPtr;
     }
     
     void reset(T& ptr)
     {
         //oldPtr = mData; current_ptr = ptr; if(old_ptr != nullptr) get_deleter()(old_ptr)
-        auto oldPtr = mData;
+        auto* oldPtr = mData;
         mData = ptr;
-        if (oldPtr != nullptr){
-            delete[] oldPtr;
+        delete oldPtr;
+    }
+
+    void reset()
+    {
+        if (mData){
+            delete mData;
         }
     }
     
     void swap(MyUniquePtr<T>& other)
     {
-        std::swap(mData, other.mData);
+        std::swap(mData,other.mData);
     }
 
-    bool operator==(T& other) const
+    bool operator==(MyUniquePtr& other) const
     {
         return this->get() == other.get();
     }
@@ -95,55 +118,72 @@ public:
     
     operator bool() const
     {
-        return mData != nullptr ? true : false;
+        return mData != nullptr;
     }
     
 private:
     T* mData = nullptr;
     
 };
+
 
 
 template<class T>
 class MyUniquePtr<T[]>
 {
 public:
-    MyUniquePtr() = default;
+    MyUniquePtr(){
+        std::cout << "default constructor this= " << this << std::endl;
+    }
+    
+    MyUniquePtr(std::nullptr_t){
+        std::cout << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
+    }
+    
+    MyUniquePtr(T ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T ptr) this= " << this << std::endl;
+        ptr = nullptr;
+    }
+    
+    explicit MyUniquePtr(T* ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T* ptr) this= " << this << std::endl;
+        ptr = nullptr;
+        
+    }
+    
+    MyUniquePtr(T& ptr) : mData(ptr){
+        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        ptr = nullptr;
+    }
+    
+    MyUniquePtr(MyUniquePtr&& ptr)
+    {
+        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        mData = ptr.mData;
+        ptr.mData = nullptr;
+    }
     
     ~MyUniquePtr()
     {
-        //delete[] mData;
+        //std::cout << "\n~this= " << this << std::endl;
+        delete[] mData;
     }
     
-    MyUniquePtr(T*&& ptr) : mData(ptr)
+    MyUniquePtr& operator=(MyUniquePtr&& other)
     {
-        ptr = nullptr;
-        delete[] ptr;
-    }
-    
-    MyUniquePtr(T& ptr) : mData(ptr)
-    {
-        mData = ptr.mData;
-    }
-    
-    // move
-    MyUniquePtr(T&& ptr) : mData(ptr.mData)
-    {
-        ptr = nullptr;
-        delete[] ptr;
-    }
-    
-    MyUniquePtr& operator=(T& other)
-    {
+        std::cout << "operator=(T& other) this= " << this << std::endl;
         mData = other.mData;
+        other.mData = nullptr;
+        return *this;
     }
 
-    T *get() const
+    T* get() const
     {
         return mData;
     }
+
     
-    T *operator->() const
+    T* operator->() const
     {
         return mData;
     }
@@ -152,40 +192,37 @@ public:
     {
         return *mData;
     }
- 
-    T& operator[](size_t index) const
-    {
-        return mData[index];
-    }
 
-    T& release()
+    T* release()
     {
-        //Releases the ownership of the managed object if any. get() returns nullptr after the call.
-        auto tempData = mData;
+        //Releases the ownership of the managed object back to caller. get() returns nullptr after the call.
+        auto* retPtr = mData;
         mData = nullptr;
-        return *tempData;
+        return retPtr;
     }
-
+    
     void reset(T& ptr)
     {
         //oldPtr = mData; current_ptr = ptr; if(old_ptr != nullptr) get_deleter()(old_ptr)
         auto oldPtr = mData;
         mData = ptr;
-        if (oldPtr != nullptr){
-            delete[] oldPtr;
-        }
+        delete[] oldPtr;
     }
-    
-    void swap(const MyUniquePtr<T>& other)
+
+    void reset()
     {
-        std::swap(mData, other.mData);
+        delete[] mData;
     }
     
-    bool operator==(T& other)
+    void swap(MyUniquePtr<T>& other)
+    {
+        std::swap(mData,other.mData);
+    }
+
+    bool operator==(MyUniquePtr& other) const
     {
         return this->get() == other.get();
     }
-    
     
     bool operator==(const std::nullptr_t other) const
     {
@@ -201,21 +238,29 @@ public:
     {
         return !(*this == other);
     }
-
+    
     operator bool() const
     {
-        return mData != nullptr ? true : false;
+        return mData != nullptr;
+    }
+
+    T& operator[](size_t index) const
+    {
+        return mData[index];
     }
     
 private:
     T* mData = nullptr;
     
-    // TODO:
-    //  typeof T
-    //  make_unique()
-    //  fix ~MyUniquePtr<T[]>: if delete[] malloc errors. if not, memory leaks when used in MyString.
-    
-    
-    
 };
+
+
+/*
+    MyUniquePtr& operator[](size_t index) const
+    {
+        return mData[index];
+    }
+*/
+
+
 

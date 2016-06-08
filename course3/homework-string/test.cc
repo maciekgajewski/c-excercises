@@ -14,7 +14,6 @@ void string_test()
     // default created object is empty
     assert(string1.empty());
     assert(string1.size() == 0);
-    
     // Initilized from string literal
     StringType string2("Hey");
     
