@@ -8,47 +8,46 @@ class MyUniquePtr
 {
 public:
     MyUniquePtr(){
-        std::cout << "default constructor this= " << this << std::endl;
+        //std::cout/g << "default constructor this= " << this << std::endl;
     }
     
     MyUniquePtr(std::nullptr_t){
-        std::cout << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
     }
     
     MyUniquePtr(T ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T ptr) this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T ptr) this= " << this << std::endl;
         ptr = nullptr;
     }
     
     explicit MyUniquePtr(T* ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T* ptr) this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T* ptr) this= " << this << std::endl;
         ptr = nullptr;
         
     }
     
-    MyUniquePtr(T& ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+    explicit MyUniquePtr(T& ptr) : mData(ptr){
+        //std::cout/g << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
         ptr = nullptr;
     }
     
     MyUniquePtr(MyUniquePtr&& ptr)
     {
-        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T&& ptr)  this= " << this << std::endl;
         mData = ptr.mData;
         ptr.mData = nullptr;
     }
     
     ~MyUniquePtr()
     {
-        std::cout << "\n~this= " << this << std::endl;
+        //std::cout/g << "\n~this= " << this << std::endl;
         delete mData;
     }
     
     MyUniquePtr& operator=(MyUniquePtr&& other)
     {
-        std::cout << "operator=(T& other) this= " << this << std::endl;
-        mData = other.mData;
-        other.mData = nullptr;
+        //std::cout/g << "operator=(T& other) this= " << this << std::endl;
+        std::swap(mData,other.mData);
         return *this;
     }
 
@@ -127,53 +126,51 @@ private:
 };
 
 
-
 template<class T>
 class MyUniquePtr<T[]>
 {
 public:
     MyUniquePtr(){
-        std::cout << "default constructor this= " << this << std::endl;
+        //std::cout/g << "default constructor this= " << this << std::endl;
     }
     
     MyUniquePtr(std::nullptr_t){
-        std::cout << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(std::nullptr_t)this= " << this << std::endl;
     }
     
     MyUniquePtr(T ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T ptr) this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T ptr) this= " << this << std::endl;
         ptr = nullptr;
     }
     
     explicit MyUniquePtr(T* ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T* ptr) this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T* ptr) this= " << this << std::endl;
         ptr = nullptr;
         
     }
     
     MyUniquePtr(T& ptr) : mData(ptr){
-        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
         ptr = nullptr;
     }
     
     MyUniquePtr(MyUniquePtr&& ptr)
     {
-        std::cout << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
+        //std::cout/g << "MyUniquePtr(T& ptr)  this= " << this << std::endl;
         mData = ptr.mData;
         ptr.mData = nullptr;
     }
     
     ~MyUniquePtr()
     {
-        //std::cout << "\n~this= " << this << std::endl;
+        ////std::cout/g << "\n~this= " << this << std::endl;
         delete[] mData;
     }
     
     MyUniquePtr& operator=(MyUniquePtr&& other)
     {
-        std::cout << "operator=(T& other) this= " << this << std::endl;
-        mData = other.mData;
-        other.mData = nullptr;
+        //std::cout/g << "operator=(T& other) this= " << this << std::endl;
+        std::swap(mData,other.mData);
         return *this;
     }
 
@@ -254,13 +251,6 @@ private:
     
 };
 
-
-/*
-    MyUniquePtr& operator[](size_t index) const
-    {
-        return mData[index];
-    }
-*/
 
 
 
