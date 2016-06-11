@@ -7,7 +7,8 @@
 
 template<typename StringType>
 void string_test()
-{
+{	
+	
 	// Default construction
 	StringType string1;
 	
@@ -46,12 +47,13 @@ void string_test()
 	assert(string_const_ref.empty() == false);
 	assert(string_const_ref.size() == 3);
 	assert(string_const_ref[0] == 'H');
-
+	
+	
 	// c_str test
 	assert(std::strcmp(string_const_ref.c_str(), "Hey") == 0);
-
+	
+	
 	// assignment operator test
-	std::cout << "pre copy-assignment operator";
 	string3 = "abc";
 	assert(string_const_ref == "abc");
 	
@@ -59,13 +61,13 @@ void string_test()
 	assert(string_const_ref == "Hex");
 	assert(string2 == "Hex");
 	
-	/*
-
+	
+	
 
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
-        
+       
 	StringType plusResultEmpty = StringType() + StringType();
 	assert(plusResultEmpty.empty());
 	assert(plusResultEmpty.size() == 0); 
@@ -75,29 +77,31 @@ void string_test()
 	
 	StringType plusResult3 = StringType("888") + StringType();
 	assert(plusResult3 == "888");
-
+	
+	
+		
 	// operator +=
 
 	plusResult += "";
 	assert(plusResult == "Hex123");
-
+	
 	plusResult += StringType();
 	assert(plusResult == "Hex123");
 
 	plusResult += string2;
 	assert(plusResult == "Hex123Hex");
-
+	
 	StringType emptyPlus;
 	emptyPlus += StringType();
 	assert(emptyPlus.empty());
 	assert(emptyPlus.size() == 0);
-	
+
 	// operator <
 	assert(StringType() < StringType("0"));
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
-*/
+
 }
 
 

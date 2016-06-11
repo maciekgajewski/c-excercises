@@ -20,11 +20,17 @@ public:
 	char& operator[](const int); // indexing operator
 	char operator[](const int) const; // const indexing operator
 
-	char* c_str() const; // c_string method?
+	const char* c_str() const; // c_string method?
 
 	MyString(MyString&&);
 	MyString& operator=(MyString&&); //rvalue assignment copy operator, can steal its state
 	MyString& operator=(const MyString&); //non rvalue version
+
+	friend MyString operator+(const MyString&, const MyString&);
+	
+	MyString& operator+=(const MyString&);
+
+	bool operator<(const MyString&);
 };
 
 
