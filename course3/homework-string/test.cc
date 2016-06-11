@@ -95,7 +95,7 @@ void string_test()
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
 
-	// move contructor and assignment operator tests
+	// move contructor and assignment operator
 	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
 	const char* string_buffer = string4.c_str();
 	StringType string5 = std::move(string4);
@@ -104,6 +104,13 @@ void string_test()
 	StringType string6;
 	string6 = std::move(string5);
 	assert(string_buffer == string6.c_str());
+	
+	// iterator
+	int i = 0;
+	for (auto it = string6.begin(); it != string6.end(); ++it)
+	{
+		assert(*it == string6[i++]);
+	}
 }
 
 
