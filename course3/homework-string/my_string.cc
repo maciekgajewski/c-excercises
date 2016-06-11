@@ -49,6 +49,16 @@ int MyString::compare(const MyString& str) const
 	return std::strcmp(c_str(), str.c_str());
 }
 
+char* MyString::begin() const
+{
+	return mBuffer.get();
+}
+
+char* MyString::end() const
+{
+	return mBuffer.get() + size();
+}
+
 MyString& MyString::operator=(const MyString& str)
 {
 	if (str.empty())

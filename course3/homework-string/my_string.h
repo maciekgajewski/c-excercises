@@ -17,6 +17,9 @@ public:
 	const char* c_str() const;
 	int compare(const MyString& str) const;
 	
+	char* begin() const;
+	char* end() const;
+	
 	MyString& operator=(const MyString& str);
 	MyString& operator=(MyString&& str);
 	bool operator==(const MyString& str) const;
