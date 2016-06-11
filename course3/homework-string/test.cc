@@ -111,6 +111,7 @@ void string_test()
 	{
 		assert(*it == string6[i++]);
 	}
+	assert(i == string6.size());
 }
 
 
