@@ -43,6 +43,7 @@ public:
 	class const_iterator
 	{
 	public:
+		const_iterator(const iterator& it) : mNode(it.mNode) {}
 		const_iterator(Node* node) : mNode(node) {}
 		
 		bool operator==(const const_iterator& it) { return mNode == it.mNode; }

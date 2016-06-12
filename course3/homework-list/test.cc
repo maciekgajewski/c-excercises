@@ -52,12 +52,12 @@ void list_test()
 	assert (i == 5);
 	
 	// const_iterator
-	/*i = 0;
+	i = 0;
 	for (Karun::List<int>::const_iterator it = l.begin(); it != l.end(); ++it)
 	{
 		assert(*it == ++i * 10);
 	}
-	assert (i == 5);*/
+	assert (i == 5);
 	
 	// erase
 	l.erase(l.begin());
