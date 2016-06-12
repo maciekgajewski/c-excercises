@@ -31,18 +31,18 @@ class MyUniquePtr<T[]>
 	public:
 		//MyUniquePtr() = default;
 		MyUniquePtr() : mData(nullptr) {
-			std::cout << "MyUniquePtr[] default constructor" << std::endl;
+			//std::cout << "MyUniquePtr[] default constructor" << std::endl;
 		}
 		MyUniquePtr(T* obj) : mData(obj) {
-			std::cout << "MyUniquePtr[] initializing constructor" << std::endl;
+			//std::cout << "MyUniquePtr[] initializing constructor" << std::endl;
 		}
 		MyUniquePtr(const MyUniquePtr& obj) = delete;
 		MyUniquePtr(MyUniquePtr&& obj) : mData(obj.mData) {
-			std::cout << "MyUniquePtr[] move constructor" << std::endl;
+			//std::cout << "MyUniquePtr[] move constructor" << std::endl;
 			obj.mData = nullptr;
 		}
 		~MyUniquePtr() {
-			std::cout << "MyUniquePtr[] destructor" << std::endl;
+			//std::cout << "MyUniquePtr[] destructor" << std::endl;
 			delete[] mData;
 		}
 
@@ -70,13 +70,13 @@ template<class T>
  * inferred.*/
 MyUniquePtr<T> MyMakeUnique(int num_entries)
 {
-	std::cout << "MyMakeUnique[] new" << std::endl;
+	//std::cout << "MyMakeUnique[] new" << std::endl;
 	return MyUniquePtr<T>(new typename std::remove_extent<T>::type[num_entries]());
 }
 
 template<class T, class... Args>
 MyUniquePtr<T> MyMakeUnique(Args&&... args)
 {
-	std::cout << "MyMakeUnique new" << std::endl;
+	//std::cout << "MyMakeUnique new" << std::endl;
 	return MyUniquePtr<T>(new T(std::forward<Args>(args)...));
 }

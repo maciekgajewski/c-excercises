@@ -67,8 +67,8 @@ void string_test()
 	assert(plusResultEmpty.empty());
 	assert(plusResultEmpty.size() == 0); 
 	
-	StringType plusResult2 = StringType("888") + StringType("777");
-	assert(plusResult2 == "888777");
+	StringType plusResult2 = StringType() + StringType("777");
+	assert(plusResult2 == "777");
 	
 	StringType plusResult3 = StringType("888") + StringType();
 	assert(plusResult3 == "888");
