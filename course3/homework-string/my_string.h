@@ -31,4 +31,6 @@ class MyString
 		bool empty() const;
 		size_t size() const;
 		const char* c_str() const;
+		const char* begin() const;
+		const char* end() const;
 };

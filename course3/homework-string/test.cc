@@ -62,7 +62,7 @@ void string_test()
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
-        
+
 	StringType plusResultEmpty = StringType() + StringType();
 	assert(plusResultEmpty.empty());
 	assert(plusResultEmpty.size() == 0); 
@@ -95,6 +95,11 @@ void string_test()
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
 	
+	StringType forIterating("FoooBar");
+	int i(0);
+	for (auto it(forIterating.begin()); it != forIterating.end(); it++, i++) {
+		assert (*it == forIterating[i]);
+	}
 }
 
 

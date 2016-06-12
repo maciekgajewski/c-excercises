@@ -126,3 +126,11 @@ const char* MyString::c_str() const {
 		return "";
 	return buf.get();
 }
+
+const char* MyString::begin() const {
+	return buf.get();
+}
+
+const char* MyString::end() const{
+	return buf.get() + size();
+}
