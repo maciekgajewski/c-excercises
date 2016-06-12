@@ -6,12 +6,79 @@
 
 void list_test()
 {
+	// default constructor
+	Karun::List<int> l;
+	assert(l.empty());
+	assert(l.size() == 0);
+	assert(l.begin() == l.end());
 	
+	// push_front
+	l.push_front(10);
+	assert(l.size() == 1);
+	assert(l.front() == 10);
+	l.push_front(20);
+	assert(l.size() == 2);
+	assert(l.front() == 20);
+	l.push_front(30);
+	assert(l.size() == 3);
+	assert(l.front() == 30);
+	
+	// pop_front
+	l.pop_front();
+	assert(l.size() == 2);
+	assert(l.front() == 20);
+	l.pop_front();
+	assert(l.size() == 1);
+	assert(l.front() == 10);
+	l.pop_front();
+	assert(l.empty());
+	assert(l.begin() == l.end());
+	
+	// iterator
+	l.push_front(50); l.push_front(40); l.push_front(3); l.push_front(20); l.push_front(10);
+	assert(l.size() == 5);
+	int i = 0;
+	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
+	{
+		++i;
+		if (*it == 3) *it *= 10;
+		assert(*it == i * 10);
+	}
+	assert (i == 5);
+	
+	// const_iterator
+	/*i = 0;
+	for (Karun::List<int>::const_iterator it = l.begin(); it != l.end(); ++it)
+	{
+		assert(*it == ++i * 10);
+	}
+	assert (i == 5);*/
+	
+	// erase
+	l.erase(l.begin());
+	assert(l.size() == 4);
+	i = 1;
+	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
+	{
+		assert(*it == ++i * 10);
+	}
+	assert(i == 5);
+	
+	Karun::List<int>::iterator b = l.begin();
+	++b; ++b;
+	l.erase(b);
+	assert(l.size() == 3);
+	i = 1;
+	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
+	{
+		assert(++i < 4 ? *it == i * 10 : *it == (i + 1) * 10);
+	}
+	assert(i == 4);
 }
 
 int main()
 {
-	std::cout << "Testing karun::list..." << std::endl;
+	std::cout << "Testing Karun::List..." << std::endl;
 	list_test();
 	std::cout << "Tests pass :)" << std::endl;
 }
