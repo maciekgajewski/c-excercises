@@ -17,9 +17,30 @@ void list_test()
 	assert(!list1.empty());
 	assert(list1.size() == 1);
 
+	assert(list1.front() == 2);
+
 	list1.pop_front();
 	assert(list1.empty());
 	assert(list1.size() == 0);
+
+	list1.push_front(3);
+	list1.push_front(4);
+	list1.push_front(5);
+
+	typename ListType::iterator it = list1.begin();
+	list1.erase(it);
+	assert(list1.front() == 4);
+
+	list1.push_front(6);
+
+	assert(list1.size() == 3);
+	it = list1.begin();
+	++it;
+	list1.erase(it);
+	assert(list1.size() == 2);
+	assert(list1.front() == 6);
+	list1.pop_front();
+	assert(list1.front() == 3);
 }
 
 int main()
