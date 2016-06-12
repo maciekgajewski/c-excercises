@@ -59,8 +59,8 @@ public:
 	
 	iterator begin() { return mBegin; }
 	const_iterator begin() const { return mBegin; }
-	iterator end() { return mEnd; }
-	const_iterator end() const { return mEnd; }
+	iterator end() { return nullptr; }
+	const_iterator end() const { return nullptr; }
 	
 	bool empty() const { return mSize == 0; }
 	std::size_t size() const { return mSize; }
@@ -101,7 +101,6 @@ public:
 private:
 	std::size_t mSize = 0;
 	Node* mBegin = nullptr;
-	Node* mEnd = nullptr;
 };
 
 }
