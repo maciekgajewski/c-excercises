@@ -57,8 +57,8 @@ public:
 	~List() { while (size() > 0) pop_front(); }
 	
 	iterator begin() { return mBegin; }
-	iterator end() { return mEnd; }
 	const_iterator begin() const { return mBegin; }
+	iterator end() { return mEnd; }
 	const_iterator end() const { return mEnd; }
 	
 	bool empty() const { return mSize == 0; }

@@ -34,9 +34,14 @@ void list_test()
 	assert(l.empty());
 	assert(l.begin() == l.end());
 	
-	// iterator
-	l.push_front(50); l.push_front(40); l.push_front(3); l.push_front(20); l.push_front(10);
+	// front
+	l.push_front(50); l.push_front(40); l.push_front(3); l.push_front(20); l.push_front(1);
 	assert(l.size() == 5);
+	assert(l.front() == 1);
+	l.front() *= 10;
+	assert(l.front() == 10);
+	
+	// iterator
 	int i = 0;
 	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
 	{
