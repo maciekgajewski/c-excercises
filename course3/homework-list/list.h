@@ -57,6 +57,9 @@ public:
 		Node* mNode = nullptr;
 	};
 	
+	List() = default;
+	List(const std::initializer_list<T>& list) { for (const T& t : list) push_front(t); }
+	
 	iterator begin() { return mBegin.get(); }
 	const_iterator begin() const { return mBegin.get(); }
 	iterator end() { return nullptr; }

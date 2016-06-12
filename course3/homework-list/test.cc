@@ -35,7 +35,7 @@ void list_test()
 	assert(l.begin() == l.end());
 	
 	// front
-	l.push_front(50); l.push_front(40); l.push_front(3); l.push_front(20); l.push_front(1);
+	l = {50, 40, 3, 20, 1};
 	assert(l.size() == 5);
 	assert(l.front() == 1);
 	l.front() *= 10;
