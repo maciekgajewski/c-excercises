@@ -30,7 +30,6 @@ int main()
 	std::cout << "std::list test passes" << std::endl;
 	
 	std::cout << "Testing MyLinkedList..." << std::endl;
-	//list_test<MyLinkedList<int>>();
-	list_test<MyLinkedList>();
+	list_test<MyLinkedList<int>>();
 	std::cout << "MyLinkedList test passes" << std::endl;
 }
