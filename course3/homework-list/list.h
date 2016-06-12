@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cstddef>
+#include <memory>
 
 
 namespace Karun
@@ -15,11 +15,15 @@ public:
 	friend class List;
 	
 	public:
-		Node(const T& data, Node* next) : mData(data), mNext(next) {}
+		Node(const T& data, std::unique_ptr<Node>& next)
+		: 	mData(data)
+		{
+			mNext = std::move(next);
+		}
 		
 	private:
 		T mData;
-		Node* mNext = nullptr;
+		std::unique_ptr<Node> mNext;
 	};
 	
 	class iterator
@@ -31,7 +35,7 @@ public:
 		
 		bool operator==(const iterator& it) { return mNode == it.mNode; }
 		bool operator!=(const iterator& it) { return !operator==(it); }
-		iterator& operator++() { mNode = mNode->mNext; return *this; }
+		iterator& operator++() { mNode = mNode->mNext.get(); return *this; }
 		T& operator*() { return mNode->mData; }
 		
 	private:
@@ -46,59 +50,53 @@ public:
 		
 		bool operator==(const const_iterator& it) { return mNode == it.mNode; }
 		bool operator!=(const const_iterator& it) { return !operator==(it); }
-		const_iterator& operator++() { mNode = mNode->mNext; return *this; }
+		const_iterator& operator++() { mNode = mNode->mNext.get(); return *this; }
 		const T& operator*() { return mNode->mData; }
 		
 	private:
 		Node* mNode = nullptr;
 	};
 	
-	~List() { while (size() > 0) pop_front(); }
-	
-	iterator begin() { return mBegin; }
-	const_iterator begin() const { return mBegin; }
+	iterator begin() { return mBegin.get(); }
+	const_iterator begin() const { return mBegin.get(); }
 	iterator end() { return nullptr; }
 	const_iterator end() const { return nullptr; }
 	
 	bool empty() const { return mSize == 0; }
 	std::size_t size() const { return mSize; }
+	
 	T& front() { return mBegin->mData; }
 	const T& front() const { return mBegin->mData; }
 	
 	void push_front(const T& data)
 	{
-		Node* node = new Node(data, mBegin);
-		mBegin = node;
+		mBegin = std::make_unique<Node>(data, mBegin);
 		mSize++;
 	}
 	
 	void pop_front()
 	{
-		Node* node = mBegin;
-		mBegin = mBegin->mNext;
-		delete node;
+		mBegin = std::move(mBegin->mNext);
 		mSize--;
 	}
 	
-	void erase(iterator e)
+	void erase(iterator it)
 	{
-		iterator it = mBegin;
-		if (it == e)
+		iterator e = begin();
+		if (e == it)
 		{
 			pop_front();
 			return;
 		}
 		
-		while (it.mNode->mNext != e.mNode) { ++it; }
-		Node* node = it.mNode->mNext;
-		it.mNode->mNext = it.mNode->mNext->mNext;
-		delete node;
+		while (e.mNode->mNext.get() != it.mNode) { ++e; }
+		e.mNode->mNext = std::move(e.mNode->mNext->mNext);
 		mSize--;
 	}
 	
 private:
 	std::size_t mSize = 0;
-	Node* mBegin = nullptr;
+	std::unique_ptr<Node> mBegin;
 };
 
 }
