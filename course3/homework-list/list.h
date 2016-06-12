@@ -15,8 +15,6 @@ public:
 	friend class List;
 	
 	public:
-		Node() = default;
-		Node(const Node& node) = default;
 		Node(const T& data, Node* next) : mData(data), mNext(next) {}
 		
 	private:
