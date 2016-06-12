@@ -8,6 +8,7 @@
 template<typename StringType>
 void string_test()
 {
+	
 	// Default construction
 	StringType string1;
 	
@@ -66,8 +67,8 @@ void string_test()
 	assert(plusResultEmpty.empty());
 	assert(plusResultEmpty.size() == 0); 
 	
-	StringType plusResult2 = StringType() + StringType("777");
-	assert(plusResult2 == "777");
+	StringType plusResult2 = StringType("888") + StringType("777");
+	assert(plusResult2 == "888777");
 	
 	StringType plusResult3 = StringType("888") + StringType();
 	assert(plusResult3 == "888");
@@ -93,6 +94,7 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+	
 }
 
 

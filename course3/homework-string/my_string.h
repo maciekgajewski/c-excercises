@@ -13,6 +13,7 @@ class MyString
 		MyString(const char* str);
 		MyString(const MyString& obj);
 		MyString(MyString&& obj);
+		~MyString();
 		bool operator==(const MyString& rhs) const;
 		bool operator!=(const MyString& rhs) const;
 		bool operator>(const MyString& rhs) const;
