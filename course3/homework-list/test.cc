@@ -46,10 +46,21 @@ void list_test()
 	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
 	{
 		++i;
-		if (*it == 3) *it *= 10;
+		if (i == 3) *it *= 10;
 		assert(*it == i * 10);
 	}
 	assert (i == 5);
+	
+	l.front() = 1;
+	assert(l.front() == 1);
+	i = 0;
+	for (int& x : l)
+	{
+		++i;
+		if (i == 1) x *= 10;
+		assert(x == i * 10);
+	}
+	assert(i == 5);
 	
 	// const_iterator
 	i = 0;
@@ -63,9 +74,9 @@ void list_test()
 	l.erase(l.begin());
 	assert(l.size() == 4);
 	i = 1;
-	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
+	for (int& x : l)
 	{
-		assert(*it == ++i * 10);
+		assert(x == ++i * 10);
 	}
 	assert(i == 5);
 	
@@ -74,9 +85,9 @@ void list_test()
 	l.erase(b);
 	assert(l.size() == 3);
 	i = 1;
-	for (Karun::List<int>::iterator it = l.begin(); it != l.end(); ++it)
+	for (int& x : l)
 	{
-		assert(++i < 4 ? *it == i * 10 : *it == (i + 1) * 10);
+		assert(++i < 4 ? x == i * 10 : x == (i + 1) * 10);
 	}
 	assert(i == 4);
 }
