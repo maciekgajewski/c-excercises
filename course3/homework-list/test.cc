@@ -111,7 +111,8 @@ void list_test()
 	Karun::List<std::unique_ptr<int>> l2;
 	l2.push_front(std::make_unique<int>(300));
 	l2.push_front(std::make_unique<int>(200));
-	l2.push_front(std::make_unique<int>(100));
+	std::unique_ptr<int> u1 = std::make_unique<int>(100);
+	l2.push_front(std::move(u1));
 	i = 0;
 	for (auto& u : l2)
 	{
