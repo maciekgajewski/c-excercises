@@ -93,7 +93,8 @@ public:
 			return;
 		}
 		
-		while (e.mNode->mNext.get() != it.mNode) { ++e; }
+		while (e.mNode->mNext.get() != it.mNode) 
+			++e;
 		e.mNode->mNext = std::move(e.mNode->mNext->mNext);
 		mSize--;
 	}
