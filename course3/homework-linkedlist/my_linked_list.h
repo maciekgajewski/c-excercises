@@ -54,17 +54,17 @@ class MyLinkedList {
 	};
 
 	std::size_t size() const {
-		return numNodes;
+		return mNumNodes;
 	}
 
 	bool empty() const {
 		return mHead == nullptr;
 	}
 
-	MyLinkedList() : numNodes(0) {}
+	MyLinkedList() : mNumNodes(0) {}
 
 	MyLinkedList(std::initializer_list<T> initList) {
-		numNodes = initList.size();
+		mNumNodes = initList.size();
 		for (auto reverseIterator = std::rbegin(initList); reverseIterator != std::rend(initList); ++reverseIterator)
 			push_front(*reverseIterator);
 	}
@@ -73,12 +73,12 @@ class MyLinkedList {
 		std::unique_ptr<Node> newHead = std::make_unique<Node>(value);
 		newHead->mNext = std::move(mHead);
 		mHead = std::move(newHead);
-		numNodes++;
+		mNumNodes++;
 	}
 
 	void pop_front() {
 		mHead = std::move(mHead->mNext);
-		numNodes--;
+		mNumNodes--;
 	}
 
 	const T& front() const {
@@ -114,12 +114,12 @@ class MyLinkedList {
 		for (iterator it = begin(); it != end(); ++it) {
 			if (it.mPtr->mNext.get() == toErase.mPtr) {
 				it.mPtr->mNext = std::move(toErase.mPtr->mNext);
-				numNodes--;
+				mNumNodes--;
 				break;
 			}
 		}
 	}
 	private:
-	std::size_t numNodes;
+	std::size_t mNumNodes;
 	std::unique_ptr<Node> mHead;
 };
