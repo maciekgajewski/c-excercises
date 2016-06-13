@@ -106,6 +106,17 @@ void list_test()
 	assert(*l.begin() == 20);
 	l.erase(l.begin());
 	assert(l.empty());
+	
+	// list of move only objects
+	Karun::List<std::unique_ptr<int>> l2;
+	l2.push_front(std::make_unique<int>(300));
+	l2.push_front(std::make_unique<int>(200));
+	l2.push_front(std::make_unique<int>(100));
+	i = 0;
+	for (auto& u : l2)
+	{
+		assert(*u == ++i * 100);
+	}
 }
 
 int main()

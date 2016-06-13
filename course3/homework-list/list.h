@@ -16,11 +16,7 @@ public:
 	friend class List;
 	
 	public:
-		Node(const T& data, std::unique_ptr<Node>& next)
-		: 	mData(data)
-		{
-			mNext = std::move(next);
-		}
+		Node(T data, std::unique_ptr<Node>& next) : mData(std::move(data)), mNext(std::move(next)) {}
 		
 	private:
 		T mData;
@@ -72,9 +68,9 @@ public:
 	T& front() { return mBegin->mData; }
 	const T& front() const { return mBegin->mData; }
 	
-	void push_front(const T& data)
+	void push_front(T data)
 	{
-		mBegin = std::make_unique<Node>(data, mBegin);
+		mBegin = std::make_unique<Node>(std::move(data), mBegin);
 		mSize++;
 	}
 	
