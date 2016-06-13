@@ -34,9 +34,11 @@ void list_test()
 	assert(l.empty());
 	assert(l.begin() == l.end());
 	
-	// front
+	// initializer list
 	l = {50, 40, 3, 20, 1};
 	assert(l.size() == 5);
+	
+	// front
 	assert(l.front() == 1);
 	l.front() *= 10;
 	assert(l.front() == 10);
@@ -51,6 +53,7 @@ void list_test()
 	}
 	assert (i == 5);
 	
+	// range-based for
 	l.front() = 1;
 	assert(l.front() == 1);
 	i = 0;
@@ -70,26 +73,39 @@ void list_test()
 	}
 	assert (i == 5);
 	
-	// erase
+	// erase first element
 	l.erase(l.begin());
 	assert(l.size() == 4);
-	i = 1;
-	for (int& x : l)
-	{
-		assert(x == ++i * 10);
-	}
-	assert(i == 5);
+	auto b = l.begin();
+	assert(*b == 20);
+	assert(*++b == 30);
+	assert(*++b == 40);
+	assert(*++b == 50);
+	assert(++b == l.end());
 	
-	Karun::List<int>::iterator b = l.begin();
-	++b; ++b;
-	l.erase(b);
+	// erase mid element
+	l.erase(++++l.begin());
 	assert(l.size() == 3);
-	i = 1;
-	for (int& x : l)
-	{
-		assert(++i < 4 ? x == i * 10 : x == (i + 1) * 10);
-	}
-	assert(i == 4);
+	b = l.begin();
+	assert(*b == 20);
+	assert(*++b == 30);
+	assert(*++b == 50);
+	assert(++b == l.end());
+	
+	// erase last element
+	l.erase(++++l.begin());
+	assert(l.size() == 2);
+	b = l.begin();
+	assert(*b == 20);
+	assert(*++b == 30);
+	assert(++b == l.end());
+	
+	// erase all elements
+	l.erase(++l.begin());
+	assert(l.size() == 1);
+	assert(*l.begin() == 20);
+	l.erase(l.begin());
+	assert(l.empty());
 }
 
 int main()
