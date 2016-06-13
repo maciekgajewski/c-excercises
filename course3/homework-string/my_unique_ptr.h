@@ -68,7 +68,7 @@ template<class T>
  * isn't called, the single object function is called instead. This results in
  * compilation errors naturally...dunno why the correct template function isn't being
  * inferred.*/
-MyUniquePtr<T> MyMakeUnique(int num_entries)
+MyUniquePtr<T> MyMakeUnique(std::size_t num_entries)
 {
 	//std::cout << "MyMakeUnique[] new" << std::endl;
 	return MyUniquePtr<T>(new typename std::remove_extent<T>::type[num_entries]());

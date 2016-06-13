@@ -3,11 +3,11 @@
 #include <cstring>
 #include <stdexcept>
 
-MyString::MyString(const char* str) : buf(MyMakeUnique<char[]>((int)(std::strlen(str)+1))) {
+MyString::MyString(const char* str) : buf(MyMakeUnique<char[]>(std::strlen(str)+1)) {
 	std::strcpy(buf.get(), str);
 }
 
-MyString::MyString(const MyString& obj) : buf(MyMakeUnique<char[]>((int)(obj.size()+1))) {
+MyString::MyString(const MyString& obj) : buf(MyMakeUnique<char[]>(obj.size()+1)) {
 	if (!obj.empty())
 		std::strcpy(buf.get(), obj.buf.get());
 }
@@ -26,7 +26,7 @@ MyString::~MyString() {}
 MyString& MyString::operator=(const MyString& rhs) {
 	buf.reset();
 	if (!rhs.empty()) {
-		buf = MyMakeUnique<char[]>((int)(rhs.size()+1));
+		buf = MyMakeUnique<char[]>(rhs.size()+1);
 		std::strcpy(buf.get(), rhs.buf.get());
 	}
 	return *this;
@@ -34,7 +34,7 @@ MyString& MyString::operator=(const MyString& rhs) {
 
 MyString& MyString::operator+=(const MyString& rhs) {
 	if (!rhs.empty()) {
-		auto concat_string = MyMakeUnique<char[]>((int)(size() + rhs.size() + 1));
+		auto concat_string = MyMakeUnique<char[]>(size() + rhs.size() + 1);
 		if (!empty()) {
 			std::strcpy(concat_string.get(), buf.get());
 			std::strcat(concat_string.get(), rhs.buf.get());
