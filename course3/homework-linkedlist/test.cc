@@ -41,6 +41,10 @@ void list_test()
 	assert(list1.front() == 6);
 	list1.pop_front();
 	assert(list1.front() == 3);
+
+	ListType list2 = {1,2,3};
+	for (auto elt : list2)
+		std::cout << elt << std::endl;
 }
 
 int main()
