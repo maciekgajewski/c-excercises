@@ -97,6 +97,10 @@ void string_test()
 	
 	StringType forIterating("FoooBar");
 	int i(0);
+	for (auto c : forIterating) {
+		assert (c  == forIterating[i++]);
+	}
+	i = 0;
 	for (auto it(forIterating.begin()); it != forIterating.end(); it++, i++) {
 		assert (*it == forIterating[i]);
 	}
