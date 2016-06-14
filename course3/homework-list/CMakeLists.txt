@@ -8,6 +8,7 @@ add_executable(listmain
 )
 
 add_executable(tests-of-list
+    unit-test-runner.cc
     tests-of-list.cc
 )
 
