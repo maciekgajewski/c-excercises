@@ -74,7 +74,7 @@ public:
     
     ~LinkedList()
     {        
-        Node* current = mHead;
+        auto current = mHead;
         while(current != nullptr)
         {
             auto tmp = current;
@@ -97,12 +97,8 @@ public:
     {
         int size = 0;
         
-        auto current = mHead;
-        while(current != nullptr)
-        {
-            current = current->Next;
+        for(auto current = mHead; current != nullptr; current = current->Next)
             ++size;
-        }
         
         return size;
     }
@@ -120,7 +116,7 @@ public:
     void pop_front()
     {
         if(empty())
-            return;
+            return; // TODO: Maybe this should just throw?
   
         auto tmp = mHead;
         mHead = mHead->Next;
@@ -129,6 +125,8 @@ public:
     
     const TNode& front() const
     {
+        // TODO: What is the correct response to calling front() on an empty list?
+        
         return mHead->Data;
     }
 
@@ -159,8 +157,7 @@ public:
             if(tmp != nullptr)
                 delete tmp;            
         }
-    }
-     
+    }     
         
 private:
     Node* mHead;
