@@ -7,29 +7,29 @@ MyString::MyString(): mSize(0) { }
 
 MyString::MyString(const char *inchar)
 {
-    mSize = std::strlen(inchar);
-    mBuffer.reset(new char[mSize + 1]);
-    std::strcpy(mBuffer.get(), inchar);
+    this->mSize = std::strlen(inchar);
+    this->mBuffer.reset(new char[this->mSize + 1]);
+    std::strcpy(this->mBuffer.get(), inchar);
 }
 
 MyString::MyString(const MyString& str)
 {
     if (!str.empty())
     {
-        mSize = str.mSize;
-        mBuffer.reset(new char[mSize + 1]);
-        std::strcpy(mBuffer.get(), str.mBuffer.get());
+        this->mSize = str.mSize;
+        this->mBuffer.reset(new char[this->mSize + 1]);
+        std::strcpy(this->mBuffer.get(), str.mBuffer.get());
     }
 }
 
 std::size_t MyString::size() const
 {
-    return mSize;
+    return this->mSize;
 }
 
 bool MyString::empty() const
 {
-    return !mBuffer || mSize == 0;
+    return !this->mBuffer || this->mSize == 0;
 }
 
 bool MyString::operator==(const MyString& other) const
@@ -46,20 +46,20 @@ bool MyString::operator!=(const MyString& other) const
 
 const char& MyString::operator[](const std::size_t i) const
 {
-    if (i > mSize)
+    if (i > this->mSize)
     {
-        throw std::out_of_range("Index cannot be larger than the size of the string");
+        throw std::out_of_range("Index out of range");
     }
-    return mBuffer[i];
+    return this->mBuffer[i];
 }
 
 char& MyString::operator[](const std::size_t i)
 {
-    if (i > mSize)
+    if (i > this->mSize)
     {
         throw std::out_of_range("Index cannot be larger than the size of the string");
     }
-    return mBuffer[i];
+    return this->mBuffer[i];
 }
 
 const char* MyString::c_str() const {
