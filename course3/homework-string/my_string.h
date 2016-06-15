@@ -37,6 +37,14 @@ public:
         return length;
     }
 
+    const char* begin() const {
+        return buff.get();
+    }
+
+    const char* end() const {
+        return buff.get() + size();
+    }
+
     const char* c_str() const {
         if (buff)
             return buff.get();
