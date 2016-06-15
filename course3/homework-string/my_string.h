@@ -17,12 +17,15 @@ public:
     bool operator==(const MyString& other) const;
     bool operator!=(const MyString& other) const;
     const char& operator[](const std::size_t i) const;
-	char& operator[](const std::size_t i);
+    char& operator[](const std::size_t i);
 
     void operator=(const char* inchar);
     MyString& operator=(const MyString& other);
     MyString operator+(const MyString& other) const;
     MyString& operator+=(const MyString& other);
+
+    char* begin();
+    char* end();
 
 private:
     std::size_t mSize;

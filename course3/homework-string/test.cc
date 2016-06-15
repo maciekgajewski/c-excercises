@@ -65,6 +65,10 @@ void string_test()
     // operator +=
     plusResult += string2;
     assert(plusResult == "Hex123Hex");
+
+    // iterator
+    int i = 0;
+    for (auto ch : plusResult) assert(ch == plusResult[i++]);
 }
 
 

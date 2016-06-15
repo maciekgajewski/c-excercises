@@ -96,13 +96,11 @@ MyString& MyString::operator=(const MyString &other) {
     return *this;
 }
 
+char* MyString::begin() {
+    return this->mBuffer.get();
+}
 
-
-
-
-
-
-
-
-
+char* MyString::end() {
+    return this->mBuffer.get() + this->mSize;
+}
 
