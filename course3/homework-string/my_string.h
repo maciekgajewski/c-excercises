@@ -8,7 +8,6 @@ public:
 
     MyString();
     MyString(const char* inchar);
-    MyString(const std::size_t size);
     MyString(const MyString&);
 
     std::size_t size() const;
@@ -17,7 +16,8 @@ public:
 
     bool operator==(const MyString& other) const;
     bool operator!=(const MyString& other) const;
-    char& operator[](const std::size_t i) const;
+    const char& operator[](const std::size_t i) const;
+	char& operator[](const std::size_t i);
 
     void operator=(const char* inchar);
     MyString& operator=(const MyString& other);

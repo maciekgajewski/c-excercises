@@ -5,13 +5,11 @@
 
 MyString::MyString(): mSize(0) { }
 
-MyString::MyString(const char *inchar) :mSize(std::strlen(inchar)), mBuffer(new char[mSize + 1])
+MyString::MyString(const char *inchar)
 {
+    mSize = std::strlen(inchar);
+    mBuffer.reset(new char[mSize + 1]);
     std::strcpy(mBuffer.get(), inchar);
-}
-
-MyString::MyString(const std::size_t size) :mSize(size), mBuffer(new char[mSize + 1])
-{
 }
 
 MyString::MyString(const MyString& str)
@@ -46,7 +44,16 @@ bool MyString::operator!=(const MyString& other) const
     return !(*this == other);
 }
 
-char& MyString::operator[](const std::size_t i) const
+const char& MyString::operator[](const std::size_t i) const
+{
+    if (i > mSize)
+    {
+        throw std::out_of_range("Index cannot be larger than the size of the string");
+    }
+    return mBuffer[i];
+}
+
+char& MyString::operator[](const std::size_t i)
 {
     if (i > mSize)
     {
@@ -67,19 +74,19 @@ void MyString::operator=(const char* inchar) {
 }
 
 MyString MyString::operator+(const MyString &other) const {
-    auto str = MyString(this->mSize + other.mSize);
+    auto str = MyString();
+    str.mSize = this->mSize + other.mSize;
+    str.mBuffer.reset(new char[str.mSize + 1]);
     std::strcpy(str.mBuffer.get(), this->mBuffer.get());
     std::strcpy(str.mBuffer.get() + this->mSize, other.mBuffer.get());
     return str;
 }
 
 MyString& MyString::operator+=(const MyString &other) {
-    auto current_size = this->mSize;
-    this->mSize = current_size + other.mSize;
-    auto current = this->c_str();
+    auto str = this->operator+(other);
+    this->mSize = str.mSize;
     this->mBuffer.reset(new char[this->mSize + 1]);
-    std::strcpy(this->mBuffer.get(), current);
-    std::strcpy(this->mBuffer.get() + current_size, other.c_str());
+    std::strcpy(this->mBuffer.get(), str.mBuffer.get());
     return *this;
 }
 
