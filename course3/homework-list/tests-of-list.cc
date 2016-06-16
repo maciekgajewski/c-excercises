@@ -3,6 +3,7 @@
 #include "linked-list.h"
 
 #include <vector>
+#include <string>
 
 template<typename T>
 bool ContentMatches(const LinkedList<T>& list, const std::vector<T>& expected)
@@ -490,4 +491,21 @@ SCENARIO("It is possible to access the data at the front of the list") {
         
         // TODO: What about calling front() on an empty list??
     }
+}
+
+SCENARIO("It is possible to modify the data at the front of the list") {
+	GIVEN("A list of two items") {
+		LinkedList<double> list;
+		list.push_front(1.12);
+		list.push_front(3.14);
+
+		WHEN("accessing the front item") {
+			double& item = list.front();
+			item = 6.2;
+
+			THEN("the first item in the list is modified") {
+				REQUIRE(list.front() == 6.2);
+			}
+		}
+	}
 }

@@ -2,6 +2,7 @@
 #include "linked-list.h"
 
 #include <iostream>
+#include <string>
 
 int main(int argc, char** argv)
 {
@@ -19,7 +20,7 @@ int main(int argc, char** argv)
         {
             std::cout << ", ";
         }
-        std::cout << element;
+		std::cout << element;
         isFirst = false;
     }
     std::cout << std::endl;    

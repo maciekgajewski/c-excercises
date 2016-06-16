@@ -9,7 +9,12 @@ class LinkedList
         Node(const TNode& data, Node* next) : Data(data), Next(next)
         {
         }
-        const TNode& Data;
+
+		Node(TNode&& data, Node* next) : Data(data), Next(next)
+		{
+		}
+
+        TNode Data;
         Node* Next;
     };
     
@@ -112,6 +117,12 @@ public:
     {
         mHead = new Node(data, mHead);
     }
+
+	void push_front(TNode&& data)
+	{
+		// TODO: Writing this function feels wrong, is it?
+		mHead = new Node(data, mHead);
+	}
     
     void pop_front()
     {
@@ -129,6 +140,11 @@ public:
         
         return mHead->Data;
     }
+
+	TNode& front()
+	{
+		return mHead->Data;
+	}
 
     void erase(Iterator itemToRemove)
     {
