@@ -5,18 +5,38 @@
 #include <algorithm>
 #include <iterator>
 
-
-int main()
+template<typename T>
+struct BiggerThanN
 {
-	std::vector<int> vec ;
-	std::list<int> lst = {1, 3, 45, 6, 6, 6, 77};
+	bool operator()(T v)
+	{
+		return v > mN;
+	}
 	
-	vec.reserve(lst.size());
-	std::copy(lst.begin(), lst.end(), std::back_inserter(vec));
-	
-	std::sort(vec.begin(), vec.end());
+	T mN;
+};
 
-	//for(int i : vec)
-	//	std::cout << i << std::endl;
+int main(int argc, char** argv)
+{
+	std::vector<int> vec = { 1, 4, 5, 6, 7, 8, 9};
+	
+	auto biggerThan6 = std::count_if(vec.begin(), vec.end(), BiggerThanN<int>{6});// BiggerThanN
+	auto biggerThan9 = std::count_if(vec.begin(), vec.end(), BiggerThanN<int>{9});// BiggerThanN
+	int X = 4;
+	
+	std::list<std::string> strings = {"a", "list", "of", "Strings"};
+	int biggerThanC = std::count_if(strings.begin(), strings.end(), BiggerThanN<std::string>{"c"});
+	std::cout << "bigger than C: " << biggerThanC << std::endl;
+	
+	auto lambda = [X, &argc](int n){ return n > X; } ;
+	auto biggerThan4 = std::count_if(vec.begin(), vec.end(), lambda);//  
+	
+	std::cout << "Vector content:" << std::endl;
 	std::copy(vec.begin(), vec.end(), std::ostream_iterator<int>(std::cout, ", "));
+	std::cout << std::endl;
+	std::cout << "elements >6: " << biggerThan6 << std::endl;
+	std::cout << "elements >9: " << biggerThan9 << std::endl;
+	std::cout << "elements >4: " << biggerThan4 << std::endl;
+	
+	
 }
