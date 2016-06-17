@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <iterator>
 
+#include <boost/range/algorithm.hpp>
+
 template<typename T>
 struct BiggerThanN
 {
@@ -20,7 +22,7 @@ int main(int argc, char** argv)
 {
 	std::vector<int> vec = { 1, 4, 5, 6, 7, 8, 9};
 	
-	auto biggerThan6 = std::count_if(vec.begin(), vec.end(), BiggerThanN<int>{6});// BiggerThanN
+	auto biggerThan6 = boost::count_if(vec, BiggerThanN<int>{6});// BiggerThanN
 	auto biggerThan9 = std::count_if(vec.begin(), vec.end(), BiggerThanN<int>{9});// BiggerThanN
 	int X = 4;
 	
