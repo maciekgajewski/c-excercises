@@ -7,8 +7,6 @@ class LinkedList
 {
     struct Node
     {
-        friend class LinkedList<TElement>;
-
         Node(const TElement& data) : mData(data), mNext()
         {
         }
@@ -20,8 +18,6 @@ class LinkedList
         Node(TElement&& data, std::unique_ptr<Node>&& next) : mData(std::move(data)), mNext(std::move(next))
         {
         }
-
-      private:
 
         const TElement& data() const
         {
@@ -55,15 +51,14 @@ class LinkedList
         {
             return std::move(mNext);
         }
-
+        
+      private:
         TElement mData;
         std::unique_ptr<Node> mNext;
     };
 
     struct Iterator
     {
-        friend class LinkedList<TElement>;
-
         using value_type = TElement;
         using pointer = TElement*;
         using reference = TElement&;
@@ -86,12 +81,12 @@ class LinkedList
         {
             return that.mPointer != mPointer;
         }
-
+        
         bool operator==(const Iterator& that)
         {
             return that.mPointer == mPointer;
         }
-
+                
         const TElement& operator*()
         {
             return mPointer->data();
@@ -113,21 +108,17 @@ class LinkedList
             return mPointer != nullptr;
         }
 
-    private:
-        Iterator(Node* that) : mPointer(that)
-        {
-        }
-
-        bool operator!=(Node * that)
+        bool operator!=(Node* that)
         {
             return mPointer != that;
         }
-
+        
+    private:
+        
         Node* mPointer;
     };
 
 public:
-
     using value_type = TElement;
 
     LinkedList() = default;
@@ -177,7 +168,7 @@ public:
         // TODO: Since this never changes, can we have a single instance shared by all lists?
         return Iterator();
     }
-
+    
     std::size_t size() const
     {
         int size = 0;
@@ -192,7 +183,7 @@ public:
     {
         return !mHead;
     }
-
+    
     void push_front(const TElement& data)
     {
         mHead = std::move(std::make_unique<Node>(data, std::move(mHead)));
@@ -210,7 +201,6 @@ public:
 
     const TElement& front() const
     {
-        const std::unique_ptr<Node>& constHead = mHead; // Not sure if this is needed, it feels like it should be
         return mHead->data();
     }
 
@@ -242,3 +232,9 @@ public:
   private:
     std::unique_ptr<Node> mHead;
 };
+
+ 
+ 
+ 
+ 
+ 
