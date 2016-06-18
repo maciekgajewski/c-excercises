@@ -100,6 +100,7 @@ class LinkedList
 
         Iterator operator++ (int)
         {
+            // FIXME: wrong order
             return Iterator(mPointer->next());
         }
 
