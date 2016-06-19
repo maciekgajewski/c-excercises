@@ -2,33 +2,33 @@
 #include <cstddef>
 #include <memory>
 
-template <typename TContent>
+template <typename TElement>
 class LinkedList
 {
     struct Node
     {
-        friend class LinkedList<TContent>;
+        friend class LinkedList<TElement>;
 
-        Node(const TContent& data) : mData(data), mNext()
+        Node(const TElement& data) : mData(data), mNext()
         {
         }
 
-        Node(const TContent& data, std::unique_ptr<Node>&& next) : mData(data), mNext(std::move(next))
+        Node(const TElement& data, std::unique_ptr<Node>&& next) : mData(data), mNext(std::move(next))
         {
         }
 
-        Node(TContent&& data, std::unique_ptr<Node>&& next) : mData(std::move(data)), mNext(std::move(next))
+        Node(TElement&& data, std::unique_ptr<Node>&& next) : mData(std::move(data)), mNext(std::move(next))
         {
         }
 
       private:
 
-        const TContent& data() const
+        const TElement& data() const
         {
             return mData;
         }
 
-        TContent& data()
+        TElement& data()
         {
             return mData;
         }
@@ -38,7 +38,7 @@ class LinkedList
             return mNext.get();
         }
 
-        Node* insert_after(const TContent& data)
+        Node* insert_after(const TElement& data)
         {
             mNext = std::move(std::make_unique<Node>(data, std::move(mNext)));
 
@@ -56,15 +56,25 @@ class LinkedList
             return std::move(mNext);
         }
 
-        TContent mData;
+        TElement mData;
         std::unique_ptr<Node> mNext;
     };
 
     struct Iterator
     {
-        friend class LinkedList<TContent>;
+        friend class LinkedList<TElement>;
+
+        using value_type = TElement;
+        using pointer = TElement*;
+        using reference = TElement&;
+        using difference_type = size_t;
+        using iterator_category = std::forward_iterator_tag;
 
         Iterator() : mPointer(nullptr)
+        {
+        }
+
+        Iterator(const Iterator& other) : mPointer(other.mPointer)
         {
         }
 
@@ -77,7 +87,12 @@ class LinkedList
             return that.mPointer != mPointer;
         }
 
-        const TContent& operator*()
+        bool operator==(const Iterator& that)
+        {
+            return that.mPointer == mPointer;
+        }
+
+        const TElement& operator*()
         {
             return mPointer->data();
         }
@@ -88,12 +103,20 @@ class LinkedList
             return *this;
         }
 
+        Iterator operator++ (int)
+        {
+            return Iterator(mPointer->next());
+        }
+
         operator bool()
         {
             return mPointer != nullptr;
         }
 
-      private:
+    private:
+        Iterator(Node* that) : mPointer(that)
+        {
+        }
 
         bool operator!=(Node * that)
         {
@@ -103,7 +126,9 @@ class LinkedList
         Node* mPointer;
     };
 
-  public:
+public:
+
+    using value_type = TElement;
 
     LinkedList() = default;
 
@@ -122,12 +147,27 @@ class LinkedList
         }
     }
 
+    LinkedList(std::initializer_list<TElement> args)
+    {
+        if (args.size() > 0)
+        {
+            auto start = args.begin();            
+            mHead = std::make_unique<Node>(*start);
+
+            auto current = mHead.get();
+
+            auto stop = args.end();
+            for (auto next = start + 1; next != stop; ++next)
+                current = current->insert_after(*next);
+        }
+    }
+
     LinkedList(LinkedList&& that)
     {
         mHead = std::move(that.mHead);
     }
 
-    const Iterator begin() const
+    Iterator begin() const
     {
         return Iterator(mHead);
     }
@@ -153,12 +193,12 @@ class LinkedList
         return !mHead;
     }
 
-    void push_front(const TContent& data)
+    void push_front(const TElement& data)
     {
         mHead = std::move(std::make_unique<Node>(data, std::move(mHead)));
     }
 
-    void push_front(TContent&& data)
+    void push_front(TElement&& data)
     {
         mHead = std::move(std::make_unique<Node>(std::move(data), std::move(mHead)));
     }
@@ -168,13 +208,13 @@ class LinkedList
         mHead = std::move(mHead->remove());
     }
 
-    const TContent& front() const
+    const TElement& front() const
     {
         const std::unique_ptr<Node>& constHead = mHead; // Not sure if this is needed, it feels like it should be
         return mHead->data();
     }
 
-    TContent& front()
+    TElement& front()
     {
         return mHead->data();
     }
