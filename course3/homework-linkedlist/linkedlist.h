@@ -20,6 +20,11 @@ reversion_wrapper<T> reverse (T&& iterable) { return { iterable }; }
 template<typename T>
 class list {
 public:
+    typedef ptrdiff_t                          difference_type;
+    typedef std::forward_iterator_tag          iterator_category;
+    typedef T                                  value_type;
+    typedef T*                                 pointer;
+    typedef T&                                 reference;
     class Node {
     public:
         Node(const T& val, std::unique_ptr<Node>& next) : mData(val), mNext(std::move(next)) {}
@@ -29,6 +34,7 @@ public:
 
     class iterator {
     public:
+
         iterator(Node* node) : mNode(node) {}
         bool operator==(const iterator& it) { return mNode == it.mNode; }
         bool operator!=(const iterator& it) { return mNode != it.mNode; }
@@ -41,6 +47,7 @@ public:
         }
 
         Node* mNode = nullptr;
+
     };
 
     class const_iterator {
