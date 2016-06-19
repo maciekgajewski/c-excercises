@@ -3,6 +3,20 @@
 #include <memory>
 
 namespace mau {
+
+// Reverse iterator. http://stackoverflow.com/questions/8542591/c11-reverse-range-based-for-loop
+template <typename T>
+struct reversion_wrapper { T& iterable; };
+
+template <typename T>
+auto begin (reversion_wrapper<T> w) { return rbegin(w.iterable); }
+
+template <typename T>
+auto end (reversion_wrapper<T> w) { return rend(w.iterable); }
+
+template <typename T>
+reversion_wrapper<T> reverse (T&& iterable) { return { iterable }; }
+
 template<typename T>
 class list {
 public:
@@ -19,7 +33,7 @@ public:
         bool operator==(const iterator& it) { return mNode == it.mNode; }
         bool operator!=(const iterator& it) { return mNode != it.mNode; }
         iterator& operator++() { 
-            mNode = mNode->mHead.get();
+            mNode = mNode->mNext.get();
             return *this;
         }
         T& operator*() {
@@ -36,7 +50,7 @@ public:
         bool operator==(const const_iterator& it) { return mNode == it.mNode; }
         bool operator!=(const const_iterator& it) { return mNode != it.mNode; }
         const_iterator& operator++() { 
-            mNode = mNode->mHead.get();
+            mNode = mNode->mNext.get();
             return *this;
         }
         T& operator*() {
@@ -47,6 +61,17 @@ public:
     };
 
     list() : mSize() {}
+
+    list(std::initializer_list<T> init) : mSize(0) {
+        for(auto i : reverse(init))
+            push_front(i);
+
+    }
+
+    iterator begin() { return mHead.get(); }
+    const iterator begin() const { return mHead.get(); }
+    iterator end() { return nullptr; }
+    const iterator end() const { return nullptr; }
 
     std::size_t size() {
         return mSize;
@@ -72,6 +97,21 @@ public:
 
     const T& front() const {
         return mHead->mData;
+    }
+
+    void erase(iterator it) {
+        iterator e = begin();
+
+        if (e == it) {
+            pop_front();
+            return;
+        }
+
+        while(e.mNode->mNext.get() != it.mNode)
+            ++e;
+
+        e.mNode->mNext = std::move(it.mNode->mNext);
+        mSize--;
     }
 
 private:
