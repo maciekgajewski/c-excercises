@@ -1,6 +1,9 @@
 #include <cassert>
 #include <iostream>
 #include <list>
+#include <algorithm>
+#include <numeric>
+#include <iterator>
 
 #include "linkedlist.h"
 
@@ -71,6 +74,19 @@ void ListTest() {
 
     testList2.pop_front();
     assert(testList2.front() == 130);
+
+    testList2 = {1,2,3,4,5};
+
+    assert(std::accumulate(testList2.begin(), testList2.end(), 0) == 15);
+
+    std::copy(testList.begin(), testList.end(), std::front_inserter(testList2));
+
+//    testList2 = {3,5,1,2,4};
+//    assert(std::fill(testList2.begin(), testList2.end(), 10));
+//
+//    testList2 = {3,5,1,2,4};
+//    assert(std::min(testList2) == 1);
+//
 
 }
 
