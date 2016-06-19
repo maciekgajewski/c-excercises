@@ -1,180 +1,204 @@
 
 #include <cstddef>
+#include <memory>
 
-template <typename TNode>
+template <typename TContent>
 class LinkedList
 {
-    struct Node 
+    struct Node
     {
-        Node(const TNode& data, Node* next) : Data(data), Next(next)
+        friend class LinkedList<TContent>;
+
+        Node(const TContent& data) : mData(data), mNext()
         {
         }
 
-		Node(TNode&& data, Node* next) : Data(data), Next(next)
-		{
-		}
+        Node(const TContent& data, std::unique_ptr<Node>&& next) : mData(data), mNext(std::move(next))
+        {
+        }
 
-        TNode Data;
-        Node* Next;
+        Node(TContent&& data, std::unique_ptr<Node>&& next) : mData(std::move(data)), mNext(std::move(next))
+        {
+        }
+
+      private:
+
+        const TContent& data() const
+        {
+            return mData;
+        }
+
+        TContent& data()
+        {
+            return mData;
+        }
+
+        Node* next()
+        {
+            return mNext.get();
+        }
+
+        Node* insert_after(const TContent& data)
+        {
+            mNext = std::move(std::make_unique<Node>(data, std::move(mNext)));
+
+            return mNext.get();
+        }
+
+        void eraseNext()
+        {
+            auto& tmp = mNext;
+            mNext = std::move(mNext->mNext);
+        }
+
+        std::unique_ptr<Node>&& remove()
+        {
+            return std::move(mNext);
+        }
+
+        TContent mData;
+        std::unique_ptr<Node> mNext;
     };
-    
+
     struct Iterator
     {
-        friend struct LinkedList<TNode>;
-        
-        Iterator(Node* pointer) : mPointer(pointer)
+        friend class LinkedList<TContent>;
+
+        Iterator() : mPointer(nullptr)
         {
         }
-        
-        bool operator!=(const Iterator& that) 
+
+        Iterator(const std::unique_ptr<Node>& node) : mPointer(node.get())
+        {
+        }
+
+        bool operator!=(const Iterator& that)
         {
             return that.mPointer != mPointer;
         }
-        
-        const TNode& operator*() 
+
+        const TContent& operator*()
         {
-            return mPointer->Data;
+            return mPointer->data();
         }
-        
-        void operator++() 
+
+        Iterator& operator++()
         {
-            mPointer = mPointer->Next;
+            mPointer = mPointer->next();
+            return *this;
         }
-        
-    private:
+
+        operator bool()
+        {
+            return mPointer != nullptr;
+        }
+
+      private:
+
+        bool operator!=(Node * that)
+        {
+            return mPointer != that;
+        }
+
         Node* mPointer;
     };
-    
-public:
-        
-    LinkedList()
-    {
-        mHead = nullptr;
-    }
-    
+
+  public:
+
+    LinkedList() = default;
+
     LinkedList(const LinkedList& that)
-    {   
-        if(that.empty())
+    {
+        if (!that.empty())
         {
-            mHead = nullptr;  
-        }
-        else
-        {
-            mHead = new Node(that.mHead->Data, nullptr);            
-            auto current =  mHead;
-            
-            for(auto thatCurrent= that.mHead->Next; thatCurrent != nullptr; thatCurrent = thatCurrent->Next)
+            mHead = std::make_unique<Node>(that.mHead->data());
+
+            auto current = mHead.get();
+
+            for (auto thatCurrent = that.mHead->next(); thatCurrent; thatCurrent = thatCurrent->next())
             {
-                current->Next = new Node(thatCurrent->Data, nullptr);
-                current = current->Next;
+                current = current->insert_after(thatCurrent->data());
             }
-        }           
+        }
     }
-    
+
     LinkedList(LinkedList&& that)
     {
-        mHead = that.mHead;
-        that.mHead = nullptr;        
+        mHead = std::move(that.mHead);
     }
-    
-    ~LinkedList()
-    {        
-        auto current = mHead;
-        while(current != nullptr)
-        {
-            auto tmp = current;
-            current = current->Next;
-            delete tmp;
-        }
-    }
-    
+
     const Iterator begin() const
     {
         return Iterator(mHead);
     }
-    
+
     const Iterator end() const
     {
-        return Iterator(nullptr);
+        // TODO: Since this never changes, can we have a single instance shared by all lists?
+        return Iterator();
     }
-    
-    std::size_t size() const 
+
+    std::size_t size() const
     {
         int size = 0;
-        
-        for(auto current = mHead; current != nullptr; current = current->Next)
+
+        for (auto current = mHead.get(); current; current = current->next())
             ++size;
-        
+
         return size;
     }
 
     bool empty() const
     {
-        return mHead == nullptr;
-    }
-    
-    void push_front(const TNode& data)
-    {
-        mHead = new Node(data, mHead);
+        return !mHead;
     }
 
-	void push_front(TNode&& data)
-	{
-		// TODO: Writing this function feels wrong, is it?
-		mHead = new Node(data, mHead);
-	}
-    
+    void push_front(const TContent& data)
+    {
+        mHead = std::move(std::make_unique<Node>(data, std::move(mHead)));
+    }
+
+    void push_front(TContent&& data)
+    {
+        mHead = std::move(std::make_unique<Node>(std::move(data), std::move(mHead)));
+    }
+
     void pop_front()
     {
-        if(empty())
-            return; // TODO: Maybe this should just throw?
-  
-        auto tmp = mHead;
-        mHead = mHead->Next;
-        delete tmp;
-    }
-    
-    const TNode& front() const
-    {
-        // TODO: What is the correct response to calling front() on an empty list?
-        
-        return mHead->Data;
+        mHead = std::move(mHead->remove());
     }
 
-	TNode& front()
-	{
-		return mHead->Data;
-	}
+    const TContent& front() const
+    {
+        const std::unique_ptr<Node>& constHead = mHead; // Not sure if this is needed, it feels like it should be
+        return mHead->data();
+    }
+
+    TContent& front()
+    {
+        return mHead->data();
+    }
 
     void erase(Iterator itemToRemove)
     {
-        if(itemToRemove.mPointer == nullptr)
+        if (!itemToRemove)
             return;
-        
-        auto current = mHead;
+
+        Node* current = mHead.get();
         Node* previous = nullptr;
-        
-        while(current != nullptr && current != itemToRemove.mPointer)
+
+        while (current && itemToRemove != current)
         {
             previous = current;
-            current = current->Next;            
+            current = current->next();
         }
-        
-        if(previous == nullptr)
-        {
-            auto tmp = mHead;
-            mHead = mHead->Next;
-            delete tmp;
-        }
+
+        if (!previous)
+            pop_front();
         else
-        {   
-            auto tmp = previous->Next;
-            previous->Next = current->Next;
-            if(tmp != nullptr)
-                delete tmp;            
-        }
-    }     
-        
-private:
-    Node* mHead;
+            previous->eraseNext();
+    }
+
+  private:
+    std::unique_ptr<Node> mHead;
 };
