@@ -75,6 +75,11 @@ void ListTest() {
     testList2.pop_front();
     assert(testList2.front() == 130);
 
+    testList2 = {"mau", "dav"};
+    std::cout << "size: " << testList2.size() << std::endl;
+    std::cout << "front: " << testList2.front() << std::endl;
+    assert(testList2.size() == 2);
+
     testList2 = {1,2,3,4,5};
 
     assert(std::accumulate(testList2.begin(), testList2.end(), 0) == 15);
