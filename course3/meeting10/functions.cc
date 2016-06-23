@@ -21,6 +21,6 @@ std::vector<double> paramsToNumbers(int argc, const char** argv)
 {
 	std::vector<double> out;
 	out.reserve(argc);
-	std::transform(argv, argv+argc, std::back_inserter(out), str2dbl);
+	std::transform(argv, argv+argc, std::back_inserter(out), [](const char* s) { return str2dbl(s); });
 	return out;
 }

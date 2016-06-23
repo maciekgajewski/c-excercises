@@ -4,4 +4,4 @@ naive implementation : 2869 ns
 not using std::string: 2141 ns
 adding reserve: 1376 ns
 transofrm, fun ptr: 1492 ns
-
+transform + lambda: 1545 ns
