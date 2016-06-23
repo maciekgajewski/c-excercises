@@ -1,0 +1,4 @@
+paramsToNumbers becnh results
+
+naive implementation : 2869 ns
+not using std::string: 2141 ns
