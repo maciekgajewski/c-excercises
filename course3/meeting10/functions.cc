@@ -2,6 +2,8 @@
 
 #include <string>
 #include <stdexcept>
+#include <algorithm>
+#include <iterator>
 
 static double str2dbl(const char* s)
 {
@@ -19,9 +21,6 @@ std::vector<double> paramsToNumbers(int argc, const char** argv)
 {
 	std::vector<double> out;
 	out.reserve(argc);
-	for(int i = 0; i < argc; i++)
-	{
-		out.push_back(str2dbl(argv[i]));
-	}
+	std::transform(argv, argv+argc, std::back_inserter(out), str2dbl);
 	return out;
 }
