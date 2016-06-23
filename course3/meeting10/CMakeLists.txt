@@ -16,5 +16,6 @@ target_link_libraries(bench
 
 add_executable(meeting10
 	meeting10.cc
+	get_stats.hh get_stats.cc
 )
 
