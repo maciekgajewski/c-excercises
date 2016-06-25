@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <initializer_list>
+#include <boost/range/adaptor/reversed.hpp>
 
 
 namespace Karun
@@ -56,7 +57,10 @@ public:
 	};
 	
 	List() = default;
-	List(const std::initializer_list<T>& list) { for (const T& t : list) push_front(t); }
+	List(const std::initializer_list<T>& list) { 
+		for (const T& t : list | boost::adaptors::reversed) 
+			push_front(t); 
+	}
 	
 	iterator begin() { return mBegin.get(); }
 	const_iterator begin() const { return mBegin.get(); }
