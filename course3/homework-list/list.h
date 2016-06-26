@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iterator>
 #include <memory>
 #include <initializer_list>
 #include <boost/range/adaptor/reversed.hpp>
@@ -12,6 +13,8 @@ template<typename T>
 class List
 {
 public:
+	typedef T value_type;
+	
 	class Node
 	{
 	friend class List;
@@ -25,7 +28,7 @@ public:
 		std::unique_ptr<Node> mNext;
 	};
 	
-	class iterator
+	class iterator : public std::iterator<std::forward_iterator_tag, T>
 	{
 	friend class List;
 		
@@ -41,7 +44,7 @@ public:
 		Node* mNode = nullptr;
 	};
 	
-	class const_iterator
+	class const_iterator : public std::iterator<std::forward_iterator_tag, const T>
 	{
 	public:
 		const_iterator(const iterator& it) : mNode(it.mNode) {}
