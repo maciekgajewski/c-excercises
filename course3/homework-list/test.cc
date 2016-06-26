@@ -140,6 +140,26 @@ void list_test()
 	assert(*++b == 2);
 	assert(*++b == 1);
 	assert(++b == l4.end());
+	
+	// transform
+	std::transform(l4.begin(), l4.end(), l4.begin(), [](int n){ return n * n; });
+	b = l4.begin();
+	assert(*b == 9);
+	assert(*++b == 4);
+	assert(*++b == 1);
+	assert(++b == l4.end());
+	
+	// move
+	Karun::List<std::unique_ptr<int>> l5;
+	std::move(l2.begin(), l2.end(), std::front_inserter(l5));
+	assert(l2.size() == l5.size());
+	for (auto& u : l2)
+		assert(!u);
+	auto b5 = l5.begin();
+	assert(**b5 == 300);
+	assert(**++b5 == 200);
+	assert(**++b5 == 100);
+	assert(++b5 == l5.end());
 }
 
 int main()
