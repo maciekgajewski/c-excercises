@@ -11,3 +11,8 @@ add_executable(test
 add_executable(bench
 	list.h benchmark.cc
 )
+
+target_link_libraries(bench
+	benchmark
+	pthread
+)
