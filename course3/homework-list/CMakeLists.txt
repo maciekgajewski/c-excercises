@@ -12,8 +12,6 @@ add_executable(bench
 	list.h benchmark.cc
 )
 
-link_directories(/usr/local/lib)
-
 target_link_libraries(bench
 	benchmark
 	pthread
