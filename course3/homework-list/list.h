@@ -38,6 +38,7 @@ public:
 		bool operator==(const iterator& it) { return mNode == it.mNode; }
 		bool operator!=(const iterator& it) { return !operator==(it); }
 		iterator& operator++() { mNode = mNode->mNext.get(); return *this; }
+		iterator operator++(int) { return iterator(mNode->mNext.get()); }
 		T& operator*() { return mNode->mData; }
 		
 	private:
@@ -53,6 +54,7 @@ public:
 		bool operator==(const const_iterator& it) { return mNode == it.mNode; }
 		bool operator!=(const const_iterator& it) { return !operator==(it); }
 		const_iterator& operator++() { mNode = mNode->mNext.get(); return *this; }
+		const_iterator operator++(int) { return const_iterator(mNode->mNext.get()); }
 		const T& operator*() { return mNode->mData; }
 		
 	private:
