@@ -13,7 +13,7 @@ template<typename T>
 class List
 {
 public:
-	typedef T value_type;
+	using value_type = T;
 	
 	class Node
 	{
