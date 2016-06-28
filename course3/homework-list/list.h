@@ -62,9 +62,19 @@ public:
 	};
 	
 	List() = default;
-	List(const std::initializer_list<T>& list) { 
-		for (const T& t : list | boost::adaptors::reversed) 
-			push_front(t); 
+	~List() { while (!empty()) pop_front(); }
+	List(const std::initializer_list<T>& list)
+	{
+		for (const T& t : list | boost::adaptors::reversed)
+			push_front(t);
+	}
+	List& operator=(const std::initializer_list<T>& list)
+	{
+		while (!empty())
+			pop_front();
+		for (const T& t : list | boost::adaptors::reversed)
+			push_front(t);
+		return *this;
 	}
 	
 	iterator begin() { return mBegin.get(); }
