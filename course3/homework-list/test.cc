@@ -135,7 +135,7 @@ void list_test()
 	// front_inserter
 	Karun::List<int> l3 = {1, 2, 3};
 	Karun::List<int> l4;
-	boost::copy(l3, std::front_inserter<Karun::List<int>>(l4));
+	boost::copy(l3, std::front_inserter(l4));
 	b = l4.begin();
 	assert(*b == 3);
 	assert(*++b == 2);
