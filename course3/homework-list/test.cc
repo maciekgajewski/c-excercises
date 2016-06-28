@@ -124,17 +124,18 @@ void list_test()
 	// distance
 	l = {1, 1, 1, 1, 2, 2, 2, 3, 3, 4};
 	assert(std::distance(l.begin(), l.end()) == 10);
+	assert(boost::distance(l) == 10);
 	
 	// count and count_if
 	assert(std::count(l.begin(), l.end(), 2) == 3);
 	assert(std::count_if(l.begin(), l.end(), [](int n){ return n >= 2; }) == 6);
-	//assert(boost::count(l, 2) == 3);
-	//assert(boost::count_if(l, [](int n){ return n >= 2; }) == 6);
+	assert(boost::count(l, 2) == 3);
+	assert(boost::count_if(l, [](int n){ return n >= 2; }) == 6);
 	
 	// front_inserter
 	Karun::List<int> l3 = {1, 2, 3};
 	Karun::List<int> l4;
-	std::copy(l3.begin(), l3.end(), std::front_inserter<Karun::List<int>>(l4));
+	boost::copy(l3, std::front_inserter<Karun::List<int>>(l4));
 	b = l4.begin();
 	assert(*b == 3);
 	assert(*++b == 2);
@@ -143,9 +144,10 @@ void list_test()
 	
 	// transform
 	std::transform(l4.begin(), l4.end(), l4.begin(), [](int n){ return n * n; });
+	boost::transform(l4, l4.begin(), [](int n){ return n * n; });
 	b = l4.begin();
-	assert(*b == 9);
-	assert(*++b == 4);
+	assert(*b == 81);
+	assert(*++b == 16);
 	assert(*++b == 1);
 	assert(++b == l4.end());
 	
