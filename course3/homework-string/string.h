@@ -20,8 +20,13 @@ public:
 	const char* c_str() const;
 	int compare(const String& str) const;
 	
-	char* begin() const;
-	char* end() const;
+	using iterator = char*;
+	using const_iterator = const char*;
+	
+	iterator begin();
+	const_iterator begin() const;
+	iterator end();
+	const_iterator end() const;
 	
 	String& operator=(const String& str);
 	String& operator=(String&& str);

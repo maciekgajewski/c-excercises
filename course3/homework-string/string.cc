@@ -50,12 +50,22 @@ int Karun::String::compare(const Karun::String& str) const
 	return std::strcmp(c_str(), str.c_str());
 }
 
-char* Karun::String::begin() const
+Karun::String::iterator Karun::String::begin()
 {
 	return mBuffer.get();
 }
 
-char* Karun::String::end() const
+Karun::String::const_iterator Karun::String::begin() const
+{
+	return mBuffer.get();
+}
+
+Karun::String::iterator Karun::String::end()
+{
+	return mBuffer.get() + size();
+}
+
+Karun::String::const_iterator Karun::String::end() const
 {
 	return mBuffer.get() + size();
 }
@@ -138,7 +148,7 @@ Karun::String& Karun::String::operator+=(const Karun::String& str)
 std::size_t std::hash<Karun::String>::operator()(const Karun::String& str) const
 {
 	std::size_t seed = 0;
-	for (int i=0; i < str.size(); i++)
-		boost::hash_combine(seed, str[i]);
+	for (auto& c : str)
+		boost::hash_combine(seed, c);
 	return seed;
 }
