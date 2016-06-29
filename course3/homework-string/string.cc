@@ -1,9 +1,9 @@
-#include "my_string.h"
+#include "string.h"
 
 #include <cstring>
 
 
-MyString::MyString(const char* str)
+Karun::String::String(const char* str)
 {
 	if (str[0] != '\0')
 	{
@@ -12,7 +12,7 @@ MyString::MyString(const char* str)
 	}
 }
 
-MyString::MyString(const MyString& str)
+Karun::String::String(const Karun::String& str)
 {
 	if (!str.empty())
 	{
@@ -21,7 +21,7 @@ MyString::MyString(const MyString& str)
 	}
 }
 
-MyString::MyString(MyString&& str)
+Karun::String::String(Karun::String&& str)
 {
 	if (!str.empty())
 	{
@@ -29,37 +29,37 @@ MyString::MyString(MyString&& str)
 	}
 }
 
-bool MyString::empty() const
+bool Karun::String::empty() const
 {
 	return !mBuffer;
 }
 
-std::size_t MyString::size() const
+std::size_t Karun::String::size() const
 {
 	return empty() ? 0 : std::strlen(mBuffer.get());
 }
 
-const char* MyString::c_str() const
+const char* Karun::String::c_str() const
 {
 	return empty() ? "" : mBuffer.get();
 }
 
-int MyString::compare(const MyString& str) const
+int Karun::String::compare(const Karun::String& str) const
 {
 	return std::strcmp(c_str(), str.c_str());
 }
 
-char* MyString::begin() const
+char* Karun::String::begin() const
 {
 	return mBuffer.get();
 }
 
-char* MyString::end() const
+char* Karun::String::end() const
 {
 	return mBuffer.get() + size();
 }
 
-MyString& MyString::operator=(const MyString& str)
+Karun::String& Karun::String::operator=(const Karun::String& str)
 {
 	if (str.empty())
 	{
@@ -74,7 +74,7 @@ MyString& MyString::operator=(const MyString& str)
 	return *this;
 }
 
-MyString& MyString::operator=(MyString&& str)
+Karun::String& Karun::String::operator=(Karun::String&& str)
 {
 	if (str.empty())
 	{
@@ -88,7 +88,7 @@ MyString& MyString::operator=(MyString&& str)
 	return *this;
 }
 
-bool MyString::operator==(const MyString& str) const
+bool Karun::String::operator==(const Karun::String& str) const
 {
 	if (empty() && str.empty()) return true;
 	if (empty() || str.empty()) return false;
@@ -96,39 +96,39 @@ bool MyString::operator==(const MyString& str) const
 	return std::strcmp(mBuffer.get(), str.mBuffer.get()) == 0;
 }
 
-bool MyString::operator!=(const MyString& str) const
+bool Karun::String::operator!=(const Karun::String& str) const
 {
 	return !operator==(str);
 }
 
-bool MyString::operator<(const MyString& str) const
+bool Karun::String::operator<(const Karun::String& str) const
 {
 	return compare(str) < 0;
 }
 
-const char& MyString::operator[](int idx) const
+const char& Karun::String::operator[](int idx) const
 {
 	return mBuffer.get()[idx];
 }
 
-char& MyString::operator[](int idx)
+char& Karun::String::operator[](int idx)
 {
 	return mBuffer.get()[idx];
 }
 
-MyString MyString::operator+(const MyString& str) const
+Karun::String Karun::String::operator+(const Karun::String& str) const
 {
 	if (empty()) return str;
 	else if (str.empty()) return *this;
 	
-	MyString retStr;
+	Karun::String retStr;
 	retStr.mBuffer.reset(new char[size() + str.size() + 1]);
 	std::strcpy(retStr.mBuffer.get(), mBuffer.get());
 	std::strcpy(retStr.mBuffer.get() + size(), str.mBuffer.get());
 	return retStr;
 }
 
-MyString& MyString::operator+=(const MyString& str)
+Karun::String& Karun::String::operator+=(const Karun::String& str)
 {
 	*this = *this + str;
 	return *this;

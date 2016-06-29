@@ -1,4 +1,4 @@
-#include "my_string.h"
+#include "string.h"
 
 #include <string>
 #include <cassert>
@@ -117,17 +117,13 @@ void string_test()
 
 int main()
 {
-	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
-	// if it crashes, it's a good sign. Remove the line and proceed.
-	// assert(false);
-	
-	// test fior std::string - works
+	// test for std::string - works
 	std::cout << "Testing std::string..." << std::endl;
 	string_test<std::string>();
 	std::cout << "std::string test passes" << std::endl;
 	
-	// test for your string - it should compile and pass pass
-	std::cout << "Testing MyString..." << std::endl;
-	string_test<MyString>();
-	std::cout << "MyString test passes" << std::endl;
+	// test for your string - it should compile and pass
+	std::cout << "Testing Karun::String..." << std::endl;
+	string_test<Karun::String>();
+	std::cout << "Karun::String test passes" << std::endl;
 }
