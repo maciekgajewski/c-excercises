@@ -4,6 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <cstring>
+#include <unordered_map>
+#include <unordered_set>
 
 template<typename StringType>
 void string_test()
@@ -105,6 +107,21 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+
+    std::unordered_set<StringType> testSet = 
+        {"k", "thx", "bye"};
+
+    assert(testSet.find("k") != testSet.end());
+    assert(testSet.find("thx") != testSet.end());
+    assert(testSet.find("bye") != testSet.end());
+    assert(testSet.find("hello") == testSet.end());
+
+    std::unordered_map<StringType, int> testMap = {
+        {"Hello", 1},
+        {"World", 2}
+    };
+    assert(testMap["Hello"] == 1);
+    assert(testMap["World"] == 2);
 }
 
 

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <memory>
+#include <boost/functional/hash.hpp>
 
 class MyString
 {
@@ -118,3 +119,14 @@ public:
         return buff[index];
     }
 };
+
+template<>
+struct std::hash<MyString> {
+    std::size_t operator()(const MyString& str) const {
+        std::size_t seed = 0;
+        for (int i = 0; i < str.size(); i++)
+            boost::hash_combine(seed, str[i]);
+        return seed;
+    }
+};
+
