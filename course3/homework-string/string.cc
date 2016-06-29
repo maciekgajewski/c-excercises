@@ -148,7 +148,7 @@ Karun::String& Karun::String::operator+=(const Karun::String& str)
 std::size_t std::hash<Karun::String>::operator()(const Karun::String& str) const
 {
 	std::size_t seed = 0;
-	for (auto& c : str)
+	for (auto c : str)
 		boost::hash_combine(seed, c);
 	return seed;
 }
