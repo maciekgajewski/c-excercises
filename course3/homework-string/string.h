@@ -39,3 +39,14 @@ private:
 };
 
 }
+
+namespace std
+{
+
+template<>
+struct hash<Karun::String>
+{
+	std::size_t operator()(const Karun::String& str) const;
+};
+
+}

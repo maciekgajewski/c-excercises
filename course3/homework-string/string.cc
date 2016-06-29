@@ -1,6 +1,7 @@
 #include "string.h"
 
 #include <cstring>
+#include <boost/functional/hash.hpp>
 
 
 Karun::String::String(const char* str)
@@ -132,4 +133,12 @@ Karun::String& Karun::String::operator+=(const Karun::String& str)
 {
 	*this = *this + str;
 	return *this;
+}
+
+std::size_t std::hash<Karun::String>::operator()(const Karun::String& str) const
+{
+	std::size_t seed = 0;
+	for (int i=0; i < str.size(); i++)
+		boost::hash_combine(seed, str[i]);
+	return seed;
 }
