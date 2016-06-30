@@ -2,20 +2,18 @@
 #include <string>
 #include <memory>
 
+#include <boost/optional.hpp>
+
 struct Person {
 	std::string firstName;
 	std::string lastName;
 
-	void print() {
+	virtual void print() {
 		std::cout << "Person{first: " << firstName << ", last:" << lastName << "}" << std::endl;
 	}
 };
 
-struct Record {
-	int id;
-};
-
-struct Employee : public Person, public Record {
+struct Employee : public Person {
 	std::string position;
 
 	void print() {
@@ -24,13 +22,26 @@ struct Employee : public Person, public Record {
 	}
 };
 
-void print_empl(Employee* e)
+std::unique_ptr<Person> make_person(
+	const std::string& f, const std::string& l, const boost::optional<std::string> pos = boost::none)
 {
-	e->print();
+	std::unique_ptr<Person> p;
+	if (!pos) {
+		p = std::make_unique<Person>();
+	}
+	else {
+		auto e = std::make_unique<Employee>();
+		e->position = *pos;
+		p = std::move(e);
+	}
+	p->firstName = f; p->lastName = l;
+	return p;
 }
 
 int main(int argc, char** argv)
 {
+	using namespace std::literals;
+	
 	Employee p;
 	p.firstName = "Dan"; p.lastName= "Collier"; p.position = "C++ Developer";
 	std::cout << "sizeof p=" << sizeof(p) << std::endl;
@@ -40,19 +51,10 @@ int main(int argc, char** argv)
 	p.print();
 	
 	Person* pptr = &p;
-	void* vptr = pptr;
-	
-	Record* rptr = &p;
-	void* rec_vptr = &rptr;
-	
-	std::cout << "pptr=" << pptr << ", vptr=" << vptr << ", rptr=" << rptr 
-		<< ", rec_vptr=" << rec_vptr << std::endl;
-	
-	print_empl(static_cast<Employee*>(rec_vptr));
-	
 	pptr->print();
 	
-	auto pp = std::make_unique<Person>();
-	pp->lastName = "L"; pp->firstName = "F";
+	auto pp = make_person("Firstun", "Lasterson", "Position"s);
 	pp->print();
+	auto pp2 = make_person("Fred", "Flintstone");
+	pp2->print();
 }
