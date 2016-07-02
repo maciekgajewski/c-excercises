@@ -1,10 +1,13 @@
 #include "debugger_state.hh"
 
+#include "ievent_sink.hh"
+
 #include <iostream>
 
 namespace Teabag {
 
-DebuggerState::DebuggerState()
+DebuggerState::DebuggerState(IEventSink& s)
+	: sink_(s)
 {
 	fatalError_ = [this](const InputRecord& input)
 	{
@@ -19,8 +22,9 @@ DebuggerState::~DebuggerState()
 {
 }
 
-void DebuggerState::processInput(const std::vector<InputRecord>& notifications, const boost::optional<InputRecord>& result)
+std::string DebuggerState::processInput(const std::vector<InputRecord>& notifications, const boost::optional<InputRecord>& result)
 {
+	commandBuffer_.clear();
 	if (result)
 	{
 		if (result->token > 0)
@@ -31,32 +35,42 @@ void DebuggerState::processInput(const std::vector<InputRecord>& notifications, 
 			resultHandlers_.erase(it);
 		}
 	}
-	for(const InputRecord& ir : notifications)
-	{
-		std::cout << "NOTIFICATION: " << ir.type << " " << ir.inputClass << " " << toJson(ir.result) << std::endl;
-	}
 
-	// ignore input
 	if (!started_)
 	{
 		sendCommand("-break-insert main", fatalError_);
 		sendCommand("-exec-run", fatalError_);
 		started_ = true;
 	}
+	else
+	{
+		for(const InputRecord& ir : notifications)
+		{
+			std::cerr << "NOTIFICATION: " << ir.type << " " << ir.inputClass << " " << toJson(ir.result) << std::endl;
+			if (ir.type == '*' && ir.inputClass == "stopped")
+			{
+				onStopped(ir);
+			}
+		}
+	}
+
+	return commandBuffer_;
 }
 
 void DebuggerState::sendCommand(const std::string& cmd, DebuggerState::ResultHandler h)
 {
 	int token = nextToken_++;
 
-	std::string withToken = std::to_string(token) + cmd;
-
-//	process_->write(withToken.toLocal8Bit());
-//	process_->write("\n");
-	// TODO
+	commandBuffer_ += std::to_string(token);
+	commandBuffer_ += cmd;
+	commandBuffer_ += "\n";
 
 	resultHandlers_[token] = h;
+}
 
+void DebuggerState::onStopped(const InputRecord&)
+{
+	// get: frame, backtrace?
 }
 
 }

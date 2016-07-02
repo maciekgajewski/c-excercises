@@ -30,7 +30,7 @@ private:
 	int inFile_ = -1;
 	int outFile_ = -1;
 
-	DebuggerState* state_ = nullptr;
+	std::unique_ptr<DebuggerState> state_;
 	IEventSink& sink_;
 };
 

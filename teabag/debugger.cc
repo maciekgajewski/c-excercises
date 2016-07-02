@@ -11,7 +11,8 @@
 
 namespace Teabag {
 
-Debugger::Debugger(IEventSink& sink) : sink_(sink)
+Debugger::Debugger(IEventSink& sink) :
+	state_(new DebuggerState(sink)), sink_(sink)
 {
 }
 
@@ -104,7 +105,6 @@ std::string parseCString(const std::string& result, size_t& pos)
 
 	std::string out;
 
-	pos++;
 	for(pos++; result[pos] != '"'; ++pos)
 	{
 		if (result[pos] == '\\')
@@ -150,8 +150,28 @@ static Result parseTuple(const std::string& result, size_t& pos)
 
 static Result parseArray(const std::string& result, size_t& pos)
 {
+	if (result[pos] != '[')
+		throw std::runtime_error("Error parsing " + result + ", Expceting \" at pos " + std::to_string(pos));
+
 	Result out;
-	// TODO
+
+	for(;;)
+	{
+		pos ++;
+		auto v = parseValue(result, pos);
+		out.push_back({{}, v});
+		//std::cout << "tuple, got field=" << kv.first << ", string forward is: " << (result.c_str() + pos) << std::endl;
+		pos++;
+		if (result[pos] == ',')
+		{
+			continue;
+		}
+		else if (result[pos] == ']')
+		{
+			break;
+		}
+		throw std::runtime_error("Error parsing " + result + ", Expceting ',' or ']' at pos " + std::to_string(pos) + ", found " + std::string(1, result[pos]) + " instead");
+	}
 	return out;
 }
 
@@ -195,7 +215,11 @@ void Debugger::processLine(const std::string& line)
 
 	if (line == "(gdb)")
 	{
-		// TODO send to state
+		std::string reply = state_->processInput(notifications_, result_);
+		if (!reply.empty())
+		{
+			::write(inFile_, reply.data(), reply.size());
+		}
 		notifications_.clear();
 		result_.reset();
 		return;
