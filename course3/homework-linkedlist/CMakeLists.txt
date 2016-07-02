@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.5)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_FLAGS "-Wall")
+find_package(Boost REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
 add_executable (linked_list test.cc)

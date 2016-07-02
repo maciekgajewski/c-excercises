@@ -12,7 +12,8 @@ class MyLinkedList {
 	};
 
 	public:
-	class iterator {
+	typedef T value_type;
+	class iterator : public std::iterator<std::forward_iterator_tag, T> {
 		public:
 			Node* mPtr = nullptr;
 			iterator(Node* node) : mPtr(node) {}
@@ -26,12 +27,15 @@ class MyLinkedList {
 				mPtr = mPtr->mNext.get();
 				return *this;
 			}
+			iterator operator++(int) {
+				return iterator(mPtr->mNext.get());
+			}
 			T& operator*() {
 				return mPtr->mData;
 			}
 	};
 
-	class const_iterator
+	class const_iterator : public std::iterator<std::forward_iterator_tag, const T>
 	{
 		public:
 			Node* mPtr = nullptr;
@@ -47,6 +51,9 @@ class MyLinkedList {
 			const_iterator& operator++() {
 				mPtr = mPtr->mNext.get();
 				return *this;
+			}
+			const_iterator operator++(int) {
+				return const_iterator(mPtr->mNext.get());
 			}
 			const T& operator*() {
 				return mPtr->mData;
