@@ -1,21 +1,16 @@
 #include "debugger_state.hh"
 
-#include <QIODevice>
-
-#include <QtGlobal>
-
 #include <iostream>
 
 namespace Teabag {
 
-DebuggerState::DebuggerState(QIODevice* process, QObject* p)
-	: QObject(p), process_(process)
+DebuggerState::DebuggerState()
 {
 	fatalError_ = [this](const InputRecord& input)
 	{
 		if (input.inputClass == "error")
 		{
-			emit fatalError(input.result.get<QString>("msg"));
+			throw std::runtime_error(input.result.get<std::string>("msg"));
 		}
 	};
 }
@@ -24,21 +19,21 @@ DebuggerState::~DebuggerState()
 {
 }
 
-void DebuggerState::processInput(const QList<InputRecord>& notifications, const boost::optional<InputRecord>& result)
+void DebuggerState::processInput(const std::vector<InputRecord>& notifications, const boost::optional<InputRecord>& result)
 {
 	if (result)
 	{
 		if (result->token > 0)
 		{
 			auto it = resultHandlers_.find(result->token);
-			Q_ASSERT(it != resultHandlers_.end());
-			(*it)(*result);
+			assert(it != resultHandlers_.end());
+			it->second(*result);
 			resultHandlers_.erase(it);
 		}
 	}
-	foreach(const InputRecord& ir, notifications)
+	for(const InputRecord& ir : notifications)
 	{
-		std::cout << "NOTIFICATION: " << ir.type.toLatin1() << " " << ir.inputClass.toStdString() << " " << toJson(ir.result).toStdString() << std::endl;
+		std::cout << "NOTIFICATION: " << ir.type << " " << ir.inputClass << " " << toJson(ir.result) << std::endl;
 	}
 
 	// ignore input
@@ -50,14 +45,15 @@ void DebuggerState::processInput(const QList<InputRecord>& notifications, const 
 	}
 }
 
-void DebuggerState::sendCommand(const QString& cmd, DebuggerState::ResultHandler h)
+void DebuggerState::sendCommand(const std::string& cmd, DebuggerState::ResultHandler h)
 {
 	int token = nextToken_++;
 
-	QString withToken = QString::number(token) + cmd;
+	std::string withToken = std::to_string(token) + cmd;
 
-	process_->write(withToken.toLocal8Bit());
-	process_->write("\n");
+//	process_->write(withToken.toLocal8Bit());
+//	process_->write("\n");
+	// TODO
 
 	resultHandlers_[token] = h;
 

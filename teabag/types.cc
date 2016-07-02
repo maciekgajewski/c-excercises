@@ -6,11 +6,11 @@
 
 namespace Teabag {
 
-QString toJson(const Result& r)
+std::string toJson(const Result& r)
 {
 	std::ostringstream ss;
 	boost::property_tree::json_parser::write_json(ss, r, false);
-	return QString::fromStdString(ss.str());
+	return ss.str();
 }
 
 

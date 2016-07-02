@@ -2,53 +2,34 @@
 
 #include "types.hh"
 
-#include <QObject>
-
 #include <boost/optional.hpp>
 
 #include <memory>
-
-class QProcess;
 
 namespace Teabag {
 
 class DebuggerState;
 
-class Debugger : public QObject
+class Debugger
 {
-	Q_OBJECT
 public:
-	explicit Debugger(QObject *p = nullptr);
-
+	explicit Debugger();
 	~Debugger();
 
-	void start(const QString& binary);
-
-signals:
-
-	void finished();
-
-	void consoleOutput(const QString&);
-	void targetOutput(const QString&);
-
-private slots:
-
-	void onStdOutData();
-	void onStdErrData();
-	void onFinished();
-	void onDebugerError(const QString& error);
+	void run(const char* binaryToDebug);
 
 private:
 
-	void processLine(const QString& line);
-	void processOutput();
+	void mainLoop();
+	void processLine(const std::string& line);
 
-	QProcess* debuggerProcess_ = nullptr;
-	QList<InputRecord> notifications_;
 	boost::optional<InputRecord> result_;
+	std::vector<InputRecord> notifications_;
+
+	int inFile_ = -1;
+	int outFile_ = -1;
 
 	DebuggerState* state_ = nullptr;
-
 };
 
 }

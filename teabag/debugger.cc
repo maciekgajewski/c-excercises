@@ -2,61 +2,98 @@
 
 #include "debugger_state.hh"
 
-#include <QProcess>
-
 #include <iostream>
+#include <cassert>
+#include <regex>
+
+#include <unistd.h>
 
 namespace Teabag {
 
-Debugger::Debugger(QObject *p) : QObject(p)
+Debugger::Debugger()
 {
-	debuggerProcess_ = new QProcess(this);
-
-	connect(debuggerProcess_, SIGNAL(finished(int)), SLOT(onFinished()));
-	connect(debuggerProcess_, SIGNAL(readyReadStandardOutput()), SLOT(onStdOutData()));
-	connect(debuggerProcess_, SIGNAL(readyReadStandardError()), SLOT(onStdErrData()));
 }
 
 Debugger::~Debugger()
 {
 }
 
-void Debugger::start(const QString& binary)
+void Debugger::run(const char* binaryToDebug)
 {
-	QString gdb = "gdb";
-	QStringList args = {"--interpreter=mi", binary};
+	assert(inFile_ == -1);
+	assert(outFile_ == -1);
 
-	debuggerProcess_->start(gdb, args);
-	delete state_;
-	state_ = new DebuggerState(debuggerProcess_, this);
-	connect(state_, SIGNAL(fatalError(QString)), SLOT(onDebugerError(QString)));
-}
+	int inPipe[2];
+	int outPipe[2];
 
-void Debugger::onStdOutData()
-{
-	QByteArray line = debuggerProcess_->readLine(4096);
-	while(!line.isEmpty())
+	::pipe(inPipe);
+	::pipe(outPipe);
+
+	if (::fork())
 	{
-		processLine(line.simplified());
-		line = debuggerProcess_->readLine(4096);
+		::close(inPipe[0]);
+		::close(outPipe[1]);
+
+		inFile_ = inPipe[1];
+		outFile_ = outPipe[0];
+
+		mainLoop();
 	}
+	else
+	{
+		::close(inPipe[1]);
+		::dup2(inPipe[0], STDIN_FILENO);
+
+		::close(outPipe[0]);
+		::dup2(outPipe[1], STDOUT_FILENO);
+
+		::execlp("gdb", "gdb", "--interpreter=mi", binaryToDebug, nullptr);
+		throw std::runtime_error("Failed to start debugger");
+	}
+
 }
 
-void Debugger::onStdErrData()
+void Debugger::mainLoop()
 {
-	std::cerr << debuggerProcess_->readAllStandardError().data() << std::endl;
-}
+	static const size_t BUFSIZE = 4096;
+	char buf[BUFSIZE];
 
-void Debugger::onFinished()
-{
-	// TODO
-	emit finished();
-}
+	std::string line;
 
-void Debugger::onDebugerError(const QString& error)
-{
-	std::cerr << "Fatal debugger error :" << error.toStdString() << std::endl;
-	emit finished();
+	for(;;)
+	{
+		int bytesRead = ::read(outFile_, buf, BUFSIZE);
+		if (bytesRead <= 0)
+		{
+			return;
+		}
+
+		// read lines
+		char* begin = buf;
+		char* end = buf + bytesRead;
+		while(begin != end)
+		{
+			char* n = std::find(begin, end, '\n');
+			if (n == end)
+			{
+				// remove any whitespace at the end
+				while(n != begin && *(n-1) == ' ')
+					--n;
+				line.append(begin, end);
+				break;
+			}
+			else
+			{
+				while(n != begin && *(n-1) == ' ')
+					--n;
+				line.append(begin, n);
+				processLine(line);
+				line.clear();
+				begin = n+1;
+			}
+		}
+
+	}
 }
 
 std::string parseCString(const std::string& result, size_t& pos)
@@ -149,14 +186,15 @@ static std::pair<std::string, Result> parseResult(const std::string& result, siz
 	return {key, parseValue(result, pos)};
 }
 
-void Debugger::processLine(const QString& line)
+void Debugger::processLine(const std::string& line)
 {
+	std::cout << line << std::endl;
 	if (line.length() < 1)
 		return;
 
 	if (line == "(gdb)")
 	{
-		processOutput();
+		// TODO send to state
 		notifications_.clear();
 		result_.reset();
 		return;
@@ -164,47 +202,41 @@ void Debugger::processLine(const QString& line)
 
 	if (line[0] == '~')
 	{
-		emit consoleOutput(line.right(line.length()-1));
+		//emit consoleOutput(line.right(line.length()-1));
 		return;
 	}
 
 	if (line[0] == '@')
 	{
-		emit targetOutput(line.right(line.length()-1));
+		//emit targetOutput(line.right(line.length()-1));
 		return;
 	}
 
-	QRegExp regexp("(\\d+)?([*+=^])([^,]+)(,(.+))?");
-
-	if (!regexp.exactMatch(line))
+	std::regex regexp("(\\d+)?([*+=^])([^,]+)(,(.+))?");
+	std::smatch match;
+	if (!std::regex_match(line, match, regexp))
 	{
-		std::cerr << "Failed to parse: " << line.toStdString() << std::endl;
+		std::cerr << "Failed to parse: " << line << std::endl;
 		return;
 	}
 
-	QString token = regexp.cap(1);
-	QString typeChar = regexp.cap(2);
-	QString resultClass = regexp.cap(3);
-	QString result = regexp.cap(5);
+	std::string token = match.str(1);
+	std::string typeChar = match.str(2);
+	std::string resultClass = match.str(3);
+	std::string result = match.str(5);
 
 	InputRecord record;
-	record.token = token.toInt();
+	record.token = token.empty() ? 0 : std::stoi(token);
 	record.type = typeChar[0];
 	record.inputClass = resultClass;
 	size_t pos = 0;
-	record.result.push_back(parseResult(result.toStdString(), pos));
+	record.result.push_back(parseResult(result, pos));
 
 	if (record.type == '^')
 		result_ = record;
 	else
-		notifications_.append(record);
+		notifications_.push_back(record);
 }
-
-void Debugger::processOutput()
-{
-	state_->processInput(notifications_, result_);
-}
-
 
 }
 
