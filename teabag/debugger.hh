@@ -9,11 +9,12 @@
 namespace Teabag {
 
 class DebuggerState;
+class IEventSink;
 
 class Debugger
 {
 public:
-	explicit Debugger();
+	explicit Debugger(IEventSink& sink);
 	~Debugger();
 
 	void run(const char* binaryToDebug);
@@ -30,6 +31,7 @@ private:
 	int outFile_ = -1;
 
 	DebuggerState* state_ = nullptr;
+	IEventSink& sink_;
 };
 
 }

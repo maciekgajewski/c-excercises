@@ -1,6 +1,7 @@
 #include "debugger.hh"
 
 #include "debugger_state.hh"
+#include "ievent_sink.hh"
 
 #include <iostream>
 #include <cassert>
@@ -10,7 +11,7 @@
 
 namespace Teabag {
 
-Debugger::Debugger()
+Debugger::Debugger(IEventSink& sink) : sink_(sink)
 {
 }
 
@@ -188,7 +189,7 @@ static std::pair<std::string, Result> parseResult(const std::string& result, siz
 
 void Debugger::processLine(const std::string& line)
 {
-	std::cout << line << std::endl;
+	//std::cout << line << std::endl;
 	if (line.length() < 1)
 		return;
 
@@ -202,13 +203,13 @@ void Debugger::processLine(const std::string& line)
 
 	if (line[0] == '~')
 	{
-		//emit consoleOutput(line.right(line.length()-1));
+		sink_.debuggerOutput(std::string(line.begin()+1, line.end()));
 		return;
 	}
 
 	if (line[0] == '@')
 	{
-		//emit targetOutput(line.right(line.length()-1));
+		sink_.targetOutput(std::string(line.begin()+1, line.end()));
 		return;
 	}
 

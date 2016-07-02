@@ -18,6 +18,8 @@ add_executable(teabag
 	debugger.cc debugger.hh
 	debugger_state.cc debugger_state.hh
 	types.cc types.hh
+	ievent_sink.hh
+	json_sink.cc json_sink.hh
 )
 
 target_link_libraries(teabag

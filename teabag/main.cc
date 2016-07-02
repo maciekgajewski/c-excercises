@@ -1,5 +1,5 @@
 #include "debugger.hh"
-
+#include "json_sink.hh"
 #include <iostream>
 
 int main(int argc, char** argv)
@@ -10,8 +10,11 @@ int main(int argc, char** argv)
 		return 2;
 	}
 
-	Teabag::Debugger debugger;
+	Teabag::JsonSink sink(std::cout);
+	Teabag::Debugger debugger(sink);
 	debugger.run(argv[0]);
+
+
 
 	return 0;
 }
