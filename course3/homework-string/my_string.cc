@@ -3,6 +3,12 @@
 #include <cstring>
 #include <stdexcept>
 
+std::size_t std::hash<MyString>::operator()(const MyString& ms) const
+{
+	// Terrible terrible hash function
+	return 1;
+}
+
 MyString::MyString(const char* str) : buf(MyMakeUnique<char[]>(std::strlen(str)+1)) {
 	std::strcpy(buf.get(), str);
 }

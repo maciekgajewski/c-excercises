@@ -34,3 +34,16 @@ class MyString
 		const char* begin() const;
 		const char* end() const;
 };
+
+/*
+ * Don't understand why I need to wrap this with namespace std :(
+ * If I don't I get the following compilation error:
+ * /home/wshayes/projects/cpp_course/c-excercises/course3/homework-string/my_string.h:46:9: error: ‘hash’ is not a class template
+ */
+namespace std {
+	template<>
+	struct hash<MyString>
+	{
+		std::size_t operator()(const MyString& ms) const;
+	};
+}

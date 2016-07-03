@@ -4,7 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <cstring>
-
+#include <unordered_map>
+ 
 template<typename StringType>
 void string_test()
 {
@@ -104,6 +105,19 @@ void string_test()
 	for (auto it(forIterating.begin()); it != forIterating.end(); it++, i++) {
 		assert (*it == forIterating[i]);
 	}
+
+	std::unordered_map<StringType, std::string> um = {
+		{"RED","red"},
+		{"GREEN","green"},
+		{"BLUE","blue"}
+	};
+
+	assert (um["RED"] == "red");
+	assert (um["GREEN"] == "green");
+	assert (um["BLUE"] == "blue");
+
+	//std::unordered_set<StringType> us = {
+
 }
 
 
