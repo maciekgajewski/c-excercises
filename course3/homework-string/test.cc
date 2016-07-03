@@ -5,7 +5,8 @@
 #include <iostream>
 #include <cstring>
 #include <unordered_map>
- 
+#include <unordered_set>
+
 template<typename StringType>
 void string_test()
 {
@@ -107,17 +108,23 @@ void string_test()
 	}
 
 	std::unordered_map<StringType, std::string> um = {
-		{"RED","red"},
-		{"GREEN","green"},
-		{"BLUE","blue"}
+		{"RED", "red"},
+		{"GREEN", "green"},
+		{"BLUE", "blue"}
 	};
 
 	assert (um["RED"] == "red");
 	assert (um["GREEN"] == "green");
 	assert (um["BLUE"] == "blue");
 
-	//std::unordered_set<StringType> us = {
+	std::unordered_set<StringType> us = {
+		{"RED"},
+		{"BLUE"},
+		{"GREEN"}
+	};
 
+	assert (us.find("BLUE") != us.end());
+	assert (us.find("PURPLE") == us.end());
 }
 
 
