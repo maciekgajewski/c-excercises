@@ -32,8 +32,33 @@ def readUntil(inputClass):
 			if line.startswith(inputClass):
 				return
 
+def execCommand(cmd):
+	sendCommand(cmd)
+	printInput()
+
 printInput()
-sendCommand('-break-insert main')
-readUntil('^done')
+execCommand('-break-insert main')
+
 sendCommand('-exec-run')
 readUntil('*stopped')
+
+execCommand('-stack-info-frame')
+execCommand('-stack-info-depth')
+execCommand('-stack-list-arguments --all-values')
+execCommand('-stack-list-frames')
+execCommand('-stack-list-locals --simple-values')
+execCommand('-stack-list-variables --simple-values')
+execCommand('-symbol-list-lines /home/maciek/workspace/build/teabag-debug/test.cc')
+execCommand('-data-disassemble -f test.cc -l 4 -n 1 0')
+execCommand('-data-evaluate-expression &argc')
+execCommand('-data-evaluate-expression &argv')
+execCommand('-data-evaluate-expression &s')
+execCommand('-data-evaluate-expression sizeof(s)')
+
+while(True):
+	print('==================')
+	sendCommand('-exec-step')
+	readUntil('*stopped')
+	execCommand('-stack-info-depth')
+
+
