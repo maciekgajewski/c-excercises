@@ -2,42 +2,44 @@
 #include <string>
 #include <memory>
 
+#include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
 
-struct Person {
+struct INamedClass {
+	virtual std::string TypeName() const = 0;
+};
+
+struct Person : public INamedClass {
 	std::string firstName;
 	std::string lastName;
 
 	virtual ~Person() {}
+	std::string TypeName() const final { return "Person"; }
 	
-	virtual void print() {
-		std::cout << "Person{first: " << firstName << ", last:" << lastName << "}" << std::endl;
+	virtual void ToStream(std::ostream& s) const {
+		s << "first: " << firstName << ", last: " << lastName;
 	}
 };
 
 struct Employee : public Person {
 	std::string position;
 
-	void print() {
-		std::cout << "Employee{first: " << firstName << ", last:" << lastName 
-		<< ", position: " << position << "}" << std::endl;
+	void ToStream(std::ostream& s) const {
+		Person::ToStream(s);
+		s << ", position: " << position;
 	}
 };
 
-std::unique_ptr<Person> make_person(
-	const std::string& f, const std::string& l, const boost::optional<std::string> pos = boost::none)
+struct Car : public INamedClass {
+	std::string make, model;
+	std::string TypeName() const final { return "Type"; }
+}
+
+std::ostream& operator<<(std::ostream& s, const Person& p)
 {
-	std::unique_ptr<Person> p;
-	if (!pos) {
-		p = std::make_unique<Person>();
-	}
-	else {
-		auto e = std::make_unique<Employee>();
-		e->position = *pos;
-		p = std::move(e);
-	}
-	p->firstName = f; p->lastName = l;
-	return p;
+	s << "Type: " << p.TypeName() << ", ";
+	p.ToStream(s);
+	return s;
 }
 
 int main(int argc, char** argv)
@@ -46,17 +48,15 @@ int main(int argc, char** argv)
 	
 	Employee p;
 	p.firstName = "Dan"; p.lastName= "Collier"; p.position = "C++ Developer";
-	std::cout << "sizeof p=" << sizeof(p) << std::endl;
-	std::cout << "sizeof std:string=" << sizeof(std::string) << std::endl;
-	std::cout << "addr of p=" << &p <<", addr of p.firstName=" << &p.firstName << std::endl;
 	
-	p.print();
+	Person m;
+	m.firstName = "Maciek"; m.lastName = "Gajewski";
+
+	std::cout << p << std::endl;
+	std::cout << m << std::endl;
 	
-	Person* pptr = &p;
-	pptr->print();
+	std::string ss = boost::lexical_cast<std::string>(p);
 	
-	auto pp = make_person("Firstun", "Lasterson", "Position"s);
-	pp->print();
-	auto pp2 = make_person("Fred", "Flintstone");
-	pp2->print();
+	
+	
 }
