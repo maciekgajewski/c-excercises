@@ -6,6 +6,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
+#include <boost/any.hpp>
 
 
 using OperFun = std::function<double(double, double)>;
@@ -22,7 +23,7 @@ int main(int argc, char** argv)
 	using namespace std::placeholders;
 	
 	std::map<std::string, OperFun> operations = {
-		{ "+", std::bind(add, _2, 0, _1) },
+		{ "+", [](double a, double b){ return add(a, 0 , b);} },
 		{ "*", mul }
 	};
 
@@ -33,4 +34,9 @@ int main(int argc, char** argv)
 	double b = std::stod(argv[3]);
 	
 	std::cout << a << " " << oper << " " << b << " = " << operations[oper](a, b) << std::endl;
+	
+	
+	boost::any x = 5;
+	std::cout << boost::any_cast<int>(x) << std::endl;
+	
 }
