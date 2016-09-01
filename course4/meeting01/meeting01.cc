@@ -2,23 +2,18 @@
 
 int c = 10;
 
-namespace X
+int fac(int x)
 {
-	int c = 9;
+	std::cout << "x=" << x << ", addr=" << &x << std::endl;
+	if (x <= 1)
+		return 1;
+	else
+		return x * fac(x-1);
 }
 
-namespace Y
+int main(int argc, char** argv)
 {
-	int c = 55;
-}
-
-int main()
-{
-	using namespace X;
-	
-	int a = 7;
-	int b = 8;
-	
-	std::cout << "a+b = " << a+b+c << std::endl;
+	auto f = fac(3);
+	std::cout << "3! = " << f << std::endl;
 }
 
