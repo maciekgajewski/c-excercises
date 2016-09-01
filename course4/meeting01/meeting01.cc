@@ -1,19 +1,20 @@
 #include <iostream>
 
-int c = 10;
-
-int fac(int x)
-{
-	std::cout << "x=" << x << ", addr=" << &x << std::endl;
-	if (x <= 1)
-		return 1;
-	else
-		return x * fac(x-1);
-}
+void print(int x) { std::cout << "int=" << x << std::endl; }
+void print(float x) { std::cout << "float=" << x << std::endl; }
 
 int main(int argc, char** argv)
 {
-	auto f = fac(3);
-	std::cout << "3! = " << f << std::endl;
+	int i = 7;
+	float f = 7;
+	
+	int* p = &i;
+	float* r = reinterpret_cast<float*>(&i);
+	
+	print(i);
+	print(f);
+	print(*p);
+	print(*r);
+	
 }
 
