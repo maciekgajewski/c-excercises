@@ -12,22 +12,24 @@ void triple(int& i)
 	i *= 3;
 }
 
+void printFirstAndLast(int a[])
+{
+	std::cout << a[0] << ", " << a[4] << std::endl;
+	std::cout << sizeof(a) << std::endl; 
+	a[0] = 7;
+}
+	
 int main(int argc, char** argv)
 {
-	int a = 7;
-	int b = 8;
-	S x = { 1, 3.14 };
+	int a[5] = { 1, 2, 3, 4, 5 };
 	
-	int* p = &a;
-	int& r = a;
+	a[0] = 6;
 	
-	S* sp = &x;
-	S& sr = x;
 	
-	triple(a);
-	triple(b);
+	a[77777] = 66;
 	
-	std::cout << sr.i  << sp->i << std::endl;
+	printFirstAndLast(a);
+	printFirstAndLast(a);
 	
 }
 
