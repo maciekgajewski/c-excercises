@@ -1,20 +1,33 @@
 #include <iostream>
 #include <string>
 
+struct S
+{
+	int i;
+	double d;
+};
+
+void triple(int& i)
+{
+	i *= 3;
+}
+
 int main(int argc, char** argv)
 {
-	auto a = 33ll;
-	auto b = 4.5;
-	auto c = "hel\0lo"; // const char*
+	int a = 7;
+	int b = 8;
+	S x = { 1, 3.14 };
 	
-	auto d = *c; // const char
-	auto e = c + 4;
-	auto f = c[1];
-	auto g = std::string("hello");
-	auto h = g[1];
+	int* p = &a;
+	int& r = a;
 	
-	std::cout << g << std::endl;
-	std::cout << 3["hello"] << std::endl;
+	S* sp = &x;
+	S& sr = x;
+	
+	triple(a);
+	triple(b);
+	
+	std::cout << sr.i  << sp->i << std::endl;
 	
 }
 
