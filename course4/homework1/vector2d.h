@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ostream>
-#include <sstream>
 
 
 struct Vector2d
