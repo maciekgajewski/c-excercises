@@ -6,7 +6,7 @@
 
 int main()
 {
-	// to make sture the code is compiled in debug mode
+	// to make sure the code is compiled in debug mode
 #ifdef NDEBUG
 #error Compile the code in debug mode!
 #endif
