@@ -27,22 +27,19 @@ struct Class
 	~Class() { std::cout << this << " Destroyed" << std::endl; }
 };
 
+void fun(Class c)
+{
+	std::cout << "fun" << std::endl;
+}
+
+Class makeClass()
+{
+	return Class("made class");
+}
+
 int main(int argc, char** argv)
 {
-	Class s1; // default construction
-	Class s2("hey!"); // initilizing constructor
-	Class s3(s2); // copy constructor
-	Class* p = nullptr;
-	{
-		Class s4 = s2; // copy constructor
-		s3 = s4; // copy assignment
-		
-		s1 = std::move(s2); // move assignment
-		
-		Class s5(std::move(s3)); // move construction
-		p = &s5;
-	}
-	std::cout << "hello!!!, p=" << p << std::endl;
+	Class a = makeClass();
 	
 }
 
