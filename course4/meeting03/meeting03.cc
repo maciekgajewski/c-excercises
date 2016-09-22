@@ -30,16 +30,14 @@ void print(const Vector& v)
 
 int main(int argc, char** argv)
 {
-	Vector v(7, 6);
-	
-	auto v2 = Vector(6, 88);
-	
-	
-	//v.setX(5);
+	std::string s1; // default construction
+	std::string s2("hey!"); // initilizing constructor
+	std::string s3(s2); // copy constructor
+	std::string s4 = s2; // copy constructor
+	s3 = s4; // copy assignment
 
-	print(v);
-	print({666, 777});
-	//std::cout << v.getX() << std::endl;
+	s1 = std::move(s2); // move assignment
 	
+	std::string s5(std::move(s3)); // move construction
 }
 
