@@ -2,6 +2,7 @@
 
 #include <math.h>
 #include <ostream>
+#include <stdexcept>
 
 const double AngleToRadian = M_PI / 180;
 
@@ -44,6 +45,9 @@ public:
 
 	static Vector2d FromPolarCoordinates(double radius, double angle)
 	{
+		if (radius < 0)
+			throw std::runtime_error("'radius' cannot be negative");
+
 		return Vector2d(
 			radius * cos(angle * AngleToRadian),
 			radius * sin(angle * AngleToRadian));

@@ -31,5 +31,7 @@ int main()
 	print(Vector2d{-1, 2});
 	print(Vector2d{1, -2});
 	print(Vector2d{-1, -2});
+	print(Vector2d::FromPolarCoordinates(1, 180));
+	print(Vector2d::FromPolarCoordinates(500, -4180));
 	std::cout << "done" << std::endl;
 }
