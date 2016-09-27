@@ -22,6 +22,9 @@ int main()
 	s << a;
 
 	assert(s.str() == "(5, 6)");
+	
+	double pi = 3.14159265358979323846;
+	std::cout << Vector2d(PolarCoords2d(5, pi/2)) << std::endl;
 
 	std::cout << "done" << std::endl;
 }
