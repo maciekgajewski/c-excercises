@@ -11,12 +11,12 @@ int main()
 #error Compile the code in debug mode!
 #endif
 
-	std::cout << "Starting test..." << std::endl;	
+        std::cout << "Starting test..." << std::endl;
 
-	Vector2d a = {5, 6};
-	Vector2d b = {-1, 7};
+        Vector2d a = Vector2d::Rectangular(5, 6);
+        Vector2d b = Vector2d::Polar(7.0710678118655, 98.130102354156); //{-1, 7};
 
-	assert((a+b == Vector2d{4, 13}));
+        assert((a+b == Vector2d::Rectangular(4, 13)));
 
 	std::stringstream s;
 	s << a;
