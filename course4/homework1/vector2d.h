@@ -3,18 +3,22 @@
 #include <ostream>
 #include <cmath>
 
+bool double_eq(double x, double y)
+//check whether two doubles are approximately equal. This assumes that they are neither both very large or very small
+{
+	return std::abs(x-y) < 1e-10;
+}
+
 struct PolarCoords2d;
 
 struct CartesianCoords2d
 {
 	double x, y;
-	
-	CartesianCoords2d(double x, double y) : x(x), y(y) {}
-	
+		
 	PolarCoords2d get_polar_coords() const;
 	
 	bool operator==(const CartesianCoords2d& other_coords) const{
-		return x == other_coords.x && y == other_coords.y;
+		return double_eq(x, other_coords.x) && double_eq(y, other_coords.y);
 	}
 
 	CartesianCoords2d operator+(const CartesianCoords2d& other_coords) const{
@@ -25,9 +29,7 @@ struct CartesianCoords2d
 struct PolarCoords2d
 {
 	double r, phi;
-	
-	PolarCoords2d(double r, double phi) : r(r), phi(phi) {}
-	
+		
 	CartesianCoords2d get_cartesian_coords() const{
 		return CartesianCoords2d{r * std::cos(phi), r * std::sin(phi)};
 	}
@@ -64,5 +66,6 @@ struct Vector2d
 };
 
 std::ostream& operator<<(std::ostream& s, const Vector2d& vector){
-		return s << '(' << vector.get_cartesian_coords().x << ", " << vector.get_cartesian_coords().y << ')';
+	CartesianCoords2d coords = vector.get_cartesian_coords();
+	return s << '(' << coords.x << ", " << coords.y << ')';
 }
