@@ -4,34 +4,34 @@
 #include <cassert>
 #include <iostream>
 
-void print(const Vector2d& value)
-{
-	std::cout << value.GetRadius() << " " << value.GetAngle() << std::endl;
-}
+bool AreEqual(Vector2d x, Vector2d y) { return x == y; }
 
 int main()
 {
 	std::cout << "Starting test..." << std::endl;	
 
-	Vector2d a = {5, 6};
-	Vector2d b = {-1, 7};
+	Vector2d a = Vector2d::FromCartesianCoordinates(5, 6);
+	Vector2d b = Vector2d::FromCartesianCoordinates(-1, 7);
 
-	assert((a+b == Vector2d{4, 13}));
+	assert(a+b == Vector2d::FromCartesianCoordinates(4, 13));
 
 	std::stringstream s;
 	s << a;
 
 	assert(s.str() == "(5, 6)");
 
-	print(Vector2d{1, 0});
-	print(Vector2d{0, 1});
-	print(Vector2d{-1, 0});
-	print(Vector2d{0, -1});
-	print(Vector2d{1, 2});
-	print(Vector2d{-1, 2});
-	print(Vector2d{1, -2});
-	print(Vector2d{-1, -2});
-	print(Vector2d::FromPolarCoordinates(1, 180));
-	print(Vector2d::FromPolarCoordinates(500, -4180));
+	assert(AreEqual(
+		Vector2d::FromPolarCoordinates(1, 0),
+		Vector2d::FromCartesianCoordinates(1, 0)));
+	assert(AreEqual(
+		Vector2d::FromPolarCoordinates(1, M_PI),
+		Vector2d::FromCartesianCoordinates(-1, 0)));
+	assert(AreEqual(
+		Vector2d::FromPolarCoordinates(1, M_PI / 2),
+		Vector2d::FromCartesianCoordinates(0, 1)));
+	assert(AreEqual(
+		Vector2d::FromPolarCoordinates(1, -M_PI / 2),
+		Vector2d::FromCartesianCoordinates(0, -1)));
+
 	std::cout << "done" << std::endl;
 }
