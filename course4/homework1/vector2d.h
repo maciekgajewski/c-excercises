@@ -7,19 +7,17 @@ struct Vector2d
 {
 public:
     // named ctors
-    static Vector2d fromCarthesian(const double x, const double y) {
+    static Vector2d fromCarthesian(double x, double y) {
         return { x, y };
     }
-    static Vector2d fromPolar(const double rho, const double phi) {
-        return { rho * cos(phi), rho * sin(phi) };
+    static Vector2d fromPolar(double rho, double phi) {
+        return { rho * std::cos(phi), rho * std::sin(phi) };
     }
-    // ctor
-    Vector2d(double x, double y) : mX(x), mY(y) {}
     // setters
-    void X(const double x) {
+    void X(double x) {
         mX = x; 
     }
-    void Y(const double y) {
+    void Y(double y) {
         mY = y;
     }
     // getters 
@@ -30,10 +28,10 @@ public:
         return mY;
     }
     double Rho() const {
-        return sqrt(mX*mX + mY*mY);
+        return std::sqrt(mX*mX + mY*mY);
     }
     double Phi() const {
-        return atan2(mY, mX);
+        return std::atan2(mY, mX);
     }
     // operators
     bool operator==(const Vector2d& other) const {
@@ -48,6 +46,8 @@ public:
 private:
     double mX;
     double mY;
+
+    Vector2d(double x, double y) : mX(x), mY(y) {}
 
     friend std::ostream& operator<<(std::ostream& out, const Vector2d& vector) {
         return out << '(' << vector.mX << ", " << vector.mY << ')';
