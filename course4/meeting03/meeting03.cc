@@ -11,8 +11,8 @@ struct Class
 	Class(Class&& source) { std::cout << this << " Moved from " << &source << std::endl; }
 	
 	// User-define
-	Class(const char* v) { std::cout << this << " Initialized with v=" << v << std::endl; }
-
+	explicit Class(const char* v) { std::cout << this << " Initialized with v=" << v << std::endl; }
+	explicit Class(int a, int b) { std::cout << this << " Initialized with a=" << a << ", b=b" << std::endl; }
 	// copy assignment
 	Class& operator=(const Class& source) {
 		std::cout << this << " Copy-assigned from " << &source << std::endl;
@@ -39,7 +39,7 @@ Class makeClass()
 
 int main(int argc, char** argv)
 {
-	Class a = makeClass();
+	fun(Class{22, 33});
 	
 }
 
