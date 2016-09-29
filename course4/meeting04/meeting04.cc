@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 
 struct Class
 {
@@ -26,12 +27,40 @@ struct Class
 	~Class() { std::cout << this << " Destroyed" << std::endl; }
 };
 
+
+class UniquePtrClass
+{
+public:
+	UniquePtrClass() : mPtr(nullptr) {}
+	UniquePtrClass(Class* p) : mPtr(p) {}
+	~UniquePtrClass() { delete mPtr; }
+	UniquePtrClass(const UniquePtrClass&) = delete;
+	UniquePtrClass(UniquePtrClass&& u)
+	{
+		mPtr = u.mPtr;
+		u.mPtr = nullptr;
+	}
+	
+	operator bool () const { return mPtr != nullptr; }
+	
+private:
+	
+	Class* mPtr;
+};
+
+UniquePtrClass MakeUniqueClass()
+{
+	return UniquePtrClass(new Class);
+}
+
 int main(int argc, char** argv)
 {
-	Class* c = new Class();
-	Class b;
+	auto c = MakeUniqueClass();
+	auto a = std::move(c);
 	
-	//delete c;
-	
+	if (c)
+	{
+		std::cout << "up is not null" << std::endl;
+	}
 }
 
