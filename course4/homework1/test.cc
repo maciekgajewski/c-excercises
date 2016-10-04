@@ -5,7 +5,6 @@
 #include <cassert>
 #include <iostream>
 
-#define PI 3.14159265
 #define EPS 0.0000001
 
 void test_operators()
@@ -13,7 +12,7 @@ void test_operators()
 	Vector2d a = Vector2d::fromCarthesian(5, 6);
 	Vector2d b = Vector2d::fromCarthesian(-1, 7);
 
-    assert(a+b == Vector2d::fromCarthesian(4, 13));
+	assert(a+b == Vector2d::fromCarthesian(4, 13));
 	assert(a-b == Vector2d::fromCarthesian(6, -1));
 
 	std::stringstream s;
@@ -37,17 +36,17 @@ void test_cart_get_set()
 
 void test_polar_get_set()
 {
-    Vector2d a = Vector2d::fromPolar(1, PI/2);
+    Vector2d a = Vector2d::fromPolar(1, M_PI/2);
 
     assert(a.Rho() == 1);
-    assert(a.Phi() == PI/2);
+    assert(a.Phi() == M_PI/2);
 
     assert(std::abs(a.X()) < EPS);
     assert(std::abs(a.Y() - 1) <  EPS);
 
     a.Y(2);
     assert(std::abs(a.Rho()-2) < EPS);
-    assert(std::abs(a.Phi()-PI/2) < EPS);
+    assert(std::abs(a.Phi()-M_PI/2) < EPS);
 }
 
 int main()
