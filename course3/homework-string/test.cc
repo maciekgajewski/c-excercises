@@ -110,7 +110,7 @@ int main()
 {
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
-	//string_test<std::string>();
+	string_test<std::string>();
 	std::cout << "std::string test passes" << std::endl;
 	
 	// test for your string - it should compile and pass pass
