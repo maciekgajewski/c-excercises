@@ -31,8 +31,6 @@ char& string::operator[](int index) const
 
 string& string::operator=(const string& source)
 {
-    mCharArray.release();
-
     mLength = source.size();
     mCharArray = std::make_unique<char[]>(mLength);
     deepCopy(source.mCharArray.get(), mLength);
@@ -106,7 +104,6 @@ int string::size() const
 
 string::~string()
 {
-    mCharArray.release();
 }
 
  std::stringstream& operator <<(std::stringstream& ss, const course::string &s)
