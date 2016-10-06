@@ -1,10 +1,16 @@
 #include "string.hh"
+#include "person.hh"
 
 #include <iostream>
 
-int main()
+#define HW "Hello, World!"
+#ifdef __WIN32
+int d = 5;
+#endif
+
+int main(int argc, char** argv)
 {
-	maciek::string s = "Hello, World!";
+	maciek::string s = HW;
 	
-	std::cout << s.length() << std::endl;
+	std::cout << s.length() << " " << s << std::endl;
 }
