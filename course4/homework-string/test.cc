@@ -4,6 +4,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#include <cstring>
 
 template<typename StringType>
 void test()
@@ -69,15 +70,66 @@ void test()
 	assert(ss.str() == "HepHex");
 }
 
+template<typename StringType>
+void test2()
+{
+	StringType string1 = "12345678901234567890";
+	StringType string2 = string1;
+	
+	assert(string2.length() == 20);
+	
+	// c_str test
+	const StringType& cref = string1;
+	assert(std::strlen(cref.c_str()) == 20);
+	
+	// operator +=
+	string2 += string1;
+	assert(std::strlen(string2.c_str()) == 40);
+	
+	// operator +
+	StringType string3 = cref + string1;
+	assert(std::strlen(string3.c_str()) == 40);
+	
+	assert(std::strcmp(string2.c_str(), string3.c_str()) == 0);
+	assert(string2 == string3);
+	assert(cref != string3);
+	
+	string1 = "abc";
+	assert(std::strlen(cref.c_str()) == 3);
+	assert(string2.length() == 40);
+	
+	string1 = "1234567890";
+	assert(std::strlen(cref.c_str()) == 10);
+	
+	string1 = "zz";
+	assert(std::strlen(cref.c_str()) == 2);
+
+	string1 = "";
+	assert(std::strlen(cref.c_str()) == 0);
+
+	// clear
+	string2.clear();
+	assert(std::strlen(string2.c_str()) == 0);
+	assert(string2.empty());
+	assert(string2.length() == 0);
+	
+	// c_str on default - constructed
+	StringType string4;
+	assert(std::strlen(string4.c_str()) == 0);
+	assert(string4.empty());
+	assert(string4.length() == 0);
+}
 
 int main()
 {
 	std::cout << "Testing std::string..." << std::endl;
 	test<std::string>();
+	test2<std::string>();
 	std::cout << "std::string passes" << std::endl;
 
 	std::cout << "Testing course::string..." << std::endl;
 	test<course::string>();
+	test2<course::string>();
 	std::cout << "course::string passes" << std::endl;
 	
 }
