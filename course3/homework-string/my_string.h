@@ -55,7 +55,6 @@ MyString::MyString(const char* s1)
 MyString::MyString(const MyString& s1)
 {
 	mStrSize = s1.mStrSize;
-	mStr.reset();
 	mStr = std::make_unique<char[]>(mStrSize + 1);
 	strcpy(mStr.get(), s1.c_str());
 }
@@ -94,7 +93,6 @@ bool MyString::operator != (const MyString& str) const
 MyString& MyString::operator= (const MyString& str)
 {
 	mStrSize = str.mStrSize;
-	mStr.reset();
 	mStr = std::make_unique<char[]>(mStrSize + 1);
 	strcpy(mStr.get(), str.c_str());
 	return *this;
