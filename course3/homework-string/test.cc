@@ -32,7 +32,7 @@ void string_test()
 	assert(string3[0] == 'H');
 	assert(string3[1] == 'e');
 	assert(string3[2] == 'y');
-	
+
 	// writable charactetr acess
 	string2[2] = 'x';
 	assert(string2 == "Hex");
@@ -100,7 +100,7 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+	//assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
