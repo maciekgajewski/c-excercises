@@ -21,27 +21,14 @@ struct Vector
 	
 	T sum() const;
 	
-	template<typename X>
-	T sumX(const X& c) const;
-};
-
-template<>
-struct Vector<double>
-{
-	double a, b;
-	int sum() const { return int(a/b); }
 };
 
 template<typename T>
 T Vector<T>::sum() const { return x + y; }
 
+template<>
+double Vector<double>::sum() const { return x / y; }
 
-template<typename T>
-template<typename X>
-T Vector<T>::sumX(const X& c) const
-{
-	return x + y + c;
-}
 
 int main(int argc, char** argv)
 {
@@ -52,9 +39,6 @@ int main(int argc, char** argv)
 
 	print(v1.sum());
 	print(v2.sum());
-	
-	print(v2.sumX("abc"));
-	print(v2.sumX(std::string("zzzz")));
 	
 	Vector<double> v3{ 100.0, 2.5 };
 	print(v3.sum());
