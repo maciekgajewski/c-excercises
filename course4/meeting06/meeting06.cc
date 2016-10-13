@@ -3,45 +3,42 @@
 #include <string>
 
 template<typename T>
-void print(const T& v)
-{
-	std::cout << v << std::endl;
-}
+struct TypePrinter;
 
-void print(const char* t)
+template<>
+struct TypePrinter<int>
 {
-	std::cout << "c-string: " << t << std::endl;
-}
+	static void print() { std::cout << "int" << std::endl; }
+};
 
-template<typename T>
-struct Vector
+template<>
+struct TypePrinter<double>
 {
-	T x;
-	T y;
-	
-	T sum() const;
-	
+	static void print() { std::cout << "double" << std::endl; }
+};
+
+template<typename P>
+struct TypePrinter<P*>
+{
+	static void print() { std::cout << "pointer to "; TypePrinter<P>::print(); }
 };
 
 template<typename T>
-T Vector<T>::sum() const { return x + y; }
+struct XXX;
 
-template<>
-double Vector<double>::sum() const { return x / y; }
-
+template<typename T>
+void print(const T& p)
+{
+	XXX<T> x;
+}
 
 int main(int argc, char** argv)
 {
-	print("Hello");
+	TypePrinter<int>::print();
+	TypePrinter<double>::print();
+	TypePrinter<double*>::print();
+	TypePrinter<int*>::print();
 	
-	Vector<int> v1{3, 5};
-	Vector<std::string> v2{"aaa", "bbbb"};
-
-	print(v1.sum());
-	print(v2.sum());
-	
-	Vector<double> v3{ 100.0, 2.5 };
-	print(v3.sum());
-	
+	print(8.0f);
 }
 
