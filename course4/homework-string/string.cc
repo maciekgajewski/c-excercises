@@ -42,12 +42,15 @@ int string::length() const
 void string::clear()
 {
     mSize = 0;
-    chars = std::make_unique<char[]>(1);
-    chars[0] = '\0';
 }
 
 const char * string::c_str() const
 {
+    if(!mSize)
+    {
+        return emptyArray;
+    }
+
     return chars.get();
 }
 

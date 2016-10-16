@@ -9,6 +9,7 @@ namespace course {
 class string
 {
 private:
+    static constexpr char * emptyArray = "\0";
     std::unique_ptr<char[]> chars;
     int mSize;
     void copyChars(const char * c);
