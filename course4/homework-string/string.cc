@@ -6,18 +6,16 @@ namespace course {
 
 string::string()
 {
-    mSize = 0;
+    clear();
 }
 
 string::string(const char * c)
 {
-    mSize = std::strlen(c);
     copyChars(c);
 }
 
 string::string(const string& source)
 {
-    mSize = source.mSize;
     copyChars(source.chars.get());
 }
 
@@ -34,6 +32,23 @@ bool string::empty() const
 int string::size() const
 {
     return mSize;
+}
+
+int string::length() const
+{
+    return mSize;
+}
+
+void string::clear()
+{
+    mSize = 0;
+    chars = std::make_unique<char[]>(1);
+    chars[0] = '\0';
+}
+
+const char * string::c_str() const
+{
+    return chars.get();
 }
 
 bool string::operator == (const string& other) const
@@ -69,6 +84,13 @@ char& string::operator [](const int index)
     return chars[index];
 }
 
+string string::operator + (const string& other) const
+{
+    string result(*this);
+    result += other;
+    return result;
+}
+
 string& string::operator =(const string& source)
 {
    mSize = source.mSize;
@@ -84,15 +106,40 @@ void string::stealChars(string&& source)
 {
     mSize = source.mSize;
     chars = std::move(source.chars);
-    source.chars = nullptr;
 }
 
 void string::copyChars(const char *c)
 {
-    chars = std::make_unique<char[]>(mSize);
+    mSize = std::strlen(c);
+    chars = std::make_unique<char[]>(mSize+1);
     for(int i=0; i < mSize; ++i)
     {
         chars[i]= c[i];
     }
+
+    chars[mSize] = '\0';
+}
+
+string& string::operator += (const string& other)
+{
+    int newSize = mSize + other.mSize;
+    auto oldChars = std::move(chars);
+    chars = std::make_unique<char[]>(newSize + 1);
+
+    int i;
+    for(i = 0; i< mSize; ++i)
+    {
+        chars[i] = oldChars[i];
+    }
+
+    for(i= mSize; i < newSize; ++i)
+    {
+        chars[i] = other[i - mSize];
+    }
+
+    chars[newSize] = '\0';
+
+    mSize = newSize;
+    return *this;
 }
 }

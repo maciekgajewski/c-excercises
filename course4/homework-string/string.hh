@@ -2,6 +2,7 @@
 #include <ostream>
 #include<vector>
 #include <memory>
+#include <iostream>
 
 namespace course {
 
@@ -26,6 +27,8 @@ public:
 
     int size() const;
 
+    int length() const;
+
     bool operator == (const string& other) const;
 
     bool operator != (const string& other) const;
@@ -36,16 +39,26 @@ public:
 
     string& operator =(const string& source);
 
-    string& operator=(string&& source);
+    string& operator =(string&& source);
 
-    friend std::ostream& operator<<(std::ostream& os, const string& s)
-    {
-        for(int i=0; i < s.size(); ++i)
-        {
-            os << s.chars[i];
-        }
+    string operator + (const string& other) const;
 
-        return os;
-    }
+    string& operator += (const string& other);
+
+    const char * c_str() const;
+
+    void clear();
+
+    friend std::ostream& operator<<(std::ostream& os, const string& s);
 };
+
+inline std::ostream& operator<<(std::ostream& os, const string& s)
+{
+    for(int i=0; i < s.size(); ++i)
+    {
+        os << s.chars[i];
+    }
+
+    return os;
+}
 }
