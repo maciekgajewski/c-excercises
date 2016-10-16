@@ -3,7 +3,7 @@
 #include <sstream>
 #include <cassert>
 #include <iostream>
-#include <cmath>
+#include <math.h>
 int main()
 {
 	// to make sture the code is compiled in debug mode
@@ -26,7 +26,7 @@ int main()
 	assert(s.str() == "(5, 6)");
 
     const double rho = 1.0;
-    const double phi = M_PI / 4;
+    const double phi = M_PI / 3;
     auto polar = Vector2d::createByPolarCoordinates(rho, phi);
     std::stringstream ss;
     ss << polar;

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cmath>
+#include <math.h>
 #include <ostream>
 
 struct Vector2d
@@ -17,7 +17,7 @@ public:
 
    static Vector2d createByPolarCoordinates(double rho, double phi)
    {
-      return Vector2d(rho * std::cos(phi), rho * std::sin(phi));
+      return Vector2d(rho * cos(phi), rho * sin(phi));
    }
 
    double GetX() const
@@ -42,12 +42,12 @@ public:
 
    double GetRho() const
    {
-       return std::sqrt(pow(mX, 2) + pow(mY, 2));
+       return sqrt(pow(mX, 2) + pow(mY, 2));
    }
 
    double GetPhi() const
    {
-       return std::atan2(mY, mX);
+       return atan2(mY, mX);
    }
 
    bool operator == (const Vector2d& other) const
