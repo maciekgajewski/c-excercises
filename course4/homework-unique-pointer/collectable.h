@@ -21,7 +21,7 @@ public:
 
     CollectablePointer(CollectablePointer&& other)
     {
-        payload = std::move(other.payload);
+        payload =other.payload;
         other.payload = nullptr;
     }
 
@@ -39,29 +39,22 @@ public:
         return *payload;
     }
 
-    static CollectablePointer<T> createInstance()
+    T& operator*()
     {
-        CollectablePointer<T> result;
-        result.payload = new T();
-        std::cout << "allocated(): " << (void*)result.payload << std::endl;
-        return result;
+        return *payload;
     }
 
-    template<typename TArg>
-    static CollectablePointer<T> createInstance(TArg arg)
+    T *operator->() const
     {
-        CollectablePointer<T> result;
-        result.payload = new T(arg);
-        std::cout << "allocated(arg): "<<arg<<" " << (void*)result.payload << std::endl;
-        return result;
+        return payload;
     }
 
-    template<typename TArg1, typename TArg2>
-    static CollectablePointer<T> createInstance(TArg1 arg1, TArg2 arg2)
+    template<typename...TArgs>
+    static CollectablePointer<T> createInstance(TArgs...args)
     {
         CollectablePointer<T> result;
-        result.payload = new T(arg1, arg2);
-        std::cout << "allocated(arg, arg): "<<arg1 <<" "<<arg2 <<" " << (void*)result.payload << std::endl;
+        result.payload = new T(args...);
+        std::cout << "allocated(args): " << (void*)result.payload << std::endl;
         return result;
     }
 
