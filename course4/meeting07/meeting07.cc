@@ -2,7 +2,7 @@
 #include <string>
 
 template<typename T>
-void foo(T t)
+void foo(T* param)
 {
 }
 
@@ -15,8 +15,11 @@ int main()
 	std::string s = text;
 	const std::string& cref = s;
 	
-	foo(d);
-	foo(text);
-	foo(s);
-	foo(cref);
+// 	foo(d);
+// 	foo(text);
+// 	foo(s);
+// 	foo(cref);
+// 	foo(77);
+
+	foo(nullptr);
 }
