@@ -2,24 +2,30 @@
 #include <string>
 
 template<typename T>
-void foo(T* param)
+struct PtrDetector
 {
+	static const bool IsPointer = false;
+	using WithoutPtr = T;
+};
+
+template<typename P>
+struct PtrDetector<P*>
+{
+	static const bool IsPointer = true;
+	using WithoutPtr = P;
+};
+
+template<typename V>
+void foo(V v)
+{
+	using VNotPtr = PtrDetector<int>::WithoutPtr;
 }
 
 int main()
 {
-	std::cout << "yo" << std::endl;
+	auto b1 = PtrDetector<int>::IsPointer;
+	auto b2 = PtrDetector<int*>::IsPointer;
 	
-	double d = 6.5;
-	const char* text = "Hello";
-	std::string s = text;
-	const std::string& cref = s;
-	
-// 	foo(d);
-// 	foo(text);
-// 	foo(s);
-// 	foo(cref);
-// 	foo(77);
-
-	foo(nullptr);
+	using T1 = PtrDetector<int>::WithoutPtr;
+	using T2 = PtrDetector<int*>::WithoutPtr;
 }
