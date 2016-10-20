@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <memory>
+#include <iostream>
 
 namespace course {
 
@@ -79,22 +80,31 @@ public:
 			return string(my_ptr.get(), other_string.my_ptr.get());
 	}
 
-	string& operator+=(const string & other_string)
+	string& operator+=(const string& other_string)
 	{
 		if (!other_string.empty())
 		{
 			std::unique_ptr<char[]> new_ptr = std::make_unique<char[]>(size()+other_string.size()+1);
-			std::strcpy(new_ptr.get(), my_ptr.get());
-			std::strcat(new_ptr.get(), other_string.my_ptr.get());
+			if (!empty())
+			{
+				std::strcpy(new_ptr.get(), my_ptr.get());
+				std::strcat(new_ptr.get(), other_string.my_ptr.get());
+			}
+			else
+			{
+				std::strcpy(new_ptr.get(), other_string.my_ptr.get());
+			}
 			my_ptr = std::move(new_ptr);
 		}
 		return *this;
 	}
 
-	char* c_str() const
+	const char* c_str() const
 	{
 		if (empty())
+		{
 			return "";
+		}
 		else
 			return my_ptr.get();
 	}
