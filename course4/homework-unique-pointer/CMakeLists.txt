@@ -5,5 +5,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(gc_collectable
 	test.cc
-        collectable.h)
+        collectable.h
+        refcounted.h)
 
