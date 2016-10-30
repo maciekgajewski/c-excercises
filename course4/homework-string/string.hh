@@ -24,13 +24,12 @@ public:
     int size() const;
     int length() const;
     void clear();
+    char* begin();
+    char* end();
 
 private:
     std::unique_ptr<char[]> mData;
     int mLength;
-    int getLenghtOfChars(const char* chars);
-    void deepCopy(const char* chars, int lenght);
-    bool deepCompare(const char* chars, int length);
 };
 
 std::stringstream& operator <<(std::stringstream& os, const course::string &s);
