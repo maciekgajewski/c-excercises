@@ -119,6 +119,16 @@ const char* string::c_str() const
      mLength = 0;
  }
 
+ char* string::begin()
+ {
+     return mData.get();
+ }
+
+ char* string::end()
+ {
+     return mData.get() + mLength;
+ }
+
 string::~string()
 {
 }

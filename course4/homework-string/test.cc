@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 template<typename StringType>
 void test()
@@ -120,16 +121,27 @@ void test2()
 	assert(string4.length() == 0);
 }
 
+template<typename StringType>
+void test3()
+{
+    // test begin() and end()
+    StringType abc("GECABDF");
+    std::sort(abc.begin(),abc.end());
+    assert(abc == "ABCDEFG");
+}
+
 int main()
 {
 	std::cout << "Testing std::string..." << std::endl;
 	test<std::string>();
 	test2<std::string>();
+    test3<std::string>();
 	std::cout << "std::string passes" << std::endl;
 
 	std::cout << "Testing course::string..." << std::endl;
 	test<course::string>();
 	test2<course::string>();
+    test3<course::string>();
 	std::cout << "course::string passes" << std::endl;
 	
 }
