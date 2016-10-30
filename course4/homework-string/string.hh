@@ -46,6 +46,14 @@ public:
 
     string& operator += (const string& other);
 
+    char * begin();
+
+    char * end();
+
+    char * begin() const;
+
+    char * end() const;
+
     const char * c_str() const;
 
     void clear();

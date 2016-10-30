@@ -111,6 +111,26 @@ void string::stealChars(string&& source)
     chars = std::move(source.chars);
 }
 
+char * string::begin()
+{
+    return &chars[0];
+}
+
+char * string::end()
+{
+    return &chars[mSize];
+}
+
+char * string::begin() const
+{
+    return &chars[0];
+}
+
+char * string::end() const
+{
+    return &chars[mSize];
+}
+
 void string::copyChars(const char *c)
 {
     mSize = std::strlen(c);
