@@ -27,6 +27,16 @@ public:
 		}
 	}
 
+	string(char init_char)
+	{
+		if (init_char != '\0')
+		{
+			my_ptr = std::make_unique<char[]>(2);
+			my_ptr.get()[0] = init_char;
+			my_ptr.get()[1] = '\0';
+		}
+	}
+
 	bool empty() const
 	{
 		return !my_ptr;
@@ -102,9 +112,7 @@ public:
 	const char* c_str() const
 	{
 		if (empty())
-		{
 			return "";
-		}
 		else
 			return my_ptr.get();
 	}
@@ -124,6 +132,26 @@ public:
 			}
 		}
 		return *this;
+	}
+
+	const char* begin() const
+	{
+		return my_ptr.get();
+	}
+
+	const char* end() const
+	{
+		return my_ptr.get() + size();
+	}
+
+	char* begin()
+	{
+		return my_ptr.get();
+	}
+
+	char* end()
+	{
+		return begin() + size();
 	}
 
 private:

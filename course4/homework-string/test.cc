@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 template<typename StringType>
 void test()
@@ -118,6 +119,23 @@ void test2()
 	assert(std::strlen(string4.c_str()) == 0);
 	assert(string4.empty());
 	assert(string4.length() == 0);
+	
+	//iteration over string
+	string1 = "abghcdef";
+	string2.clear();
+	for (auto it: string1)
+		string2 += it;
+	assert(string1 == string2);
+	string3 = "";
+	for (auto it: string3)
+		string2 += it;
+	assert(string1 == string2);
+	
+	//std::sort
+	std::sort(string1.begin(), string1.end());
+	assert(string1 == "abcdefgh");
+	std::sort(string3.begin(), string3.end());
+	assert(string3.empty());
 }
 
 int main()
