@@ -2,34 +2,46 @@
 #include "list.hh"
 #include <cassert>
 #include <algorithm>
+#include<forward_list>
+
+template<typename T>
+void RunStringTest()
+{
+    T list;
+    list.push_front("ABC");
+    assert(!list.empty());
+    list.push_front("XYZ");
+    assert(list.front() == "XYZ");
+    list.pop_front();
+    assert(list.front() == "ABC");
+    list.pop_front();
+    assert(list.empty());
+    list.push_front("OOO");
+    assert(list.front() == "OOO");
+    list.push_front("XYZ");
+    assert(list.front() == "XYZ");
+}
+
+template<typename T>
+void RunAlgoTest()
+{
+    T list;
+    list.push_front(2);
+    list.push_front(3);
+    list.push_front(2);
+    list.push_front(1);
+    list.push_front(2);
+
+    int count = std::count_if(list.begin(), list.end(), [](int x) {return x == 2;});
+    assert(count == 3);
+}
 
 int main()
 {
-    course::List<std::string> x;
+    RunStringTest<course::List<std::string>>();
+    RunStringTest<std::forward_list<std::string>>();
 
-    // push/pop tests
-    x.push_front("ABC");
-    x.push_front("XYZ");
-    assert(x.size() == 2);
-    assert(x.pop_front() == "XYZ");
-    assert(x.size() == 1);
-    x.push_front("OOO");
-    assert(x.front() == "OOO");
-    assert(x.size() == 2);
-
-    //clean test
-    x.empty();
-    assert(x.size() == 0);
-    //usable after clean
-    x.push_front("XYZ");
-    assert(x.size() == 1);
-
-    course::List<int> y;
-    y.push_front(2);
-    y.push_front(3);
-    y.push_front(2);
-    y.push_front(1);
-    y.push_front(2);
-
-    int count = std::count<course::ListIterator<int>, int>(y.begin(), y.end(), 3);
+    RunAlgoTest<course::List<int>>();
+    RunAlgoTest<std::forward_list<int>>();
+    std::cout << "DONE" << std::endl;
 }

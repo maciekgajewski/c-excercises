@@ -21,11 +21,11 @@ private:
     std::shared_ptr<ListElement<T>> next;
     bool isTerminal;
     ListElement() = default;
-    static ListElement<T> GetTerminalElement()
+    static std::shared_ptr<ListElement<T>> GetTerminalElement()
     {
         ListElement<T> result;
         result.isTerminal = true;
-        return result;
+        return std::make_shared<ListElement<T>>(result);
     }
 
 public:
@@ -33,26 +33,15 @@ public:
     ListElement(T newItem)
     {
         item = newItem;
-        std::cout<<"Created node: " << newItem <<std::endl;
         next = nullptr;
         isTerminal = false;
     }
 
-    ~ListElement()
-    {
-        if(isTerminal)
-        {
-            std::cout<<"deleted terminal node"<<std::endl;
-        }
-        else
-        {
-            std::cout<<"Deleted node: " << item <<std::endl;
-        }
-    }
+    ~ListElement() {}
 };
 
 template<typename T>
-class ListIterator
+class ListIterator : public std::iterator<std::input_iterator_tag, T, T, const T*, T>
 {
 private:
     std::shared_ptr<ListElement<T>> current;
@@ -90,8 +79,7 @@ class List
 {
 private:
     int mSize = 0;
-    std::shared_ptr<ListElement<T>> terminalElement =
-            std::make_shared<ListElement<T>>(ListElement<T>::GetTerminalElement());
+    std::shared_ptr<ListElement<T>> terminalElement = ListElement<T>::GetTerminalElement();
     std::shared_ptr<ListElement<T>> head = terminalElement;
 
 public:
@@ -105,10 +93,9 @@ public:
         return ListIterator<T>(terminalElement);
     }
 
-    void empty()
+    bool empty()
     {
-        head = terminalElement;
-        mSize = 0;
+        return mSize == 0;
     }
 
     int size() const
