@@ -68,9 +68,10 @@ public:
         return current -> item;
     }
 
-    ListElement<T>& operator ++()
+    ListIterator<T>& operator ++()
     {
         current = current -> next;
+        return *this;
     }
 
     bool operator ==(const ListIterator<T>& other)
