@@ -9,14 +9,15 @@ namespace course {
 template<typename T>
 struct pointer_value_pair
 {
-	pointer_value_pair(std::unique_ptr<pointer_value_pair<T>>&& pointer, T& value) : value(value), pointer(std::move(pointer)) {}
+	pointer_value_pair(std::unique_ptr<pointer_value_pair<T>>&& pointer, const T& value) : value(value), pointer(std::move(pointer)) {}
 	
 	std::unique_ptr<pointer_value_pair<T>> pointer;
-    T& value;
+	T value;
 };
 
 template<typename T>
-class linked_list_iterator : public std::iterator<std::input_iterator_tag, T, T, const T*, T> //need to derive from std::iterator to not get strange errors of missing iterator_traits
+class linked_list_iterator : public std::iterator<std::input_iterator_tag, T, T, const T*, T> 
+//deriving from std::iterator allows to not implement all this iterator_traits stuff
 {
 public:
 	linked_list_iterator(pointer_value_pair<T>* pointer) : pointer(pointer) {}
@@ -64,7 +65,7 @@ public:
 		return !begin_ptr;
 	}
 
-	void push_front(T& insert_val)
+	void push_front(const T& insert_val)
 	{
 		begin_ptr = std::make_unique<pointer_value_pair<T>>(std::move(begin_ptr), insert_val);
 	}

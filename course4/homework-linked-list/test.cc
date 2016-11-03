@@ -5,6 +5,7 @@
 #include <iostream>
 #include <forward_list>
 #include <algorithm>
+#include <numeric>
 
 template<typename LinkedListType>
 void test()
@@ -67,6 +68,12 @@ void test()
 	//changing the value in the front of the list
 	linked_list.front() = i2;
 	assert(linked_list.front() == i2);
+
+	//checking that the container actually copies the elements
+	LinkedListType linked_list2;
+	for (int i=1; i<=100; i++)
+		linked_list2.push_front(i);
+	assert(std::accumulate(linked_list2.begin(), linked_list2.end(), 0) == 5050);
 }
 
 int main()
