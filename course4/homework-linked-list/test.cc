@@ -1,4 +1,5 @@
 #include "linked_list.hh"
+#include "count_until.hh"
 
 #include <cassert>
 #include <sstream>
@@ -6,6 +7,7 @@
 #include <forward_list>
 #include <algorithm>
 #include <numeric>
+#include <array>
 
 template<typename LinkedListType>
 void test()
@@ -74,6 +76,14 @@ void test()
 	for (int i=1; i<=100; i++)
 		linked_list2.push_front(i);
 	assert(std::accumulate(linked_list2.begin(), linked_list2.end(), 0) == 5050);
+
+	//checking count_until
+	LinkedListType linked_list3;
+	std::array<int, 6> test_values{2, 4, 2, 3, 2, 1};
+	for (int test_val: test_values)
+		linked_list3.push_front(test_val);
+	assert(course::count_until(linked_list3.begin(), linked_list3.end(), 2, 4) == 2);
+	assert(course::count_until(linked_list3.begin(), linked_list3.end(), 2, 7) == 3);	
 }
 
 int main()
