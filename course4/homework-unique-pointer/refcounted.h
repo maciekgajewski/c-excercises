@@ -8,8 +8,9 @@ class RefcountingPointer
 {
 private:
     T* payload;
-    uint* count;
+    uint16_t* count;
     RefcountingPointer() = default;
+
     void decrement()
     {
         if(count == nullptr)
@@ -19,12 +20,9 @@ private:
 
         if(--(*count) == 0)
         {
-            std::cout << "Deleting: " << (void*)payload << std::endl;
             delete payload;
-        }
-        else
-        {
-            std::cout<<"for " <<(void*)payload <<" still " << *count <<" references" << std::endl;
+            delete count;
+            count = nullptr;
         }
     }
 
@@ -35,12 +33,10 @@ public:
         payload = other.payload;
         count = other.count;
         (*count)++;
-        std::cout << "allocated as copy: " << (void*)payload << ", count: "<< *count << std::endl;
     }
 
     RefcountingPointer(RefcountingPointer&& other)
     {
-        std::cout << "move constructed" << std::endl;
         payload = other.payload;
         count = other.count;
         other.payload = nullptr;
@@ -75,7 +71,6 @@ public:
     RefcountingPointer& operator=(const RefcountingPointer& other)
     {
         decrement();
-        std::cout << "copy assigning" << std::endl;
         count = other.count;
         payload = other.payload;
         (*count)++;
@@ -85,7 +80,6 @@ public:
     RefcountingPointer& operator=(RefcountingPointer&& other)
     {
         decrement();
-        std::cout << "move assigned" << std::endl;
         count = other.count;
         payload = other.payload;
         other.payload = nullptr;
@@ -98,8 +92,7 @@ public:
     {
         RefcountingPointer<T> result;
         result.payload = new T(args...);
-        result.count = new uint(1);
-        std::cout << "allocated(args): " << (void*)result.payload << std::endl;
+        result.count = new uint16_t(1);
         return result;
     }
 };

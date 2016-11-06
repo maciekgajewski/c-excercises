@@ -16,7 +16,6 @@ public:
     CollectablePointer(const CollectablePointer& other)
     {
         payload = new T(*other.payload);
-        std::cout << "allocated as copy: " << (void*)payload << std::endl;
     }
 
     CollectablePointer(CollectablePointer&& other)
@@ -54,7 +53,6 @@ public:
     {
         CollectablePointer<T> result;
         result.payload = new T(args...);
-        std::cout << "allocated(args): " << (void*)result.payload << std::endl;
         return result;
     }
 
@@ -62,7 +60,6 @@ public:
     {
         for(int i =0; i< CollectablePointer<T>::poolOfDead.size(); ++i)
         {
-            std::cout << "Deleting: " << (void*)CollectablePointer<T>::poolOfDead[i] << std::endl;
             delete(CollectablePointer<T>::poolOfDead[i]);
         }
 
