@@ -50,9 +50,9 @@ public:
 
     char * end();
 
-    char * begin() const;
+    const char * begin() const;
 
-    char * end() const;
+    const char * end() const;
 
     const char * c_str() const;
 

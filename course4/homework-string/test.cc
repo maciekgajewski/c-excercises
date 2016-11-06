@@ -126,7 +126,7 @@ void iteratorTest()
 {
   //const iteration test
   const StringType s("ABCBB");
-  int b_num = std::count_if(s.begin(), s.end(), [](const char& c){return c=='B';});
+  int b_num = std::count_if(s.begin(), s.end(), [](const char c){return c=='B';});
   assert(b_num == 3);
 
   // non-const test

@@ -121,12 +121,12 @@ char * string::end()
     return &chars[mSize];
 }
 
-char * string::begin() const
+const char * string::begin() const
 {
     return &chars[0];
 }
 
-char * string::end() const
+const char * string::end() const
 {
     return &chars[mSize];
 }
