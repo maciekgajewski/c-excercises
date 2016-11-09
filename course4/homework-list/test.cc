@@ -1,8 +1,9 @@
-#include <iostream>
 #include "list.hh"
+#include "algo.h"
 #include <cassert>
 #include <algorithm>
-#include<forward_list>
+#include <forward_list>
+#include <iostream>
 
 template<typename T>
 void RunStringTest()
@@ -34,6 +35,16 @@ void RunAlgoTest()
 
     int count = std::count_if(list.begin(), list.end(), [](int x) {return x == 2;});
     assert(count == 3);
+
+    int count_until = course::count_until(list.begin(), list.end(), 2, 3);
+    assert(count_until==2);
+
+    int count_until_func = course::count_until_func(
+                list.begin(),
+                list.end(),
+                [](int x) {return x == 2;},
+                [](int x) {return x > 2;});
+    assert(count_until_func == 2);
 }
 
 int main()

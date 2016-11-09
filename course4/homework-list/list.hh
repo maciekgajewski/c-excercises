@@ -108,20 +108,18 @@ public:
         return head->item;
     }
 
-    void push_front(T newItem)
+    void push_front(const T& newItem)
     {
+        T itemCopy = newItem;
         std::shared_ptr<ListElement<T>> oldHead = std::move(head);
-        head = std::make_shared<ListElement<T>>(newItem);
+        head = std::make_shared<ListElement<T>>(itemCopy);
         mSize++;
         head->next = std::move(oldHead);
     }
 
-    T pop_front()
+    void pop_front()
     {
-        T value = head -> item;
-        std::shared_ptr<ListElement<T>> newHead = std::move(head -> next);
-        head = std::move(newHead);
+        head =  std::move(head -> next);
         mSize--;
-        return value;
     }
 };}
