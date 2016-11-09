@@ -18,23 +18,16 @@ class ListElement
 
 private:
     T item;
-    std::shared_ptr<ListElement<T>> next;
-    bool isTerminal;
+    std::unique_ptr<ListElement<T>> next;
+
     ListElement() = default;
-    static std::shared_ptr<ListElement<T>> GetTerminalElement()
-    {
-        ListElement<T> result;
-        result.isTerminal = true;
-        return std::make_shared<ListElement<T>>(result);
-    }
 
 public:
 
-    ListElement(T newItem)
+    ListElement(const T& newItem)
+        :item(newItem),
+         next(nullptr)
     {
-        item = newItem;
-        next = nullptr;
-        isTerminal = false;
     }
 
     ~ListElement() {}
@@ -44,10 +37,10 @@ template<typename T>
 class ListIterator : public std::iterator<std::input_iterator_tag, T, T, const T*, T>
 {
 private:
-    std::shared_ptr<ListElement<T>> current;
+    ListElement<T>* current;
 
 public:
-    ListIterator(std::shared_ptr<ListElement<T>> element)
+    ListIterator(ListElement<T>* element)
     {
         current = element;
     }
@@ -59,18 +52,18 @@ public:
 
     ListIterator<T>& operator ++()
     {
-        current = current -> next;
+        current = current -> next.get();
         return *this;
     }
 
     bool operator ==(const ListIterator<T>& other)
     {
-        return current -> isTerminal == other -> current.isTerminal;
+        return current == other.current;
     }
 
     bool operator !=(const ListIterator<T>& other)
     {
-        return current -> isTerminal != other.current -> isTerminal;
+        return current != other.current;
     }
 };
 
@@ -79,18 +72,17 @@ class List
 {
 private:
     int mSize = 0;
-    std::shared_ptr<ListElement<T>> terminalElement = ListElement<T>::GetTerminalElement();
-    std::shared_ptr<ListElement<T>> head = terminalElement;
+    std::unique_ptr<ListElement<T>> head = nullptr;
 
 public:
     ListIterator<T> begin() const
     {
-        return ListIterator<T>(head);
+        return ListIterator<T>(head.get());
     }
 
     ListIterator<T> end() const
     {
-        return ListIterator<T>(terminalElement);
+        return ListIterator<T>(nullptr);
     }
 
     bool empty()
@@ -110,16 +102,15 @@ public:
 
     void push_front(const T& newItem)
     {
-        T itemCopy = newItem;
-        std::shared_ptr<ListElement<T>> oldHead = std::move(head);
-        head = std::make_shared<ListElement<T>>(itemCopy);
+        std::unique_ptr<ListElement<T>> oldHead = std::move(head);
+        head = std::make_unique<ListElement<T>>(newItem);
         mSize++;
         head->next = std::move(oldHead);
     }
 
     void pop_front()
     {
-        head =  std::move(head -> next);
+        head = std::move(head -> next);
         mSize--;
     }
 };}
