@@ -1,10 +1,11 @@
 #include <iostream>
 #include <set>
+#include <unordered_set>
 #include <string>
 
 int main(int argc, char** argv)
 {
-	std::set<std::string, std::greater<std::string>> args(argv, argv+argc);
+	std::unordered_set<std::string> args(argv, argv+argc);
 	
 	for(const auto& a : args)
 		std::cout << a << " ";
