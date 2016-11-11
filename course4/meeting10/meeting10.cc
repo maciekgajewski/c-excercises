@@ -1,18 +1,15 @@
 #include <iostream>
-#include <set>
+#include <map>
 #include <unordered_set>
 #include <string>
 
 int main(int argc, char** argv)
 {
-	std::unordered_set<std::string> args(argv, argv+argc);
+	std::map<std::string, int> arg_counts;
+	for(int i = 0; i < argc; i++)
+		arg_counts[argv[i]]++;
 	
-	for(const auto& a : args)
-		std::cout << a << " ";
-	std::cout << std::endl;
-	
-	auto it = args.find("Elvis");
-	if (it != args.end())
-		std::cout << "Elvis is in the house!" << std::endl;
+	for(const auto& p : arg_counts)
+		std::cout << p.first << " : " << p.second << std::endl;
 }
 
