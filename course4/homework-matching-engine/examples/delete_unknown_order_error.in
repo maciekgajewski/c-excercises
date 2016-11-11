@@ -1,0 +1,5 @@
+delete zz 666
+insert buy zz 666 120 45
+delete zz 666
+delete zz 666
+delete yy 666
