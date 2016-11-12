@@ -85,10 +85,18 @@ void test2()
 	// operator +=
 	string2 += string1;
 	assert(std::strlen(string2.c_str()) == 40);
+
+	string2 += "";
+	assert(std::strlen(string2.c_str()) == 40);
+
+	StringType string10;
+	string10 += string2;
+	assert(std::strlen(string10.c_str()) == 40);
 	
 	// operator +
 	StringType string3 = cref + string1;
 	assert(std::strlen(string3.c_str()) == 40);
+
 	
 	assert(std::strcmp(string2.c_str(), string3.c_str()) == 0);
 	assert(string2 == string3);
@@ -97,6 +105,7 @@ void test2()
 	string1 = "abc";
 	assert(std::strlen(cref.c_str()) == 3);
 	assert(string2.length() == 40);
+
 	
 	string1 = "1234567890";
 	assert(std::strlen(cref.c_str()) == 10);
@@ -106,6 +115,7 @@ void test2()
 
 	string1 = "";
 	assert(std::strlen(cref.c_str()) == 0);
+
 
 	// clear
 	string2.clear();
