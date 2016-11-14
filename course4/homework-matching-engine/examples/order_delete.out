@@ -1,0 +1,9 @@
+pricefeed AAA 10@77 -
+pricefeed AAA 20@77 -
+pricefeed BBB 10@77 -
+pricefeed BBB 20@77 -
+pricefeed BBB 10@77 -
+pricefeed AAA 10@77 -
+pricefeed AAA - -
+pricefeed BBB - -
+

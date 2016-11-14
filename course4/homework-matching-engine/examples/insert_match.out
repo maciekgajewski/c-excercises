@@ -1,0 +1,11 @@
+pricefeed AAA 10@99 -
+pricefeed AAA 10@99 9@101
+pricefeed AAA 10@99 10@101
+tradefeed AAA 7@101
+pricefeed AAA 10@99 3@101
+tradefeed AAA 3@101
+pricefeed AAA 4@102 -
+pricefeed BBB - 77@11034
+tradefeed BBB 77@11034
+tradefeed BBB 104@11035
+pricefeed BBB 19@11037 -
