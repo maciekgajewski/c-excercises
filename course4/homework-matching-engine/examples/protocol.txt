@@ -1,0 +1,47 @@
+=== Expected behaviour ===
+
+The matching engine should read input from STDIN and write output to STDOUT.
+
+The input stream will contain commands: order insert and order delete. One command per line.
+
+The output stream will contain trsade feeds, proce feeds and error messages, one record per line.
+
+Every order should be treaded as limit GFD order. It should be matched agains book of existing orders.
+If there is any unmatched volume left, it should be added to the book.
+
+Order insert should be followed by 0 or more trade feeds. In case of a pay-trough, there should be one trade feed per price level.
+This complicates the code, but mkes the output more predicitable, and removes any reaquirement on how orders are stored internally.
+The priority in which orders at elvel are matched is irrelvent for this project.
+
+After trade feeds, at most 1 price feed should be printed.
+
+There is no predefined set of allowed instruments, every valid instrument id should be accepted, and book should be created for the instrument.
+
+Every invalid input should produce "input error"
+
+Attempt to delete nont-exiting order, or to insert order into a boook woth duplicate id should result in "invalid order error".
+Order IDs are unique per instrument.
+
+
+=== Syntax ===
+
+= Input syntax =
+
+"insert" "buy"|"sell" INSTRUMENT ORDERID PRICE VOLUME
+delete INSTRMENT ORDERID
+
+= Output sytntax =
+
+"tradefeed" INSTRUMENT VOLUME@PRICE
+"pricefeed" INSTRUMENT VOLUME@PRICE|"-" VOLUME@PRICE|"-"
+"input error"
+"invalid order error"
+
+INSTRUMENT: sequence of letters and digits
+VOLUME, PRICE: positive integer > 0
+ORDERID: 64bit unsigned integer
+
+
+=== Testing ===
+
+Use example input/output pairs as documentation. The tester script is a habdy tool to automatically test your program.

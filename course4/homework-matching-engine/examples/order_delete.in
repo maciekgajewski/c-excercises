@@ -1,0 +1,8 @@
+insert buy AAA 1 77 10
+insert buy AAA 2 77 10
+insert buy BBB 1 77 10
+insert buy BBB 2 77 10
+delete BBB 1
+delete AAA 2
+delete AAA 1
+delete BBB 2

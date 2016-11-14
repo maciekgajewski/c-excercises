@@ -26,5 +26,4 @@ build_
 
 # Executables
 *.exe
-*.out
 *.app
