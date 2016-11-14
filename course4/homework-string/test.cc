@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 template<typename StringType>
 void test()
@@ -86,6 +87,20 @@ void test2()
 	string2 += string1;
 	assert(std::strlen(string2.c_str()) == 40);
 	
+	string2 += "";
+	assert(std::strlen(string2.c_str()) == 40);
+	
+	StringType string10;
+	string10 += string2;
+	assert(std::strlen(string10.c_str()) == 40);
+
+	string10 += 'a';
+	assert(std::strlen(string10.c_str()) == 41);
+
+	StringType string11;
+	string11 += 'a';
+	assert(std::strlen(string11.c_str()) == 1);
+	
 	// operator +
 	StringType string3 = cref + string1;
 	assert(std::strlen(string3.c_str()) == 40);
@@ -107,6 +122,10 @@ void test2()
 	string1 = "";
 	assert(std::strlen(cref.c_str()) == 0);
 
+	string11 = "";
+	StringType string12 = string11 + 'a';
+	assert(std::strlen(string12.c_str()) == 1);
+
 	// clear
 	string2.clear();
 	assert(std::strlen(string2.c_str()) == 0);
@@ -120,16 +139,36 @@ void test2()
 	assert(string4.length() == 0);
 }
 
+template<typename StringType>
+void test3()
+{
+	StringType string1;
+	assert(string1.begin() == string1.end());
+	
+	StringType string2 = "abc";
+	StringType string3;
+	for (auto it = string2.begin(); it != string2.end(); it++) {
+		string3 += *it;
+	}
+	assert(string2 == string3);
+
+	StringType string4 = "hcbadfge";
+	std::sort(string4.begin(), string4.end());
+	assert(string4 == "abcdefgh");
+}
+
 int main()
 {
 	std::cout << "Testing std::string..." << std::endl;
 	test<std::string>();
 	test2<std::string>();
+	test3<std::string>();
 	std::cout << "std::string passes" << std::endl;
 
 	std::cout << "Testing course::string..." << std::endl;
 	test<course::string>();
 	test2<course::string>();
+	test3<course::string>();
 	std::cout << "course::string passes" << std::endl;
 	
 }
