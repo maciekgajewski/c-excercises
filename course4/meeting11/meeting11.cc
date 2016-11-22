@@ -8,6 +8,7 @@ int divide(int a, int b)
 		return a/b;
 	else
 		throw std::runtime_error("Divison by zero");
+	
 }
 
 struct S
@@ -15,6 +16,15 @@ struct S
 	S() { std::cout << "S created" << std::endl; }
 	~S() { std::cout << "S destroyed" << std::endl; }
 };
+
+// convers c-strings to int and divide
+int divide_strings(const char* a, const char* b)
+{
+	auto s = std::make_unique<S>();
+	int res = divide(std::stoi(a), std::stoi(b));
+	std::cout << "foo!" << std::endl;
+	return res;
+}
 
 int main(int argc, char** argv)
 {
@@ -26,13 +36,17 @@ int main(int argc, char** argv)
 	
 	try
 	{
-		auto s = std::make_unique<S>();
-		std::cout << divide(std::stoi(argv[1]), std::stoi(argv[2])) << std::endl;
+		std::cout << divide_strings(argv[1], argv[2]) << std::endl;
 		std::cout << "boo!" << std::endl;
 	}
-	catch(...)
+	catch(const std::exception& e)
 	{
-		std::cerr << "Error!" << std::endl;
+		std::cerr << "Error: " << e.what() << std::endl;
+		return 1;
+	}
+	catch(const std::runtime_error& re)
+	{
+		std::cerr << "Runtime error: " << re.what() << std::endl;
 		return 1;
 	}
 	
