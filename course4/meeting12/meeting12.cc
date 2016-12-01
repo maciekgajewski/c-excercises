@@ -1,11 +1,13 @@
 #include <iostream>
 #include <stdexcept>
+#include <vector>
 #include <memory>
-#include <cassert>
 
 class Person
 {
 public:
+	
+	virtual ~Person() = default;
 
 	using NameType = std::string;
 
@@ -24,27 +26,16 @@ private:
 	int mAge;
 };
 
-class Record
+class Employee : public Person
 {
 public:
-	Record(int id) : mId(id) {}
-	int GetId() const { return mId; }
-private:
-	int mId;
-};
-
-class Employee : public Person, public Record
-{
-public:
-	Employee(const std::string& p, const NameType& n, int a, int id) : Person(n, a), Record(id), mPosition(p) {}
+	Employee(const std::string& p, const NameType& n, int a) : Person(n, a), mPosition(p) {}
 	
 	void print() const override final
 	{
 		std::cout << "Employee: position: " << mPosition << " ";
 		Person::print();
 	}
-	
-	virtual void paySalary() { std::cout << "yay!" << std::endl; }
 private:
 	NameType mPosition;
 };
@@ -53,35 +44,25 @@ void report(const Person& person)
 {
 	std::cout << "=== REPORT ==" << std::endl;
 	person.print();
-	
-	const Employee* e = dynamic_cast<const Employee*>(&person);
-	if (e) 
-	{
-		std::cout << "this is an Employee, BTW" << std::endl;
-	}
-	const Employee& er = dynamic_cast<const Employee&>(person);
-	
 	std::cout << "=============" << std::endl;
 }
 
 int main(int argc, char** argv)
 {
-	Person p("Maciek", 36);
-	p.print();
-	
-	Employee e("QT guy", "Ilya", 28, 666);
-	e.print();
+	std::vector<std::unique_ptr<Person>> people;
 
-	std::cout << "Ilya's ID=" << e.GetId() << std::endl;
+	{
+		Person p("Maciek", 36);
+		p.print();
+		
+		Employee e("QT guy", "Ilya", 28);
+		e.print();
+		
+		people.push_back(std::make_unique<Person>(p));
+		people.push_back(std::make_unique<Employee>(e));
+	}
 	
-	std::cout << "&e=" << &e << std::endl;
-	std::cout << "&e as person=" << static_cast<Person*>(&e) << std::endl;
-	std::cout << "&e as record=" << static_cast<Record*>(&e) << std::endl;
-	Record* r = reinterpret_cast<Record*>(&e);
-	std::cout << "r=" << r << std::endl;
-	std::cout << "r->id=" << r->GetId() << std::endl;
-	
-	report(p);
-	report(e);
+	for(auto& i: people)
+		report(*i);
 }
 
