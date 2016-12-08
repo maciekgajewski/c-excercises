@@ -441,6 +441,9 @@ void act()
 }
 
 // recursion + inlininkg + const prop + loop unrolling
+#include <cstring>
+#include <algorithm>
+
 inline void serialize(char*) {} //terminator
 
 template<typename T>
