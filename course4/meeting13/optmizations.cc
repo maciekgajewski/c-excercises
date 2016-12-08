@@ -172,6 +172,18 @@ boost::optional<double> get_first(const std::vector<double>& v)
 	else
 		return v.at(0);
 }
+
+// noexcept impact ///////////////////////////////////////
+#include <memory>
+
+void foo(int&);
+
+void bar() noexcept
+{
+  auto i = std::make_unique<int>(7);
+  foo(*i);
+}
+
 // Copy elision ///////////////////////////////////
 struct ExpensiveToCopy
 {
@@ -298,12 +310,48 @@ void set_val(int* buf, int val)
     *buf = val + super_expensive();
 }
 
+// null-pointer check elision /////////////////////////////////////
+struct Data {
+  int a;
+  void foo();
+};
+
+Data* get_data();
+
+
+void act()
+{
+  Data* ptr = get_data();
+  ptr->a = 7;
+  
+  if (ptr)
+  {
+    ptr->foo();
+  }
+}
+
 // interesting one ////////////////////////////////////////
 int foo(int i)
 {
   int x[2];
   x[i] = 12;
   return x[i];
+}
+
+// undefined behaviour - /0 (see clang) ///////////////////////////////////
+static int div(int a, int b)
+{
+  return a / b;
+}
+
+int res()
+{
+  int a = 0;
+  for(int i = 0; i < 5; i++)
+  {
+    a += div(5, i);
+  }
+  return a;
 }
 
 // bound checking removal (clang vs gcc) ////////////////////////////////////
@@ -321,7 +369,7 @@ std::vector<int> foo()
   return v;
 }
 
-// compare ////////////////////////////////////////////
+// compare - loop simplification to memcmp ////////////////////////////////////////////
 #include <algorithm>
 
 bool cmp(char* a, char* b, int l)
