@@ -4,7 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <stdexcept>
-#include <list>
+#include <unordered_set>
 #include <map>
 #include <array>
 #include <algorithm>
@@ -78,8 +78,8 @@ public:
 	}
 
 private:
-	std::map<int, std::list<std::uint64_t>, std::greater<int>> buy_price_order_ids;
-	std::map<int, std::list<std::uint64_t>, std::less<int>> sell_price_order_ids;
+	std::map<int, std::unordered_set<std::uint64_t>, std::greater<int>> buy_price_order_ids;
+	std::map<int, std::unordered_set<std::uint64_t>, std::less<int>> sell_price_order_ids;
 	std::unordered_map<std::uint64_t, Order> id_order_book;
 	std::string instrument;
 
@@ -112,7 +112,7 @@ private:
 		else
 		{
 			int top_level_price = side_price_order_ids.begin() -> first;
-			const std::list<uint64_t>& top_level_order_ids = side_price_order_ids.begin() -> second;
+			const std::unordered_set<uint64_t>& top_level_order_ids = side_price_order_ids.begin() -> second;
 			int top_level_volume = 0;
 			for (std::uint64_t order_id: top_level_order_ids)
 				top_level_volume += id_order_book[order_id].volume;
@@ -127,18 +127,19 @@ private:
 		                                                                   order.price <= other_side_order_ids.begin()->first) //we can match against resting orders
 		{
 			int this_price = other_side_order_ids.begin()->first;
-			std::list<std::uint64_t>& order_ids_this_price = other_side_order_ids.begin()->second;
+			std::unordered_set<std::uint64_t>& order_ids_this_price = other_side_order_ids.begin()->second;
 			int matched_on_this_level = 0;
 			while (!order_ids_this_price.empty()) //orders left to match on this price level
 			{
-				Order& order_to_match = id_order_book[order_ids_this_price.front()];
+				auto order_id_to_match_iterator = order_ids_this_price.begin();
+				Order& order_to_match = id_order_book[*order_id_to_match_iterator];
 				int match_volume = std::min(order_to_match.volume, order.volume);
 				matched_on_this_level += match_volume;
 				order.volume -= match_volume;
 				order_to_match.volume -= match_volume;
 				if (order_to_match.volume == 0)
 				{
-					order_ids_this_price.pop_front();
+					order_ids_this_price.erase(order_id_to_match_iterator);
 					id_order_book.erase(order_to_match.order_id);
 				}
 				if (order.volume == 0)
@@ -156,19 +157,18 @@ private:
 	void add_to_book(std::uint64_t order_id, int order_price, ThisSideOrderIdsType& this_side_price_order_ids)
 	{
 		if (this_side_price_order_ids.count(order_price)) //already orders on this price
-			this_side_price_order_ids[order_price].push_back(order_id);
+			this_side_price_order_ids[order_price].insert(order_id);
 		else
-			this_side_price_order_ids.emplace(order_price, std::list<std::uint64_t>{}).first->second.push_back(order_id);
+			this_side_price_order_ids.emplace(order_price, std::unordered_set<std::uint64_t>{}).first->second.insert(order_id);
 	}
 
 	template<typename SidePriceOrderIdType>
 	void delete_order_from_side_price_order_ids(const Order& order_to_remove, SidePriceOrderIdType& side_price_order_ids)
 	{
-		std::list<uint64_t>& order_ids_this_price = side_price_order_ids[order_to_remove.price];
+		std::unordered_set<uint64_t>& order_ids_this_price = side_price_order_ids[order_to_remove.price];
 		order_ids_this_price.erase(std::find(std::begin(order_ids_this_price), std::end(order_ids_this_price), order_to_remove.order_id));
 		if (order_ids_this_price.empty())
 			side_price_order_ids.erase(order_to_remove.price);
-			
 	}
 };
 
