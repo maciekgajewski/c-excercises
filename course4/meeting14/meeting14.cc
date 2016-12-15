@@ -24,18 +24,29 @@ boost::optional<std::string> get_greeting()
 	}
 }
 
+// template<typename ... Types>
+// class variant
+// {
+// private:
+// 	int type;
+// 	char buffer[maxofsizes(Types...)];
+// 	//...
+// };
+
+struct visitor
+{
+	void operator()(int) { std::cout << "int" << std::endl; }
+	void operator()(double) { std::cout << "double" << std::endl; }
+	void operator()(const std::string&) { std::cout << "string" << std::endl; }
+};
 
 int main(int argc, char** argv)
 {
-// 	auto greeting = get_greeting();
-// 	if (greeting)
-// 		std::cout << *greeting << std::endl;
+	boost::variant<int, double, std::string> v = "erty";
+	visitor vtor;
+	boost::apply_visitor(vtor, v);
 	
-	boost::any a = 6.6;
-	auto b = a;
-	
-	int x = boost::any_cast<int>(b);
-	std::cout << x << std::endl;
+	boost::apply_visitor([&](auto x) { std::cout << "the value is=" << x <<std::endl; }, v);
 	
 }
 
