@@ -6,47 +6,40 @@
 #include <iostream>
 #include <string>
 #include <tuple>
+#include <functional>
+#include <sstream>
 
 using namespace std::literals;
 
-boost::optional<std::string> get_greeting()
-{
-	std::random_device device;
-	std::uniform_int_distribution<int> dist(0, 1);
-
-	if (dist(device))
-	{
-		return "Hello, world!"s;
-	}
-	else
-	{
-		return boost::none;
-	}
-}
-
-// template<typename ... Types>
-// class variant
-// {
-// private:
-// 	int type;
-// 	char buffer[maxofsizes(Types...)];
-// 	//...
-// };
-
-struct visitor
-{
-	void operator()(int) { std::cout << "int" << std::endl; }
-	void operator()(double) { std::cout << "double" << std::endl; }
-	void operator()(const std::string&) { std::cout << "string" << std::endl; }
-};
+double add(double x, double y) { return x + y; };
 
 int main(int argc, char** argv)
 {
-	boost::variant<int, double, std::string> v = "erty";
-	visitor vtor;
-	boost::apply_visitor(vtor, v);
+	std::function<double(double, double)> myFun = add;
 	
-	boost::apply_visitor([&](auto x) { std::cout << "the value is=" << x <<std::endl; }, v);
+	myFun = [f=myFun](double a, double b) {
+		std::cout << "== BEGIN ==" << std::endl;
+		double x = f(a,b);
+		std::cout << "== END ==" << std::endl;
+		return x;
+	};
+	
+	if (myFun)
+	{
+		double x = myFun(5, 7.7);
+		std::cout << "x=" << x << std::endl;
+		std::ostringstream s;
+		s << "the value is: " << x;
+		
+		std::cout << s.str() << std::endl;
+	}
+	else
+	{
+		std::cout << "not set" << std::endl;
+	}
+	
+	auto b = std::bind(add, 4, 5);
+	x = b();
 	
 }
 
