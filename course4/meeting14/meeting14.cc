@@ -12,9 +12,13 @@ boost::optional<std::string> get_greeting()
 	std::uniform_int_distribution<int> dist(0, 1);
 
 	if (dist(device))
+	{
 		return "Hello, world!"s;
+	}
 	else
+	{
 		return boost::none;
+	}
 }
 
 
