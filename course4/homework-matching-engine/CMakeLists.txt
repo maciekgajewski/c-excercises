@@ -6,4 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_executable(
         matching_engine
         main.cc
-        models.h)
+        models.h
+        orderBookEntry.h
+        orderBookEntry.cc
+        orderBook.h
+        orderBook.cc
+        matchingEngine.h)
