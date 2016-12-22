@@ -22,31 +22,79 @@ public:
 	
 	void set(const T& v)
 	{
-		{
-			std::lock_guard<std::mutex> l(mutex_);
-			buffer_ = v;
-		}
-		cv_.notify_all();
+		buffer_ = v;
+		seq_++;
 	}
 	
 	T wait()
 	{
-		std::unique_lock<std::mutex> l(mutex_);
-		cv_.wait(l);
+		int prev = seq_;
+		while(prev == seq_)
+			;
+		
 		return buffer_;
 	}
 	
 private:
-	
-	std::mutex mutex_;
+	std::atomic<int> seq_;
 	T buffer_;
-	//int wrtie_Seq
-	std::condition_variable cv_;
 };
-
+using comm = communicator<int>;
 int main(int argc, char** argv)
 {
 	std::cout << "start" << std::endl;
+	
+	if (argc < 2)
+	{
+		std::cout << "usage PROG client|server" << std::endl;
+		return 1;
+	}
+	
+	
+	if (argv[1] == "server"s)
+	{
+		bi::shared_memory_object::remove(SHM);
+		bi::shared_memory_object shm(bi::create_only, SHM, bi::read_write);
+		
+		shm.truncate(sizeof(comm));
+		
+		bi::mapped_region region(shm, bi::read_write);
+		
+		void* addr = region.get_address();
+		std::cout << "got shared memory at " << addr << std::endl;
+		comm* c = new(addr) comm;
+		
+		for(int i = 0; i < 50; i++)
+		{
+			std::cout << "server: " << i << std::endl;
+			std::this_thread::sleep_for(1s);
+			c->set(i);
+		}
+		c->set(-1);
+
+		
+		c->~comm();
+		
+	}
+	else
+	{
+		bi::shared_memory_object shm(bi::open_only, SHM, bi::read_write);
+		bi::mapped_region region(shm, bi::read_write);
+		
+		void* addr = region.get_address();
+		std::cout << "client got shared memory at " << addr << std::endl;
+		comm* c = reinterpret_cast<comm*>(addr);
+		
+		while(true)
+		{
+			int v = c->wait();
+			std::cout << "got: " << v << std::endl;
+			if (v == -1)
+				break;
+		}
+
+	}
+	/*
 	communicator<int> c;
 
 	std::thread t([&] 
@@ -63,13 +111,14 @@ int main(int argc, char** argv)
 	for(int i = 0; i < 5; i++)
 	{
 		std::cout << "main thread: " << i << std::endl;
-		std::this_thread::sleep_for(500ms);
+		std::this_thread::sleep_for(10us);
 		c.set(i);
 	}
 	c.set(-1);
 	
 	t.join();
 	
+	*/
 	std::cout << "end" << std::endl;
 }
 
