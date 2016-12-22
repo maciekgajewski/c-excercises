@@ -6,6 +6,7 @@
 #include <thread>
 #include <atomic>
 #include <array>
+#include <future>
 
 using namespace std::literals;
 namespace bi = boost::interprocess;
@@ -16,14 +17,15 @@ int main(int argc, char** argv)
 {
 	std::cout << "start" << std::endl;
 	int x = 0;
-	
-	std::thread t([&] 
+
+	std::future<int> res = std::async(std::launch::async, [&] 
 	{
 		for(int i = 0; i < 10; i++)
 		{
 			std::cout << "another thread: " << i << ", x=" << x << std::endl;
 			std::this_thread::sleep_for(500ms);
 		}
+		return 66;
 	});
 
 		for(int i = 0; i < 5; i++)
@@ -33,7 +35,8 @@ int main(int argc, char** argv)
 			std::this_thread::sleep_for(500ms);
 		}
 	
-	//t.join();
+	
+	std::cout << "result = " << res.get() << std::endl;
 	
 	std::cout << "end" << std::endl;
 }
