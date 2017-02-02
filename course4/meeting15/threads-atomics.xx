@@ -1,0 +1,76 @@
+#include "cpu.hh"
+
+#include <boost/interprocess.hpp>
+
+#include <iostream>
+#include <thread>
+#include <atomic>
+
+using namespace std::literals;
+
+
+struct message_na
+{
+	int seq = 0;
+	int data = 0;
+};
+
+struct message_a
+{
+	std::atomic<int> seq;
+	std::atomic<int> data;
+};
+
+
+using message = message_na;
+
+void read(volatile message* m)
+{
+	int seq = m->seq;
+	while(seq < 900)
+	{
+		while(m->seq == seq)
+		{
+			continue;
+		}
+		int data = m->data;
+		if (data != seq+1)
+			std::cout << "miss: data=" << data << ", expected=" << seq+1 << std::endl;
+		seq = m->seq;
+	}
+}
+
+void send(volatile message* m)
+{
+	for(int i = 0; i < 1000; i++)
+	{
+		m->data = i;
+		m->seq = i;
+		std::this_thread::sleep_for(1us);
+		
+		if (i%100 == 0)
+			std::cout << "send=" << i << std::endl;
+	}
+}
+int main(int argc, char** argv)
+{
+	std::cout << "start" << std::endl;
+
+	volatile message buf;
+	set_cpu_affinity(1);
+	std::cout << "main thread cpu: " << get_cpu() << std::endl;
+	
+	std::thread t([&]
+	{
+		set_cpu_affinity(8);
+		std::this_thread::yield();
+		std::cout << "secondary thread cpu: " << get_cpu() << std::endl;
+		read(&buf);
+		
+	});
+	std::this_thread::sleep_for(50ms);
+	send(&buf);
+	t.join();
+	std::cout << "end" << std::endl;
+}
+

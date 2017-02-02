@@ -1,0 +1,87 @@
+#include "cpu.hh"
+
+#include <boost/interprocess/managed_shared_memory.hpp>
+
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <array>
+
+using namespace std::literals;
+
+constexpr int QSIZE = 1024;
+
+struct message_na
+{
+	volatile int seq = 0;
+	std::array<int, QSIZE> data;
+};
+
+struct message_a
+{
+	std::atomic<int> seq;
+	std::array<int, QSIZE> data;
+};
+
+
+using message = message_na;
+const int count = 10000;
+void read(message* m)
+{
+	int seq = m->seq;
+	for(int i = 0; i < count-1; i++)
+	{
+		int prevseq = seq;
+		while(seq == prevseq)
+		{
+			seq = m->seq;
+			continue;
+		}
+		int data = m->data[seq];
+		if (seq == -1)
+			break;
+		if (seq != prevseq+1)
+			std::cout << "seq error: seq=" << seq << ", prev=" << prevseq << std::endl;
+		if (data != seq)
+			std::cout << "error: data=" << data << ", expected=" << seq << std::endl;
+	}
+	std::cout << "fninished receiving at seq=" << seq << std::endl;
+}
+
+void send(message* m)
+{
+	for(int i = 0; i < count; i++)
+	{
+		int idx = i % QSIZE;
+		m->data[idx] = idx;
+		m->seq = idx;
+		
+		if (i%(count/10) == 0)
+			std::cout << "send=" << i << std::endl;
+	}
+	m->seq = -1;
+}
+int main(int argc, char** argv)
+{
+	std::cout << "start" << std::endl;
+
+	
+	
+	message buf;
+	set_cpu_affinity(1);
+	std::cout << "main thread cpu: " << get_cpu() << std::endl;
+	
+	std::thread t([&]
+	{
+		set_cpu_affinity(1<<3);
+		std::this_thread::yield();
+		std::cout << "secondary thread cpu: " << get_cpu() << std::endl;
+		read(&buf);
+		
+	});
+	std::this_thread::sleep_for(50ms);
+	send(&buf);
+	t.join();
+	std::cout << "end" << std::endl;
+}
+

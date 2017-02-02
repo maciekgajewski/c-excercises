@@ -1,0 +1,35 @@
+#include "cpu.hh"
+
+#include <iostream>
+#include <thread>
+#include <atomic>
+
+
+using namespace std::literals;
+
+int main(int argc, char** argv)
+{
+	std::cout << "start" << std::endl;
+
+	volatile int flag = 0;
+	set_cpu_affinity(1);
+	std::cout << "main thread cpu: " << get_cpu() << std::endl;
+	
+	std::thread t([&]
+	{
+		set_cpu_affinity(8);
+		std::this_thread::yield();
+		std::cout << "secondary thread cpu: " << get_cpu() << std::endl;
+		
+		int c = 0;
+		while(flag == 0)
+			c++;
+		
+		std::cout << "exited, c=" << c << std::endl;
+	});
+	std::this_thread::sleep_for(200ms);
+	flag = 1;
+	t.join();
+	std::cout << "end" << std::endl;
+}
+

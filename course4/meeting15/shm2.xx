@@ -1,0 +1,69 @@
+#include "cpu.hh"
+
+#include <boost/interprocess/managed_shared_memory.hpp>
+
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <array>
+
+using namespace std::literals;
+namespace bi = boost::interprocess;
+
+const char* SHM = "course-shm";
+
+int main(int argc, char** argv)
+{
+	std::cout << "start" << std::endl;
+
+	if (argc < 2)
+	{
+		std::cout << "usage: PROG server|client" << std::endl;
+		return 2;
+	}
+	
+	if (argv[1] == "server"s)
+	{
+		std::cout << "server" << std::endl;
+		set_cpu(0);
+		bi::shared_memory_object::remove(SHM);
+		bi::shared_memory_object shm(bi::create_only, SHM, bi::read_write);
+		shm.truncate(1000);
+		
+		bi::mapped_region region(shm, bi::read_write);
+		
+		void* addr = region.get_address();
+		std::cout << "region addr=" << addr << std::endl;
+		
+		int* p = reinterpret_cast<int*>(addr);
+		for(int i = 0; i < 100; i++)
+		{
+			std::cout << "writing " << i << std::endl;
+			*p = i;
+			std::this_thread::sleep_for(1s);
+		}
+	}
+	else
+	{
+		std::cout << "client" << std::endl;
+		set_cpu(2);
+		bi::shared_memory_object shm(bi::open_only, SHM, bi::read_write);
+		bi::mapped_region region(shm, bi::read_write);
+		
+		void* addr = region.get_address();
+		std::cout << "region addr=" << addr << std::endl;
+		
+		volatile int* p = reinterpret_cast<volatile int*>(addr);
+		int val = *p;
+		
+		while(true) {
+			std::cout << "got: " << val << std::endl;
+			while(*p == val)
+				continue;
+			val = *p;
+		}
+	}
+
+	std::cout << "end" << std::endl;
+}
+
