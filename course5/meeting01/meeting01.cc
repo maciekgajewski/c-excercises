@@ -15,5 +15,13 @@ int main(int argc, char** argv)
 	std::cout << "xp=" << xp << std::endl;
 	std::cout << "yp=" << yp << std::endl;
 	std::cout << "&global=" << &global << std::endl;
+	
+	auto f = &global; // double*
+	auto g = &f; // double**
+	auto h = *g; // double*
+	auto j = *h; // double
+	
+	std::cout << "argc=" << argc << std::endl;
+	
 }
 
