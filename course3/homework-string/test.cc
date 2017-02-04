@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstring>
 
+
 template<typename StringType>
 void string_test()
 {
@@ -93,6 +94,24 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+
+	// move contructor and assignment operator
+	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
+	const char* string_buffer = string4.c_str();
+	StringType string5 = std::move(string4);
+	assert(string_buffer == string5.c_str());
+
+	StringType string6;
+	string6 = std::move(string5);
+	assert(string_buffer == string6.c_str());
+	
+	// iterator
+	int i = 0;
+	for (auto it = string6.begin(); it != string6.end(); ++it)
+	{
+		assert(*it == string6[i++]);
+	}
+	assert(i == string6.size());
 }
 
 
@@ -100,7 +119,7 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+	// assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
