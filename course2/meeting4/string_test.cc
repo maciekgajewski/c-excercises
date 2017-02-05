@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <sstream>
+#include "SmartString.h"
 
 template<typename StringType>
 void basic_test()
@@ -94,12 +95,13 @@ void concatenation_operator()
 
 int main()
 {
-	basic_test<std::string>();
-	basic_operators<std::string>();
-	indexing_operator<std::string>();
-	stream_output_operator<std::string>();
-	concatenation_operator<std::string>();
+	basic_test<SmartString>();
+	basic_operators<SmartString>();
+	indexing_operator<SmartString>();
+	stream_output_operator<SmartString>();
+	concatenation_operator<SmartString>();
 	std::cout << "std::string tests passed" << std::endl;
-	
+
 	// TODO after implementing your string class, run the selected functions for your type here
 }
+
