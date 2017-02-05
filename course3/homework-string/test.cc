@@ -26,6 +26,9 @@ void string_test()
 	
 	assert(string2 == string3);
 	assert(string3.size() == 3);
+
+    assert(string2 != string1);
+    assert(string1 != string2);
 	
 	// read-only character access
 	
@@ -100,7 +103,7 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+//	assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
