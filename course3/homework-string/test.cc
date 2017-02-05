@@ -4,6 +4,8 @@
 #include <cassert>
 #include <iostream>
 #include <cstring>
+#include <unordered_map>
+#include <unordered_set>
 
 template<typename StringType>
 void string_test()
@@ -26,6 +28,9 @@ void string_test()
 	
 	assert(string2 == string3);
 	assert(string3.size() == 3);
+
+    assert(string2 != string1);
+    assert(string1 != string2);
 	
 	// read-only character access
 	
@@ -53,14 +58,23 @@ void string_test()
 	// assignment operator test
 	string3 = "abc";
 	assert(string_const_ref == "abc");
+    assert(string3.size() == 3);
 	
 	string3 = string2;
 	assert(string_const_ref == "Hex");
 	assert(string2 == "Hex");
 
+    StringType stringMau = "Maurice";
+    StringType stringCopy;
+
+    stringCopy = stringMau;
+    assert(stringCopy == "Maurice"); 
+    assert(stringCopy.size() == 7);
+
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
+    assert(plusResult.size() == 6);
         
 	StringType plusResultEmpty = StringType() + StringType();
 	assert(plusResultEmpty.empty());
@@ -93,6 +107,21 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+
+    std::unordered_set<StringType> testSet = 
+        {"k", "thx", "bye"};
+
+    assert(testSet.find("k") != testSet.end());
+    assert(testSet.find("thx") != testSet.end());
+    assert(testSet.find("bye") != testSet.end());
+    assert(testSet.find("hello") == testSet.end());
+
+    std::unordered_map<StringType, int> testMap = {
+        {"Hello", 1},
+        {"World", 2}
+    };
+    assert(testMap["Hello"] == 1);
+    assert(testMap["World"] == 2);
 }
 
 
@@ -100,7 +129,7 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+//	assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
