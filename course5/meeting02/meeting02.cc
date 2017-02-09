@@ -1,39 +1,18 @@
 #include <iostream>
 
-int fun()
-{
-	int i;
-	if (i == 42)
-		return 1;
-	else
-		return 7;
-}
-
 int main(int argc, char** argv)
 {
-	std::cout << "Hello again!" << std::endl;
-
-	float x = 7;
-	int y;
-	int g = 88;
+	int i1 = 5;
+	const int ci = 6;
+	int* p1 = &i1;
+	const int* p2 = &ci;
+	p2 = p1;
+	p1 = p2;
+	auto t = *p1;
 	
-	auto p = &y; // int*
-	y = 5;
+	void* vp = p1;
 	
-	const int z = y;
-	//z = 4; ERROR
-	auto p2 = &z; // const int*
-	//*p2 = 6; ERROR
-	p2 = &y;
-	
-	int* const p3 = &y;
-	*p3 = 8;
-	//p3 = &g;// ERROR
-	
-	std::cout << "y=" << y << std::endl;
-	std::cout << "p==p2 " << std::boolalpha << (p == p2) << std::endl;
-	std::cout << "p==p3 " << (p == p3) << std::endl;
-	
+	std::cout << "t=" << t << std::endl;
 	
 }
 
