@@ -2,17 +2,18 @@
 
 int main(int argc, char** argv)
 {
-	int i1 = 5;
-	const int ci = 6;
-	int* p1 = &i1;
-	const int* p2 = &ci;
-	p2 = p1;
-	p1 = p2;
-	auto t = *p1;
+	const int i = 6;
+	int* p = (int*)&i;
 	
-	void* vp = p1;
+	float f = 6.66;
+	const float* cpf = &f;
+	float* pf = &f;
 	
-	std::cout << "t=" << t << std::endl;
+	*p = 77;
+	*pf = 88.88;
+	
+	std::cout << "i= " << i << std::endl;
+	std::cout << "f= " << f << std::endl;
 	
 }
 
