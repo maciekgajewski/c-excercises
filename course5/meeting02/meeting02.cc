@@ -1,23 +1,28 @@
 #include <iostream>
 
+struct S
+{
+};
+
 int main(int argc, char** argv)
 {
-	const int i = 6;
-	int* p = const_cast<int*>(&i);
-	
-	std::cout << "&i = " << &i << std::endl;
-	std::cout << "p = " << p << std::endl;
+	int i = 6;
+	int* p = &i;
 	
 	float f = 6.66;
-	const float* cpf = &f;
 	float* pf = &f;
 	
 	*p = 77;
-	*pf = 88.88;
+	*pf = *p; // convertion int -> float
+	
+	float* p2 = reinterpret_cast<float*>(&i);
+	
+	//*p2 = 77;
+	
+	//S s = *p2;
 	
 	std::cout << "i= " << i << std::endl;
-	std::cout << "*p= " << *p << std::endl;
+	std::cout << "*p2= " << *p2 << std::endl;
 	std::cout << "f= " << f << std::endl;
-	
 }
 
