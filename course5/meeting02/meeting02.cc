@@ -30,5 +30,10 @@ int main(int argc, char** argv)
 	*p3 = 8;
 	//p3 = &g;// ERROR
 	
+	std::cout << "y=" << y << std::endl;
+	std::cout << "p==p2 " << std::boolalpha << (p == p2) << std::endl;
+	std::cout << "p==p3 " << (p == p3) << std::endl;
+	
+	
 }
 
