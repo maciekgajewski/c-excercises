@@ -1,0 +1,1 @@
+/usr/bin/c++    -Wall -std=c++14   CMakeFiles/carmack.dir/carmack.cc.o  -o carmack -rdynamic 

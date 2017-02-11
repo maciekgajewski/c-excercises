@@ -1,0 +1,3 @@
+/home/balazs/workspace/c-excercises/course5/homework2/carmack/CMakeFiles/edit_cache.dir
+/home/balazs/workspace/c-excercises/course5/homework2/carmack/CMakeFiles/rebuild_cache.dir
+/home/balazs/workspace/c-excercises/course5/homework2/carmack/CMakeFiles/carmack.dir
