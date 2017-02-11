@@ -10,7 +10,7 @@ struct NewtonMetadata {
         unsigned long lastStackTop = 0;
 };
 
-float newtonSqrtStep(float input, float oldApproximation, struct NewtonMetadata& metadata)
+float newtonSqrtStep(float input, float oldApproximation, NewtonMetadata& metadata)
 {
         metadata.recursionDepth++;
         if (metadata.recursionDepth >= MAX_DEPTH)
@@ -29,7 +29,7 @@ float newtonSqrtStep(float input, float oldApproximation, struct NewtonMetadata&
         }
 }
 
-float newtonSqrt(float input, struct NewtonMetadata& metadata)
+float newtonSqrt(float input, NewtonMetadata& metadata)
 {
         return newtonSqrtStep(input, input, metadata);
 }
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 {
         for (auto i = 1; i < argc; i++)
         {
-                auto input = std::atof(argv[i]);
+                auto input = std::stof(argv[i]);
                 struct NewtonMetadata metadata;
                 float newtonResult = newtonSqrt(input, metadata);
                 std::cout << "newtonSqrt(" << argv[i] << ")=" << newtonResult << "; recursion depth: " <<

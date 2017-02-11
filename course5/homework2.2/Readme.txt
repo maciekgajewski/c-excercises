@@ -1,6 +1,6 @@
 Square root calculation using Newton's method, recusrively
 
-Usage: carmack [<number> [<number> [...]]]
+Usage: newton [<number> [<number> [...]]]
 
 This program calculates square roots using a recusrive implementation
 of Newton's method. The recursion continues until the result converges
