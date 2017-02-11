@@ -14,11 +14,12 @@ float inv_sqrt( float x )
     float* p = &y;
     int* p2 = reinterpret_cast<int*>(p);
     i = *p2;
+    i = * reinterpret_cast<int*>(&y);
     i = magic - ( i >> 1);
 
     y = *reinterpret_cast<float*>(&i);
     y = y * ( 1.5 - ( x2 *y *y) );
- //   y = y * ( 1.5 - ( x2 *y *y) );
+
     return y;
 }
 
