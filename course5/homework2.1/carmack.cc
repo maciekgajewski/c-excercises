@@ -8,7 +8,7 @@ const int FAST_INVERSE_SQRT_MAGIC = 0x5f3759df;
 
 float fastInvSqrt(float input)
 {
-        unsigned long temporaryIntegerForm;
+        std::uint32_t temporaryIntegerForm;
         temporaryIntegerForm = *reinterpret_cast<unsigned long *>(&input);
         temporaryIntegerForm = FAST_INVERSE_SQRT_MAGIC - (temporaryIntegerForm >> 1);
         auto approximateResult = *reinterpret_cast<float *>(&temporaryIntegerForm);
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
 {
         for (auto i = 1; i < argc; i++)
         {
-                auto input = std::atof(argv[i]);
+                auto input = std::stof(argv[i]);
                 auto fastResult = fastSqrt(input);
                 auto stdResult = std::sqrt(input);
                 auto error = std::abs(fastResult - stdResult) / stdResult;
