@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 float inv_sqrt( float x )
 {
