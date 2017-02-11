@@ -1,6 +1,8 @@
 #include <iostream>
-#include <stdio.h>
+#include <string>
 #include <time.h>
+
+// Newton method of sqrt. The stack frame was 48 for Debug mode and 64 for Release mode.
 
 int i = 0;
 float x;
@@ -33,9 +35,9 @@ float function( float y, int it)
 
 int main(int argc, char** argv)
 {
-    const float y = std::atof(argv[1]); // input number
-    x = std::atof(argv[2]); //initial guess
-    const int it = std::atoi(argv[3]); // number of iterations
+    const float y = std::stof(argv[1]); // input number
+    x = std::stof(argv[2]); //initial guess
+    const int it = std::stoi(argv[3]); // number of iterations
 
     clock_t t = clock();
     std::cout << "sqrt of " << argv[1] << " is " << function(y, it) << std::endl;
