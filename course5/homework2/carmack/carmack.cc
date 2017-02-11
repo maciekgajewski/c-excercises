@@ -1,8 +1,9 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <string>
+
+// Implementing fast-sqrt algortihm. However, for me, sqrt from the math library seems much faster.
 
 float inv_sqrt( float x )
 {
@@ -25,14 +26,14 @@ float inv_sqrt( float x )
 
 int main(int argc, char** argv)
 {
-    float x = std::atof(argv[1]);
+    float x = std::stof(argv[1]);
     clock_t t;
     t = clock();
-    std::cout << "Carmack_sqrt" << argv[1] << "=" << 1/inv_sqrt(x) << std::endl;
+    std::cout << "Carmack_sqrt of " << argv[1] << "=" << 1/inv_sqrt(x) << std::endl;
     t = clock() - t;
-    std::cout << "Carmack_time" << argv[1] << "=" << t << std::endl;
+    std::cout << "Carmack_time" << "=" << t << std::endl;
     t = clock();
-    std::cout << "math_sqrt"  << "=" << sqrt(x) << std::endl;
+    std::cout << "math_sqrt of"  << "=" << sqrt(x) << std::endl;
     t = clock() - t;
     std::cout << "math_time"  << "=" << t << std::endl;
 }
