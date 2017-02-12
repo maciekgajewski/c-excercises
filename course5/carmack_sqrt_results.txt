@@ -1,0 +1,145 @@
+I compared Carmack's square root with the standard library's square root for a
+range of "random" numbers without integer-valued square roots (FLT_MIN, 0.000234,
+5, 13, 19, 52, 78, 9283657, and FLT_MAX) and a range of numbers with integer-valued
+square roots (0, 1, 4, 9, 16, 25, 36, 49).
+The values always differed, and it looks like the difference might be relatively
+smaller for small input values, and whether or not the number had an integer-valued
+square root didn't seem to make a difference.
+
+Input -----------------> 1.17549e-38
+Carmack ---> 1.08484e-19
+StdLib  ---> 1.0842e-19
+Diff          ------> 6.40419e-23
+Relative diff ------> 5.44808e+15
+
+Input -----------------> 0.000234
+Carmack ---> 0.0153061
+StdLib  ---> 0.0152971
+Diff          ------> 9.00682e-06
+Relative diff ------> 0.0384907
+
+Input -----------------> 0.001
+Carmack ---> 0.0316358
+StdLib  ---> 0.0316228
+Diff          ------> 1.30609e-05
+Relative diff ------> 0.0130609
+
+Input -----------------> 0.087
+Carmack ---> 0.295043
+StdLib  ---> 0.294958
+Diff          ------> 8.53539e-05
+Relative diff ------> 0.000981079
+
+Input -----------------> 0.5
+Carmack ---> 0.707165
+StdLib  ---> 0.707107
+Diff          ------> 5.79357e-05
+Relative diff ------> 0.000115871
+
+Input -----------------> 5
+Carmack ---> 2.23619
+StdLib  ---> 2.23607
+Diff          ------> 0.000119209
+Relative diff ------> 2.38419e-05
+
+Input -----------------> 13
+Carmack ---> 3.60571
+StdLib  ---> 3.60555
+Diff          ------> 0.000160933
+Relative diff ------> 1.23794e-05
+
+Input -----------------> 19
+Carmack ---> 4.35891
+StdLib  ---> 4.3589
+Diff          ------> 7.15256e-06
+Relative diff ------> 3.7645e-07
+
+Input -----------------> 52
+Carmack ---> 7.21142
+StdLib  ---> 7.2111
+Diff          ------> 0.000321865
+Relative diff ------> 6.18971e-06
+
+Input -----------------> 78
+Carmack ---> 8.83193
+StdLib  ---> 8.83176
+Diff          ------> 0.000174522
+Relative diff ------> 2.23747e-06
+
+Input -----------------> 9.28366e+06
+Carmack ---> 3047.9
+StdLib  ---> 3046.91
+Diff          ------> 0.993408
+Relative diff ------> 1.07006e-07
+
+Input -----------------> 3.40282e+38
+Carmack ---> 1.84576e+19
+StdLib  ---> 1.84467e+19
+Diff          ------> 1.08973e+16
+Relative diff ------> 3.20242e-23
+
+Input -----------------> 0
+Carmack ---> 3.78449e-20
+StdLib  ---> 0
+Diff          ------> 3.78449e-20
+Relative diff ------> inf
+
+Input -----------------> 1
+Carmack ---> 1.00059
+StdLib  ---> 1
+Diff          ------> 0.000590682
+Relative diff ------> 0.000590682
+
+Input -----------------> 4
+Carmack ---> 2.00118
+StdLib  ---> 2
+Diff          ------> 0.00118136
+Relative diff ------> 0.000295341
+
+Input -----------------> 9
+Carmack ---> 3.0011
+StdLib  ---> 3
+Diff          ------> 0.00109982
+Relative diff ------> 0.000122203
+
+Input -----------------> 16
+Carmack ---> 4.00236
+StdLib  ---> 4
+Diff          ------> 0.00236273
+Relative diff ------> 0.000147671
+
+Input -----------------> 25
+Carmack ---> 5.00248
+StdLib  ---> 5
+Diff          ------> 0.0024786
+Relative diff ------> 9.9144e-05
+
+Input -----------------> 36
+Carmack ---> 6.0022
+StdLib  ---> 6
+Diff          ------> 0.00219965
+Relative diff ------> 6.11014e-05
+
+Input -----------------> 49
+Carmack ---> 7.00151
+StdLib  ---> 7
+Diff          ------> 0.00150537
+Relative diff ------> 3.07219e-05
+
+Input -----------------> 400
+Carmack ---> 20.0099
+StdLib  ---> 20
+Diff          ------> 0.0099144
+Relative diff ------> 2.4786e-05
+
+Input -----------------> 1024
+Carmack ---> 32.0189
+StdLib  ---> 32
+Diff          ------> 0.0189018
+Relative diff ------> 1.84588e-05
+
+Input -----------------> 0
+Carmack ---> 3.78449e-20
+StdLib  ---> 0
+Diff          ------> 3.78449e-20
+Relative diff ------> inf
