@@ -3,7 +3,7 @@ range of "random" numbers without integer-valued square roots (FLT_MIN, 0.000234
 5, 13, 19, 52, 78, 9283657, and FLT_MAX) and a range of numbers with integer-valued
 square roots (0, 1, 4, 9, 16, 25, 36, 49).
 The values always differed, and it looks like the difference might be relatively
-smaller for small input values, and whether or not the number had an integer-valued
+bigger for small inputs. Whether or not the number had an integer-valued
 square root didn't seem to make a difference.
 
 Input -----------------> 1.17549e-38
