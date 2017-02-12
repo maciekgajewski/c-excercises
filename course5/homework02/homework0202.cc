@@ -24,20 +24,36 @@ f'(x) = 2x
 x_{n+1} = x_{n} - (x_{n}^2 - x_{n}) / (2 * x_{n})
 ***/
 
-float newton_sqrt(float input, float result, int num_iters)
+float newton_sqrt(float input, float result, int num_iters, float** addr_of_last_on_stack)
 {
+    float arbitrarily_reassigned_input = input;
+    std::cout << "Frames remaining  : " << num_iters << std::endl;
+    std::cout << "  frame start addr: " << &arbitrarily_reassigned_input << std::endl;
     if (num_iters > 0) {
         result = result - (( std::pow(result, 2) - input) / (2 * result));
-        return newton_sqrt(input, result, num_iters - 1);
+        return newton_sqrt(arbitrarily_reassigned_input, result, num_iters - 1, addr_of_last_on_stack);
     }
-    return result;
+
+    float last_arbitrary_local_variable = 0;
+    *addr_of_last_on_stack = &last_arbitrary_local_variable;
+    return result + last_arbitrary_local_variable;
 }
 
 int main(int argc, char** argv)
 {
     float input = 16;
+    float guess = 90;
+    int num_iters = 10;
 
-    float newton_result = newton_sqrt(input, 90, 10);
+    float* last_on_stack = nullptr;
+    float** addr_of_last_on_stack = &last_on_stack;
+
+    float newton_result = newton_sqrt(input, guess, num_iters, addr_of_last_on_stack);
+
+    float avg_size = (&input - last_on_stack) / (num_iters + 1);
 
     std::cout << input << ": " << newton_result << " vs " << std::sqrt(input) << std::endl;
+    std::cout << "Initial stack addr: " << &input << std::endl;
+    std::cout << "Last stack addr   : " << last_on_stack << std::endl;
+    std::cout << "Average frame size: " << avg_size << std::endl;
 }
