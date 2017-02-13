@@ -1,47 +1,47 @@
 #include <iostream>
 #include <string>
-#include <time.h>
 
 // Newton method of sqrt. The stack frame was 48 for Debug mode and 64 for Release mode.
 
-int i = 0;
-float x;
 bool* start = nullptr;
 bool* end = nullptr;
 
-float function( float y, int it)
+float function( float y, int it, float& rx, int& ri)
 {
-    if( i == 0)
+    if( ri == 0)
     {
         bool a;
         start = &a;
     }
-    else if( i == it )
+    else if( ri == it )
     {
         bool a;
         end = &a;
     }
 
-    while( i < it)
+    while( ri < it)
     {
-        i++;
-        x -= ( x * x - y )/(2 * x);
-        function( y, it);
+        ri++;
+        rx -= ( rx * rx - y )/(2 * rx);
+        function( y, it, rx, ri );
     }
 
-    return x;
+    return rx;
 
 }
 
 int main(int argc, char** argv)
 {
     const float y = std::stof(argv[1]); // input number
-    x = std::stof(argv[2]); //initial guess
-    const int it = std::stoi(argv[3]); // number of iterations
+    float x = std::stof(argv[2]); //initial guess
+    const int it = 1000;
 
-    clock_t t = clock();
-    std::cout << "sqrt of " << argv[1] << " is " << function(y, it) << std::endl;
-    t = clock() - t;
+    int i = 0;
+
+    int& ri = i;
+    float& rx = x;
+
+    std::cout << "sqrt of " << argv[1] << " is " << function(y, it, rx, ri) << std::endl;
 
     std::cout << "depth" << "=" << i + 1 << std::endl;
     int size = (start - end)/i;
@@ -55,5 +55,4 @@ int main(int argc, char** argv)
         std::cout << "stack grows upwards" << std::endl;
     }
 
-    std::cout << "calculation time: " << t << std::endl;
 }
