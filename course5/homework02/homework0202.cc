@@ -26,17 +26,13 @@ x_{n+1} = x_{n} - (x_{n}^2 - x_{n}) / (2 * x_{n})
 
 float newton_sqrt(float input, float result, int num_iters, float** addr_of_last_on_stack)
 {
-    float arbitrarily_reassigned_input = input;
     std::cout << "Frames remaining  : " << num_iters << std::endl;
-    std::cout << "  frame start addr: " << &arbitrarily_reassigned_input << std::endl;
+    std::cout << "  frame start addr: " << &input << std::endl;
     if (num_iters > 0) {
         result = result - (( result * result - input) / (2 * result));
-        return newton_sqrt(arbitrarily_reassigned_input, result, num_iters - 1, addr_of_last_on_stack);
+        return newton_sqrt(input, result, num_iters - 1, addr_of_last_on_stack);
     }
-
-    float last_arbitrary_local_variable = 0;
-    *addr_of_last_on_stack = &last_arbitrary_local_variable;
-    return result + last_arbitrary_local_variable;
+    return result;
 }
 
 int main(int argc, char** argv)
