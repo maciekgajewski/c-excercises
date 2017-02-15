@@ -21,7 +21,7 @@ float carmack_sqrt(float input)
     float* int_to_fl = reinterpret_cast<float*>(&from_magic);
 
     float result = 1 / *int_to_fl;
-    result = result - (( std::pow(result, 2) - input) / (2 * result));
+    result = result - (( result * result - input) / (2 * result));
 
     return result;
 }
