@@ -13,10 +13,10 @@ The algorithm accepts a 32-bit floating-point number as the input and stores a h
 
 float carmack_sqrt(float input)
 {
-    long* fl_to_int = reinterpret_cast<long*>(&input);
+    int32_t* fl_to_int = reinterpret_cast<int32_t*>(&input);
 
-    long shifted_rt = *fl_to_int >> 1;
-    long from_magic = 0x5f3759df - shifted_rt;
+    int32_t shifted_rt = *fl_to_int >> 1;
+    int32_t from_magic = 0x5f3759df - shifted_rt;
 
     float* int_to_fl = reinterpret_cast<float*>(&from_magic);
 
