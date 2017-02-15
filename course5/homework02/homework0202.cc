@@ -30,7 +30,7 @@ float newton_sqrt(float input, float result, int num_iters, float** addr_of_last
     std::cout << "Frames remaining  : " << num_iters << std::endl;
     std::cout << "  frame start addr: " << &arbitrarily_reassigned_input << std::endl;
     if (num_iters > 0) {
-        result = result - (( std::pow(result, 2) - input) / (2 * result));
+        result = result - (( result * result - input) / (2 * result));
         return newton_sqrt(arbitrarily_reassigned_input, result, num_iters - 1, addr_of_last_on_stack);
     }
 
