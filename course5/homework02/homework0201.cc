@@ -34,13 +34,10 @@ int main(int argc, char** argv)
         0, 1, 4, 9, 16, 25, 36, 49, 400, 1024
     };
 
-    float carmack_result;
-    float stdlib_result;
-    float diff;
     for (auto input : inputs) {
-        carmack_result = carmack_sqrt(input);
-        stdlib_result = std::sqrt(input);
-        diff = carmack_result - stdlib_result;
+        float carmack_result = carmack_sqrt(input);
+        float stdlib_result = std::sqrt(input);
+        float diff = carmack_result - stdlib_result;
         std::cout << std::endl << "Input -----------------> "  << input << std::endl;
         std::cout << "Carmack ---> " << carmack_result << std::endl;
         std::cout << "StdLib  ---> " << stdlib_result << std::endl;
