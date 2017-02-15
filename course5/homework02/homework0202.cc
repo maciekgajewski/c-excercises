@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cfloat>
 #include <cmath>
 
 /****
@@ -24,21 +25,26 @@ f'(x) = 2x
 x_{n+1} = x_{n} - (x_{n}^2 - x_{n}) / (2 * x_{n})
 ***/
 
-float newton_sqrt(float input, float result, int num_iters)
+float newton_sqrt(float input, float result)
 {
-    if (num_iters > 0) {
+    if (std::abs(result * result - input) > .0001) {
         result = result - (( result * result - input) / (2 * result));
-        return newton_sqrt(input, result, num_iters - 1);
+        return newton_sqrt(input, result);
     }
     return result;
 }
 
 int main(int argc, char** argv)
 {
-    float input = 16;
+    float inputs[22] = {
+        FLT_MIN, 0.000234, 0.001, 0.087, 0.5,
+        5, 13, 19, 52, 78, 9283657, FLT_MAX,
+        0, 1, 4, 9, 16, 25, 36, 49, 400, 1024
+    };
     float guess = 90;
-    int num_iters = 10;
 
-    float newton_result = newton_sqrt(input, guess, num_iters);
-    std::cout << input << ": " << newton_result << " vs " << std::sqrt(input) << std::endl;
+    for (auto input : inputs) {
+        float newton_result = newton_sqrt(input, guess);
+        std::cout << input << ": " << newton_result << " vs " << std::sqrt(input) << std::endl;
+    }
 }
