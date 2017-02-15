@@ -3,30 +3,27 @@
 
 // Newton method of sqrt. The stack frame was 48 for Debug mode and 64 for Release mode.
 
-bool* start = nullptr;
-bool* end = nullptr;
-
-float function( float y, int it, float& rx, int& ri)
+float newton_sqrt( float y, int it, float x, int i, bool** start_address, bool** end_address)
 {
-    if( ri == 0)
+    if( i == 0)
     {
         bool a;
-        start = &a;
+        *start_address = &a;
     }
-    else if( ri == it )
+    else if( i == it )
     {
         bool a;
-        end = &a;
+        *end_address = &a;
     }
-
-    while( ri < it)
+    
+    if( i < it )
     {
-        ri++;
-        rx -= ( rx * rx - y )/(2 * rx);
-        function( y, it, rx, ri );
+        i++;
+        x -= ( x * x - y )/(2 * x);
+        x = newton_sqrt( y, it, x, i, start_address, end_address );
     }
-
-    return rx;
+    
+    return x;
 
 }
 
@@ -38,14 +35,16 @@ int main(int argc, char** argv)
 
     int i = 0;
 
-    int& ri = i;
-    float& rx = x;
+    bool* start = nullptr;
+    bool* end = nullptr;
+    bool** start_address = &start;
+    bool** end_address = &end;
 
-    std::cout << "sqrt of " << argv[1] << " is " << function(y, it, rx, ri) << std::endl;
+    std::cout << "sqrt of " << argv[1] << " is " << newton_sqrt(y, it, x, i, start_address, end_address) << std::endl;
 
-    std::cout << "depth" << "=" << i + 1 << std::endl;
-    int size = (start - end)/i;
-    std::cout << "size of stack frame" << "=" << (start - end)/i << std::endl;
+    std::cout << "depth" << "=" << it + 1 << std::endl;
+    int size = (*start_address - *end_address)/it;
+    std::cout << "size of stack frame" << "=" << (*start_address - *end_address)/it << std::endl;
     if (size > 0)
     {
         std::cout << "stack grows downwards" << std::endl;
