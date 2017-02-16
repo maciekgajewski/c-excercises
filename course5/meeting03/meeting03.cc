@@ -3,7 +3,9 @@
 
 int main(int argc, char** argv)
 {
-	std::string h = "Greetings, ";
-	std::string w = "World!";
+	std::string h = "Hello, worl";
+	std::string w = "d!";
+	
+	std::cout << h << w << std::endl;
 }
 
