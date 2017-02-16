@@ -1,31 +1,21 @@
 #include <iostream>
 #include <string>
 
-double foo()
+void fun(int, int a = 6)
 {
-	std::cout << "I'm foo" << std::endl;
-	return 3.3;
+	std::cout << "fun(int)" << std::endl;
 }
 
-double bar()
+void fun(float)
 {
-	std::cout << "bar" << std::endl;
-	return 6.6;
+	std::cout << "fun(float)" << std::endl;
 }
-	
 
-void hey(int a, int b)
-{
-}
-	
 int main(int argc, char** argv)
 {
-	double(*p1)() = &foo;
+	fun(8);
+	fun(8.8, 8);
 	
-	auto x = p1();
-	p1 = &bar;
-	std::cout << p1() << std::endl;
-	
-	p1 = &hey;
-	std::cout << p1() << std::endl;
+	std::cout << std::setprecision(7) << 8.8 << std::endl;
+	::printf("%7f", 8.8, 6, 77);
 }
