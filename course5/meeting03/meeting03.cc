@@ -1,29 +1,44 @@
 #include <iostream>
 #include <string>
 
-struct Vector
+namespace course
 {
-	std::int32_t x;
-	std::int32_t y;
-};
+
+double foo(int x)
+{
+	std::cout << "I'm course::foo, and x=" << x << std::endl;
+	return x * 3;
+}
+
+}
+
+// int foo(int i)
+// {
+// 	std::cout << "I'm foo, and i=" << i << std::endl;
+// 	if (i > 0)
+// 		return i*2.0;
+// 	else
+// 		return i;
+// }
+
+namespace course 
+{
+	namespace inner
+	{
+		
+		double bar()
+		{
+			return foo(6);
+		}
+	}
+	
+	
+}
 
 int main(int argc, char** argv)
 {
-	std::string h = "Hello, worl";
-	std::string w = "d!";
+	using namespace course;
 	
-	
-	for(int i =0 ; i < 5; i++)
-	{
-		std::string s = std::to_string(i);
-	}
-	
-
-	if(w == "d!")
-	{
-		std::string x = "X";
-	}
-	
-	std::cout << h << w << std::endl;
-	std::cout << "The size of std::string is: " << sizeof(std::string) << std::endl;
+	auto x = ::foo(argc);
+	std::cout << "x = " << x << std::endl;
 }
