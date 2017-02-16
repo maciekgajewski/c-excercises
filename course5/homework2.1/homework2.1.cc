@@ -5,7 +5,7 @@
 float fast_inv_sqrt(float number)
 {
     const float threehalfs = 1.5f;
-    int32_t i;
+    std::int32_t i;
     static_assert(sizeof(i) == sizeof(number), "Only 32bit float type supported");
     std::memcpy(&i, &number, sizeof(i));
     i = 0x5f3759df - (i >> 1);
