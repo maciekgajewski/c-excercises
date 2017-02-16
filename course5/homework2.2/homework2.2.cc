@@ -3,8 +3,6 @@
 #include <cstring>
 #include <vector>
 
-static const float EPSILON = 1.0e-8;
-
 struct FuncInspectMetadata
 {
     std::vector<void*> ptr_to_local;
@@ -16,6 +14,7 @@ struct FuncInspectMetadata
 // The stack grows from the higher address to the lower on this ABI.
 float newton_sqrt(float number, float guess, FuncInspectMetadata &metadata)
 {
+    static constexpr float EPSILON = 1.0e-8;
     metadata.ptr_to_local.push_back(&guess);
     if (std::fabs(guess*guess - number) < EPSILON) return guess;
     return newton_sqrt(number, guess - ((guess*guess - number) / (2*guess)), metadata);
