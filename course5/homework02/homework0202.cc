@@ -27,7 +27,9 @@ x_{n+1} = x_{n} - (x_{n}^2 - x_{n}) / (2 * x_{n})
 
 float newton_sqrt(float input, float result)
 {
-    if (result * result - input > .00001) {
+    const float DELTA = 1E-5;
+    if (std::abs(result*result - input) > DELTA)
+    {
         result = result - (( result * result - input) / (2 * result));
         return newton_sqrt(input, result);
     }
