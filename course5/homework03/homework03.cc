@@ -1,38 +1,38 @@
 #include <cstdio>
 #include <string>
-#include <typeinfo>
 #include <iostream>
-#include <type_traits>
 
-template <typename T>
-void print(T p, int prec = 4)
+void print(int x)
 {
-	auto a = p;
-	if ( std::is_same<T, int>::value | std::is_same<T, long>::value )
-	{
-		std::printf("%d\n", a);
-		std::printf("%s\n", "int");
-	} else if ( std::is_same<T, float>::value | std::is_same<T, double>::value )
-	{
-		std::printf("%f\n", a);
-		std::printf("%s\n", "float");
-	} else if ( std::is_same<T, std::string>::value )
-	{
-		std::printf("%s\n", a);
-		std::printf("%s\n", "string");
-	} else if ( std::is_same<T, bool>::value )
-	{
-		if (a == 1)
-		{
-			std::printf("%s\n", "true");
-		}
-	//	std::printf("%s\n", a ? "true" : "false");
-	} else
-	{
-		std::printf("%s\n", "unsupported type");
-	}
+	std::printf("%d\n", x);
 }
-// TODO your code goes here
+
+void print(long x)
+{
+	std::printf("%ld\n", x);
+}
+
+void print(bool x)
+{
+	std::printf("%s\n", x ? "true" : "false");
+}
+
+void print(const std::string x)
+{
+	std::printf("%s\n", x.c_str());
+}
+
+void print(const char* x)
+{
+	std::printf("%s\n", x);
+}
+
+
+void print(double x, int prec = 0)
+{
+	std::printf("%.*f \n", prec, x);
+}
+
 
 int main()
 {
@@ -47,9 +47,4 @@ int main()
 
 	float f = 6;
 	print(f); // 6
-//	std::cout << typeid(typeid(7).name()).name() << std::endl;
-//	std::cout << typeid(3.3f).name() << std::endl;
-//	std::cout << typeid("hello4").name()[0] << std::endl;
-//	std::cout << typeid(ch).name() << std::endl;
-//	std::cout << typeid(true).name() << std::endl;
 }
