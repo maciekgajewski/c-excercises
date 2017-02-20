@@ -1,6 +1,7 @@
 #include <cstdio>
-
-// TODO your code goes here
+#include <iostream>
+#include <string>
+#include "print.h"
 
 int main()
 {
@@ -10,7 +11,7 @@ int main()
 	print(1.0/3.0, 2);// 0.33
 	
 	std::string s = "world!";
-	ptrint("hello, ") // hello, 
+	print("hello, "); // hello, 
 	print(s); // world!
 	
 	float f = 6;
