@@ -60,11 +60,11 @@ int main()
         print(7); // 7
         print(true);// true
         print(1.0/3.0, 2);// 0.33
-            
+
         std::string s = "world!";
         print("hello, "); // hello, 
         print(s); // world!
-            
+
         float f = 6;
         print(f); // 6
 }
