@@ -10,9 +10,10 @@ int main()
 	print(1.0/3.0, 2);// 0.33
 	
 	std::string s = "world!";
-	ptrint("hello, ") // hello, 
+	print("hello, ") // hello, 
 	print(s); // world!
 	
 	float f = 6;
 	print(f); // 6
 }
+
