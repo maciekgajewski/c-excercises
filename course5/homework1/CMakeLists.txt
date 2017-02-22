@@ -1,6 +1,2 @@
-set(CMAKE_CXX_STANDARD 14)
-set(CMAKE_CXX_FLAGS "-Wall")
-project(hw1)
-add_executable(hw1_v1 homework1_v1.cc)
-add_executable(hw1_v2 homework1_v2.cc)
-add_executable(hw1_hell homework1_hell.cc)
+# Your code goes here
+
