@@ -1,37 +1,50 @@
 #include <iostream>
 
-struct Vector;
 
-void print(const Vector& );
-
-struct Carrier;
-
-struct Plane
+class Vector
 {
-	Carrier* carrier;
+public:
+	void Init(int x, int y) // Vector::Init(Vector* this, int xx, int yy)
+	{
+		this->x = x;
+		this->y = y;
+	}
+	
+	int GetX() { return x; }
+	int GetY() { return y; }
+	
+	Vector operator + (Vector rhs)
+	{
+		Vector v; 
+		v.Init(this->x + rhs.x, this->y + rhs.y);
+		return v;
+	}
+	
+private:
+	int x = 0;
+	int y = 0;
 };
 
-struct Carrier
+std::ostream& operator<<(std::ostream& stream, Vector vec)
 {
-	std::vector<Plane> planes;
-};
+	stream << "(" << vec.GetX() << ", " << vec.GetY() << ")";
+	return stream;
+}
 
-
-struct Vector
+void print(Vector vec)
 {
-	int x;
-	int y;
-};
-
+	std::cout << vec << std::endl;
+}
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	Vector v = {1, 55};
-	
+	Vector v; // constructor call
 	print(v);
-}
+	v.Init(55, 77);
+	
+	Vector x;
+	x.Init(6, 8);
+	
+	print(v + x);
+} // destructor 
 
-void print(const Vector& vec)
-{
-	std::cout << "(" << vec.x << ", " << vec.y << ")" << std::endl;
-}
