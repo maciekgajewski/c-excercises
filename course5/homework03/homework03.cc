@@ -21,9 +21,7 @@ namespace printer
 
 	void print(double input, int precision = 0)
 	{
-		std::string format_str = "%." + std::to_string(precision) + "f";
-		const char * format_ptr = format_str.c_str();
-		std::printf(format_ptr, input);
+		std::printf("%.*f", precision, input);
 	}
 
 	void print(bool input)
