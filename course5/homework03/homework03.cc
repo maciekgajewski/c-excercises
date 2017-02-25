@@ -28,7 +28,7 @@ namespace printer
 
 	void print(bool input)
 	{
-		if (input == 1)
+		if (input)
 			std::printf("true");
 		else
 			std::printf("false");
