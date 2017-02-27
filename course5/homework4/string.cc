@@ -24,12 +24,6 @@ private:
 class Stream
 {
 public:
-
-        Stream()
-        {
-            throw std::runtime_error("No file or filename provided");
-        }
-
         Stream(const char* filename)
         {
             this->file = std::fopen(filename, "w");
@@ -48,25 +42,13 @@ public:
             }
         }
 
-        Stream(const Stream&)
-        {
-            throw std::runtime_error("Stream is not copyable");
-        }
+        Stream(const Stream&) = delete;
 
-        Stream(Stream&&)
-        {
-            throw std::runtime_error("Stream is not movable");
-        }
+        Stream(Stream&&) = delete;
 
-        Stream& operator=(const Stream&)
-        {
-            throw std::runtime_error("Stream is not copyable");
-        }
+        Stream& operator=(const Stream&) = delete;
 
-        Stream& operator=(Stream&&)
-        {
-            throw std::runtime_error("Stream is not moveable");
-        }        
+        Stream& operator=(Stream&&) = delete; 
 
         Stream& operator<<(const std::string& x)
         {
@@ -131,7 +113,7 @@ int main(int, char**)
     s << "Hello, " << w; // content does not appear in the file due to quick_exit
     
     Cout << "2 + 2 = " << 2 + 2 << "\n";
-
+    
     Stream f("text.txt");
     f << "hey" << Endl; //content does appear in the file because of Endl
     
