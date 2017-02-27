@@ -82,16 +82,15 @@ private:
     FILE *mFile;
 };
 
-StreamWriter& Endl(StreamWriter &writer)
+struct EndlClass {};
+
+static EndlClass Endl;
+
+StreamWriter& operator<<(StreamWriter &writer, EndlClass)
 {
     writer << "\n";
     writer.flush();
     return writer;
-}
-
-StreamWriter& operator<<(StreamWriter &writer, StreamWriter& (*Manipulator)(StreamWriter&))
-{
-    return Manipulator(writer);
 }
 
 void test_move(StreamWriter writer)
