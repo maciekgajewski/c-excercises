@@ -21,6 +21,15 @@ public:
         rhs.mFile = nullptr;
     }
 
+    StreamWriter& operator=(StreamWriter &&rhs)
+    {
+        if (mFile)
+            std::fclose(mFile);
+        mFile = rhs.mFile;
+        rhs.mFile = nullptr;
+        return *this;
+    }
+
     StreamWriter(StreamWriter const &) = delete;
     StreamWriter& operator=(StreamWriter const &) = delete;
 
@@ -96,7 +105,12 @@ int main()
     std::string w = "World!";
     s << "Hello, " << w << "\n";
     s << "2 + 2 = " << 2 + 2 << "\n";
-    test_move(std::move(s));
+
+    StreamWriter serr("/dev/stderr");
+    serr = std::move(s);
+    serr << "Hello again!\n";
+
+    test_move(std::move(serr));
 
     StreamWriter s2("output.txt");
     s2 << "hey" << Endl << "test" << Endl;
