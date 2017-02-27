@@ -73,7 +73,7 @@ private:
     FILE *mFile;
 };
 
-StreamWriter& MyEndl(StreamWriter &writer)
+StreamWriter& Endl(StreamWriter &writer)
 {
     writer << "\n";
     writer.flush();
@@ -87,7 +87,7 @@ StreamWriter& operator<<(StreamWriter &writer, StreamWriter& (*Manipulator)(Stre
 
 void test_move(StreamWriter writer)
 {
-    writer << "Mokus felmaszott a fara." << MyEndl;
+    writer << "Mokus felmaszott a fara." << Endl;
 }
 
 int main()
@@ -99,6 +99,6 @@ int main()
     test_move(std::move(s));
 
     StreamWriter s2("output.txt");
-    s2 << "hey" << MyEndl << "test" << MyEndl;
+    s2 << "hey" << Endl << "test" << Endl;
     std::quick_exit(1);
 }
