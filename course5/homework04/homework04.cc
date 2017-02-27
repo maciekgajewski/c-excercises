@@ -11,6 +11,8 @@ public:
     StreamWriter(std::string const &filename, std::string const &mode="w")
     {
         mFile = std::fopen(filename.c_str(), mode.c_str());
+        if (mFile == nullptr)
+            throw std::runtime_error(std::strerror(errno));
     }
 
     StreamWriter(StreamWriter &&rhs)
