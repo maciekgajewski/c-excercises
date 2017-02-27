@@ -5,14 +5,6 @@
 #include <tuple>
 #include <cerrno>
 
-class PrintError : public std::runtime_error
-{
-public:
-    using std::runtime_error::runtime_error;
-    PrintError() : std::runtime_error(std::strerror(errno))
-    {}
-};
-
 class StreamWriter
 {
 public:
@@ -28,7 +20,7 @@ public:
     }
 
     StreamWriter(StreamWriter const &) = delete;
-    StreamWriter operator=(StreamWriter const &) = delete;
+    StreamWriter& operator=(StreamWriter const &) = delete;
 
     ~StreamWriter()
     {
@@ -38,31 +30,36 @@ public:
 
     StreamWriter& operator<<(bool b)
     {
-        if (std::fprintf(mFile, b ? "true" : "false") < 0) throw PrintError();
+        if (std::fprintf(mFile, b ? "true" : "false") < 0)
+            throw std::runtime_error(std::strerror(errno));
         return *this;
     }
 
     StreamWriter& operator<<(int i)
     {
-        if (std::fprintf(mFile, "%d", i) < 0) throw PrintError();
+        if (std::fprintf(mFile, "%d", i) < 0)
+            throw std::runtime_error(std::strerror(errno));
         return *this;
     }
 
     StreamWriter& operator<<(double d)
     {
-        if (std::fprintf(mFile, "%lg", d) < 0) throw PrintError();
+        if (std::fprintf(mFile, "%lg", d) < 0)
+            throw std::runtime_error(std::strerror(errno));
         return *this;
     }
 
     StreamWriter& operator<<(char const *str)
     {
-        if (std::fprintf(mFile, "%s", str) < 0) throw PrintError();
+        if (std::fprintf(mFile, "%s", str) < 0)
+            throw std::runtime_error(std::strerror(errno));
         return *this;
     }
 
     StreamWriter& operator<<(std::string const &str)
     {
-        if (std::fprintf(mFile, "%s", str.c_str()) < 0) throw PrintError();
+        if (std::fprintf(mFile, "%s", str.c_str()) < 0)
+            throw std::runtime_error(std::strerror(errno));
         return *this;
     }
 
