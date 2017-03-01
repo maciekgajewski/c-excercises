@@ -26,9 +26,8 @@ public:
 	}
 
 	~Stream()
-	{
-                if (file != stdout)
-                        std::fclose(file);
+        {
+                std::fclose(file);
 	}
 
 	Stream& operator << (std::string value)
@@ -76,10 +75,9 @@ int main(int argc, char** argv)
 
         Stream Cout;
 
+        // why: double free or corruption (top) ?
         if (argc > 1)
                 Cout = Stream(argv[1]);
-
-        Cout << std::string(argv[1]) << Stream::endl;
 
 	// comment indicates the expected input
         Cout << 7 << 5 << Stream::endl; // 75
