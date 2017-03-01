@@ -1,5 +1,6 @@
 #$ build dir
 build_
+course5/builds
 # Compiled Object files
 *.slo
 *.lo
