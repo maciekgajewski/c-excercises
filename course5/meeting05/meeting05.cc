@@ -2,39 +2,43 @@
 #include <string>
 #include <cassert>
 
-class Counter
+struct Person
 {
-public:
+	Person() = delete;
 	
-	Counter(int& r) : mRef(r)
+	Person(std::string n, unsigned a)
+		: name(n), age(a)
 	{
 	}
+
+	std::string GetName() const { return name; }
+	unsigned GetAge() const { return age; }
 	
-	Counter(const Counter& other) = delete;
-	
-	void Count()
-	{
-		mRef++;
-	}
+	void SetAge(unsigned a) { age = a; }
 	
 private:
-	int& mRef;
+	std::string name;
+	unsigned age = 0;
 };
+
+void fun(const std::string& str)
+{
+	std::cout << "Fun: length of str=" << str.length() << std::endl;
+}
+
+void fun(const Person& p)
+{
+	std::cout << "Fun: " << p.GetName() << " is " << p.GetAge() << " years old" << std::endl;
+}
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	int x = 0;
-	Counter c1(x);
-	Counter c2(x);
+	Person p("Maciek", 36);
 	
-	c1.Count();
-	c2.Count();
-	c1.Count();
-	
-	//Counter c3; // if compiles: Counter has default constructor
-	Counter c4 = c1; // if compiles - its copyable
-	
-	std::cout << "x = " << x << std::endl;
-	
+	std::string s = "Hello";
+	std::string s2 = ", world!";
+	fun(s + s2);
+	fun("yoyoyo");
+	fun(p);
 }
 
