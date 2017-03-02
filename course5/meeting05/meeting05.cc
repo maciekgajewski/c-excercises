@@ -21,24 +21,15 @@ private:
 	unsigned age = 0;
 };
 
-void fun(const std::string& str)
+std::ostream& operator<<(std::ostream& s, const Person& p)
 {
-	std::cout << "Fun: length of str=" << str.length() << std::endl;
-}
-
-void fun(const Person& p)
-{
-	std::cout << "Fun: " << p.GetName() << " is " << p.GetAge() << " years old" << std::endl;
+	s << p.GetName() << " is " << p.GetAge() << " years old";
+	return s;
 }
 
 int main(int /*argc*/, char** /*argv*/)
 {
 	Person p("Maciek", 36);
-	
-	std::string s = "Hello";
-	std::string s2 = ", world!";
-	fun(s + s2);
-	fun("yoyoyo");
-	fun(p);
+	std::cout << p << std::endl;
 }
 
