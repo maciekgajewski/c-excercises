@@ -10,6 +10,14 @@ public:
 	
 	enum class Mode { READ, WRITE, APPEND };
 	
+	File() = delete;
+	File(const File&) = delete;
+	File(File&& src)
+	{
+		mFile = src.mFile;
+		src.mFile = nullptr;
+	}
+	
 	File(const std::string& path, Mode mode)
 	{
 		switch(mode)
@@ -33,7 +41,8 @@ public:
 	
 	~File()
 	{
-		std::fclose(mFile);
+		if (mFile)
+			std::fclose(mFile);
 	}
 	
 	void write(const std::string& s)
@@ -53,9 +62,12 @@ private:
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	File f("/output.txt", File::Mode::APPEND);
+	File f("output.txt", File::Mode::APPEND);
 	f.write("hey\n");
 	std::string str = "you!";
 	f.write(str);
+	
+	File f2 = std::move(f);
+	f2.write("boo");
 }
 
