@@ -3,71 +3,44 @@
 #include <cassert>
 #include <cstdio>
 #include <cstring>
+#include <thread>
 
-class File
+struct Length
 {
-public:
+	Length(double m) :mMeters(m) {}
 	
-	enum class Mode { READ, WRITE, APPEND };
+	double ToMeters() const { return mMeters; }
+	double ToInches() const { return mMeters * 39.37; }
 	
-	File() = delete;
-	File(const File&) = delete;
-	File(File&& src)
+	Length operator-(const Length& o) const
 	{
-		mFile = src.mFile;
-		src.mFile = nullptr;
+		return Length(mMeters - o.mMeters);
 	}
 	
-	File(const std::string& path, Mode mode)
-	{
-		switch(mode)
-		{
-		case Mode::READ:
-			mFile = std::fopen(path.c_str(), "r");
-			break;
-		case Mode::WRITE:	
-			mFile = std::fopen(path.c_str(), "w");
-			break;
-		case Mode::APPEND:	
-			mFile = std::fopen(path.c_str(), "a");
-			break;
-		}
-		if (!mFile)
-		{
-			std::string msg = std::strerror(errno);
-			throw std::runtime_error("Failed to open a file:" + msg);
-		}
-	}
-	
-	~File()
-	{
-		if (mFile)
-			std::fclose(mFile);
-	}
-	
-	void write(const std::string& s)
-	{
-		std::fprintf(mFile, "%s", s.c_str());
-	}
-	
-	void write(const char* s)
-	{
-		std::fprintf(mFile, "%s", s);
-	}
-
 private:
-	
-	FILE* mFile;
+	double mMeters = 0.0;
 };
+
+std::ostream& operator<<(std::ostream& s, const Length& l)
+{
+	s << l.ToMeters() << "m";
+	return s;
+}
+
+Length operator "" _m(long double meters){ return Length(meters);}
+Length operator "" _cm(long double c){ return Length(c/100.0);}
+Length operator "" _cm(unsigned long long c){ return Length(c/100.0);}
+
+using namespace std::literals;
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	File f("output.txt", File::Mode::APPEND);
-	f.write("hey\n");
-	std::string str = "you!";
-	f.write(str);
+	Length l(2);
 	
-	File f2 = std::move(f);
-	f2.write("boo");
+	std::cout << "Maciek's height: " << l << std::endl;
+	std::this_thread::sleep_for(3min);
+	std::cout <<"Fei's height: " << l - 28_cm << std::endl;
+	
+	
 }
 
