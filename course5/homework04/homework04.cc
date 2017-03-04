@@ -15,20 +15,35 @@ private:
 public:
         static Endl endl;
 
-        Stream()
-        {
-                file = stdout;
-        }
+        Stream() = delete;
+
+        Stream(FILE * file) : file(file) { }
 
         Stream(const char * filename)
 	{
                 file = std::fopen(filename, "w");
 	}
 
+        Stream(Stream&& source)
+        {
+                file = source.file;
+                source.file = nullptr;
+        }
+
+        Stream(const Stream& other) = delete;
+
 	~Stream()
         {
-                std::fclose(file);
+                if (file && file != stdout)
+                    std::fclose(file);
 	}
+
+        Stream& operator = (Stream&& stream)
+        {
+                file = stream.file;
+                stream.file = nullptr;
+                return *this;
+        }
 
 	Stream& operator << (std::string value)
 	{
@@ -70,27 +85,32 @@ public:
 
 };
 
+void test(Stream& cout)
+{
+        // comment indicates the expected input
+        cout << 7 << 5 << Stream::endl; // 75
+        cout << true;// true
+        cout << 1.0/3.0;// 0.33
+
+        std::string s = "world!";
+        cout << "hello, "; // hello,
+        cout << s; // world!
+        cout << Stream::endl;
+
+        float f = 6;
+        cout << f; // 6
+        cout << Stream::endl;
+}
+
 int main(int argc, char** argv)
 {
+        Stream Cout = Stream(stdout);
 
-        Stream Cout;
-
-        // why: double free or corruption (top) ?
         if (argc > 1)
-                Cout = Stream(argv[1]);
-
-	// comment indicates the expected input
-        Cout << 7 << 5 << Stream::endl; // 75
-        Cout << true;// true
-        Cout << 1.0/3.0;// 0.33
-	
-	std::string s = "world!";
-        Cout << "hello, "; // hello,
-        Cout << s; // world!
-        Cout << Stream::endl;
-	
-	float f = 6;
-        Cout << f; // 6
-        Cout << Stream::endl;
+        {
+            auto c = Stream(argv[1]);
+            Cout = std::move(c); //why I cannot just do Cout = Stream(argv[1]);?
+        }
+        test(Cout);
 }
 
