@@ -15,10 +15,8 @@ class Stream
 {
 public:
 	// Constructors
-	Stream() // default
-	{
-		throw std::runtime_error("Stream must be constructed with a filename: Stream('filename.txt')");
-	}
+	Stream() = delete; // default
+
 	Stream(const Stream&) = delete; // copy
 
 	Stream(Stream&& src) // move
@@ -104,6 +102,7 @@ int Endl = EOF;
 int main(int, char**)
 {
 	Stream s("output.txt");
+	// Stream s2; // test that default construction doesn't compile
 	// Stream s2 = s; // test that copy construction doesn't compile
 	// Stream s2; // test copy assignment doesn't compile
 	// s2 = s;
