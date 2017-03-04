@@ -108,8 +108,7 @@ int main(int argc, char** argv)
 
         if (argc > 1)
         {
-            auto c = Stream(argv[1]);
-            Cout = std::move(c); //why I cannot just do Cout = Stream(argv[1]);?
+            Cout = std::move(Stream(argv[1]));
         }
         test(Cout);
 }
