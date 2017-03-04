@@ -19,7 +19,12 @@ namespace printer
 		std::printf("%i", input);
 	}
 
-	void print(double input, int precision = 0)
+	void print(double input)
+	{
+		std::printf("%g", input);
+	}
+
+	void print(double input, int precision)
 	{
 		std::printf("%.*f", precision, input);
 	}
@@ -61,6 +66,8 @@ int main()
 	float f = 6;
 	print(f); // 6
 
-	double d = 6;
+	double d = 6.6;
 	print(d); // 6
+
+	print(6.87234, 2);
 }
