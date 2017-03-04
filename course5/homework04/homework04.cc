@@ -19,10 +19,8 @@ public:
 	{
 		throw std::runtime_error("Stream must be constructed with a filename: Stream('filename.txt')");
 	}
-	Stream(const Stream&) // copy
-	{
-		throw std::runtime_error("Stream object cannot be copied");
-	}
+	Stream(const Stream&) = delete; // copy
+
 	Stream(Stream&& src) // move
 	{
 		fname = src.fname;
@@ -45,12 +43,7 @@ public:
 	}
 
 	// copy assignment operator
-	Stream& operator=(const Stream& src)
-	{
-		fname = src.fname;
-		fp = src.fp;
-		return *this;
-	}
+	Stream& operator=(const Stream& src) = delete;
 
 	// move assignment operator
 	Stream& operator=(Stream&& src)
@@ -111,6 +104,9 @@ int Endl = EOF;
 int main(int, char**)
 {
 	Stream s("output.txt");
+	// Stream s2 = s; // test that copy construction doesn't compile
+	// Stream s2; // test copy assignment doesn't compile
+	// s2 = s;
 
 	std::string w = "World!";
 	s << "Hello, " << w << "\n";
