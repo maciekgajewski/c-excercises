@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <cassert>
 
 /***
 1.       Write a Vector2D class, that has 2 double fields: x, y
@@ -82,6 +83,9 @@ std::ostream& operator<<(std::ostream& s, const Vector2D& vec)
 	return s;
 }
 
+Vector2D operator "" _x(long double initX){ return Vector2D(initX, 0.0);}
+Vector2D operator "" _y(long double initY){ return Vector2D(0.0, initY);}
+
 int main(int, char**)
 {
     Vector2D defaultVec;
@@ -136,4 +140,8 @@ int main(int, char**)
     std::cout << equals << std::endl;
     equals = Vector2D(2, 4) != vec;
     std::cout << equals << std::endl;
+
+    auto autovec = 3.3_x + 0.7_y;
+    std::cout << autovec << std::endl;
+    assert(autovec==Vector2D(3.3, 0.7));
 }
