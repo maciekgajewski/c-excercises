@@ -19,7 +19,28 @@
 class Vector2D
 {
 public:
+    enum class System { CARTESIAN, POLAR };
+
 	Vector2D(double initX = 0.0, double initY = 0.0) : x(initX), y(initY) {}
+
+    Vector2D(double arg1, double arg2, System system)
+    {
+        double initX;
+        double initY;
+        switch(system)
+        {
+        case System::POLAR:
+            initX = arg1 * std::cos(arg2);
+            initY = arg1 * std::sin(arg2);
+            break;
+        case System::CARTESIAN:
+            initX = arg1;
+            initY = arg2;
+            break;
+        }
+        x = initX;
+        y = initY;
+    }
 
 	double GetX() const { return x; }
 	double GetY() const { return y; }
@@ -86,6 +107,9 @@ std::ostream& operator<<(std::ostream& s, const Vector2D& vec)
 Vector2D operator "" _x(long double initX){ return Vector2D(initX, 0.0);}
 Vector2D operator "" _y(long double initY){ return Vector2D(0.0, initY);}
 
+Vector2D operator "" _r(long double initR){ return Vector2D(initR, 0.0, Vector2D::System::POLAR);}
+Vector2D operator "" _theta(long double initTheta){ return Vector2D(std::cos(0.0), initTheta, Vector2D::System::POLAR);}
+
 int main(int, char**)
 {
     Vector2D defaultVec;
@@ -144,4 +168,10 @@ int main(int, char**)
     auto autovec = 3.3_x + 0.7_y;
     std::cout << autovec << std::endl;
     assert(autovec==Vector2D(3.3, 0.7));
+
+    auto autovecPolar = 4.472136_r;
+    auto autovecPolar2 =  1.107149_theta;
+    std::cout << autovecPolar.AsPolar() << std::endl;
+    std::cout << autovecPolar2.AsPolar() << std::endl;
+    std::cout << (autovecPolar + autovecPolar2).AsPolar() << std::endl;
 }
