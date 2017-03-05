@@ -28,6 +28,11 @@ public:
 	{
 		this->fname = fname;
 		this->fp = std::fopen(fname, "a");
+		if (!this->fp)
+		{
+			std::string msg = std::strerror(errno);
+			throw std::runtime_error("Failed to open file: " + msg);
+		}
 	}
 	Stream(std::FILE *)
 	{
@@ -109,6 +114,10 @@ int main(int, char**)
 	// Stream s2 = s; // test that copy construction doesn't compile
 	// Stream s2; // test copy assignment doesn't compile
 	// s2 = s;
+
+	Stream s2("/etc/passwd"); // test that file-open error checking is working
+	s2 << "YOLO!" << Endl;
+
 
 	std::string w = "World!";
 	s << "Hello, " << w << "\n";
