@@ -52,7 +52,7 @@ public:
 	}
 
 	// overloaded << operator
-	Stream& operator << (int input)
+	const Stream& operator << (int input) const
 	{
 		if (input == EOF)
 		{
@@ -65,12 +65,12 @@ public:
 		}
 		return *this;
 	}
-	Stream& operator << (double input)
+	const Stream& operator << (double input) const
 	{
 		std::fprintf(fp, "%f", input);
 		return *this;
 	}
-	Stream& operator << (bool input)
+	const Stream& operator << (bool input) const
 	{
 		if (input)
 			std::fprintf(fp, "true");
@@ -78,12 +78,12 @@ public:
 			std::fprintf(fp, "false");
 		return *this;
 	}
-	Stream& operator << (const char * input)
+	const Stream& operator << (const char * input) const
 	{
 		std::fprintf(fp, "%s", input);
 		return *this;
 	}
-	Stream& operator << (std::string input)
+	const Stream& operator << (std::string input) const
 	{
 		std::fprintf(fp, "%s", input.c_str());
 		return *this;
@@ -94,10 +94,13 @@ private:
 	std::FILE * fp;
 };
 
-
 Stream Cout(stdout);
 int Endl = EOF;
 
+void yolo(const Stream& s)
+{
+	s << "Yolo\n" << Endl;
+}
 
 int main(int, char**)
 {
@@ -113,5 +116,6 @@ int main(int, char**)
 	Cout << "2 + 2 = " << 2 + 2 << "\n";
 	s << "hey" << Endl;
 	s << -2 << Endl;
+	yolo(s);
 	std::abort();
 }
