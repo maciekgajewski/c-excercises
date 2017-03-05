@@ -49,14 +49,14 @@ Vector2D& Vector2D::operator-=(const Vector2D& lhs)
 	return *this;
 }
 
-Vector2D operator+(const RadialCoord& r, const AngularCoord& t)
+Vector2D operator*(const RadialCoord& r, const AngularCoord& t)
 {
 	return { r.val * std::cos(t.val), r.val * std::sin(t.val) };
 }
 
-Vector2D operator+(const AngularCoord& t, const RadialCoord& r)
+Vector2D operator*(const AngularCoord& t, const RadialCoord& r)
 {
-	return r + t;
+	return r * t;
 }
 
 

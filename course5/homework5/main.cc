@@ -4,8 +4,6 @@
 #include <cassert>
 #include <cmath>
 
-const double pi = std::acos(-1);
-
 using namespace Vector;
 
 int main()
@@ -43,12 +41,12 @@ int main()
 	{
 		Vector2D c(0, 10);
 		assert(c.GetRad() == 10.0);
-		assert(c.GetTheta() == (pi / 2));
+		assert(c.GetTheta() == (M_PI / 2));
 	}
 
 	{
 		Vector2D c(2, 2);
-		assert(c.GetTheta() == (pi / 4));
+		assert(c.GetTheta() == (M_PI / 4));
 	}
 
 	{
@@ -62,12 +60,12 @@ int main()
 	}
 
 	{
-		auto vec = 3.3_r + 1.0_t;
+		auto vec = 3.3_r * 1.0_t;
 		assert(vec.GetRad() == 3.3 && vec.GetTheta() == 1.0);
 	}
 
 	{
-		auto vec = 1.0_t + 3.3_r;
+		auto vec = 1.0_t * 3.3_r;
 		assert(vec.GetRad() == 3.3 && vec.GetTheta() == 1.0);
 	}
 }
