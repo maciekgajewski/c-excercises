@@ -12,7 +12,7 @@
 7.       Can you come with similar way of initializing vector with user-defined literals, but from polar coordinates?
 8.       Let’s apply some more proper structure to the project: put the class’ definition into vector2d.h, class implementation into vector2d.cc, main function with all the unit tests in main.cc
 9.       Make sure you test all the functionality!
-10.   Remember to put your class into a namespace.
+10.      Remember to put your class into a namespace.
 ***/
 
 class Vector2D
@@ -33,6 +33,43 @@ public:
     {
         return "(" + std::to_string(GetR()) + "-r, " + std::to_string(GetTheta()) + "-theta)";
     }
+
+    Vector2D operator+(const Vector2D& vec) const
+	{
+		return Vector2D(x + vec.x, y + vec.y);
+	}
+
+    Vector2D operator-() const
+	{
+		return Vector2D(-x, -y);
+	}
+
+    Vector2D operator-(const Vector2D& vec) const
+	{
+		return Vector2D(x - vec.x, y - vec.y);
+	}
+
+    void operator+=(const Vector2D& vec)
+	{
+		x = x + vec.x;
+		y = y + vec.y;
+	}
+
+    void operator-=(const Vector2D& vec)
+	{
+		x = x - vec.x;
+		y = y - vec.y;
+	}
+
+    bool operator==(const Vector2D& vec) const
+	{
+		return (x == vec.x) && (y == vec.y);
+	}
+
+    bool operator!=(const Vector2D& vec) const
+	{
+		return !(*this == vec);
+	}
 
 private:
 	double x = 0.0;
@@ -65,4 +102,38 @@ int main(int, char**)
 
     defaultVec = vec;
     std::cout << defaultVec << std::endl;
+
+    Vector2D addedVec = Vector2D(1, 3) + Vector2D(2, 1);
+    std::cout << addedVec << std::endl;
+
+    Vector2D subtractedVec = Vector2D(4, 5) - Vector2D(2, 1);
+    std::cout << subtractedVec << std::endl;
+
+    Vector2D negatedVec = -Vector2D(1, 2);
+    std::cout << negatedVec << std::endl;
+
+    Vector2D otherVec(1, 3);
+    std::cout << "Increment assigning vector " << vec << " with " << otherVec << std::endl;
+    vec += otherVec;
+    std::cout << vec << std::endl;
+
+    std::cout << "And decrement assigning vector " << vec << " with " << otherVec << std::endl;
+    vec -= otherVec;
+    std::cout << vec << std::endl;
+
+    std::cout << "Equality: " << std::endl;
+    bool equals = vec == otherVec;
+    std::cout << equals << std::endl;
+    equals = vec == vec;
+    std::cout << equals << std::endl;
+    equals = Vector2D(2, 4) == vec;
+    std::cout << equals << std::endl;
+
+    std::cout << "Non-equality: " << std::endl;
+    equals = vec != otherVec;
+    std::cout << equals << std::endl;
+    equals = vec != vec;
+    std::cout << equals << std::endl;
+    equals = Vector2D(2, 4) != vec;
+    std::cout << equals << std::endl;
 }
