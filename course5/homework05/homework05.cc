@@ -1,9 +1,6 @@
 #include <iostream>
-// #include <string>
-// #include <cassert>
-// #include <cstdio>
-// #include <cstring>
-// #include <thread>
+#include <cmath>
+#include <string>
 
 /***
 1.       Write a Vector2D class, that has 2 double fields: x, y
@@ -29,6 +26,14 @@ public:
     void SetX(double newX) { x = newX; }
     void SetY(double newY) { y = newY; }
 
+    double GetR() const { return std::sqrt(x*x + y*y); }
+    double GetTheta() const { return std::atan2(y, x); }
+
+    std::string AsPolar() const
+    {
+        return "(" + std::to_string(GetR()) + "-r, " + std::to_string(GetTheta()) + "-theta)";
+    }
+
 private:
 	double x = 0.0;
 	double y = 0.0;
@@ -44,15 +49,19 @@ int main(int, char**)
 {
     Vector2D defaultVec;
     std::cout << defaultVec << std::endl;
+    std::cout << defaultVec.AsPolar() << std::endl;
 
 	Vector2D vec(3.14, 3.14);
 	std::cout << vec << std::endl;
+    std::cout << vec.AsPolar() << std::endl;
 
     vec.SetX(2);
     std::cout << vec << std::endl;
+    std::cout << vec.AsPolar() << std::endl;
 
     vec.SetY(4);
     std::cout << vec << std::endl;
+    std::cout << vec.AsPolar() << std::endl;
 
     defaultVec = vec;
     std::cout << defaultVec << std::endl;
