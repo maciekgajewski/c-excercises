@@ -1,5 +1,6 @@
 #include "vector.h"
 #include <iostream>
+#include <cmath>
 
 int main(int, char**)
 {
@@ -9,7 +10,9 @@ int main(int, char**)
 
     std::cout << "v = "<< v << std::endl;
     
-    auto  u = 2*45.0_phi;
+
+
+    auto  u = 2*0.785398_phi;
 
     std::cout << "u = " << u << std::endl;
 
@@ -24,5 +27,9 @@ int main(int, char**)
     std::cout << "v == u: " << (v == u) << std::endl;
 
     std::cout << "v != u: " << (v != u) << std::endl;
+
+    std::cout << "magnitude of v: " << v.GetR() << std::endl;
+
+    std::cout << "angle of v: " << v.GetAngle() << std::endl;
     
 }

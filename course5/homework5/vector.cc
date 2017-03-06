@@ -91,7 +91,7 @@ namespace vector{
 
     Vector2D operator "" _phi(long double phi) // user can provide phi in degree
     {
-        phi = phi * Pi /180;
+        phi = phi;
         Vector2D U(cos(phi), sin(phi));
         return U;
     }
