@@ -20,6 +20,8 @@ int main(int, char**)
 
     std::cout << "u = " << u << std::endl;
 
+    std::cout << "u-= (1.0_x + 1.0_y) " << u << std::endl;
+
     v += u;
 
     std::cout << "v = " << v << std::endl;

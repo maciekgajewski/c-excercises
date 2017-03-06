@@ -65,8 +65,6 @@ namespace vector{
 
     bool Vector2D::operator!=(const Vector2D& src) const { return !(*this == src); }
 
-    
-
     std::ostream& operator<<(std::ostream& s, const Vector2D& V) 
     {
         s << "(" << V.GetX() << ", " << V.GetY() << ")";
