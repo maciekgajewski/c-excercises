@@ -24,6 +24,7 @@ public:
 		std::cout << "move constructor -- from " << src.fname <<std::endl;
 		fname = src.fname;
 		fp = src.fp;
+		src.fp = nullptr;
 	}
 	Stream(const char* fname)
 	{
@@ -49,7 +50,8 @@ public:
 			std::cout << "destruct -- closing " << this->fname << std::endl;
 		else
 			std::cout << "destruct -- closing stdout" << std::endl;
-		std::fclose(this->fp);
+		if (this->fp)
+			std::fclose(this->fp);
 	}
 
 	// copy assignment operator
@@ -61,6 +63,7 @@ public:
 		std::cout << "move assignment -- from " << src.fname << std::endl;
 		fname = src.fname;
 		fp = src.fp;
+		src.fp = nullptr;
 		return *this;
 	}
 
@@ -142,12 +145,11 @@ int main(int, char**)
 	s2 << "\n :) \n" << Endl;
 
 	Stream s3("more.txt");
-	s3 = std::move(sToMove);  // test move assignment
-	s3 << "\n :( \n" << Endl;
+	std::cout << "test move assignment:" << std::endl;
+	Stream s4("tmp.txt");
+	s4 = std::move(s3);  // test move assignment
+	s4 << "\n :( \n" << Endl;
+	s3 << "yolo" << Endl;
 
 	// std::abort();
 }
-
-
-// Stream s2 = std::move(Stream("another.txt"));
-// warning: moving a temporary object prevents copy elision [-Wpessimizing-move]
