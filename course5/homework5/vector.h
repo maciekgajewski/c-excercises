@@ -8,21 +8,19 @@ namespace vector{
             Vector2D() = delete;
             Vector2D(double, double);
             Vector2D(const Vector2D&);
-        //    Vector2D(Vector2D&&);
             Vector2D& operator=(const Vector2D&);
-        //    Vector2D&& operator=(Vector2D&& src);
             double GetX() const;
             double GetY() const;
             void SetX(double);
             void SetY(double);
             double GetR() const;
             double GetAngle() const;
-            Vector2D operator+(const Vector2D&);
-            Vector2D operator-(const Vector2D&);
+            Vector2D operator+(const Vector2D&) const;
+            Vector2D operator-(const Vector2D&) const;
             Vector2D& operator+=(const Vector2D&);
             Vector2D& operator-=(const Vector2D&);
-            bool operator==(const Vector2D&);
-            bool operator!=(const Vector2D&);
+            bool operator==(const Vector2D&) const;
+            bool operator!=(const Vector2D&) const;
 
     private:
             double x;

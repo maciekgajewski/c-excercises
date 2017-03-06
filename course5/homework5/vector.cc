@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 
-#define Pi 3.14159265
 
 namespace vector{
 
@@ -28,16 +27,16 @@ namespace vector{
         this->y = y;
     }
 
-    double Vector2D::GetR() const { return sqrt(x*x + y*y); }
+    double Vector2D::GetR() const { return std::sqrt(x*x + y*y); }
     double Vector2D::GetAngle() const { return atan( y / x); }
 
-    Vector2D Vector2D::operator+(const Vector2D& src)
+    Vector2D Vector2D::operator+(const Vector2D& src) const
     {
         Vector2D v( x + src.x, y + src.y );
         return v;
     }
 
-    Vector2D Vector2D::operator-(const Vector2D& src)
+    Vector2D Vector2D::operator-(const Vector2D& src) const
     {
         Vector2D v( x - src.x, y - src.y );
         return v;
@@ -56,7 +55,7 @@ namespace vector{
         return *this;
     }
 
-    bool Vector2D::operator==(const Vector2D& src)
+    bool Vector2D::operator==(const Vector2D& src) const
     {
         if ( x == src.x && y == src.y )
             return true;
@@ -64,7 +63,7 @@ namespace vector{
             return false;
     }
 
-    bool Vector2D::operator!=(const Vector2D& src)
+    bool Vector2D::operator!=(const Vector2D& src) const
     {
         return !(*this == src);
     }
@@ -89,10 +88,9 @@ namespace vector{
         return Y;
     }
 
-    Vector2D operator "" _phi(long double phi) // user can provide phi in degree
+    Vector2D operator "" _phi(long double phi)
     {
-        phi = phi;
-        Vector2D U(cos(phi), sin(phi));
+        Vector2D U(std::cos(phi), std::sin(phi));
         return U;
     }
 
