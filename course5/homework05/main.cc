@@ -1,6 +1,4 @@
-#include <iostream>
-#include <cmath>
-#include <string>
+#include "vector2d.h"
 #include <cassert>
 
 /***
@@ -16,102 +14,10 @@
 10.      Remember to put your class into a namespace.
 ***/
 
-class Vector2D
-{
-public:
-    enum class System { CARTESIAN, POLAR };
-
-	Vector2D(double initX = 0.0, double initY = 0.0) : x(initX), y(initY) {}
-
-    Vector2D(double arg1, double arg2, System system)
-    {
-        double initX;
-        double initY;
-        switch(system)
-        {
-        case System::POLAR:
-            initX = arg1 * std::cos(arg2);
-            initY = arg1 * std::sin(arg2);
-            break;
-        case System::CARTESIAN:
-            initX = arg1;
-            initY = arg2;
-            break;
-        }
-        x = initX;
-        y = initY;
-    }
-
-	double GetX() const { return x; }
-	double GetY() const { return y; }
-
-    void SetX(double newX) { x = newX; }
-    void SetY(double newY) { y = newY; }
-
-    double GetR() const { return std::sqrt(x*x + y*y); }
-    double GetTheta() const { return std::atan2(y, x); }
-
-    std::string AsPolar() const
-    {
-        return "(" + std::to_string(GetR()) + "-r, " + std::to_string(GetTheta()) + "-theta)";
-    }
-
-    Vector2D operator+(const Vector2D& vec) const
-	{
-		return Vector2D(x + vec.x, y + vec.y);
-	}
-
-    Vector2D operator-() const
-	{
-		return Vector2D(-x, -y);
-	}
-
-    Vector2D operator-(const Vector2D& vec) const
-	{
-		return Vector2D(x - vec.x, y - vec.y);
-	}
-
-    void operator+=(const Vector2D& vec)
-	{
-		x = x + vec.x;
-		y = y + vec.y;
-	}
-
-    void operator-=(const Vector2D& vec)
-	{
-		x = x - vec.x;
-		y = y - vec.y;
-	}
-
-    bool operator==(const Vector2D& vec) const
-	{
-		return (x == vec.x) && (y == vec.y);
-	}
-
-    bool operator!=(const Vector2D& vec) const
-	{
-		return !(*this == vec);
-	}
-
-private:
-	double x = 0.0;
-	double y = 0.0;
-};
-
-std::ostream& operator<<(std::ostream& s, const Vector2D& vec)
-{
-	s << "(" << vec.GetX() << ", " << vec.GetY() << ")";
-	return s;
-}
-
-Vector2D operator "" _x(long double initX){ return Vector2D(initX, 0.0);}
-Vector2D operator "" _y(long double initY){ return Vector2D(0.0, initY);}
-
-Vector2D operator "" _r(long double initR){ return Vector2D(initR, 0.0, Vector2D::System::POLAR);}
-Vector2D operator "" _theta(long double initTheta){ return Vector2D(std::cos(0.0), initTheta, Vector2D::System::POLAR);}
-
 int main(int, char**)
 {
+    using namespace vector;
+
     Vector2D defaultVec;
     std::cout << defaultVec << std::endl;
     std::cout << defaultVec.AsPolar() << std::endl;
