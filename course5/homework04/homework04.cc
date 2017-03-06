@@ -16,19 +16,11 @@ class Stream
 public:
 	// Constructors
 	Stream() = delete; // default
-
 	Stream(const Stream&) = delete; // copy
+	Stream(Stream&& src) = delete; // move
 
-	Stream(Stream&& src) // move
-	{
-		std::cout << "move constructor -- from " << src.fname <<std::endl;
-		fname = src.fname;
-		fp = src.fp;
-		src.fp = nullptr;
-	}
 	Stream(const char* fname)
 	{
-		std::cout << "create -- opening " << fname << std::endl;
 		this->fname = fname;
 		this->fp = std::fopen(fname, "a");
 		if (!this->fp)
@@ -39,17 +31,12 @@ public:
 	}
 	Stream(std::FILE *)
 	{
-		std::cout << "create -- from stdout" << std::endl;
 		this->fp = stdout;
 	}
 
 	// Destructor
 	~Stream()
 	{
-		if (this->fname)
-			std::cout << "destruct -- closing " << this->fname << std::endl;
-		else
-			std::cout << "destruct -- closing stdout" << std::endl;
 		if (this->fp)
 			std::fclose(this->fp);
 	}
@@ -58,14 +45,7 @@ public:
 	Stream& operator=(const Stream& src) = delete;
 
 	// move assignment operator
-	Stream& operator=(Stream&& src)
-	{
-		std::cout << "move assignment -- from " << src.fname << std::endl;
-		fname = src.fname;
-		fp = src.fp;
-		src.fp = nullptr;
-		return *this;
-	}
+	Stream& operator=(Stream&& src) = delete;
 
 	// overloaded << operator
 	const Stream& operator << (int input) const
@@ -116,8 +96,6 @@ int Endl = EOF;
 void yolo(const Stream& s)
 {
 	s << "Yolo" << Endl;
-	Stream sToMove("another2.txt");
-	Stream s2 = std::move(sToMove);
 }
 
 int main(int, char**)
@@ -138,18 +116,7 @@ int main(int, char**)
 	Cout << "2 + 2 = " << 2 + 2 << "\n";
 	s << "hey" << Endl;
 	s << -2 << Endl;
-	yolo(std::move(s));
-
-	Stream sToMove("another.txt");
-	Stream s2 = std::move(sToMove); // test move constructor
-	s2 << "\n :) \n" << Endl;
-
-	Stream s3("more.txt");
-	std::cout << "test move assignment:" << std::endl;
-	Stream s4("tmp.txt");
-	s4 = std::move(s3);  // test move assignment
-	s4 << "\n :( \n" << Endl;
-	s3 << "yolo" << Endl;
+	yolo(s);
 
 	// std::abort();
 }
