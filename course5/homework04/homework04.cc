@@ -19,11 +19,11 @@ public:
 	Stream(const Stream&) = delete; // copy
 	Stream(Stream&& src) = delete; // move
 
-	Stream(const char* fname)
+	Stream(const char* initFname)
 	{
-		this->fname = fname;
-		this->fp = std::fopen(fname, "a");
-		if (!this->fp)
+		fname = initFname;
+		fp = std::fopen(fname, "a");
+		if (!fp)
 		{
 			std::string msg = std::strerror(errno);
 			throw std::runtime_error("Failed to open file: " + msg);
@@ -31,14 +31,14 @@ public:
 	}
 	Stream(std::FILE *)
 	{
-		this->fp = stdout;
+		fp = stdout;
 	}
 
 	// Destructor
 	~Stream()
 	{
-		if (this->fp)
-			std::fclose(this->fp);
+		if (fp)
+			std::fclose(fp);
 	}
 
 	// copy assignment operator
