@@ -30,10 +30,10 @@ inline Radian operator"" _rad(unsigned long long r) { return Radian(r); }
 inline Degree operator"" _deg(long double d) { return Degree(d); }
 inline Degree operator"" _deg(unsigned long long d) { return Degree(d); }
 
-class PolarHelper
+class Distance
 {
 public:
-    explicit PolarHelper(double r)
+    explicit Distance(double r)
         : mR(r)
     {}
 
@@ -74,9 +74,9 @@ private:
     double mX, mY;
 };
 
-Vector2D operator+(PolarHelper r, Radian o);
-Course::PolarHelper operator "" _r(long double r);
-Course::PolarHelper operator "" _r(unsigned long long r);
+Vector2D operator*(Distance r, Radian o);
+Course::Distance operator "" _r(long double r);
+Course::Distance operator "" _r(unsigned long long r);
 Course::Vector2D operator "" _x(long double x);
 Course::Vector2D operator "" _y(long double y);
 Course::Vector2D operator "" _x(unsigned long long x);

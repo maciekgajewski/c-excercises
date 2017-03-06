@@ -48,7 +48,7 @@ Vector2D& Vector2D::operator-=(Vector2D rhs)
     return *this;
 }
 
-Vector2D operator+(PolarHelper r, Radian o)
+Vector2D operator*(Distance r, Radian o)
 {
     return Vector2D::FromPolar(r.Get(), o);
 }
@@ -58,14 +58,14 @@ Vector2D Vector2D::FromPolar(double r, Radian O)
     return Vector2D(r * std::cos(O.Get()), r * std::sin(O.Get()));
 }
 
-PolarHelper operator "" _r(long double r)
+Distance operator "" _r(long double r)
 {
-    return Course::PolarHelper(r);
+    return Course::Distance(r);
 }
 
-PolarHelper operator "" _r(unsigned long long r)
+Distance operator "" _r(unsigned long long r)
 {
-    return Course::PolarHelper(r);
+    return Course::Distance(r);
 }
 
 Vector2D operator "" _x(long double x)
