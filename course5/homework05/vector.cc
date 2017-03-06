@@ -2,10 +2,6 @@
 
 namespace Course {
 
-Radian::Radian(const Degree& degree)
-    : mRadian(degree.Get() * (M_PI/180.0))
-{}
-
 Vector2D::Vector2D(double x, double y) : mX(x), mY(y)
 {}
 
@@ -48,14 +44,14 @@ Vector2D& Vector2D::operator-=(Vector2D rhs)
     return *this;
 }
 
-Vector2D operator*(Distance r, Radian o)
+Vector2D operator*(Distance r, Angle o)
 {
     return Vector2D::FromPolar(r.Get(), o);
 }
 
-Vector2D Vector2D::FromPolar(double r, Radian O)
+Vector2D Vector2D::FromPolar(double r, Angle O)
 {
-    return Vector2D(r * std::cos(O.Get()), r * std::sin(O.Get()));
+    return Vector2D(r * std::cos(O.GetRadian()), r * std::sin(O.GetRadian()));
 }
 
 Distance operator "" _r(long double r)

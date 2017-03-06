@@ -5,30 +5,21 @@
 
 namespace Course {
 
-class Degree;
-
-class Radian {
+class Angle {
     double mRadian;
 public:
-    explicit Radian(double radian) : mRadian(radian) {}
-    Radian(const Degree& degree);
+    static Angle FromRadian(double radian) { return Angle(radian); }
+    static Angle FromDegree(double degree) { return Angle(degree * (180.0/M_PI)); }
 
-    double Get() const { return mRadian; }
+    double GetRadian() const { return mRadian; }
+private:
+    explicit Angle(double radian) : mRadian(radian) {}
 };
 
-class Degree {
-    double mDegree;
-public:
-    explicit Degree(double degree) : mDegree(degree) {}
-    Degree(const Radian& radian) : mDegree(radian.Get() * (180.0/M_PI)) {}
-
-    double Get() const { return mDegree; }
-};
-
-inline Radian operator"" _rad(long double r) { return Radian(r); }
-inline Radian operator"" _rad(unsigned long long r) { return Radian(r); }
-inline Degree operator"" _deg(long double d) { return Degree(d); }
-inline Degree operator"" _deg(unsigned long long d) { return Degree(d); }
+inline Angle operator"" _rad(long double r) { return Angle::FromRadian(r); }
+inline Angle operator"" _rad(unsigned long long r) { return Angle::FromRadian(r); }
+inline Angle operator"" _deg(long double d) { return Angle::FromDegree(d); }
+inline Angle operator"" _deg(unsigned long long d) { return Angle::FromDegree(d); }
 
 class Distance
 {
@@ -59,7 +50,7 @@ public:
     Vector2D operator-(Vector2D rhs);
     Vector2D& operator+=(Vector2D rhs);
     Vector2D& operator-=(Vector2D rhs);
-    static Vector2D FromPolar(double r, Radian O);
+    static Vector2D FromPolar(double r, Angle O);
 
     double GetX() const { return mX; }
     double GetY() const { return mY; }
@@ -74,7 +65,7 @@ private:
     double mX, mY;
 };
 
-Vector2D operator*(Distance r, Radian o);
+Vector2D operator*(Distance r, Angle o);
 Course::Distance operator "" _r(long double r);
 Course::Distance operator "" _r(unsigned long long r);
 Course::Vector2D operator "" _x(long double x);
