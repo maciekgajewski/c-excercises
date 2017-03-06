@@ -9,11 +9,11 @@ class Vector2D
 public:
     enum class System { CARTESIAN, POLAR };
 
-	Vector2D(double initX = 0.0, double initY = 0.0);
+    Vector2D(double initX = 0.0, double initY = 0.0);
     Vector2D(double arg1, double arg2, System system);
 
-	double GetX() const;
-	double GetY() const;
+    double GetX() const;
+    double GetY() const;
 
     void SetX(double newX);
     void SetY(double newY);
@@ -32,8 +32,8 @@ public:
     bool operator!=(const Vector2D& vec) const;
 
 private:
-	double x;
-	double y;
+    double x;
+    double y;
 };
 
 }
