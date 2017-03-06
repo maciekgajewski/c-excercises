@@ -61,18 +61,9 @@ namespace vector{
         return *this;
     }
 
-    bool Vector2D::operator==(const Vector2D& src) const
-    {
-        if ( x == src.x && y == src.y )
-            return true;
-        else
-            return false;
-    }
+    bool Vector2D::operator==(const Vector2D& src) const { return x == src.x && y == src.y; }
 
-    bool Vector2D::operator!=(const Vector2D& src) const
-    {
-        return !(*this == src);
-    }
+    bool Vector2D::operator!=(const Vector2D& src) const { return !(*this == src); }
 
     
 
