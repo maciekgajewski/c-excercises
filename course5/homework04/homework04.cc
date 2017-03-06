@@ -21,11 +21,13 @@ public:
 
 	Stream(Stream&& src) // move
 	{
+		std::cout << "move constructor -- from " << src.fname <<std::endl;
 		fname = src.fname;
 		fp = src.fp;
 	}
 	Stream(const char* fname)
 	{
+		std::cout << "create -- opening " << fname << std::endl;
 		this->fname = fname;
 		this->fp = std::fopen(fname, "a");
 		if (!this->fp)
@@ -36,12 +38,17 @@ public:
 	}
 	Stream(std::FILE *)
 	{
+		std::cout << "create -- from stdout" << std::endl;
 		this->fp = stdout;
 	}
 
 	// Destructor
 	~Stream()
 	{
+		if (this->fname)
+			std::cout << "destruct -- closing " << this->fname << std::endl;
+		else
+			std::cout << "destruct -- closing stdout" << std::endl;
 		std::fclose(this->fp);
 	}
 
@@ -51,6 +58,7 @@ public:
 	// move assignment operator
 	Stream& operator=(Stream&& src)
 	{
+		std::cout << "move assignment -- from " << src.fname << std::endl;
 		fname = src.fname;
 		fp = src.fp;
 		return *this;
@@ -104,7 +112,9 @@ int Endl = EOF;
 
 void yolo(const Stream& s)
 {
-	s << "Yolo\n" << Endl;
+	s << "Yolo" << Endl;
+	Stream sToMove("another2.txt");
+	Stream s2 = std::move(sToMove);
 }
 
 int main(int, char**)
@@ -115,8 +125,8 @@ int main(int, char**)
 	// Stream s2; // test copy assignment doesn't compile
 	// s2 = s;
 
-	Stream s2("/etc/passwd"); // test that file-open error checking is working
-	s2 << "YOLO!" << Endl;
+	// Stream s2("/etc/passwd"); // test that file-open error checking is working
+	// s2 << "YOLO!" << Endl;
 
 
 	std::string w = "World!";
@@ -125,6 +135,19 @@ int main(int, char**)
 	Cout << "2 + 2 = " << 2 + 2 << "\n";
 	s << "hey" << Endl;
 	s << -2 << Endl;
-	yolo(s);
-	std::abort();
+	yolo(std::move(s));
+
+	Stream sToMove("another.txt");
+	Stream s2 = std::move(sToMove); // test move constructor
+	s2 << "\n :) \n" << Endl;
+
+	Stream s3("more.txt");
+	s3 = std::move(sToMove);  // test move assignment
+	s3 << "\n :( \n" << Endl;
+
+	// std::abort();
 }
+
+
+// Stream s2 = std::move(Stream("another.txt"));
+// warning: moving a temporary object prevents copy elision [-Wpessimizing-move]
