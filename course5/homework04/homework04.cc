@@ -2,6 +2,9 @@
 #include <string>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include <cassert>
+#include <sstream>
 
 class Endl
 {
@@ -34,7 +37,7 @@ public:
 
 	~Stream()
         {
-                if (file && file != stdout)
+                if (file && file != stdout && file != stdin && file != stderr)
                     std::fclose(file);
 	}
 
@@ -45,7 +48,13 @@ public:
                 return *this;
         }
 
-	Stream& operator << (std::string value)
+	Stream& operator << (const char * value)
+	{
+		std::fprintf(file, "%s", value);
+		return *this;
+	}
+
+	Stream& operator << (const std::string& value)
 	{
 		std::fprintf(file, "%s", value.c_str());
                 return *this;
@@ -102,14 +111,34 @@ void test(Stream& cout)
         cout << Stream::endl;
 }
 
-int main(int argc, char** argv)
+void create_write_close(const char * fname)
 {
-        Stream Cout = Stream(stdout);
+	auto cout = Stream(fname);
+	test(cout);
+}
 
-        if (argc > 1)
-        {
-            Cout = std::move(Stream(argv[1]));
-        }
-        test(Cout);
+void do_magic_from_stackoverflow(const char * fname, std::string expected)
+{
+	std::ifstream t(fname);
+	std::stringstream buffer;
+	buffer << t.rdbuf();
+	auto actual = buffer.str();
+	auto cout = Stream(stdout);
+	//cout << actual << Stream::endl;
+	//std::stringstream buffer;
+	assert(actual == expected); 	
+}
+
+void test_file()
+{
+	auto fname = "test.test";
+	auto expected = "75\ntrue0.333333hello, world!\n6.000000\n";
+	create_write_close(fname);
+	do_magic_from_stackoverflow(fname, expected);
+}
+
+int main(int , char** )
+{
+	test_file();
 }
 
