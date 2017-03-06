@@ -24,6 +24,8 @@ int main(int, char**)
 
     std::cout << "v = " << v << std::endl;
 
+    std::cout << "-v = " << -v << std::endl;
+
     std::cout << "v == u: " << (v == u) << std::endl;
 
     std::cout << "v != u: " << (v != u) << std::endl;
@@ -32,4 +34,5 @@ int main(int, char**)
 
     std::cout << "angle of v: " << v.GetAngle() << std::endl;
     
+
 }

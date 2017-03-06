@@ -42,6 +42,12 @@ namespace vector{
         return v;
     }
 
+    Vector2D Vector2D::operator-() const
+    {
+        Vector2D v( - x, - y );
+        return v;
+    }
+
     Vector2D& Vector2D::operator+=(const Vector2D& src)
     {
         x += src.x;

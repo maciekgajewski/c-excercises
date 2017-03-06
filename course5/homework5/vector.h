@@ -17,6 +17,7 @@ namespace vector{
             double GetAngle() const;
             Vector2D operator+(const Vector2D&) const;
             Vector2D operator-(const Vector2D&) const;
+            Vector2D operator-() const;
             Vector2D& operator+=(const Vector2D&);
             Vector2D& operator-=(const Vector2D&);
             bool operator==(const Vector2D&) const;
