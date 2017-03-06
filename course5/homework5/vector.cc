@@ -28,7 +28,7 @@ namespace vector{
     }
 
     double Vector2D::GetR() const { return std::sqrt(x*x + y*y); }
-    double Vector2D::GetAngle() const { return atan( y / x); }
+    double Vector2D::GetAngle() const { return std::atan( y / x); }
 
     Vector2D Vector2D::operator+(const Vector2D& src) const
     {
