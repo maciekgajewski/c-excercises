@@ -21,4 +21,7 @@ int main()
 
     auto vec2 = 10_r + 180_deg;
     std::cout << "R: " << vec2.GetR() << " deg: " << vec2.GetO() << std::endl;
+
+    Vector2D a(3, 4);
+    assert(-a == Vector2D(-3, -4));
 }
