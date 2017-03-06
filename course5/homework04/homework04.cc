@@ -109,6 +109,11 @@ int main(int, char**)
 	// Stream s2("/etc/passwd"); // test that file-open error checking is working
 	// s2 << "YOLO!" << Endl;
 
+	// Stream sToMove("another2.txt"); // test that move construction doesn't compile
+	// Stream s2 = std::move(sToMove);
+
+	// Stream sToMove("another2.txt"); // test that move assignment doesn't compile
+	// s = std::move(sToMove);
 
 	std::string w = "World!";
 	s << "Hello, " << w << "\n";
