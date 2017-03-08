@@ -31,7 +31,15 @@ public:
                 Stream(filename.c_str());
         }
 
-        Stream(const Stream& other) = delete;
+        Stream(const Stream& that) = delete;
+
+        Stream(Stream&& that)
+        {
+                fp = that.fp;
+                that.fp = nullptr;
+                filename = that.filename;
+                that.filename = nullptr;
+        }
 
         ~Stream()
         {
