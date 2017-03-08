@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
+#include <stdexcept>
 
 struct flush_t {
         const char* value;
@@ -22,8 +23,11 @@ public:
 
         Stream(const char* filename)
         {
-                fp = std::fopen(filename, "w");
                 this->filename = filename;
+                fp = std::fopen(filename, "w");
+                if (fp == nullptr) {
+                        throw std::runtime_error("Failed to open file");
+                }
         }
 
         Stream(const std::string& filename)
@@ -44,7 +48,10 @@ public:
         ~Stream()
         {
                 if (filename != nullptr) {
-                        std::fclose(fp);
+                        auto result = std::fclose(fp);
+                        if (result != 0) {
+                                throw std::runtime_error("Failed to properly close file");
+                        }
                 }
         }
 
