@@ -49,6 +49,11 @@ Vector2D& Vector2D::operator-=(const Vector2D& lhs)
 	return *this;
 }
 
+Vector2D operator-(const Vector2D& v)
+{
+	return { -v.GetX(), -v.GetY() };
+}
+
 Vector2D operator*(const RadialCoord& r, const AngularCoord& t)
 {
 	return { r.val * std::cos(t.val), r.val * std::sin(t.val) };

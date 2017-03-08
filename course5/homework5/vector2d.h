@@ -41,6 +41,7 @@ inline Vector2D operator "" _y(long double y) { return Vector2D(0.0, y); }
 inline RadialCoord operator "" _r(long double r) { return RadialCoord{static_cast<double>(r)}; }
 inline AngularCoord operator "" _t(long double t) { return AngularCoord{static_cast<double>(t)}; }
 
+Vector2D operator-(const Vector2D& v);
 Vector2D operator*(const RadialCoord& r, const AngularCoord& t);
 Vector2D operator*(const AngularCoord& t, const RadialCoord& r);
 

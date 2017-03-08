@@ -34,6 +34,11 @@ int main()
 	}
 
 	{
+		auto c = -a;
+		assert(c.GetX() == -1.0 && c.GetY() == -2.0);
+	}
+
+	{
 		assert(a != b);
 		assert(Vector2D(1.0, 2.0) == a);
 	}
