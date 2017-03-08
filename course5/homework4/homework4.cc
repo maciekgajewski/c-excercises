@@ -50,10 +50,7 @@ public:
         ~Stream()
         {
                 if (filename != nullptr) {
-                        auto result = std::fclose(fp);
-                        if (result != 0) {
-                                throw std::runtime_error("Failed to properly close file");
-                        }
+                        std::fclose(fp);
                 }
         }
 
