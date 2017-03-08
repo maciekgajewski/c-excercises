@@ -13,6 +13,8 @@ struct flush_t {
         }
 };
 
+flush_t Endl("\n");
+
 
 class Stream {
 public:
@@ -102,24 +104,42 @@ public:
                 return *this;
         }
 
+        const Stream& operator<<(const void* value) const
+        {
+                std::fprintf(fp, "%p", value);
+                return *this;
+        }
+
+        void Describe(Stream& out) const
+        {
+                out << "this->fp: " << this->fp << "; this->filename: " << (filename == nullptr ? "<none>" : filename );
+        }
+
 private:
         std::FILE* fp;
         const char* filename = nullptr;
 };
 
 
-flush_t Endl("\n");
 Stream Cout(stdout);
 
 int main(int, char**)
 {
         Stream s("output.txt");
         std::string w = "World!";
-        s << "Hello, " << w;
+        s << "Hello, " << w << Endl;
 
         Cout << "2 + 2 = " << 2 + 2 << Endl;
         Cout << "3.5 + 3.5 = " << 3.5 + 3.5 << Endl;
         Cout << "1 == 1 = " << (1 == 1) << Endl;
+
+        Stream s2 = std::move(s);
+        s2 << "some more text" << Endl;
+        Cout << "s moved to s2, old s: ";
+        s.Describe(Cout);
+        Cout << ", new s2: ";
+        s2.Describe(Cout);
+        Cout << Endl;
 
         return 0;
 }
