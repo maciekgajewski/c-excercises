@@ -38,24 +38,11 @@ int main(int /*argc*/, char** /*argv*/)
 {
 	std::cout << "Hello, world!" << std::endl;
 
-	std::unique_ptr<Vector> p = std::make_unique<Vector>();
-	std::cout << "vector: " << p->x << ", " << p->y << std::endl;
+	std::unique_ptr<Vector[]> p = std::make_unique<Vector[]>(3);
 	
-	Vector v2 = *p;
-	
-	p = std::make_unique<Vector3D>(6, 6, 7);
-	std::cout << "vector: " << p->x << ", " << p->y << std::endl;
-	
-	p = MakeVector(7, 8);
-	std::cout << "vector: " << p->x << ", " << p->y << std::endl;
-	
-	Vector* raw = p.get();
-	
-	std::unique_ptr<Vector> p2 = std::move(p);
-	
-	if(p2)
+	for(int i = 0; i < 3 ; i++)
 	{
-		std::cout << "vector2: " << p2->x << ", " << p2->y << std::endl;
+		std::cout << "p["<< i << "] = " << p[i].x << ", " << p[i].y << std::endl;
 	}
 }
 
