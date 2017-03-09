@@ -27,7 +27,7 @@ public:
 	}
 	
 	double z = 0;
-}
+};
 
 std::unique_ptr<Vector> MakeVector(double x, double y)
 {
