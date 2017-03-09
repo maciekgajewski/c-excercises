@@ -38,11 +38,12 @@ int main(int /*argc*/, char** /*argv*/)
 {
 	std::cout << "Hello, world!" << std::endl;
 
-	std::unique_ptr<Vector[]> p = std::make_unique<Vector[]>(3);
-	
-	for(int i = 0; i < 3 ; i++)
+	for(int i = 0; i < 1000; i++)
 	{
-		std::cout << "p["<< i << "] = " << p[i].x << ", " << p[i].y << std::endl;
+		//Vector* p = new Vector(5*i, 6); // old C++
+		auto p = std::make_unique<Vector>(5*i, 6);
+		std::cout << "vector: " << p-> x << ", " << p->y << std::endl;
 	}
+	//delete p;
 }
 
