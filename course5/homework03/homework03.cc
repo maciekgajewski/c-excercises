@@ -13,7 +13,12 @@ void print(bool boolean)
     printf("%s\n", boolean ? "true":"false");
 }
 
-void print(float number, int precision=0)
+void print(float number)
+{
+    printf("%g\n", number);
+}
+
+void print(float number, unsigned precision)
 {
     printf("%.*f\n", precision, number);
 }
