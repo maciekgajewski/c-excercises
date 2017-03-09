@@ -29,31 +29,54 @@ public:
 	double z = 0;
 };
 
-std::unique_ptr<Vector> MakeVector(double x, double y)
+Vector* MakeVector(double x, double y)
 {
-	return std::make_unique<Vector>(x, y);
+	//return new Vector(x, y);
+	Vector* p;
+	if (x > 6)
+		p = new Vector(x , y);
+	return p;
 }
 
 void PrintVector(const Vector& v)
 {
 	std::cout << "vector: " << v.x << ", " << v.y << std::endl;
-	throw std::runtime_error("Error!!!");
+	//throw std::runtime_error("Error!!!");
 }
 
-void DoSomething()
+void PrintSharedVector(std::shared_ptr<Vector> v)
 {
-	//Vector* p = new Vector(5, 6); // old C++
-	auto p = std::make_unique<Vector>(5, 6);
-	PrintVector(*p);
-	//delete p;
+	std::cout << "vector: " << v->x << ", " << v->y << std::endl;
 }
 
-int main(int /*argc*/, char** /*argv*/)
+void DoSomething(double x)
+{
+	std::shared_ptr<Vector> p;
+	std::weak_ptr<Vector> wp = p;
+	
+	if (x > 88)
+	{
+		auto p2 = std::make_shared<Vector>(5, 6);
+		p = p2;
+	}
+
+	if (p)
+	{
+		PrintSharedVector(p);
+	}
+}
+
+int main(int argc, char** argv)
 {
 	std::cout << "Hello, world!" << std::endl;
+	
+	double x = 0;
+	if (argc > 1)
+		x = std::stod(argv[1]);
+	
 	try
 	{
-		DoSomething();
+		DoSomething(x);
 	}
 	catch(const std::exception& e)
 	{
