@@ -5,23 +5,9 @@ using namespace vector;
 
 Vector2D::Vector2D(double initX, double initY) : x(initX), y(initY) {}
 
-Vector2D::Vector2D(double arg1, double arg2, System system)
+Vector2D Vector2D::vectorFromPolar(double initR, double initTheta)
 {
-    double initX;
-    double initY;
-    switch(system)
-    {
-    case System::POLAR:
-        initX = arg1 * std::cos(arg2);
-        initY = arg1 * std::sin(arg2);
-        break;
-    case System::CARTESIAN:
-        initX = arg1;
-        initY = arg2;
-        break;
-    }
-    x = initX;
-    y = initY;
+    return Vector2D::Vector2D(initR * std::cos(initTheta), initR * std::sin(initTheta));
 }
 
 double Vector2D::GetX() const { return x; }
@@ -78,8 +64,8 @@ bool Vector2D::operator!=(const Vector2D& vec) const
 Vector2D operator "" _x(long double initX){ return Vector2D(initX, 0.0);}
 Vector2D operator "" _y(long double initY){ return Vector2D(0.0, initY);}
 
-Vector2D operator "" _r(long double initR){ return Vector2D(initR, 0.0, Vector2D::System::POLAR);}
-Vector2D operator "" _theta(long double initTheta){ return Vector2D(std::cos(0.0), initTheta, Vector2D::System::POLAR);}
+Vector2D operator "" _r(long double initR){ return Vector2D::vectorFromPolar(initR, 0.0);}
+Vector2D operator "" _theta(long double initTheta){ return Vector2D::vectorFromPolar(std::cos(0.0), initTheta);}
 
 std::ostream& operator<<(std::ostream& s, const vector::Vector2D& vec)
 {

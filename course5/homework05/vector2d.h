@@ -4,13 +4,15 @@
 
 namespace vector
 {
+
+// struct R { double val; };
+// struct Theta { double val; };
+
 class Vector2D
 {
 public:
-    enum class System { CARTESIAN, POLAR };
-
     Vector2D(double initX = 0.0, double initY = 0.0);
-    Vector2D(double arg1, double arg2, System system);
+    static Vector2D vectorFromPolar(double initR, double initTheta);
 
     double GetX() const;
     double GetY() const;
