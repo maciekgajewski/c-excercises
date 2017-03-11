@@ -1,9 +1,12 @@
-#include "my_string.h"
+#include "string.h"
 
 #include <string>
 #include <cassert>
 #include <iostream>
 #include <cstring>
+#include <unordered_set>
+#include <unordered_map>
+
 
 template<typename StringType>
 void string_test()
@@ -93,22 +96,50 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+
+	// move contructor and assignment operator
+	StringType string4 = "Note to SSO: I am not a short string, so please don't try any fancy stuff!";
+	const char* string_buffer = string4.c_str();
+	StringType string5 = std::move(string4);
+	assert(string_buffer == string5.c_str());
+
+	StringType string6;
+	string6 = std::move(string5);
+	assert(string_buffer == string6.c_str());
+	
+	// iterator
+	int i = 0;
+	for (auto it = string6.begin(); it != string6.end(); ++it)
+	{
+		assert(*it == string6[i++]);
+	}
+	assert(i == string6.size());
+	
+	// unordered_set
+	std::unordered_set<StringType> set = {"abc", "123", "ABC"};
+	assert(set.find("abc") != set.end());
+	assert(set.find("123") != set.end());
+	assert(set.find("ABC") != set.end());
+	assert(set.find("456") == set.end());
+	
+	// unordered_map
+	std::unordered_map<StringType, int> map = {{"abc", 1}, {"123", 2}, {"ABC", 3}};
+	assert(map["abc"] == 1);
+	assert(map["123"] == 2);
+	assert(map["ABC"] == 3);
+	assert(map.find("456") == map.end());
 }
 
 
 int main()
 {
-	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
-	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
-	
-	// test fior std::string - works
+	// test for std::string - works
 	std::cout << "Testing std::string..." << std::endl;
 	string_test<std::string>();
 	std::cout << "std::string test passes" << std::endl;
 	
-	// test for your string - it should compile and pass pass
-	std::cout << "Testing MyString..." << std::endl;
-	string_test<MyString>();
-	std::cout << "MyString test passes" << std::endl;
+	// test for your string - it should compile and pass
+	std::cout << "Testing Karun::String..." << std::endl;
+	string_test<Karun::String>();
+	std::cout << "Karun::String test passes" << std::endl;
 }
