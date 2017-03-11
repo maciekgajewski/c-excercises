@@ -17,7 +17,12 @@ public:
 	// Constructors
 	Stream() = delete; // default
 	Stream(const Stream&) = delete; // copy
-	Stream(Stream&& src) = delete; // move
+	Stream(Stream&& src) // move
+	{
+		fname = src.fname;
+		fp = src.fp;
+		src.fp = nullptr;
+	}
 
 	Stream(const char* initFname)
 	{
@@ -45,7 +50,13 @@ public:
 	Stream& operator=(const Stream& src) = delete;
 
 	// move assignment operator
-	Stream& operator=(Stream&& src) = delete;
+	Stream& operator=(Stream&& src)
+	{
+		fname = src.fname;
+		fp = src.fp;
+		src.fp = nullptr;
+		return *this;
+	}
 
 	// overloaded << operator
 	const Stream& operator << (int input) const
@@ -100,7 +111,10 @@ void yolo(const Stream& s)
 
 int main(int, char**)
 {
-	Stream s("output.txt");
+	Stream s("initialization.txt");
+	std::string w = "World!";
+	s << "Hello, " << w << "\n";
+
 	// Stream s2; // test that default construction doesn't compile
 	// Stream s2 = s; // test that copy construction doesn't compile
 	// Stream s2; // test copy assignment doesn't compile
@@ -109,14 +123,13 @@ int main(int, char**)
 	// Stream s2("/etc/passwd"); // test that file-open error checking is working
 	// s2 << "YOLO!" << Endl;
 
-	// Stream sToMove("another2.txt"); // test that move construction doesn't compile
-	// Stream s2 = std::move(sToMove);
+	Stream sToMove("move_construction.txt"); // test move construction
+	Stream s2 = std::move(sToMove);
+	s2 << "move construction yolo" << Endl;
 
-	// Stream sToMove("another2.txt"); // test that move assignment doesn't compile
-	// s = std::move(sToMove);
-
-	std::string w = "World!";
-	s << "Hello, " << w << "\n";
+	Stream sToMove2("move_assignment.txt"); // test move assignment
+	s = std::move(sToMove2);
+	s << "move assignment yolo" << Endl;
 
 	Cout << "2 + 2 = " << 2 + 2 << "\n";
 	s << "hey" << Endl;
