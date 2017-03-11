@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <cstring>
+#include <algorithm>
 
 template<typename StringType>
 void test()
@@ -120,16 +121,31 @@ void test2()
 	assert(string4.length() == 0);
 }
 
+template<typename StringType>
+void iteratorTest()
+{
+  //const iteration test
+  const StringType s("ABCBB");
+  int b_num = std::count_if(s.begin(), s.end(), [](const char c){return c=='B';});
+  assert(b_num == 3);
+
+  // non-const test
+  StringType s2("zaB1A2C3");
+  std::sort(s2.begin(), s2.end());
+  assert(s2=="123ABCaz");
+}
+
 int main()
 {
 	std::cout << "Testing std::string..." << std::endl;
 	test<std::string>();
 	test2<std::string>();
+    iteratorTest<std::string>();
 	std::cout << "std::string passes" << std::endl;
 
 	std::cout << "Testing course::string..." << std::endl;
 	test<course::string>();
 	test2<course::string>();
+    iteratorTest<course::string>();
 	std::cout << "course::string passes" << std::endl;
-	
 }
