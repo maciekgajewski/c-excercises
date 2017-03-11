@@ -22,8 +22,8 @@ int main(int, char**)
     std::cout << defaultVec << std::endl;
     std::cout << defaultVec.AsPolar() << std::endl;
 
-	Vector2D vec(3.14, 3.14);
-	std::cout << vec << std::endl;
+    Vector2D vec(3.14, 3.14);
+    std::cout << vec << std::endl;
     std::cout << vec.AsPolar() << std::endl;
 
     vec.SetX(2);
