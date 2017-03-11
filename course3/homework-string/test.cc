@@ -3,6 +3,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+#include <sstream>
 #include <cstring>
 
 template<typename StringType>
@@ -93,15 +94,20 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+
+	// operator <<
+	std::stringstream s;
+	s << plusResult;
+	assert(s.str() == "Hex123Hex");
+
+	// move ctor
+	StringType moved = std::move(plusResult);
+	assert(moved == "Hex123Hex");
 }
 
 
 int main()
 {
-	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
-	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
-	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
 	string_test<std::string>();
