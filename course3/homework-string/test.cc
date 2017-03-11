@@ -4,10 +4,13 @@
 #include <cassert>
 #include <iostream>
 #include <cstring>
+#include <unordered_map>
+#include <unordered_set>
 
 template<typename StringType>
 void string_test()
 {
+	
 	// Default construction
 	StringType string1;
 	
@@ -61,7 +64,7 @@ void string_test()
 	// operator +
 	StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
-        
+
 	StringType plusResultEmpty = StringType() + StringType();
 	assert(plusResultEmpty.empty());
 	assert(plusResultEmpty.size() == 0); 
@@ -93,6 +96,35 @@ void string_test()
 	assert(StringType("0") < StringType("1"));
 	assert(!(StringType("1") < StringType("0")));
 	assert(!(StringType("1") < StringType()));
+	
+	StringType forIterating("FoooBar");
+	int i(0);
+	for (auto c : forIterating) {
+		assert (c  == forIterating[i++]);
+	}
+	i = 0;
+	for (auto it(forIterating.begin()); it != forIterating.end(); it++, i++) {
+		assert (*it == forIterating[i]);
+	}
+
+	std::unordered_map<StringType, std::string> um = {
+		{"RED", "red"},
+		{"GREEN", "green"},
+		{"BLUE", "blue"}
+	};
+
+	assert (um["RED"] == "red");
+	assert (um["GREEN"] == "green");
+	assert (um["BLUE"] == "blue");
+
+	std::unordered_set<StringType> us = {
+		{"RED"},
+		{"BLUE"},
+		{"GREEN"}
+	};
+
+	assert (us.find("BLUE") != us.end());
+	assert (us.find("PURPLE") == us.end());
 }
 
 
@@ -100,7 +132,6 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
