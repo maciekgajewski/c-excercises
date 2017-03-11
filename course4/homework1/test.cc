@@ -22,6 +22,10 @@ int main()
 	s << a;
 
 	assert(s.str() == "(5, 6)");
+	
+	const double pi = 3.14159265358979323846;
+	assert(Vector2d(PolarCoords2d{5, pi/2}) == Vector2d(CartesianCoords2d{0, 5}));
+	assert(Vector2d(CartesianCoords2d{-2, 0}) == Vector2d(PolarCoords2d{2, pi}));
 
 	std::cout << "done" << std::endl;
 }

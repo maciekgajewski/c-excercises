@@ -59,7 +59,7 @@ void string_test()
 	assert(string2 == "Hex");
 
 	// operator +
-	StringType plusResult = string_const_ref + StringType("123");
+    StringType plusResult = string_const_ref + StringType("123");
 	assert(plusResult == "Hex123");
         
 	StringType plusResultEmpty = StringType() + StringType();
@@ -100,7 +100,7 @@ int main()
 {
 	// pre-test - of this _doesn't_ crash your program, you faield to compile it in debug mode (g++ -g)
 	// if it crashes, it's a good sign. Remove the line and proceed.
-	assert(false);
+	//assert(false);
 	
 	// test fior std::string - works
 	std::cout << "Testing std::string..." << std::endl;
