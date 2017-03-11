@@ -1,0 +1,23 @@
+{
+    "foo": {
+        "bar": {
+            "baz": "qux"
+        }
+    },
+    "colours": [
+        "red",
+        "green",
+        "blue"
+    ],
+    "shapes": [
+        "circle",
+        "square",
+        "rectangle",
+        "triangle"
+    ],
+    "fruits": {
+        "apple": "red",
+        "mango": "yellow",
+        "orange": "orange"
+    }
+}
