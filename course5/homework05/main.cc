@@ -75,9 +75,6 @@ int main(int, char**)
     std::cout << autovec << std::endl;
     assert(autovec==Vector2D(3.3, 0.7));
 
-    auto autovecPolar = 4.472136_r;
-    auto autovecPolar2 =  1.107149_theta;
+    auto autovecPolar = 4.472136_r * 1.107149_theta;
     std::cout << autovecPolar.AsPolar() << std::endl;
-    std::cout << autovecPolar2.AsPolar() << std::endl;
-    std::cout << (autovecPolar + autovecPolar2).AsPolar() << std::endl;
 }

@@ -5,8 +5,8 @@
 namespace vector
 {
 
-// struct R { double val; };
-// struct Theta { double val; };
+struct R { double val; };
+struct Theta { double val; };
 
 class Vector2D
 {
@@ -38,11 +38,14 @@ private:
     double y;
 };
 
-Vector2D operator "" _x(long double initX);
-Vector2D operator "" _y(long double initY);
-
-Vector2D operator "" _r(long double initR);
-Vector2D operator "" _theta(long double initTheta);
 }
+
+vector::Vector2D operator*(const vector::R& r, const vector::Theta& t);
+
+vector::Vector2D operator "" _x(long double initX);
+vector::Vector2D operator "" _y(long double initY);
+
+vector::R operator "" _r(long double r);
+vector::Theta operator "" _theta(long double t);
 
 std::ostream& operator<<(std::ostream& s, const vector::Vector2D& vec);

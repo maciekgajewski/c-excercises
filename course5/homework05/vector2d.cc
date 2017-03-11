@@ -61,11 +61,16 @@ bool Vector2D::operator!=(const Vector2D& vec) const
     return !(*this == vec);
 }
 
+Vector2D operator*(const R& r, const Theta& t)
+{
+    return { r.val * std::cos(t.val), r.val * std::sin(t.val) };
+}
+
 Vector2D operator "" _x(long double initX){ return Vector2D(initX, 0.0);}
 Vector2D operator "" _y(long double initY){ return Vector2D(0.0, initY);}
 
-Vector2D operator "" _r(long double initR){ return Vector2D::vectorFromPolar(initR, 0.0);}
-Vector2D operator "" _theta(long double initTheta){ return Vector2D::vectorFromPolar(std::cos(0.0), initTheta);}
+R operator "" _r(long double r) { return R{static_cast<double>(r)}; }
+Theta operator "" _theta(long double t) { return Theta{static_cast<double>(t)}; }
 
 std::ostream& operator<<(std::ostream& s, const vector::Vector2D& vec)
 {
