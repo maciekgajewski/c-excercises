@@ -90,6 +90,7 @@ int main()
 	}
 
 	{
+		// operator[]
 		const char* raw = "abcd";
 		String::String s = raw;
 		for (size_t i = 0; i < s.length(); i++)
@@ -103,6 +104,7 @@ int main()
 	}
 
 	{
+		// operator[] const
 		const char* raw = "abcd";
 		const String::String s = raw;
 		for (size_t i = 0; i < s.length(); i++)
@@ -110,6 +112,7 @@ int main()
 	}
 
 	{
+		// operator==
 		const String::String s = "abc";
 		const String::String t = "abc";
 		const String::String u = "abd";
@@ -120,6 +123,7 @@ int main()
 	}
 
 	{
+		// operator!=
 		const String::String s = "abc";
 		const String::String t = "abc";
 		const String::String u = "abd";
