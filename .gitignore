@@ -27,3 +27,5 @@ build_
 # Executables
 *.exe
 *.app
+
+CMakeLists.txt.user
