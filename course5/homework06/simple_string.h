@@ -10,12 +10,15 @@ class String
 {
 public:
     String();
+    String(const char*);
+
+    void Print() const;
+    int Length() const;
 
 private:
-    std::unique_ptr<char[]> buffer;
+    std::unique_ptr<char[]> buffer = nullptr;
+    int size = 0;
 
 }; // String
 
 } // namespace
-
-// std::ostream& operator<<(std::ostream& s, const String);

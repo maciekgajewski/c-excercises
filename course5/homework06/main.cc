@@ -28,4 +28,7 @@ int main(int, char**)
 {
     using namespace simple_string;
     String s;
+    // static_assert(s.Length() == 0, "Default constructor should not allocate memory");
+    std::cout << s.Length() << std::endl;
+    s.Print();
 }
