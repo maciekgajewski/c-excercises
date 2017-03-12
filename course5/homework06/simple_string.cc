@@ -65,6 +65,15 @@ String& String::operator=(String&& src) // move assignment
     return *this;
 }
 
+String& String::operator=(const char * src) // assignment from const char *
+{
+    size = std::strlen(src) + 1;
+    buffer = std::make_unique<char[]>(size);
+    std::strcpy(buffer.get(), src);
+
+    return *this;
+}
+
 
 void String::Print() const
 {

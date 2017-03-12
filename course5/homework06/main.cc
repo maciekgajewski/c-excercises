@@ -66,7 +66,7 @@ int main(int, char**)
     const char* word = "word";
     std::cout << std::strlen(word) << std::endl;
 
-    String sFromChar = String(word);
+    String sFromChar = word;
     sFromChar.Print();
 
     String copyConstructedString = sFromChar;
@@ -76,7 +76,7 @@ int main(int, char**)
     String moveConstructedString = std::move(sFromChar);
     moveConstructedString.Print();
 
-    String assignmentTester = String(word);
+    String assignmentTester = word;
     assignmentTester = moveConstructedString;
     assignmentTester.Print();
     moveConstructedString.Print();
@@ -84,4 +84,7 @@ int main(int, char**)
     assignmentTester = std::move(moveConstructedString);
     assignmentTester.Print();
     moveConstructedString.Print();
+
+    assignmentTester = "yolo";
+    assignmentTester.Print();
 }
