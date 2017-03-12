@@ -28,3 +28,5 @@ course5/builds
 # Executables
 *.exe
 *.app
+
+CMakeLists.txt.user
