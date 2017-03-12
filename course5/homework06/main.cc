@@ -69,10 +69,19 @@ int main(int, char**)
     String sFromChar = String(word);
     sFromChar.Print();
 
-    String copyAssignedString = sFromChar;
-    copyAssignedString.Print();
+    String copyConstructedString = sFromChar;
+    copyConstructedString.Print();
     sFromChar.Print();
 
-    String moveAssignedString = std::move(sFromChar);
-    moveAssignedString.Print();
+    String moveConstructedString = std::move(sFromChar);
+    moveConstructedString.Print();
+
+    String assignmentTester = String(word);
+    assignmentTester = moveConstructedString;
+    assignmentTester.Print();
+    moveConstructedString.Print();
+
+    assignmentTester = std::move(moveConstructedString);
+    assignmentTester.Print();
+    moveConstructedString.Print();
 }

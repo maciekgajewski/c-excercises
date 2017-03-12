@@ -35,32 +35,35 @@ String::String(String&& src) // move
     src.buffer = nullptr;
     src.size = 0;
 }
+String& String::operator=(const String& src) // copy assignment
+{
+    size = src.size;
+    if (src.buffer)
+    {
+        buffer = std::make_unique<char[]>(size);
+        for (auto i = 0; i < size; i++)
+        {
+            buffer[i] = src.buffer[i];
+        }
+    }
+    else
+    {
+        buffer = nullptr;
+    }
 
-// String& operator=(const String& src) // copy assignment
-// {
-//     size = src.size;
-//     if (src.buffer)
-//     {
-//         buffer = std::make_unique<char[]>(size);
-//         for (auto i = 0; i < size; i++)
-//         {
-//             buffer[i] = src.buffer[i];
-//         }
-//     }
-//
-//     return *this;
-// }
-//
-// String& operator=(String&& src) // move assignment
-// {
-//     buffer = std::move(src.buffer);
-//     size = src.size;
-//
-//     src.buffer = nullptr;
-//     src.size = 0;
-//
-//     return *this;
-// }
+    return *this;
+}
+
+String& String::operator=(String&& src) // move assignment
+{
+    buffer = std::move(src.buffer);
+    size = src.size;
+
+    src.buffer = nullptr;
+    src.size = 0;
+
+    return *this;
+}
 
 
 void String::Print() const
@@ -84,10 +87,6 @@ void String::Print() const
 int String::Length() const
 {
     return size;
-    // if (buffer)
-        // return *buffer.strlen();
-    // else
-    //     return 0;
 }
 
 // char[] GetBuffer() const

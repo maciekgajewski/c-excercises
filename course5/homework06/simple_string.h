@@ -13,8 +13,8 @@ public:
     String(const char*);
     String(const String& src);
     String(String&& src);
-    // String& operator=(const String& src);
-    // String& operator=(String&& src);
+    String& operator=(const String& src);
+    String& operator=(String&& src);
 
     void Print() const;
     int Length() const;
