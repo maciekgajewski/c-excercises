@@ -13,9 +13,54 @@ String::String(const char* initString)
     std::strcpy(buffer.get(), initString);
 }
 
-// String::String(const String& src) // copy
+String::String(const String& src) // copy
+{
+    size = src.size;
+
+    if (src.buffer)
+    {
+        buffer = std::make_unique<char[]>(size);
+        for (auto i = 0; i < size; i++)
+        {
+            buffer[i] = src.buffer[i];
+        }
+    }
+}
+
+String::String(String&& src) // move
+{
+    buffer = std::move(src.buffer);
+    size = src.size;
+
+    src.buffer = nullptr;
+    src.size = 0;
+}
+
+// String& operator=(const String& src) // copy assignment
+// {
+//     size = src.size;
+//     if (src.buffer)
+//     {
+//         buffer = std::make_unique<char[]>(size);
+//         for (auto i = 0; i < size; i++)
+//         {
+//             buffer[i] = src.buffer[i];
+//         }
+//     }
 //
-// String::String(String&& src) // move
+//     return *this;
+// }
+//
+// String& operator=(String&& src) // move assignment
+// {
+//     buffer = std::move(src.buffer);
+//     size = src.size;
+//
+//     src.buffer = nullptr;
+//     src.size = 0;
+//
+//     return *this;
+// }
 
 
 void String::Print() const
@@ -44,3 +89,28 @@ int String::Length() const
     // else
     //     return 0;
 }
+
+// char[] GetBuffer() const
+// {
+//     char
+//     if (buffer)
+//
+// }
+
+// std::ostream& operator<<(std::ostream& s, const String& str)
+// {
+//     if (buffer)
+//     {
+//         s << '"';
+//         for (auto i = 0; i < size; i++)
+//         {
+//             s << buffer[i];
+//         }
+//         s << '"';
+//     }
+//     else
+//     {
+//         s << '"' << '"';
+//     }
+// 	return s;
+// }

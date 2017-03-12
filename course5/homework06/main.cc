@@ -31,4 +31,48 @@ int main(int, char**)
     // static_assert(s.Length() == 0, "Default constructor should not allocate memory");
     std::cout << s.Length() << std::endl;
     s.Print();
+
+
+    std::unique_ptr<char[]> p = std::make_unique<char[]>(5);
+    for(int i = 0; i < 4 ; i++)
+    {
+        p[i] = 'y';
+    }
+    for(int i = 0; i < 3 ; i++)
+    {
+        std::cout << p[i] << std::endl;
+    }
+    p[0] = 'y';
+    p[1] = 'o';
+    p[2] = 'l';
+    p[3] = 'o';
+
+    std::cout << *p.get() << std::endl;
+
+    // int y = 0;
+    // int * ptr = &y;
+    // *ptr = 8;
+    //
+    // std::cout << *ptr << std::endl;
+
+    char thechars[] = "chars";
+    std::cout << thechars << std::endl;
+
+    // char thechars2[] = *p;
+    // std::cout << thechars2 << std::endl;
+    std::unique_ptr<int[]> int_p = std::make_unique<int[]>(5);
+
+
+    const char* word = "word";
+    std::cout << std::strlen(word) << std::endl;
+
+    String sFromChar = String(word);
+    sFromChar.Print();
+
+    String copyAssignedString = sFromChar;
+    copyAssignedString.Print();
+    sFromChar.Print();
+
+    String moveAssignedString = std::move(sFromChar);
+    moveAssignedString.Print();
 }
