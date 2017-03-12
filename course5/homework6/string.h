@@ -21,18 +21,18 @@ public:
 	String operator+(const String&);
 	String& operator+=(const String&);
 
-	char& operator[](const int idx);
-	const char& operator[](const int idx) const;
+	char& operator[](const size_t idx);
+	const char& operator[](const size_t idx) const;
 
 	bool operator==(const String&) const;
-	bool operator!=(const String& lhs) const { return !(*this == lhs); }
+	bool operator!=(const String& rhs) const { return !(*this == rhs); }
 
 	const char* c_str() const { return mSize > 0 ? mContents.get() : ""; }
 	size_t length() const { return mSize > 0 ? mSize - 1 : 0; }
 
 private:
-	std::unique_ptr<char[]> mContents;
 	size_t mSize = 0;
+	std::unique_ptr<char[]> mContents;
 };
 
 inline std::ostream& operator<<(std::ostream& s, const String& str)
