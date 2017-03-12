@@ -5,6 +5,8 @@
 
 namespace homework05
 {
+using namespace std::literals;
+
 class Vector2D
 {
 public:
@@ -37,11 +39,11 @@ private:
 
 std::ostream& operator << (std::ostream& stream, const Vector2D& v);
 
-using namespace std::literals;
-
-
 Vector2D operator "" _x(long double value);
 Vector2D operator "" _y(long double value);
+
+Vector2D operator "" _phi(long double value);
+Vector2D operator * (double r, const Vector2D& v);
 
 
 }
