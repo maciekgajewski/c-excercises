@@ -82,7 +82,14 @@ char String::operator[](const int i) const
         return buffer[i];
     else
         throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
-        return '\0';
+}
+
+char& String::operator[](const int i)
+{
+    if (buffer && i < size)
+        return buffer[i];
+    else
+        throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
 }
 
 void String::Print() const

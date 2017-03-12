@@ -102,4 +102,18 @@ int main(int, char**)
 
     // How could I use assert to test this one?
     // assignmentTester[5]; // should raise runtime error
+
+    for (auto i = 0; i < 4; i++)
+    {
+        assignmentTester[i] = "word"[i];
+    }
+    assignmentTester.Print();
+    for (auto i = 0; i < 4; i++)
+    {
+        assert(assignmentTester[i] == "word"[i]);
+    }
+    assignmentTester.Print();
+
+    assignmentTester[5] = 'c'; // should raise runtime error
+
 }
