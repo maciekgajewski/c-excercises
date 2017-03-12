@@ -17,6 +17,8 @@ public:
     String& operator=(String&& src);
     String& operator=(const char * src);
 
+    char operator[](const int) const;
+
     void Print() const;
     int Length() const;
     // char[] GetBuffer() const;

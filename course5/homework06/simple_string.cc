@@ -1,6 +1,8 @@
 #include "simple_string.h"
 #include <memory>
 #include <string>
+#include <stdexcept>
+
 
 using namespace simple_string;
 
@@ -74,6 +76,14 @@ String& String::operator=(const char * src) // assignment from const char *
     return *this;
 }
 
+char String::operator[](const int i) const
+{
+    if (buffer && i < size)
+        return buffer[i];
+    else
+        throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
+        return '\0';
+}
 
 void String::Print() const
 {

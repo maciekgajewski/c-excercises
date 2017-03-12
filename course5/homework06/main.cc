@@ -28,7 +28,7 @@ int main(int, char**)
 {
     using namespace simple_string;
     String s;
-    // static_assert(s.Length() == 0, "Default constructor should not allocate memory");
+    assert(s.Length() == 0);
     std::cout << s.Length() << std::endl;
     s.Print();
 
@@ -61,6 +61,12 @@ int main(int, char**)
     // char thechars2[] = *p;
     // std::cout << thechars2 << std::endl;
     std::unique_ptr<int[]> int_p = std::make_unique<int[]>(5);
+    for (auto i = 0; i < 5; i++)
+    {
+        int_p[i] = i;
+    }
+
+    std::cout << int_p[3] << std::endl;
 
 
     const char* word = "word";
@@ -87,4 +93,13 @@ int main(int, char**)
 
     assignmentTester = "yolo";
     assignmentTester.Print();
+
+    for (auto i = 0; i < 4; i++)
+    {
+        assert(assignmentTester[i] == "yolo"[i]);
+    }
+    assignmentTester.Print();
+
+    // How could I use assert to test this one?
+    // assignmentTester[5]; // should raise runtime error
 }
