@@ -37,6 +37,7 @@ String::String(String&& src) // move
     src.buffer = nullptr;
     src.size = 0;
 }
+
 String& String::operator=(const String& src) // copy assignment
 {
     size = src.size;
@@ -69,7 +70,7 @@ String& String::operator=(String&& src) // move assignment
 
 String& String::operator=(const char * src) // assignment from const char *
 {
-    size = std::strlen(src) + 1;
+    size = std::strlen(src);
     buffer = std::make_unique<char[]>(size);
     std::strcpy(buffer.get(), src);
 
@@ -115,27 +116,45 @@ int String::Length() const
     return size;
 }
 
-// char[] GetBuffer() const
-// {
-//     char
-//     if (buffer)
-//
-// }
+std::unique_ptr<char[]> String::GetBufferCpy() const
+{
+    std::unique_ptr<char[]> bufferCpy = nullptr;
+    if (buffer)
+        bufferCpy = std::make_unique<char[]>(size);
+        std::strcpy(bufferCpy.get(), buffer.get());
+    return bufferCpy;
 
-// std::ostream& operator<<(std::ostream& s, const String& str)
+}
+
+// const char *String::CStr() const
 // {
+//     char res [size + 1];
 //     if (buffer)
 //     {
-//         s << '"';
 //         for (auto i = 0; i < size; i++)
 //         {
-//             s << buffer[i];
+//             std::cout << "Adding " << buffer[i] << std::endl;
+//             res[i] = buffer[i];
 //         }
-//         s << '"';
 //     }
-//     else
-//     {
-//         s << '"' << '"';
-//     }
-// 	return s;
+//     // res[size] = '\0';
+//     std::cout << "Returning " << res << std::endl;
+//     const char *toReturn = &res[0];
+//     std::cout << "Returning " << toReturn << std::endl;
+//     return toReturn;
 // }
+
+std::ostream& operator<<(std::ostream& s, const String& str)
+{
+    s << '"';
+    std::unique_ptr<char[]> bufferCpy = str.GetBufferCpy();
+    if (bufferCpy)
+    {
+        for (auto i = 0; i < str.Length(); i++)
+        {
+            s << bufferCpy[i];
+        }
+    }
+        s << '"';
+	return s;
+}

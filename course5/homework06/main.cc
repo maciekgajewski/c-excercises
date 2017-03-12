@@ -58,6 +58,14 @@ int main(int, char**)
     char thechars[] = "chars";
     std::cout << thechars << std::endl;
 
+    std::cout << std::strlen(thechars) << std::endl;
+    const char * res = "";
+    for (auto i = 0; i < 5; i++)
+    {
+        res += thechars[i];
+    }
+    std::cout << res << "  RES" << std::endl;
+
     // char thechars2[] = *p;
     // std::cout << thechars2 << std::endl;
     std::unique_ptr<int[]> int_p = std::make_unique<int[]>(5);
@@ -114,6 +122,13 @@ int main(int, char**)
     }
     assignmentTester.Print();
 
-    assignmentTester[5] = 'c'; // should raise runtime error
+    // assignmentTester[5] = 'c'; // should raise runtime error
+
+    s = "bonanza";
+    std::cout << std::strlen("bonanza") << std::endl;
+    std::cout << s.Length() << std::endl;
+    std::cout << s << std::endl;
+    // std::cout << s.CStr() << std::endl;
+    // assert(s.CStr() == "bonanza");
 
 }

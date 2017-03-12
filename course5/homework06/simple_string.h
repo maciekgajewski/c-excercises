@@ -22,7 +22,8 @@ public:
 
     void Print() const;
     int Length() const;
-    // char[] GetBuffer() const;
+    std::unique_ptr<char[]> GetBufferCpy() const;
+    // const char *CStr() const;
 
 private:
     std::unique_ptr<char[]> buffer = nullptr;
@@ -31,3 +32,5 @@ private:
 }; // String
 
 } // namespace
+
+std::ostream& operator<<(std::ostream&, const simple_string::String&);
