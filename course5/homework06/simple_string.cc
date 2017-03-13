@@ -1,6 +1,5 @@
 #include "simple_string.h"
 #include <memory>
-#include <string>
 #include <stdexcept>
 
 
@@ -100,7 +99,7 @@ String String::operator+(const String& src) // concatenation from String
     return s;
 }
 
-String& String::operator+=(const char * src) // concatenation from const char *
+String& String::operator+=(const char * src) // += from const char *
 {
     int srcsize = std::strlen(src);
     std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(size + srcsize + 1);
@@ -118,7 +117,7 @@ String& String::operator+=(const char * src) // concatenation from const char *
     return *this;
 }
 
-String& String::operator+=(const String& src) // concatenation from String
+String& String::operator+=(const String& src) // += from String
 {
     int srcsize = src.size;
     std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(size + srcsize + 1);
@@ -172,45 +171,18 @@ int String::Length() const
     return size;
 }
 
-// std::unique_ptr<char[]> String::GetBufferCpy() const
-// {
-//     std::unique_ptr<char[]> bufferCpy = nullptr;
-//     if (buffer)
-//         bufferCpy = std::make_unique<char[]>(size);
-//         std::strcpy(bufferCpy.get(), buffer.get());
-//     return bufferCpy;
-//
-// }
+const char *String::CStr() const
+{
+    const char *toReturn = "";
+    if (buffer)
+    {
+        toReturn = buffer.get();
+    }
+    return toReturn;
+}
 
-// const char *String::CStr() const
-// {
-//     char res [size + 1];
-//     if (buffer)
-//     {
-//         for (auto i = 0; i < size; i++)
-//         {
-//             std::cout << "Adding " << buffer[i] << std::endl;
-//             res[i] = buffer[i];
-//         }
-//     }
-//     // res[size] = '\0';
-//     std::cout << "Returning " << res << std::endl;
-//     const char *toReturn = &res[0];
-//     std::cout << "Returning " << toReturn << std::endl;
-//     return toReturn;
-// }
-
-// std::ostream& operator<<(std::ostream& s, const String& str)
-// {
-//     s << '"';
-//     std::unique_ptr<char[]> bufferCpy = str.GetBufferCpy();
-//     if (bufferCpy)
-//     {
-//         for (auto i = 0; i < str.Length(); i++)
-//         {
-//             s << bufferCpy[i];
-//         }
-//     }
-//         s << '"';
-// 	return s;
-// }
+std::ostream& operator<<(std::ostream& s, const String& str)
+{
+    s << str.CStr();
+    return s;
+}

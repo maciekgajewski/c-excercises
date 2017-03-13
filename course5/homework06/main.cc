@@ -92,11 +92,22 @@ int main(int, char**)
     concatTester4 += concatTester5;
     concatTester4.Print();
 
-    // s = "bonanza";
-    // std::cout << std::strlen("bonanza") << std::endl;
-    // std::cout << s.Length() << std::endl;
-    // std::cout << s << std::endl;
-    // std::cout << s.CStr() << std::endl;
-    // assert(s.CStr() == "bonanza");
+    const char *bonanza = "bonanza";
+    s = bonanza;
+    std::cout << bonanza << std::endl;
+    std::cout << s.Length() << std::endl;
+    const char *cStr = s.CStr();
+    std::cout << cStr << std::endl;
 
+    int len = std::strlen(bonanza);
+    for (auto i = 0; i <= len; i++)
+    {
+        assert(cStr[i] == bonanza[i]);
+    }
+
+    // assert(cStr == bonanza); // why does this fail?
+
+    std::cout << s << std::endl;
+    String emptyStr;
+    std::cout << emptyStr << std::endl;
 }

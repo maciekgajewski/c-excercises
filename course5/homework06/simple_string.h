@@ -1,7 +1,6 @@
 #pragma once
 #include <iostream>
 #include <memory>
-#include <string>
 
 namespace simple_string
 {
@@ -26,11 +25,10 @@ public:
 
     void Print() const;
     int Length() const;
-    std::unique_ptr<char[]> GetBufferCpy() const;
     const char *CStr() const;
 
 private:
-    std::unique_ptr<char[]> buffer = nullptr;
+    std::unique_ptr<char[]> buffer;
     int size = 0;
 
 }; // String
