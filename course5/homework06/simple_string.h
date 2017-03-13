@@ -16,6 +16,10 @@ public:
     String& operator=(const String& src);
     String& operator=(String&& src);
     String& operator=(const char * src);
+    String operator+(const char * src);
+    String operator+(const String& src);
+    String& operator+=(const char * src);
+    String& operator+=(const String& src);
 
     char operator[](const int) const;
     char& operator[](const int);
@@ -23,7 +27,7 @@ public:
     void Print() const;
     int Length() const;
     std::unique_ptr<char[]> GetBufferCpy() const;
-    // const char *CStr() const;
+    const char *CStr() const;
 
 private:
     std::unique_ptr<char[]> buffer = nullptr;

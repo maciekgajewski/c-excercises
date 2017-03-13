@@ -29,58 +29,9 @@ int main(int, char**)
     using namespace simple_string;
     String s;
     assert(s.Length() == 0);
-    std::cout << s.Length() << std::endl;
     s.Print();
 
-
-    std::unique_ptr<char[]> p = std::make_unique<char[]>(5);
-    for(int i = 0; i < 4 ; i++)
-    {
-        p[i] = 'y';
-    }
-    for(int i = 0; i < 3 ; i++)
-    {
-        std::cout << p[i] << std::endl;
-    }
-    p[0] = 'y';
-    p[1] = 'o';
-    p[2] = 'l';
-    p[3] = 'o';
-
-    std::cout << *p.get() << std::endl;
-
-    // int y = 0;
-    // int * ptr = &y;
-    // *ptr = 8;
-    //
-    // std::cout << *ptr << std::endl;
-
-    char thechars[] = "chars";
-    std::cout << thechars << std::endl;
-
-    std::cout << std::strlen(thechars) << std::endl;
-    const char * res = "";
-    for (auto i = 0; i < 5; i++)
-    {
-        res += thechars[i];
-    }
-    std::cout << res << "  RES" << std::endl;
-
-    // char thechars2[] = *p;
-    // std::cout << thechars2 << std::endl;
-    std::unique_ptr<int[]> int_p = std::make_unique<int[]>(5);
-    for (auto i = 0; i < 5; i++)
-    {
-        int_p[i] = i;
-    }
-
-    std::cout << int_p[3] << std::endl;
-
-
-    const char* word = "word";
-    std::cout << std::strlen(word) << std::endl;
-
-    String sFromChar = word;
+    String sFromChar = "word";
     sFromChar.Print();
 
     String copyConstructedString = sFromChar;
@@ -90,7 +41,8 @@ int main(int, char**)
     String moveConstructedString = std::move(sFromChar);
     moveConstructedString.Print();
 
-    String assignmentTester = word;
+    String assignmentTester = "yolo";
+    assignmentTester.Print();
     assignmentTester = moveConstructedString;
     assignmentTester.Print();
     moveConstructedString.Print();
@@ -124,10 +76,26 @@ int main(int, char**)
 
     // assignmentTester[5] = 'c'; // should raise runtime error
 
-    s = "bonanza";
-    std::cout << std::strlen("bonanza") << std::endl;
-    std::cout << s.Length() << std::endl;
-    std::cout << s << std::endl;
+    String concatTester1 = "Hello ";
+    String concatTester2 = concatTester1 + "World!";
+    concatTester2.Print();
+    concatTester1.Print();
+
+    String concatTester3 = "World Again!";
+    String concatTester4 = concatTester1 + concatTester3;
+    concatTester4.Print();
+
+    concatTester4 += " And again.";
+    concatTester4.Print();
+
+    String concatTester5 = " And again twice.";
+    concatTester4 += concatTester5;
+    concatTester4.Print();
+
+    // s = "bonanza";
+    // std::cout << std::strlen("bonanza") << std::endl;
+    // std::cout << s.Length() << std::endl;
+    // std::cout << s << std::endl;
     // std::cout << s.CStr() << std::endl;
     // assert(s.CStr() == "bonanza");
 
