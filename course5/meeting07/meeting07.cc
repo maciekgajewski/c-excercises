@@ -8,19 +8,10 @@
 
 using namespace std::literals;
 
-template<typename T>
-void println(const T& v)
-{
-	std::cout << v << std::endl;
-}
-
-struct MyString
-{
-	bool empty() { return false; }
-};
-
 int main(int /*argc*/, char** /*argv*/)
 {
+	using namespace Course;
+	
 	println(7);
 	println(8.8);
 	println("Hello!");
