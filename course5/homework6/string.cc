@@ -96,7 +96,7 @@ String& String::operator+=(String const & that)
 	std::memcpy(newBuffer.get() + mLength, that.mBuffer.get(), that.mLength);
 	mLength += that.mLength;
 	newBuffer.get()[mLength] = '\0';
-	mBuffer = std::unique_ptr<char []>(newBuffer.release());
+	mBuffer = std::move(newBuffer);
 	return *this;
 }
 

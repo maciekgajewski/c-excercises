@@ -140,6 +140,11 @@ int main(int, char**)
 	assert(cabc + String("def") == "abcdef");
 	pass();
 
+	announce("long string");
+	String longString = "this is a longer string than usual, let's see where it ends up";
+	assert((longString + longString).length() == 2 * longString.length());
+	pass();
+
 	return 0;
 }
 
