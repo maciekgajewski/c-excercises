@@ -3,8 +3,6 @@
 
 #include "string.h"
 
-
-#include <iostream>
 namespace jds {
 
 String::String()
