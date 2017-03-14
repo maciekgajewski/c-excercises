@@ -3,18 +3,21 @@
 #include <cassert>
 #include <string>
 
-#include "my_class.hh"
-
-
 using namespace std::literals;
+
+template<typename ... T>
+void println(T... v)
+{
+	std::cout << "println" << std::endl;
+}
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	using namespace Course;
-	
 	println(7);
 	println(8.8);
 	println("Hello!");
+	println(7, 8.8, "hello");
+	println("str"s, 77);
 	
 }
 

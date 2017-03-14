@@ -10,8 +10,6 @@ struct MyClass
 	int x;
 };
 
-template<typename T>
-void println(const T& v);
 
 
 MyClass operator+(MyClass a, MyClass b);

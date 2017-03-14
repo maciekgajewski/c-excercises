@@ -11,17 +11,11 @@ MyClass operator+(MyClass a, MyClass b)
 	MyClass result;
 	result.x = a.x + b.x;
 	
-	println(result.x);
+	//println(result.x);
 	
 	return result;
 }
 
-template<typename T>
-void println(const T& v)
-{
-	std::cout << v << std::endl;
-}
-	
 
 	
 }
