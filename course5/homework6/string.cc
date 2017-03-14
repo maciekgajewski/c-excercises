@@ -8,9 +8,11 @@ namespace jds {
 String::String(String const & that)
 {
 	mLength = that.mLength;
-	mBuffer = std::make_unique<char[]>(mLength + 1);
-	std::memcpy(this->mBuffer.get(), that.mBuffer.get(), that.mLength);
-	mBuffer.get()[mLength] = '\0';
+	if (mLength) {
+		mBuffer = std::make_unique<char[]>(mLength + 1);
+		std::memcpy(this->mBuffer.get(), that.mBuffer.get(), that.mLength);
+		mBuffer.get()[mLength] = '\0';
+	}
 }
 
 String::String(String && that)
