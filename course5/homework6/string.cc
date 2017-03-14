@@ -24,7 +24,7 @@ String::String(String && that)
 
 String::String(char const * source)
 {
-	mLength = strlen(source);
+	mLength = std::strlen(source);
 	if (mLength) {
 		mBuffer = std::make_unique<char[]>(mLength + 1);
 		std::memcpy(mBuffer.get(), source, mLength);
