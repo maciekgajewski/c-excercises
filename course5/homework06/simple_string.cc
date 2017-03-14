@@ -3,7 +3,8 @@
 #include <stdexcept>
 
 
-using namespace simple_string;
+namespace simple_string
+{
 
 String::String() = default;
 
@@ -186,3 +187,4 @@ std::ostream& operator<<(std::ostream& s, const String& str)
     s << str.CStr();
     return s;
 }
+} // namespace

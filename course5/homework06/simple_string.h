@@ -33,6 +33,6 @@ private:
 
 }; // String
 
-} // namespace
+std::ostream& operator<<(std::ostream&, const String&);
 
-std::ostream& operator<<(std::ostream&, const simple_string::String&);
+} // namespace
