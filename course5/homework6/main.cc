@@ -86,6 +86,20 @@ int main(int, char**)
 	assert(std::strcmp(assigned_cstr.c_str(), "abcdef") == 0);
 	pass();
 
+	announce("char * equality");
+	assert(String("abc") == "abc");
+	assert("abc" == String("abc"));
+	assert(String() == "");
+	assert("" == String());
+	pass();
+
+	announce("char * inequality");
+	assert(String("abc") != "abd");
+	assert(String() != "abc");
+	assert("abc" != String("abd"));
+	assert("" != String("abc"));
+	pass();
+
 	announce("deep copy");
 	String s1 = "abc";
 	String s2 = s1;
@@ -111,6 +125,19 @@ int main(int, char**)
 	assert(s1 + empty == String("abc"));
 	assert(empty + s1 == String("abc"));
 	assert(empty + empty == String());
+	pass();
+
+	announce("const String");
+	const String cabc = "abc";
+	assert(cabc.length() == 3);
+	assert(cabc[1] == 'b');
+	assert(cabc == "abc");
+	assert("abc" == cabc);
+	assert(cabc != "def");
+	assert("def" != cabc);
+	assert(cabc == String("abc"));
+	assert(cabc != String("def"));
+	assert(cabc + String("def") == "abcdef");
 	pass();
 
 	return 0;

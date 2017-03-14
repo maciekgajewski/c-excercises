@@ -20,7 +20,9 @@ public:
 	String operator+(String const & that) const;
 	String& operator+=(String const & that);
 	bool operator==(String const & that) const;
+	bool operator==(char const * that) const;
 	bool operator!=(String const & that) const;
+	bool operator!=(char const * that) const;
 	char const * c_str() const;
 
 private:
@@ -29,5 +31,7 @@ private:
 };
 
 std::ostream& operator<<(std::ostream& s, jds::String const & value);
+bool operator==(char const * left, String const & right);
+bool operator!=(char const * left, String const & right);
 
 }

@@ -102,12 +102,22 @@ String& String::operator+=(String const & that)
 
 bool String::operator==(String const & that) const
 {
-	return std::strcmp(c_str(), that.c_str()) == 0;
+	return !std::strcmp(c_str(), that.c_str());
+}
+
+bool String::operator==(char const * that) const
+{
+	return !std::strcmp(c_str(), that);
 }
 
 bool String::operator!=(String const & that) const
 {
-	return !(*this == that);
+	return std::strcmp(c_str(), that.c_str());
+}
+
+bool String::operator!=(char const * that) const
+{
+	return std::strcmp(c_str(), that);
 }
 
 char const * String::c_str() const
@@ -123,6 +133,16 @@ std::ostream& operator<<(std::ostream& s, jds::String const & value)
 {
 	s << value.c_str();
 	return s;
+}
+
+bool operator==(char const * left, String const & right)
+{
+	return !std::strcmp(left, right.c_str());
+}
+
+bool operator!=(char const * left, String const & right)
+{
+	return std::strcmp(left, right.c_str());
 }
 
 }
