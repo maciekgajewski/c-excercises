@@ -1,7 +1,8 @@
 #include "vector2d.h"
 #include <cmath>
 
-using namespace vector;
+namespace vector
+{
 
 Vector2D::Vector2D(double initX, double initY) : x(initX), y(initY) {}
 
@@ -77,3 +78,4 @@ std::ostream& operator<<(std::ostream& s, const vector::Vector2D& vec)
 	s << "(" << vec.GetX() << ", " << vec.GetY() << ")";
 	return s;
 }
+} // namespace

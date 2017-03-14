@@ -37,15 +37,13 @@ private:
     double x;
     double y;
 };
+Vector2D operator*(const R& r, const Theta& t);
 
+Vector2D operator "" _x(long double initX);
+Vector2D operator "" _y(long double initY);
+
+R operator "" _r(long double r);
+Theta operator "" _theta(long double t);
+
+std::ostream& operator<<(std::ostream& s, const Vector2D& vec);
 }
-
-vector::Vector2D operator*(const vector::R& r, const vector::Theta& t);
-
-vector::Vector2D operator "" _x(long double initX);
-vector::Vector2D operator "" _y(long double initY);
-
-vector::R operator "" _r(long double r);
-vector::Theta operator "" _theta(long double t);
-
-std::ostream& operator<<(std::ostream& s, const vector::Vector2D& vec);
