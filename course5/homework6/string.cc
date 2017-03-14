@@ -22,8 +22,9 @@ String::String(String const & that)
 
 String::String(String && that)
 {
-	mBuffer = std::unique_ptr<char []>(mBuffer.release());
+	mBuffer = std::unique_ptr<char []>(that.mBuffer.release());
 	mLength = that.mLength;
+	that.mLength = 0;
 }
 
 String::String(char const * source)
@@ -46,6 +47,7 @@ void String::operator=(String && that)
 {
 	mBuffer = std::unique_ptr<char []>(that.mBuffer.release());
 	mLength = that.mLength;
+	that.mLength = 0;
 }
 
 void String::operator=(char const * source)
