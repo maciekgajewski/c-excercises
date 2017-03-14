@@ -4,15 +4,15 @@
 
 #include "my_class.hh"
 
+
 int main(int /*argc*/, char** /*argv*/)
 {
-	std::unique_ptr<char[]> a;
-	assert(a.get() == nullptr);
+	Course::MyClass o1, o2;
+	o1.x = 7;
+	o2.x = 5;
 	
-	std::unique_ptr<char[]> b = std::make_unique<char[]>(7);
-	std::unique_ptr<char[]> c = std::make_unique<char[]>(4);
 	
-	c = std::move(b);
-	
+	std::cout << (o1 + o2).GetX() << std::endl; // 
+		// Course::MyClass::GetX() const
 }
 
