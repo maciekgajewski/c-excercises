@@ -23,7 +23,8 @@ int main(int, char**)
 	pass();
 
 	announce("assignment from C string");
-	String assigned_cstr = "abc";
+	String assigned_cstr;
+	assigned_cstr = "abc";
 	assert(std::strcmp(assigned_cstr.c_str(), "abc") == 0);
 	assert(assigned_cstr.length() == 3);
 	pass();
@@ -83,6 +84,33 @@ int main(int, char**)
 	announce("operator+=");
 	assigned_cstr += test_string;
 	assert(std::strcmp(assigned_cstr.c_str(), "abcdef") == 0);
+	pass();
+
+	announce("deep copy");
+	String s1 = "abc";
+	String s2 = s1;
+	s2[0] = 'd';
+	assert(s1[0] == 'a');
+	assert(s2[0] == 'd');
+	assert(s1 != s2);
+	pass();
+
+	announce("assign to empty");
+	empty = s1;
+	assert(empty == s1);
+	pass();
+
+	announce("assign from empty");
+	empty = "";
+	s1 = empty;
+	assert(s1 == String());
+	pass();
+
+	announce("adding from/to empty");
+	s1 = "abc";
+	assert(s1 + empty == String("abc"));
+	assert(empty + s1 == String("abc"));
+	assert(empty + empty == String());
 	pass();
 
 	return 0;

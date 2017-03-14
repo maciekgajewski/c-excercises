@@ -1,5 +1,4 @@
-#ifndef _JDS_STRING_H_
-#define _JDS_STRING_H_
+#pragma once
 
 #include <memory>
 
@@ -8,7 +7,7 @@ namespace jds {
 class String
 {
 public:
-	String();
+	String() = default;
 	String(String const & that);
 	String(String && that);
 	String(char const * source);
@@ -20,15 +19,15 @@ public:
 	char operator[](unsigned index) const;
 	String operator+(String const & that) const;
 	String& operator+=(String const & that);
+	bool operator==(String const & that) const;
+	bool operator!=(String const & that) const;
 	char const * c_str() const;
 
 private:
-	std::unique_ptr<char[]> mBuffer;
-	unsigned mLength;
+	std::unique_ptr<char[]> mBuffer = nullptr;
+	unsigned mLength = 0;
 };
-
-}
 
 std::ostream& operator<<(std::ostream& s, jds::String const & value);
 
-#endif
+}

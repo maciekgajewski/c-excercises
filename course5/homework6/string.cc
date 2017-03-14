@@ -5,11 +5,6 @@
 
 namespace jds {
 
-String::String()
-{
-	mLength = 0;
-}
-
 String::String(String const & that)
 {
 	mLength = that.mLength;
@@ -20,7 +15,7 @@ String::String(String const & that)
 
 String::String(String && that)
 {
-	mBuffer = std::unique_ptr<char []>(that.mBuffer.release());
+	mBuffer = std::move(that.mBuffer);
 	mLength = that.mLength;
 	that.mLength = 0;
 }
@@ -28,32 +23,38 @@ String::String(String && that)
 String::String(char const * source)
 {
 	mLength = strlen(source);
-	mBuffer = std::make_unique<char[]>(mLength + 1);
-	std::memcpy(mBuffer.get(), source, mLength);
-	mBuffer.get()[mLength] = '\0';
+	if (mLength) {
+		mBuffer = std::make_unique<char[]>(mLength + 1);
+		std::memcpy(mBuffer.get(), source, mLength);
+		mBuffer.get()[mLength] = '\0';
+	}
 }
 
 void String::operator=(String const & that)
 {
 	mLength = that.mLength;
-	mBuffer = std::make_unique<char[]>(mLength + 1);
-	std::memcpy(mBuffer.get(), that.mBuffer.get(), mLength);
-	mBuffer.get()[mLength] = '\0';
+	if (mLength) {
+		mBuffer = std::make_unique<char[]>(mLength + 1);
+		std::memcpy(mBuffer.get(), that.mBuffer.get(), mLength);
+		mBuffer.get()[mLength] = '\0';
+	}
 }
 
 void String::operator=(String && that)
 {
-	mBuffer = std::unique_ptr<char []>(that.mBuffer.release());
+	mBuffer = std::move(that.mBuffer);
 	mLength = that.mLength;
 	that.mLength = 0;
 }
 
 void String::operator=(char const * source)
 {
-	mLength = strlen(source);
-	mBuffer = std::make_unique<char[]>(mLength + 1);
-	std::memcpy(mBuffer.get(), source, mLength);
-	mBuffer.get()[mLength] = '\0';
+	mLength = std::strlen(source);
+	if (mLength) {
+		mBuffer = std::make_unique<char[]>(mLength + 1);
+		std::memcpy(mBuffer.get(), source, mLength);
+		mBuffer.get()[mLength] = '\0';
+	}
 }
 
 unsigned String::length() const
@@ -65,7 +66,7 @@ char& String::operator[](unsigned index)
 {
 	if (index >= mLength)
 	{
-		throw std::runtime_error("String index out of bounds");
+		throw std::range_error("String index out of bounds");
 	}
 	return mBuffer.get()[index];
 }
@@ -74,7 +75,7 @@ char String::operator[](unsigned index) const
 {
 	if (index >= mLength)
 	{
-		throw std::runtime_error("String index out of bounds");
+		throw std::range_error("String index out of bounds");
 	}
 	return mBuffer.get()[index];
 }
@@ -97,6 +98,16 @@ String& String::operator+=(String const & that)
 	return *this;
 }
 
+bool String::operator==(String const & that) const
+{
+	return std::strcmp(c_str(), that.c_str()) == 0;
+}
+
+bool String::operator!=(String const & that) const
+{
+	return !(*this == that);
+}
+
 char const * String::c_str() const
 {
 	if (mLength) {
@@ -106,10 +117,10 @@ char const * String::c_str() const
 	}
 }
 
-}
-
 std::ostream& operator<<(std::ostream& s, jds::String const & value)
 {
 	s << value.c_str();
 	return s;
+}
+
 }
