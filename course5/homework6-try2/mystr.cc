@@ -5,14 +5,6 @@
 
 using namespace mystring;
 
-/* Rely on default generated constructor where mStr will be assigned nullptr
-MyString::MyString()
-{
-	// mStr = nullptr;
-	//mStr = std::make_unique<char[]>(1); //length 1 for zero terminator
-	//mStr[0] = '\0'; 
-}
-*/
 
 // Function to create a new unique pointer, memset it and initialize it with a 
 // new string. 

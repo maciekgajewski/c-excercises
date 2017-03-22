@@ -15,7 +15,9 @@ private:
 	void Reset_mStr(int new_size, const char* str);
 
 public:
+// DO not define default constructor, but rely on default generated constructor where mStr will be assigned nullptr
 	MyString() = default ; // default constructor
+
 	MyString(const char* str); // User defined constructor
 
 	MyString(const MyString& str);  // copy constructor
