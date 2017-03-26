@@ -1,5 +1,8 @@
 #include "simple_string.h"
 #include <cassert>
+#include <cstring>
+#include <array>
+#include <algorithm>
 
 /***
 Please, write a String class.
@@ -24,12 +27,39 @@ Use std::string as an inspiration. Ideally, your string should be source-compati
 Run your program through valgrind, make sure there is no memory leaks and no errors.
 ***/
 
+template<typename StrT>
+void test(const char* test_name, const StrT& s, const char* expected_content, int expected_length)
+{
+    int s_l = s.length();
+    int content_l = std::strlen(expected_content);
+    bool strncmp_result = std::strncmp(s.c_str(), expected_content, std::min(s_l, content_l));
+
+    assert(strncmp_result == 0);
+    assert(s.length() == expected_length);
+
+    std::cout << "Passed: " << test_name << std::endl;
+}
+
+
 int main(int, char**)
 {
     using namespace simple_string;
+    using namespace std::literals;
+
+    String defaultS;
+    const int num_test_cases = 1;
+    std::array<const char *, num_test_cases> test_names = { {"default constructor"} };
+    std::array<String, num_test_cases> inputs = { {defaultS} };
+    std::array<const char *, num_test_cases> expected_contents = { {""} };
+    std::array<int, num_test_cases> expected_lengths = { {0} };
+
+
+    for (auto i = 0; i < num_test_cases; i++)
+    {
+        test(test_names[i], inputs[i], expected_contents[i], expected_lengths[i]);
+    }
+
     String s;
-    assert(s.length() == 0);
-    s.Print();
 
     String sFromChar = "word";
     sFromChar.Print();
