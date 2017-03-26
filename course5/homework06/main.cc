@@ -50,6 +50,7 @@ int main(int, char**)
     using namespace simple_string;
     using namespace std::literals;
 
+    /* Basic tests for construction and assignment */
     String defaultS;
     String sFromChar = "word";
     String copyConstructed = sFromChar;
@@ -96,7 +97,7 @@ int main(int, char**)
             "",
             "word", "word", "movetest",
             "assignment", "CopyAssignER", "MoveAssignER",
-            "CozyAssignER"
+            "CozyAssignER",
         }
     };
 
@@ -105,6 +106,7 @@ int main(int, char**)
         test(test_names[i], inputs[i], expected_contents[i]);
     }
 
+    /* Tests for concatenation */
     String concatStr = "Hello ";
     String concatToConstChar = concatStr + "World!";
     test("concat initialization w const char *", concatToConstChar, "Hello World!");
@@ -120,31 +122,117 @@ int main(int, char**)
     concatToString += concatStr3;
     test("+= w String", concatToString, "Hello World Again! And again. And again twice.");
 
-    String shortStr = "short";
-    const char *outcome;
-    const char *test_name;
+    /* Test out of bounds error with indexing */
+    // String shortStr = "short";
+    // const char *outcome;
+    // const char *test_name;
+    //
+    // test_name = "index out of bounds";
+    // try
+    // {
+    //     shortStr[1000];
+    //     outcome = "Failed: ";
+    // }
+    // catch(...)
+    // {
+    //     outcome = "Passed: ";
+    // }
+    // std::cout << outcome << test_name << std::endl;
+    //
+    // test_name = "assignment to index out of bounds";
+    // try
+    // {
+    //     shortStr[1000] = '8';
+    //     outcome = "Failed: ";
+    // }
+    // catch(...)
+    // {
+    //     outcome = "Passed: ";
+    // }
+    // std::cout << outcome << test_name << std::endl;
 
-    test_name = "index out of bounds";
-    try
-    {
-        shortStr[1000];
-        outcome = "Failed: ";
-    }
-    catch(...)
-    {
-        outcome = "Passed: ";
-    }
-    std::cout << outcome << test_name << std::endl;
+    /* Test assignment & construction corner cases */
+    /*
+    Assign empty string to empty string
+    Assign non-empty string to empty string
+    Assign empty string to non empty string
+    (repeat for copy/move, and construction)
+    Check the content and the length after every operation.
+    You can implement the test as one function, and array of input value and expected outputs.
+    */
+    String emptyStrCopyConstructed = "";
+    String emptyStr;
+    String emptyStr2;
+    String emptyStrCopyConstructedFromString = emptyStr;
+    String emptyStrMoveConstructedFromString = std::move(emptyStr2);
+    String emptyStrMoveConstructedFromConstChar = std::move("");
 
-    test_name = "assignment to index out of bounds";
-    try
+    String emptyStrCopyAssigned;
+    String emptyStrCopyAssignedFromString;
+    emptyStrCopyAssigned = "";
+    emptyStrCopyAssignedFromString = emptyStr;
+
+    String nonEmptyStr = "I'm not empty.";
+    String emptyStrToBeFilledWString;
+    emptyStrToBeFilledWString = nonEmptyStr;
+    String emptyStrToBeFilledWConstChar;
+    emptyStrToBeFilledWConstChar = "I'm not empty either.";
+
+    String nonEmptyStr2 = "I'm also not empty.";
+    String emptyStrToBeMoveFilledWString;
+    emptyStrToBeMoveFilledWString = std::move(nonEmptyStr2);
+    String emptyStrToBeMoveFilledWConstChar;
+    emptyStrToBeMoveFilledWConstChar = std::move("I'm also not empty either.");
+
+    const int num_test_cases_corner = 10;
+    std::array<const char *, num_test_cases_corner> test_names_corner = {
+        {
+            "empty String w empty const char * copy construction",
+            "empty String w empty String copy construction",
+
+            "empty String w empty const char * move construction",
+            "empty String w empty String move construction",
+
+            "empty String w empty const char * copy assignment",
+            "empty String w empty String copy assignment",
+
+            "empty String w non-empty String copy assignment",
+            "empty String w non-empty const char * copy assignment",
+
+            "empty String w non-empty String move assignment",
+            "empty String w non-empty const char * move assignment"
+        }
+    };
+    std::array<String, num_test_cases_corner> inputs_corner = {
+        {
+            emptyStrCopyConstructed,
+            emptyStrCopyConstructedFromString,
+
+            emptyStrMoveConstructedFromConstChar,
+            emptyStrMoveConstructedFromString,
+
+            emptyStrCopyAssigned,
+            emptyStrCopyAssignedFromString,
+
+            emptyStrToBeFilledWString,
+            emptyStrToBeFilledWConstChar,
+
+            emptyStrToBeMoveFilledWString,
+            emptyStrToBeMoveFilledWConstChar
+        }
+    };
+    std::array<const char *, num_test_cases_corner> expected_contents_corner = {
+        {
+            "", "",
+            "", "",
+            "", "",
+            "I'm not empty.", "I'm not empty either.",
+            "I'm also not empty.", "I'm also not empty either."
+        }
+    };
+
+    for (auto i = 0; i < num_test_cases_corner; i++)
     {
-        shortStr[1000] = '8';
-        outcome = "Failed: ";
+        test(test_names_corner[i], inputs_corner[i], expected_contents_corner[i]);
     }
-    catch(...)
-    {
-        outcome = "Passed: ";
-    }
-    std::cout << outcome << test_name << std::endl;
 }
