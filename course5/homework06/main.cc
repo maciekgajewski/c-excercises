@@ -66,7 +66,9 @@ int main(int, char**)
     String moveAssigned;
     moveAssigned = std::move(moveAssigner);
 
-    const int num_test_cases = 7;
+    copyAssigner[2] = 'z';
+
+    const int num_test_cases = 8;
     std::array<const char *, num_test_cases> test_names = {
         {
             "default constructor",
@@ -77,28 +79,33 @@ int main(int, char**)
 
             "const char * assignment",
             "copy assignment",
-            "move assignment"
+            "move assignment",
+
+            "[] assignment"
         }
     };
     std::array<String, num_test_cases> inputs = {
         {
             defaultS,
             sFromChar, copyConstructed, moveConstructed,
-            toBeAssigned, copyAssigned, moveAssigned
+            toBeAssigned, copyAssigned, moveAssigned,
+            copyAssigner
         }
     };
     std::array<const char *, num_test_cases> expected_contents = {
         {
             "",
             "word", "word", "movetest",
-            "assignment", "CopyAssignER", "MoveAssignER"
+            "assignment", "CopyAssignER", "MoveAssignER",
+            "CozyAssignER"
         }
     };
     std::array<int, num_test_cases> expected_lengths = {
         {
             0,
             4, 4, 8,
-            10, 12, 12
+            10, 12, 12,
+            12
         }
     };
 
@@ -107,76 +114,73 @@ int main(int, char**)
         test(test_names[i], inputs[i], expected_contents[i], expected_lengths[i]);
     }
 
-    String s;
-    String moveConstructedString;
+    String shortStr = "short";
+    const char *outcome;
+    const char *test_name;
 
-    String assignmentTester = "yolo";
-    assignmentTester.Print();
-    assignmentTester = moveConstructedString;
-    assignmentTester.Print();
-    moveConstructedString.Print();
-
-    assignmentTester = std::move(moveConstructedString);
-    assignmentTester.Print();
-    moveConstructedString.Print();
-
-    assignmentTester = "yolo";
-    assignmentTester.Print();
-
-    for (auto i = 0; i < 4; i++)
+    test_name = "index out of bounds";
+    try
     {
-        assert(assignmentTester[i] == "yolo"[i]);
+        shortStr[1000];
+        outcome = "Failed: ";
     }
-    assignmentTester.Print();
-
-    // How could I use assert to test this one?
-    // assignmentTester[5]; // should raise runtime error
-
-    for (auto i = 0; i < 4; i++)
+    catch(...)
     {
-        assignmentTester[i] = "word"[i];
+        outcome = "Passed: ";
     }
-    assignmentTester.Print();
-    for (auto i = 0; i < 4; i++)
+    std::cout << outcome << test_name << std::endl;
+
+    test_name = "assignment to index out of bounds";
+    try
     {
-        assert(assignmentTester[i] == "word"[i]);
+        shortStr[1000] = '8';
+        outcome = "Failed: ";
     }
-    assignmentTester.Print();
-
-    // assignmentTester[5] = 'c'; // should raise runtime error
-
-    String concatTester1 = "Hello ";
-    String concatTester2 = concatTester1 + "World!";
-    concatTester2.Print();
-    concatTester1.Print();
-
-    String concatTester3 = "World Again!";
-    String concatTester4 = concatTester1 + concatTester3;
-    concatTester4.Print();
-
-    concatTester4 += " And again.";
-    concatTester4.Print();
-
-    String concatTester5 = " And again twice.";
-    concatTester4 += concatTester5;
-    concatTester4.Print();
-
-    const char *bonanza = "bonanza";
-    s = bonanza;
-    std::cout << bonanza << std::endl;
-    std::cout << s.length() << std::endl;
-    const char *c_str = s.c_str();
-    std::cout << c_str << std::endl;
-
-    int len = std::strlen(bonanza);
-    for (auto i = 0; i <= len; i++)
+    catch(...)
     {
-        assert(c_str[i] == bonanza[i]);
+        outcome = "Passed: ";
     }
+    std::cout << outcome << test_name << std::endl;
 
-    // assert(c_str == bonanza); // why does this fail?
-
-    std::cout << s << std::endl;
-    String emptyStr;
-    std::cout << emptyStr << std::endl;
+    //
+    // String concatTester1 = "Hello ";
+    // String concatTester2 = concatTester1 + "World!";
+    // concatTester2.Print();
+    // concatTester1.Print();
+    //
+    // String concatTester3 = "World Again!";
+    // String concatTester4 = concatTester1 + concatTester3;
+    // concatTester4.Print();
+    //
+    // concatTester4 += " And again.";
+    // concatTester4.Print();
+    //
+    // String concatTester5 = " And again twice.";
+    // concatTester4 += concatTester5;
+    // concatTester4.Print();
+    //
+    // const char *bonanza = "bonanza";
+    // s = bonanza;
+    // std::cout << bonanza << std::endl;
+    // std::cout << s.length() << std::endl;
+    // const char *c_str = s.c_str();
+    // std::cout << c_str << std::endl;
+    //
+    // int len = std::strlen(bonanza);
+    // for (auto i = 0; i <= len; i++)
+    // {
+    //     assert(c_str[i] == bonanza[i]);
+    // }
+    //
+    // // assert(c_str == bonanza); // why does this fail?
+    //
+    // std::cout << s << std::endl;
+    // String emptyStr;
+    // std::cout << emptyStr << std::endl;
+    //
+    // auto test = "hello"s;
+    // auto test2 = "hello"s;
+    // // bool eq = test.c_str() == test2.c_str();
+    // bool eq2 = std::strncmp(test.c_str(), "hello", test.length());
+    // std::cout << "equality? " << eq2 << std::endl;
 }

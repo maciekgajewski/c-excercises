@@ -137,6 +137,22 @@ String& String::operator+=(const String& src) // += from String
     return *this;
 }
 
+// bool String::operator==(const char * cmp) const
+// {
+//     int cmp_l = std::strlen(cmp);
+//     if (cmp_l != l)
+//         return false;
+//     for (auto i = 0; i <= l; i++)
+//     {
+//         if (buffer[i] != cmp[i])
+//             return false;
+//     }
+//     return true;
+// }
+// bool String::operator==(const String& cmp) const;
+// bool String::operator!=(const char * cmp) const;
+// bool String::operator!=(const String& cmp) const;
+
 char String::operator[](const int i) const
 {
     if (buffer && i < l)
