@@ -45,6 +45,23 @@ void test(const char* test_name, const StrT& s, const char* expected_content)
     std::cout << "Passed: " << test_name << std::endl;
 }
 
+template<typename StrT, typename StrT2>
+void testEquality(const char* test_name, const StrT& s1, const StrT2& s2, bool are_equal)
+{
+    if (are_equal)
+    {
+        assert(s1 == s2);
+        assert(s2 == s1);
+    }
+    else
+    {
+        assert(s1 != s2);
+        assert(s2 != s1);
+    }
+
+    std::cout << "Passed: " << test_name << std::endl;
+}
+
 int main(int, char**)
 {
     using namespace simple_string;
@@ -235,4 +252,15 @@ int main(int, char**)
     {
         test(test_names_corner[i], inputs_corner[i], expected_contents_corner[i]);
     }
+
+    /* Equality tests */
+
+    testEquality("two Strings are equal", String("same"), String("same"), true);
+    testEquality("two std::strings are equal", "same"s, "same"s, true);
+    testEquality("two Strings are different", String("same"), String("different"), false);
+    testEquality("two std::strings are different", "same"s, "different"s, false);
+    testEquality("Strings and const char * are equal", String("same"), "same", true);
+    testEquality("std::strings and const char * are equal", "same"s, "same", true);
+    testEquality("Strings and const char * are different", String("same"), "different", false);
+    testEquality("std::strings and const char * are different", "same"s, "different", false);
 }

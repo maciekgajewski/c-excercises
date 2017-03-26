@@ -137,21 +137,33 @@ String& String::operator+=(const String& src) // += from String
     return *this;
 }
 
-// bool String::operator==(const char * cmp) const
-// {
-//     int cmp_l = std::strlen(cmp);
-//     if (cmp_l != l)
-//         return false;
-//     for (auto i = 0; i <= l; i++)
-//     {
-//         if (buffer[i] != cmp[i])
-//             return false;
-//     }
-//     return true;
-// }
-// bool String::operator==(const String& cmp) const;
-// bool String::operator!=(const char * cmp) const;
-// bool String::operator!=(const String& cmp) const;
+bool String::operator==(const char * cmp) const
+{
+    int cmp_len = std::strlen(cmp);
+    int max_len = std::max(l, cmp_len);
+    return (std::strncmp(this->c_str(), cmp, max_len) == 0);
+}
+
+bool String::operator==(const String& cmp) const
+{
+    int cmp_len = cmp.l;
+    int max_len = std::max(l, cmp_len);
+    return (std::strncmp(this->c_str(), cmp.c_str(), max_len) == 0);
+}
+
+bool String::operator!=(const char * cmp) const
+{
+    int cmp_len = std::strlen(cmp);
+    int max_len = std::max(l, cmp_len);
+    return (std::strncmp(this->c_str(), cmp, max_len) != 0);
+}
+
+bool String::operator!=(const String& cmp) const
+{
+    int cmp_len = cmp.l;
+    int max_len = std::max(l, cmp_len);
+    return (std::strncmp(this->c_str(), cmp.c_str(), max_len) != 0);
+}
 
 char String::operator[](const int i) const
 {
@@ -203,5 +215,18 @@ std::ostream& operator<<(std::ostream& s, const String& str)
 {
     s << str.c_str();
     return s;
+}
+
+bool operator==(const char * cmp, const String& cmp2)
+{
+    int cmp_len = std::strlen(cmp);
+    int max_len = std::max(cmp2.length(), cmp_len);
+    return (std::strncmp(cmp2.c_str(), cmp, max_len) == 0);
+}
+bool operator!=(const char * cmp, const String& cmp2)
+{
+    int cmp_len = std::strlen(cmp);
+    int max_len = std::max(cmp2.length(), cmp_len);
+    return (std::strncmp(cmp2.c_str(), cmp, max_len) != 0);
 }
 } // namespace
