@@ -28,11 +28,11 @@ Run your program through valgrind, make sure there is no memory leaks and no err
 ***/
 
 template<typename StrT>
-void test(const char* test_name, const StrT& s, const char* expected_content, int expected_length)
+void test(const char* test_name, const StrT& s, const char* expected_content)
 {
     int s_l = s.length();
-    int content_l = std::strlen(expected_content);
-    bool strncmp_result = std::strncmp(s.c_str(), expected_content, std::min(s_l, content_l));
+    int expected_length = std::strlen(expected_content);
+    bool strncmp_result = std::strncmp(s.c_str(), expected_content, std::min(s_l, expected_length));
 
     assert(s.length() == expected_length);
     assert(strncmp_result == 0);
@@ -44,7 +44,6 @@ void test(const char* test_name, const StrT& s, const char* expected_content, in
 
     std::cout << "Passed: " << test_name << std::endl;
 }
-
 
 int main(int, char**)
 {
@@ -100,19 +99,26 @@ int main(int, char**)
             "CozyAssignER"
         }
     };
-    std::array<int, num_test_cases> expected_lengths = {
-        {
-            0,
-            4, 4, 8,
-            10, 12, 12,
-            12
-        }
-    };
 
     for (auto i = 0; i < num_test_cases; i++)
     {
-        test(test_names[i], inputs[i], expected_contents[i], expected_lengths[i]);
+        test(test_names[i], inputs[i], expected_contents[i]);
     }
+
+    String concatStr = "Hello ";
+    String concatToConstChar = concatStr + "World!";
+    test("concat initialization w const char *", concatToConstChar, "Hello World!");
+
+    String concatStr2 = "World Again!";
+    String concatToString = concatStr + concatStr2;
+    test("concat initialization w String", concatToString, "Hello World Again!");
+
+    concatToString += " And again.";
+    test("+= w const char *", concatToString, "Hello World Again! And again.");
+
+    String concatStr3 = " And again twice.";
+    concatToString += concatStr3;
+    test("+= w String", concatToString, "Hello World Again! And again. And again twice.");
 
     String shortStr = "short";
     const char *outcome;
@@ -141,46 +147,4 @@ int main(int, char**)
         outcome = "Passed: ";
     }
     std::cout << outcome << test_name << std::endl;
-
-    //
-    // String concatTester1 = "Hello ";
-    // String concatTester2 = concatTester1 + "World!";
-    // concatTester2.Print();
-    // concatTester1.Print();
-    //
-    // String concatTester3 = "World Again!";
-    // String concatTester4 = concatTester1 + concatTester3;
-    // concatTester4.Print();
-    //
-    // concatTester4 += " And again.";
-    // concatTester4.Print();
-    //
-    // String concatTester5 = " And again twice.";
-    // concatTester4 += concatTester5;
-    // concatTester4.Print();
-    //
-    // const char *bonanza = "bonanza";
-    // s = bonanza;
-    // std::cout << bonanza << std::endl;
-    // std::cout << s.length() << std::endl;
-    // const char *c_str = s.c_str();
-    // std::cout << c_str << std::endl;
-    //
-    // int len = std::strlen(bonanza);
-    // for (auto i = 0; i <= len; i++)
-    // {
-    //     assert(c_str[i] == bonanza[i]);
-    // }
-    //
-    // // assert(c_str == bonanza); // why does this fail?
-    //
-    // std::cout << s << std::endl;
-    // String emptyStr;
-    // std::cout << emptyStr << std::endl;
-    //
-    // auto test = "hello"s;
-    // auto test2 = "hello"s;
-    // // bool eq = test.c_str() == test2.c_str();
-    // bool eq2 = std::strncmp(test.c_str(), "hello", test.length());
-    // std::cout << "equality? " << eq2 << std::endl;
 }
