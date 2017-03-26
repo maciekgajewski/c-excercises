@@ -1,6 +1,7 @@
 #include "simple_string.h"
 #include <memory>
 #include <stdexcept>
+#include <cstring>
 
 
 namespace simple_string
@@ -10,18 +11,18 @@ String::String() = default;
 
 String::String(const char* initString)
 {
-    size = std::strlen(initString);
-    buffer = std::make_unique<char[]>(size + 1);
+    l = std::strlen(initString);
+    buffer = std::make_unique<char[]>(l + 1);
     std::strcpy(buffer.get(), initString);
 }
 
 String::String(const String& src) // copy
 {
-    size = src.size;
+    l = src.l;
 
     if (src.buffer)
     {
-        buffer = std::make_unique<char[]>(size + 1);
+        buffer = std::make_unique<char[]>(l + 1);
         std::strcpy(buffer.get(), src.buffer.get());
     }
 }
@@ -29,18 +30,18 @@ String::String(const String& src) // copy
 String::String(String&& src) // move
 {
     buffer = std::move(src.buffer);
-    size = src.size;
+    l = src.l;
 
     src.buffer = nullptr;
-    src.size = 0;
+    src.l = 0;
 }
 
 String& String::operator=(const String& src) // copy assignment
 {
-    size = src.size;
+    l = src.l;
     if (src.buffer)
     {
-        buffer = std::make_unique<char[]>(size + 1);
+        buffer = std::make_unique<char[]>(l + 1);
         std::strcpy(buffer.get(), src.buffer.get());
     }
     return *this;
@@ -49,18 +50,18 @@ String& String::operator=(const String& src) // copy assignment
 String& String::operator=(String&& src) // move assignment
 {
     buffer = std::move(src.buffer);
-    size = src.size;
+    l = src.l;
 
     src.buffer = nullptr;
-    src.size = 0;
+    src.l = 0;
 
     return *this;
 }
 
 String& String::operator=(const char * src) // assignment from const char *
 {
-    size = std::strlen(src);
-    buffer = std::make_unique<char[]>(size + 1);
+    l = std::strlen(src);
+    buffer = std::make_unique<char[]>(l + 1);
     std::strcpy(buffer.get(), src);
 
     return *this;
@@ -69,16 +70,16 @@ String& String::operator=(const char * src) // assignment from const char *
 String String::operator+(const char * src) // concatenation from const char *
 {
     String s;
-    int srcsize = std::strlen(src);
-    s.size = size + srcsize;
-    s.buffer = std::make_unique<char[]>(s.size + 1);
-    for (auto i = 0; i < size; i++)
+    int srcl = std::strlen(src);
+    s.l = l + srcl;
+    s.buffer = std::make_unique<char[]>(s.l + 1);
+    for (auto i = 0; i < l; i++)
     {
         s.buffer[i] = buffer[i];
     }
-    for (auto i = 0; i <= srcsize; i++) // include null character
+    for (auto i = 0; i <= srcl; i++) // include null character
     {
-        s.buffer[i + size] = src[i];
+        s.buffer[i + l] = src[i];
     }
     return s;
 }
@@ -86,59 +87,59 @@ String String::operator+(const char * src) // concatenation from const char *
 String String::operator+(const String& src) // concatenation from String
 {
     String s;
-    int srcsize = src.size;
-    s.size = size + srcsize;
-    s.buffer = std::make_unique<char[]>(s.size + 1);
-    for (auto i = 0; i < size; i++)
+    int srcl = src.l;
+    s.l = l + srcl;
+    s.buffer = std::make_unique<char[]>(s.l + 1);
+    for (auto i = 0; i < l; i++)
     {
         s.buffer[i] = buffer[i];
     }
-    for (auto i = 0; i <= srcsize; i++) // include null character
+    for (auto i = 0; i <= srcl; i++) // include null character
     {
-        s.buffer[i + size] = src.buffer[i];
+        s.buffer[i + l] = src.buffer[i];
     }
     return s;
 }
 
 String& String::operator+=(const char * src) // += from const char *
 {
-    int srcsize = std::strlen(src);
-    std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(size + srcsize + 1);
+    int srcl = std::strlen(src);
+    std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(l + srcl + 1);
 
-    for (auto i = 0; i < size; i++)
+    for (auto i = 0; i < l; i++)
     {
         newBuffer[i] = buffer[i];
     }
-    for (auto i = 0; i <= srcsize; i++) // include null character
+    for (auto i = 0; i <= srcl; i++) // include null character
     {
-        newBuffer[i + size] = src[i];
+        newBuffer[i + l] = src[i];
     }
-    size = size + srcsize;
+    l = l + srcl;
     buffer = std::move(newBuffer);
     return *this;
 }
 
 String& String::operator+=(const String& src) // += from String
 {
-    int srcsize = src.size;
-    std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(size + srcsize + 1);
+    int srcl = src.l;
+    std::unique_ptr<char[]> newBuffer = std::make_unique<char[]>(l + srcl + 1);
 
-    for (auto i = 0; i < size; i++)
+    for (auto i = 0; i < l; i++)
     {
         newBuffer[i] = buffer[i];
     }
-    for (auto i = 0; i <= srcsize; i++) // include null character
+    for (auto i = 0; i <= srcl; i++) // include null character
     {
-        newBuffer[i + size] = src.buffer[i];
+        newBuffer[i + l] = src.buffer[i];
     }
-    size = size + srcsize;
+    l = l + srcl;
     buffer = std::move(newBuffer);
     return *this;
 }
 
 char String::operator[](const int i) const
 {
-    if (buffer && i < size)
+    if (buffer && i < l)
         return buffer[i];
     else
         throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
@@ -146,7 +147,7 @@ char String::operator[](const int i) const
 
 char& String::operator[](const int i)
 {
-    if (buffer && i < size)
+    if (buffer && i < l)
         return buffer[i];
     else
         throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
@@ -167,12 +168,12 @@ void String::Print() const
     }
 }
 
-int String::Length() const
+int String::length() const
 {
-    return size;
+    return l;
 }
 
-const char *String::CStr() const
+const char *String::c_str() const
 {
     const char *toReturn = "";
     if (buffer)
@@ -184,7 +185,7 @@ const char *String::CStr() const
 
 std::ostream& operator<<(std::ostream& s, const String& str)
 {
-    s << str.CStr();
+    s << str.c_str();
     return s;
 }
 } // namespace

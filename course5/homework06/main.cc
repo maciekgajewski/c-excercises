@@ -28,7 +28,7 @@ int main(int, char**)
 {
     using namespace simple_string;
     String s;
-    assert(s.Length() == 0);
+    assert(s.length() == 0);
     s.Print();
 
     String sFromChar = "word";
@@ -95,17 +95,17 @@ int main(int, char**)
     const char *bonanza = "bonanza";
     s = bonanza;
     std::cout << bonanza << std::endl;
-    std::cout << s.Length() << std::endl;
-    const char *cStr = s.CStr();
-    std::cout << cStr << std::endl;
+    std::cout << s.length() << std::endl;
+    const char *c_str = s.c_str();
+    std::cout << c_str << std::endl;
 
     int len = std::strlen(bonanza);
     for (auto i = 0; i <= len; i++)
     {
-        assert(cStr[i] == bonanza[i]);
+        assert(c_str[i] == bonanza[i]);
     }
 
-    // assert(cStr == bonanza); // why does this fail?
+    // assert(c_str == bonanza); // why does this fail?
 
     std::cout << s << std::endl;
     String emptyStr;

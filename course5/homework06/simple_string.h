@@ -24,12 +24,12 @@ public:
     char& operator[](const int);
 
     void Print() const;
-    int Length() const;
-    const char *CStr() const;
+    int length() const;
+    const char *c_str() const;
 
 private:
     std::unique_ptr<char[]> buffer;
-    int size = 0;
+    int l = 0;
 
 }; // String
 
