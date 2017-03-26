@@ -142,7 +142,7 @@ char String::operator[](const int i) const
     if (buffer && i < l)
         return buffer[i];
     else
-        throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
+        throw std::range_error("Index error: '" + std::to_string(i) + "' is out of range.");
 }
 
 char& String::operator[](const int i)
@@ -150,7 +150,7 @@ char& String::operator[](const int i)
     if (buffer && i < l)
         return buffer[i];
     else
-        throw std::runtime_error("Index error: '" + std::to_string(i) + "' is out of range.");
+        throw std::range_error("Index error: '" + std::to_string(i) + "' is out of range.");
 }
 
 void String::Print() const
