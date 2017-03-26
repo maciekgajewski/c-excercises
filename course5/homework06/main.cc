@@ -47,12 +47,55 @@ int main(int, char**)
     using namespace std::literals;
 
     String defaultS;
-    const int num_test_cases = 1;
-    std::array<const char *, num_test_cases> test_names = { {"default constructor"} };
-    std::array<String, num_test_cases> inputs = { {defaultS} };
-    std::array<const char *, num_test_cases> expected_contents = { {""} };
-    std::array<int, num_test_cases> expected_lengths = { {0} };
+    String sFromChar = "word";
+    String copyConstructed = sFromChar;
 
+    String toBeAssigned = "movetest";
+    String moveConstructed = std::move(toBeAssigned);
+
+    toBeAssigned = "assignment";
+    String copyAssigner = "CopyAssignER";
+    String moveAssigner = "MoveAssignER";
+    String copyAssigned;
+    copyAssigned = copyAssigner;
+    String moveAssigned;
+    moveAssigned = std::move(moveAssigner);
+
+    const int num_test_cases = 7;
+    std::array<const char *, num_test_cases> test_names = {
+        {
+            "default constructor",
+
+            "const char * construction",
+            "copy construction",
+            "move construction",
+
+            "const char * assignment",
+            "copy assignment",
+            "move assignment"
+        }
+    };
+    std::array<String, num_test_cases> inputs = {
+        {
+            defaultS,
+            sFromChar, copyConstructed, moveConstructed,
+            toBeAssigned, copyAssigned, moveAssigned
+        }
+    };
+    std::array<const char *, num_test_cases> expected_contents = {
+        {
+            "",
+            "word", "word", "movetest",
+            "assignment", "CopyAssignER", "MoveAssignER"
+        }
+    };
+    std::array<int, num_test_cases> expected_lengths = {
+        {
+            0,
+            4, 4, 8,
+            10, 12, 12
+        }
+    };
 
     for (auto i = 0; i < num_test_cases; i++)
     {
@@ -60,16 +103,7 @@ int main(int, char**)
     }
 
     String s;
-
-    String sFromChar = "word";
-    sFromChar.Print();
-
-    String copyConstructedString = sFromChar;
-    copyConstructedString.Print();
-    sFromChar.Print();
-
-    String moveConstructedString = std::move(sFromChar);
-    moveConstructedString.Print();
+    String moveConstructedString;
 
     String assignmentTester = "yolo";
     assignmentTester.Print();
