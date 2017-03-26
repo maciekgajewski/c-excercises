@@ -34,8 +34,13 @@ void test(const char* test_name, const StrT& s, const char* expected_content, in
     int content_l = std::strlen(expected_content);
     bool strncmp_result = std::strncmp(s.c_str(), expected_content, std::min(s_l, content_l));
 
-    assert(strncmp_result == 0);
     assert(s.length() == expected_length);
+    assert(strncmp_result == 0);
+
+    for (auto i = 0; i < expected_length; i++)
+    {
+        assert(s[i] == expected_content[i]);
+    }
 
     std::cout << "Passed: " << test_name << std::endl;
 }
