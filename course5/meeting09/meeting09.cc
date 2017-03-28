@@ -17,14 +17,43 @@ void println(T0 v, T... rest)
 	println(rest...);
 }
 
+template<typename T>
+struct List
+{
+	List();
+	void hello() { std::cout << "size of object is " << sizeof(T) << std::endl; }
+};
+
+template<typename T>
+List<T>::List()
+{
+	std::cout << "hello! sizeof(T)=" << sizeof(T) << std::endl;
+}
+
+template<>
+List<int>::List() // full function specialization
+{
+	std::cout << "hello from int list!" << std::endl;
+}
+
+template<typename P>
+struct List<P*>
+{
+	List() { std::cout << "boo" << std::endl; }
+	void hello() { std::cout << "size of pointed-to object is " << sizeof(P) << std::endl; }
+};
+
 int main(int /*argc*/, char** /*argv*/)
 {
-	println(7);
-	println();
-	println(8.8);
-	println("Hello!");
-	println(7, 8.8, "hello");
-	println("str"s, 77);
+	List<int> li;
+	List<std::string> ls;
+	List<double*> ldp;
+	List<char*> lcp;
+	
+	li.hello();
+	ls.hello();
+	ldp.hello();
+	lcp.hello();
 }
 
 
