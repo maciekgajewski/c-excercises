@@ -20,40 +20,39 @@ void println(T0 v, T... rest)
 template<typename T>
 struct List
 {
-	List();
-	void hello() { std::cout << "size of object is " << sizeof(T) << std::endl; }
+	static void hello() { std::cout << "size of object is " << sizeof(T) << std::endl; }
 };
-
-template<typename T>
-List<T>::List()
-{
-	std::cout << "hello! sizeof(T)=" << sizeof(T) << std::endl;
-}
-
-template<>
-List<int>::List() // full function specialization
-{
-	std::cout << "hello from int list!" << std::endl;
-}
 
 template<typename P>
 struct List<P*>
 {
-	List() { std::cout << "boo" << std::endl; }
-	void hello() { std::cout << "size of pointed-to object is " << sizeof(P) << std::endl; }
+	static void hello() { std::cout << "size of pointed-to object is " << sizeof(P) << std::endl; }
+};
+
+template<typename T>
+struct remove_ptr
+{
+	using type = T;
+};
+
+template<typename P>
+struct remove_ptr<P*>
+{
+	using type = P;
 };
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	List<int> li;
-	List<std::string> ls;
-	List<double*> ldp;
-	List<char*> lcp;
+	remove_ptr<int>::type a;
+	remove_ptr<double>::type b;
+	remove_ptr<int*>::type c;
+	remove_ptr<double*>::type d;
 	
-	li.hello();
-	ls.hello();
-	ldp.hello();
-	lcp.hello();
+	
+	List<int>::hello();
+	List<std::string>::hello();
+	List<double*>::hello();
+	List<char*>::hello();
 }
 
 
