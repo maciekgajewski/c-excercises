@@ -207,12 +207,10 @@ int String::length() const
 
 const char *String::c_str() const
 {
-    const char *toReturn = "";
     if (buffer)
-    {
-        toReturn = buffer.get();
-    }
-    return toReturn;
+        return buffer.get();
+    else
+        return "";
 }
 
 std::ostream& operator<<(std::ostream& s, const String& str)
