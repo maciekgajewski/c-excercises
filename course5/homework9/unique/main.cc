@@ -1,8 +1,6 @@
 #include "unique.h"
 #include <iostream>
 #include <cassert>
-#include <cstdlib>
-#include <stdexcept>
 
 int main(int, char**)
 {
