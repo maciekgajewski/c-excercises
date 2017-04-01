@@ -7,7 +7,11 @@
 namespace simple_string
 {
 
-String::String() = default;
+String::String()
+{
+    l = 0;
+    buffer = std::make_unique<char[]>(l + 1);
+}
 
 String::String(const char* initString)
 {
