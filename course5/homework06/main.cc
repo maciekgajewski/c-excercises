@@ -3,6 +3,7 @@
 #include <cstring>
 #include <array>
 #include <algorithm>
+#include <iostream>
 
 /***
 Please, write a String class.
@@ -201,7 +202,11 @@ int main(int, char**)
     String emptyStrToBeMoveFilledWConstChar;
     emptyStrToBeMoveFilledWConstChar = std::move("I'm also not empty either.");
 
-    const int num_test_cases_corner = 10;
+    String anotherEmptyStr;
+    nonEmptyStr2 = "I'm also not empty.";
+    nonEmptyStr2 = anotherEmptyStr;
+
+    const int num_test_cases_corner = 11;
     std::array<const char *, num_test_cases_corner> test_names_corner = {
         {
             "empty String w empty const char * copy construction",
@@ -217,7 +222,9 @@ int main(int, char**)
             "empty String w non-empty const char * copy assignment",
 
             "empty String w non-empty String move assignment",
-            "empty String w non-empty const char * move assignment"
+            "empty String w non-empty const char * move assignment",
+
+            "non-empty String w empty String copy assignment",
         }
     };
     std::array<String, num_test_cases_corner> inputs_corner = {
@@ -235,7 +242,9 @@ int main(int, char**)
             emptyStrToBeFilledWConstChar,
 
             emptyStrToBeMoveFilledWString,
-            emptyStrToBeMoveFilledWConstChar
+            emptyStrToBeMoveFilledWConstChar,
+
+            nonEmptyStr2,
         }
     };
     std::array<const char *, num_test_cases_corner> expected_contents_corner = {
@@ -244,7 +253,8 @@ int main(int, char**)
             "", "",
             "", "",
             "I'm not empty.", "I'm not empty either.",
-            "I'm also not empty.", "I'm also not empty either."
+            "I'm also not empty.", "I'm also not empty either.",
+            ""
         }
     };
 
