@@ -31,7 +31,6 @@ struct MoreUniquePtr
 			delete ptr;
 	}
 
-	// copy assignment operator
 	MoreUniquePtr& operator=(const MoreUniquePtr& src) = delete; // copy assignmt
 
 	MoreUniquePtr& operator=(MoreUniquePtr&& src) // move assignmt
