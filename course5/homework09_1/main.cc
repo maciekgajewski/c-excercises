@@ -11,7 +11,6 @@ Be mindful on what you’re measuring!
 */
 #include <benchmark/benchmark.h>
 #include <string>
-#include <iostream>
 
 using namespace std::literals;
 
