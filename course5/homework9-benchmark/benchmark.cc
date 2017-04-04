@@ -6,22 +6,6 @@
 bool is_greater_string(const std::string& a, const std::string& b) { return a>b; }
 bool is_greater(const char* a, const char* b) { return std::strcmp(a, b) > 0;}
 
-/*const char* create_char(int N, std::string a)
-{
-    std::string input = a;
-    for(int i = 0; i < N; i++) { input += a; }
-    //const char* inputchar = input.c_str();
-    return input;
-}*/
-
-std::string create_char(int N, std::string a)
-{
-    std::string input = a;
-    for(int i = 0; i < N; i++) { input += a; }
-    //const char* inputchar = input.c_str();
-    return input;
-}
-
 static void is_greater_bench(benchmark::State& state)
 {
     std::string a = "a";
