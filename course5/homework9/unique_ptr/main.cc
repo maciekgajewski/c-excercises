@@ -44,4 +44,11 @@ int main()
 
 	ptr.reset();
 	assert(TestClass::mInstanceCount == 0);
+
+	const auto cptr = MakeUnique<TestClass>(789);
+	assert(cptr->mInstanceNo == 789);
+	assert(TestClass::mInstanceCount == 1);
+
+	const auto raw3 = cptr.get();
+	assert(raw3->mInstanceNo == 789);
 }
