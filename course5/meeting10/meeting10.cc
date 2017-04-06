@@ -3,24 +3,27 @@
 #include <iomanip>
 #include <cstring>
 
-template<typename T>
-struct remove_ptr
-{
-	using type = T;
-};
+template<typename T> struct TP;
 
-template<typename P>
-struct remove_ptr<P*>
+void print(char arr[7])
 {
-	using type = P;
-};
+	TP<decltype(arr)> x;
+	std::cout << arr << std::endl;
+}
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	remove_ptr<int>::type a;
-	remove_ptr<double>::type b;
-	remove_ptr<int*>::type c;
-	remove_ptr<double*>::type d;
+	char hello[] = "Hello!";
+	// type of hello: char[7]
+	int x[] = {1, 4, 5, 7}; // int[4]
+	
+	auto hey = hello; // type of hey is const char*
+	print(hello);
+	print(hey);
+	std::cout << hey << std::endl;
+	
+	std::cout << sizeof(hey) << std::endl;
+	
 }
 
 
