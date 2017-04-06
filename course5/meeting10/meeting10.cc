@@ -3,27 +3,28 @@
 #include <iomanip>
 #include <cstring>
 
-template<typename T> struct TP;
-
-void print(char arr[7])
-{
-	TP<decltype(arr)> x;
-	std::cout << arr << std::endl;
-}
-
 int main(int /*argc*/, char** /*argv*/)
 {
 	char hello[] = "Hello!";
 	// type of hello: char[7]
 	int x[] = {1, 4, 5, 7}; // int[4]
 	
-	auto hey = hello; // type of hey is const char*
-	print(hello);
-	print(hey);
-	std::cout << hey << std::endl;
+	for(int i = 0; i < sizeof(x)/sizeof(*x); i++)
+	{
+		std::cout << x[i] << std::endl;
+	}
 	
-	std::cout << sizeof(hey) << std::endl;
+	int* end = x + 4;
+	for(int* p = x; p < end; ++p)
+	{
+		std::cout << *p << std::endl;
+	}
 	
+	// comp
+	// incr
+	// add
+	// mul
+	// deref
 }
 
 
