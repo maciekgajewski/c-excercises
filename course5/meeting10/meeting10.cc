@@ -3,6 +3,8 @@
 #include <cstring>
 #include <vector>
 #include <list>
+#include <array>
+#include <set>
 
 // 	int* end = x + 4;
 // 	for(int* p = x; p < end; ++p)
@@ -10,41 +12,34 @@
 // 		std::cout << *p << std::endl;
 // 	}
 
-template <typename T>
-void iterate_over(const T& s)
+template <typename It> 
+void iterate_over(It first, It last)
 {
-	auto end = s.end();
-	for (auto i = s.begin(); i != end; ++i)
+	for (auto i = first; i != last; ++i)
 	{
 		std::cout << *i << std::endl;
 	}
 }
 
 
-int main(int /*argc*/, char** argv)
+int main(int argc, char** argv)
 {
 	std::string s = argv[0];
 	std::vector<int> v = {1, 3, 5, 7};
 	std::list<double> l = {1.2, 3.4, 5.6, 7.8};
-	iterate_over(s);
-	iterate_over(v);
-	iterate_over(l);
+	std::set<int> set = {1, 5, 3, 8, 9, 2};
 	
-	//char hello[] = "Hello!";
-	// type of hello: char[7]
-// 	int x[] = {1, 4, 5, 7}; // int[4]
-// 	
-// 	for(int i = 0; i < sizeof(x)/sizeof(*x); i++)
-// 	{
-// 		std::cout << x[i] << std::endl;
-// 	}
-// 	
+	char hey[] = {'h', 'e', 'l', 'l', 'o'};
 	
-	// comp
-	// incr
-	// add
-	// mul
-	// deref
+	iterate_over(s.begin(), s.end());
+	auto i = s.find('g');
+	if (i != std::string::npos)
+		iterate_over(s.begin(), s.begin() + i);
+	
+	iterate_over(std::begin(hey), std::end(hey));
+	
+	iterate_over(argv, argv + argc);
 }
+
 
 
