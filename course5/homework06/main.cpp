@@ -23,7 +23,7 @@ void run_all_tests(TestClass<T> & test)
 int main()
 {
     auto test = TestClass<std::string>();
-    //run_all_tests(test);
+    run_all_tests(test);
     auto test2 = TestClass<String>();
     run_all_tests(test2);
     return 0;
