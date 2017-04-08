@@ -104,4 +104,18 @@ namespace course{
         return stream << s.c_str();
     }
 
+//    iterator& string::operator
+
+    char* string::begin() { return string_pointer.get(); }
+
+    char* string::begin() const { return string_pointer.get(); }
+
+    char* string::end() { return string_pointer.get() + len; }
+
+    char* string::end() const { return string_pointer.get() + len; }
+
+
+
+
+
 }

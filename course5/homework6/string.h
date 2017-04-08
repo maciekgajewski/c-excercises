@@ -21,6 +21,18 @@ namespace course{
             bool operator==(const string&);
             bool operator==(const char*);
             char* c_str() const;
+            char* begin();
+            char* begin() const;
+            char* end();
+            char* end() const;
+//            class iterator
+//            {
+//            public:
+                    
+//            private:
+//                    char* point;
+//            };
+//            iterator& operator++(const iterator&);
 
     private:
             std::unique_ptr<char[]> string_pointer;
