@@ -4,7 +4,6 @@
 
 namespace homework05
 {
-using namespace std::literals;
 
 class Vector2D
 {
