@@ -7,6 +7,11 @@ void print(std::string value)
 	std::printf("%s", value.c_str());
 }
 
+void print(const char* value)
+{
+	std::printf(value);   
+}
+
 void print(bool value)
 {
 	std::printf("%s", value ? "true" : "false");
@@ -31,7 +36,7 @@ int main()
 	print(1.0/3.0, 2);// 0.33
 	
 	std::string s = "world!";
-	print("hello, "); // hello, 
+	print("hello, ") // hello, 
 	print(s); // world!
 	
 	float f = 6;
