@@ -9,8 +9,8 @@ using namespace homework05;
 
 void test_equals()
 {
-    auto v1 = Vector2D(1, 0);
-    auto v2 = Vector2D(1, 0);
+    const auto v1 = Vector2D(1, 0);
+    const auto v2 = Vector2D(1, 0);
 
     assert (v1 == v2);
 }
@@ -29,8 +29,8 @@ void test_not_equals()
 
 void test_plus()
 {
-    auto v1 = Vector2D(10.0, 11.0);
-    auto v2 = Vector2D(1, -2);
+    const auto v1 = Vector2D(10.0, 11.0);
+    const auto v2 = Vector2D(1, -2);
 
     assert(v1 + v2 == Vector2D(11, 9));
 }
