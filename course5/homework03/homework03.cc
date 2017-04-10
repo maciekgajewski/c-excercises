@@ -1,32 +1,6 @@
-// Example program
-#include <string>
 #include <cstdio>
 
-void print(std::string value)
-{
-	std::printf("%s", value.c_str());
-}
-
-void print(const char* value)
-{
-	std::printf(value);   
-}
-
-void print(bool value)
-{
-	std::printf("%s", value ? "true" : "false");
-}
-
-void print(int value)
-{
-	std::printf("%d", value);
-}
-
-void print(float value, uint precision = 0)
-{
-    	std::string format = std::string("%.") + std::to_string(precision).c_str() + std::string("f");
-	std::printf(format.c_str(), value);
-}
+// TODO your code goes here
 
 int main()
 {
