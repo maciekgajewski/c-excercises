@@ -1,5 +1,4 @@
 #pragma once
-
 #include <memory>
 #include <utility>
 
@@ -8,16 +7,7 @@ namespace course
 template<class T>
 struct node
 {
-//public:
-        node() { /*next.get() = nullptr;*/ }
-        
- /*       class iterator
-        {
-        public:
-                iterator operator++() : current(current->next), {}
-        private:
-                node* current;
-        }*/
+        node() { }
         T value;
         std::unique_ptr<node<T>> next;
 };
