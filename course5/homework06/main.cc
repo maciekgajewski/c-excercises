@@ -63,6 +63,12 @@ void testEquality(const char* test_name, const StrT& s1, const StrT2& s2, bool a
     std::cout << "Passed: " << test_name << std::endl;
 }
 
+bool isA(const char& c)
+{
+    return std::strcmp(&c, "a");
+}
+
+
 int main(int, char**)
 {
     using namespace simple_string;
@@ -273,4 +279,36 @@ int main(int, char**)
     testEquality("std::strings and const char * are equal", "same"s, "same", true);
     testEquality("Strings and const char * are different", String("same"), "different", false);
     testEquality("std::strings and const char * are different", "same"s, "different", false);
+
+    String iteratorTest = "this is a test";
+    String iteratorTest2 = "this is another test";
+    for (auto& elem: iteratorTest) {
+        std::cout << elem << std::endl;
+    }
+
+    std::cout << std::boolalpha;
+    auto any_a = std::any_of(iteratorTest.begin(), iteratorTest.end(), isA);
+    std::cout << any_a << std::endl;
+
+    bool are_equal = std::equal(iteratorTest.begin(), iteratorTest.end(), iteratorTest2.begin());
+    assert (!are_equal);
+
+    auto max_el = std::max_element(iteratorTest.begin(), iteratorTest.end(), std::greater<char>());
+    std::cout << max_el << std::endl;
+
+    char t = 't';
+    int num_t = std::count(iteratorTest.begin(), iteratorTest.end(), t);
+    std::cout << num_t << std::endl;
+
+    std::sort(iteratorTest.begin(), iteratorTest.end(), std::greater<char>());
+    for (auto& elem: iteratorTest) {
+        std::cout << elem;
+    }
+    std::cout << std::endl;
+
+    std::reverse(iteratorTest.begin(), iteratorTest.end());
+    for (auto& elem: iteratorTest) {
+        std::cout << elem;
+    }
+    std::cout << std::endl;
 }
