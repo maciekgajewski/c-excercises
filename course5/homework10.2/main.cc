@@ -21,6 +21,11 @@ int main(int, char**)
 	assert(list.front() == "zzzzz");
 	// size()
 	assert(list.size() == 4);
+	// dereference iterator
+	assert(*(list.begin()) == "zzzzz");
+	*(list.begin()) = "aaaaa";
+	assert(list.front() == "aaaaa");
+	*(list.begin()) = "zzzzz";
 	// check ordering
 	char const * expected_order[] = {"zzzzz", "banana", "foo", "1"};
 	std::size_t index = 0;
@@ -54,6 +59,9 @@ int main(int, char**)
 	assert(const_list == list);
 	jds::LinkedList<std::string> one_more_copy(const_list.begin(), const_list.end());
 	assert(const_list == one_more_copy);
+	// derefence const_iterator
+	assert(*(const_list.begin()) == "zzzzz");
+	//*(const_list.begin()) = "aaaaa";	// does not compile
 
 	// pop_front()
 	list_from_move.pop_front();
