@@ -288,27 +288,23 @@ int main(int, char**)
 
     std::cout << std::boolalpha;
     auto any_a = std::any_of(iteratorTest.begin(), iteratorTest.end(), isA);
-    std::cout << any_a << std::endl;
+    assert (any_a);
 
     bool are_equal = std::equal(iteratorTest.begin(), iteratorTest.end(), iteratorTest2.begin());
     assert (!are_equal);
 
     auto max_el = std::max_element(iteratorTest.begin(), iteratorTest.end(), std::greater<char>());
-    std::cout << max_el << std::endl;
+    auto max_el_index = std::distance(iteratorTest.begin(), max_el);
+    int index_first_space = 4;
+    assert (max_el_index == index_first_space);
 
     char t = 't';
     int num_t = std::count(iteratorTest.begin(), iteratorTest.end(), t);
-    std::cout << num_t << std::endl;
+    assert (num_t == 3);
 
     std::sort(iteratorTest.begin(), iteratorTest.end(), std::greater<char>());
-    for (auto& elem: iteratorTest) {
-        std::cout << elem;
-    }
-    std::cout << std::endl;
+    assert (iteratorTest == "tttsssiihea   ");
 
     std::reverse(iteratorTest.begin(), iteratorTest.end());
-    for (auto& elem: iteratorTest) {
-        std::cout << elem;
-    }
-    std::cout << std::endl;
+    assert (iteratorTest == "   aehiisssttt");
 }
