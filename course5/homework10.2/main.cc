@@ -49,6 +49,12 @@ int main(int, char**)
 	list_from_move = std::move(list_from_it);
 	assert(list_from_move == list);
 
+	// const LinkedList for const_iterator
+	const jds::LinkedList<std::string> const_list(list);
+	assert(const_list == list);
+	jds::LinkedList<std::string> one_more_copy(const_list.begin(), const_list.end());
+	assert(const_list == one_more_copy);
+
 	// pop_front()
 	list_from_move.pop_front();
 	assert(list_from_move.front() == "banana");
