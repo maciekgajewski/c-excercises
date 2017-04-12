@@ -307,4 +307,12 @@ int main(int, char**)
 
     std::reverse(iteratorTest.begin(), iteratorTest.end());
     assert (iteratorTest == "   aehiisssttt");
+
+    std::random_shuffle(iteratorTest.begin(), iteratorTest.end());
+    std::cout << iteratorTest << std::endl;
+
+    const char space = ' ';
+    std::remove(iteratorTest2.begin(), iteratorTest2.end(), space);
+    std::cout << iteratorTest2 << std::endl;
+    // assert (iteratorTest2 == "thisisanothertest");
 }
