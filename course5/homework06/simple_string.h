@@ -33,8 +33,8 @@ public:
 
     typedef char * iterator;
     typedef const char * const_iterator;
-    iterator begin() { return &buffer.get()[0]; }
-    iterator end() { return &buffer.get()[l]; }
+    iterator begin() { return buffer.get(); }
+    iterator end() { return buffer.get() + l; }
 
 private:
     std::unique_ptr<char[]> buffer;
