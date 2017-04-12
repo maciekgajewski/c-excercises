@@ -27,6 +27,10 @@ int main(int, char**)
     using namespace std::literals;
 
     /* Basic tests for construction and assignment */
-    LinkedList<int> empty;
-    // assert (empty.size() == 0);
+    LinkedList<int> empty_data;
+    assert (empty_data.size() == 1);
+
+    LinkedList<double> pi = 3.14159;
+    assert (pi.front() == 3.14159);
+    assert (pi.size() == 1);
 }
