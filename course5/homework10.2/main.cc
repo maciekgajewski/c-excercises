@@ -5,6 +5,14 @@
 
 #include "linked_list.h"
 
+class NotDefaultCoonstructible {
+public:
+	NotDefaultCoonstructible() = delete;
+	NotDefaultCoonstructible(int value) { this->value = value; }
+private:
+	int value;
+};
+
 int main(int, char**)
 {
 	// default construction
@@ -77,6 +85,14 @@ int main(int, char**)
 	assert(*max_element == "zzzzz");
 	std::string everything = std::accumulate(list.begin(), list.end(), std::string());
 	assert(everything == "zzzzzbananafoo1");
+
+	// using a not-default constructible type
+	jds::LinkedList<NotDefaultCoonstructible> no_default_list;
+	no_default_list.push_front(NotDefaultCoonstructible(1));
+	no_default_list.emplace_front(1);
+	assert(no_default_list.size() == 2);
+
+	std::cout << "All tests passed" << std::endl;
 
 	return 0;
 }
