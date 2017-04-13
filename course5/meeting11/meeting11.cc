@@ -3,6 +3,8 @@
 #include <cassert>
 #include <string>
 #include <list>
+#include <deque>
+#include <array>
 
 #include <memory>
 
@@ -33,8 +35,10 @@ struct S
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	std::list<S> v1;
+	std::deque<S> v1;
 	//std::vector<S> v2(8); fails
+
+	std::array<S, 6> a;
 	
 	v1.emplace_back(156);
 	auto it = v1.begin();
