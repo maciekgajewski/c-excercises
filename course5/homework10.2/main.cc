@@ -34,6 +34,8 @@ int main(int, char**)
 	*(list.begin()) = "aaaaa";
 	assert(list.front() == "aaaaa");
 	*(list.begin()) = "zzzzz";
+	// operator-> on iterator
+	assert(list.begin()->length() == 5);
 	// check ordering
 	char const * expected_order[] = {"zzzzz", "banana", "foo", "1"};
 	std::size_t index = 0;
@@ -69,6 +71,8 @@ int main(int, char**)
 	assert(const_list == one_more_copy);
 	// derefence const_iterator
 	assert(*(const_list.begin()) == "zzzzz");
+	// operator-> on const_iterator
+	assert(const_list.begin()->length() == 5);
 	//*(const_list.begin()) = "aaaaa";	// does not compile
 
 	// pop_front()

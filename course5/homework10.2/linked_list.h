@@ -12,7 +12,7 @@ private:
 	struct Node
 	{
 		T value;
-		std::unique_ptr<Node> next{nullptr};
+		std::unique_ptr<Node> next;
 
 		Node() = default;
 		Node(Node const &) = delete;
@@ -23,9 +23,9 @@ private:
 		Node & operator=(Node &&) = delete;
 	};
 
-	std::unique_ptr<Node> head{nullptr};
+	std::unique_ptr<Node> head;
 public:
-	class iterator: public std::forward_iterator_tag {
+	class iterator: public std::iterator<std::forward_iterator_tag, T> {
 	public:
 		iterator() = default;
 		iterator(Node * initial): current(initial) { }
@@ -40,14 +40,15 @@ public:
 			current = current->next.get();
 			return old;
 		}
-		T & operator*() const { return current->value; }
+		T & operator*() { return current->value; }
+		T * operator->() { return &(current->value); }
 		bool operator==(iterator const & that) const { return this->current == that.current; }
 		bool operator!=(iterator const & that) const { return this->current != that.current; }
 	private:
 		Node * current{nullptr};
 	};
 
-	class const_iterator: public std::forward_iterator_tag {
+	class const_iterator: public std::iterator<std::forward_iterator_tag, T> {
 	public:
 		const_iterator() = default;
 		const_iterator(const_iterator const & that) = default;
@@ -63,6 +64,7 @@ public:
 			return old;
 		}
 		T const & operator*() const { return current->value; }
+		T const * operator->() const { return &(current->value); }
 		bool operator==(const_iterator const & that) const { return this->current == that.current; }
 		bool operator!=(const_iterator const & that) const { return this->current != that.current; }
 	private:
@@ -74,40 +76,17 @@ public:
 	LinkedList(LinkedList && that): head(std::move(that.head)) { }
 
 	template <class InputIt>
-	LinkedList(InputIt const & first, InputIt const & last)
-	{
-		std::unique_ptr<Node> * current{&head};
-		for (auto it = first; it != last; ++it)
-		{
-			*current = std::make_unique<Node>(*it);
-			current = &((*current)->next);
-		}
-	}
+	LinkedList(InputIt const & first, InputIt const & last) { from_range(first, last); }
 
 	LinkedList & operator=(LinkedList const & that)
 	{
 		this->head = nullptr;
-		std::unique_ptr<Node> * current{&head};
-		for (auto it = that.begin(); it != that.end(); ++it)
-		{
-			*current = std::make_unique<Node>(*it);
-			current = &((*current)->next);
-		}
+		from_range(that.begin(), that.end());
 		return *this;
 	}
-		
 	LinkedList & operator=(LinkedList && that) { this->head = std::move(that.head); return *this; }
 
-	bool operator==(LinkedList const & that) const
-	{
-		auto itl = begin(), itr = that.begin();
-		for (; itl != end() && itr != that.end(); ++itl, ++itr)
-		{
-			if (*itl != *itr)
-				return false;
-		}
-		return itl == end() && itr == that.end();
-	}
+	bool operator==(LinkedList const & that) const { return std::equal(begin(), end(), that.begin(), that.end()); }
 	bool operator!=(LinkedList const & that) const { return !(*this == that); }
 
 	LinkedList::iterator begin() { return iterator(head.get()); }
@@ -138,14 +117,19 @@ public:
 
 	void pop_front() { if (head) head = std::move(head->next); }
 	T & front() const { return head->value; }
-	std::size_t size()
+	std::size_t size() { return std::distance(begin(), end()); }
+
+private:
+	template <class InputIt>
+	void from_range(InputIt const & first, InputIt const & last)
 	{
-		std::size_t result{0};
-		for (auto it = begin(); it != end(); ++it)
-			++result;
-		return result;
+		std::unique_ptr<Node> * current{&head};
+		for (auto it = first; it != last; ++it)
+		{
+			*current = std::make_unique<Node>(*it);
+			current = &((*current)->next);
+		}
 	}
-		
 };
 
 }
