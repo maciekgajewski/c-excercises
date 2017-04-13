@@ -13,6 +13,14 @@ private:
 	{
 		T value;
 		std::unique_ptr<Node> next{nullptr};
+
+		Node() = default;
+		Node(Node const &) = delete;
+		Node(Node &&) = delete;
+		Node(T const & initial_value): value(initial_value) { }
+		Node(T && initial_value): value(initial_value) { }
+		Node & operator=(Node const &) = delete;
+		Node & operator=(Node &&) = delete;
 	};
 
 	std::unique_ptr<Node> head{nullptr};
@@ -36,7 +44,7 @@ public:
 		bool operator==(iterator const & that) const { return this->current == that.current; }
 		bool operator!=(iterator const & that) const { return this->current != that.current; }
 	private:
-		LinkedList<T>::Node * current{nullptr};
+		Node * current{nullptr};
 	};
 
 	class const_iterator: public std::forward_iterator_tag {
@@ -71,8 +79,7 @@ public:
 		std::unique_ptr<Node> * current{&head};
 		for (auto it = first; it != last; ++it)
 		{
-			*current = std::make_unique<Node>();
-			(*current)->value = *it;
+			*current = std::make_unique<Node>(*it);
 			current = &((*current)->next);
 		}
 	}
@@ -83,8 +90,7 @@ public:
 		std::unique_ptr<Node> * current{&head};
 		for (auto it = that.begin(); it != that.end(); ++it)
 		{
-			*current = std::make_unique<Node>();
-			(*current)->value = *it;
+			*current = std::make_unique<Node>(*it);
 			current = &((*current)->next);
 		}
 		return *this;
@@ -111,15 +117,13 @@ public:
 
 	void push_front(T const & element)
 	{
-		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>();
-		newNode->value = element;
+		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>(element);
 		newNode->next = std::move(head);
 		head = std::move(newNode);
 	}
 	void push_front(T && element)
 	{
-		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>();
-		newNode->value = std::move(element);
+		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>(element);
 		newNode->next = std::move(head);
 		head = std::move(newNode);
 	}
@@ -127,8 +131,7 @@ public:
 	template <class... Args>
 	void emplace_front(Args&& ... args)
 	{
-		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>();
-		newNode->value = T(std::forward<Args>(args)...);
+		std::unique_ptr<LinkedList<T>::Node> newNode = std::make_unique<LinkedList<T>::Node>(T(std::forward<Args>(args)...));
 		newNode->next = std::move(head);
 		head = std::move(newNode);
 	}
