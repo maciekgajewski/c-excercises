@@ -1,45 +1,45 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <string>
 
 #include <memory>
 
 // type requirements
 
-struct FixedInMemory
+struct S
 {
-	FixedInMemory(const FixedInMemory&) = delete;
-	FixedInMemory(FixedInMemory&&) = delete;
+	S() = delete;
 	
-	int mNum;
+	S(S&& o)
+		: mStr(std::move(o.mStr))
+	{
+		std::cout << "move ctor of obj with mStr=" << mStr << std::endl;
+	}
+
+	S(const std::string& s)
+		: mStr("From string: " + s)
+	{ }
+	
+	S(int i)
+		: mStr("From int:" + std::to_string(i))
+	{ }
+		
+	
+	std::string mStr;
 };
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	std::vector<FixedInMemory> v1;
+	std::vector<S> v1;
+	//std::vector<S> v2(8); fails
 	
-	FixedInMemory f{6};
+	v1.reserve(2);
+	v1.emplace_back(156);
+	v1.emplace_back("wooo");
 	
-	v1.emplace_back(8);
-	
-	std::vector<int> v;
-	
-	v.reserve(10);
-	for(int i = 0; i < 12; i++)
-	{
-		std::cout << "data when size=" << v.size()
-			<< " : " << v.data()
-			<< ", capacity=" << v.capacity()
-			<< std::endl;
-		v.push_back(i);
-	}
-	
-	v.shrink_to_fit();
-	
-	std::cout << "final size=" << v.size()
-		<< ", capacity=" << v.capacity()
-		<< ", data=" << v.data()
-		<< std::endl;
+	for(auto& s : v1)
+		std::cout << s.mStr << std::endl;
 	
 }
 
