@@ -4,14 +4,6 @@
 
 namespace course 
 {
-/*template<class T>
-struct node
-{
-        node() { }
-        T value;
-        std::unique_ptr<node> next;
-};*/
-
 template<class T>
 class llist
 {
@@ -50,7 +42,7 @@ public:
             T& operator*() { return node_ptr->value; }
             node* node_ptr;
         };
-        llist() : len(0) { first = std::make_unique<node>(); }
+        llist() : len(0) {/* first = std::make_unique<node>(); */}
         llist(llist&& other) : len( other.size() ) { first = std::move( other.get_first() ); }
         llist& operator=( llist&& other )
         {
@@ -110,12 +102,9 @@ public:
 
         void push_front(const T& val)
         {
-            if (len)
-            {
-                std::unique_ptr<node> new_node = std::make_unique<node>();
-                new_node.get()->next = std::move(first);
-                first = std::move(new_node);
-            }
+            std::unique_ptr<node> new_node = std::make_unique<node>();
+            new_node.get()->next = std::move(first);
+            first = std::move(new_node);
             first.get()->value = val;
             len++;
         }
