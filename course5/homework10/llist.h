@@ -42,7 +42,7 @@ public:
             T& operator*() { return node_ptr->value; }
             node* node_ptr;
         };
-        llist() : len(0) {/* first = std::make_unique<node>(); */}
+        llist() : len(0) {}
         llist(llist&& other) : len( other.size() ) { first = std::move( other.get_first() ); }
         llist& operator=( llist&& other )
         {
@@ -79,7 +79,9 @@ public:
             return *this;
         }
 
-        llist(const iterator& it1, const iterator& it2)
+        template<typename Q>
+ //       llist(const typename Q::iterator& it1, const typename Q::iterator& it2)
+        llist(const Q& it1, const Q& it2)
         {
             first = std::make_unique<node>();
             len = 0;

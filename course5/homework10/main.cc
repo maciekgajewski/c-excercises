@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <algorithm>
 #include <iostream>
+#include <vector>
 
 void square(int& n) 
 {
@@ -55,4 +56,6 @@ int main(int, char**)
     list3.pop_front();
     list5.pop_front();
     assert( list3.front() == list5.front() * list5.front() );
+    std::vector<int> v{2, 5, 7};
+    
 }
