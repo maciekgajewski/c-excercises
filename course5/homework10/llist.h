@@ -80,7 +80,6 @@ public:
         }
 
         template<typename Q>
- //       llist(const typename Q::iterator& it1, const typename Q::iterator& it2)
         llist(const Q& it1, const Q& it2)
         {
             first = std::make_unique<node>();

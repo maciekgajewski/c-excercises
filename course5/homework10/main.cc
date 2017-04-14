@@ -57,5 +57,8 @@ int main(int, char**)
     list5.pop_front();
     assert( list3.front() == list5.front() * list5.front() );
     std::vector<int> v{2, 5, 7};
-    
+    auto it3 = v.begin();
+    auto it4 = v.end();
+    course::llist<int> list6(it3, it4);
+    assert( list6.front() == 2 );
 }
