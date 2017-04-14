@@ -4,25 +4,31 @@
 
 namespace course 
 {
-template<class T>
+/*template<class T>
 struct node
 {
         node() { }
         T value;
-        std::unique_ptr<node<T>> next;
-};
+        std::unique_ptr<node> next;
+};*/
 
 template<class T>
 class llist
 {
 private:
-        std::unique_ptr<node<T>> first;
+        struct node
+        {
+                node() { }
+                T value;
+                std::unique_ptr<node> next;
+        };
+        std::unique_ptr<node> first;
         int len = 0;
 public:
         struct iterator
         {
             iterator() : node_ptr(nullptr) { }
-            iterator(node<T>* ptr) : node_ptr(ptr) {}
+            iterator(node* ptr) : node_ptr(ptr) {}
             iterator(const iterator& other) : node_ptr(other.node_ptr) { }
             iterator(iterator&& other) : node_ptr(other.node_ptr) { }
             iterator& operator=(const iterator& other) { return other.node_ptr; }
@@ -42,9 +48,9 @@ public:
                 }
             }
             T& operator*() { return node_ptr->value; }
-            node<T>* node_ptr;
+            node* node_ptr;
         };
-        llist() : len(0) { first = std::make_unique<node<T>>(); }
+        llist() : len(0) { first = std::make_unique<node>(); }
         llist(llist&& other) : len( other.size() ) { first = std::move( other.get_first() ); }
         llist& operator=( llist&& other )
         {
@@ -55,13 +61,13 @@ public:
 
         llist(const llist& other) : len( other.size() )
         {
-            first = std::make_unique<node<T>>();
-            node<T>* new_node = first.get();
+            first = std::make_unique<node>();
+            node* new_node = first.get();
 
             for( auto i = other.begin(); i != other.end(); ++i )
             {
                 new_node->value = *i;
-                new_node->next = std::make_unique<node<T>>();
+                new_node->next = std::make_unique<node>();
                 new_node = new_node->next.get();
             }
         }
@@ -69,13 +75,13 @@ public:
         llist& operator=( const llist& other )
         {
             len = other.size();
-            first = std::make_unique<node<T>>();
-            node<T>* new_node = first.get();
+            first = std::make_unique<node>();
+            node* new_node = first.get();
 
             for( auto i = other.begin(); i != other.end(); ++i )
             {
                 new_node->value = *i;
-                new_node->next = std::make_unique<node<T>>();
+                new_node->next = std::make_unique<node>();
                 new_node = new_node->next.get();
             }
             return *this;
@@ -83,9 +89,9 @@ public:
 
         llist(const iterator& it1, const iterator& it2)
         {
-            first = std::make_unique<node<T>>();
+            first = std::make_unique<node>();
             len = 0;
-            node<T>* new_node = first.get();
+            node* new_node = first.get();
 
             for( auto i = it1; i != it2; ++i )
             {
@@ -96,7 +102,7 @@ public:
                 {
                     len++;
                     new_node->value = *i;
-                    new_node->next = std::make_unique<node<T>>();
+                    new_node->next = std::make_unique<node>();
                     new_node = new_node->next.get();
                 }
             }
@@ -106,7 +112,7 @@ public:
         {
             if (len)
             {
-                std::unique_ptr<node<T>> new_node = std::make_unique<node<T>>();
+                std::unique_ptr<node> new_node = std::make_unique<node>();
                 new_node.get()->next = std::move(first);
                 first = std::move(new_node);
             }
@@ -159,7 +165,7 @@ public:
             return it;
         }
 
-        std::unique_ptr<node<T>> get_first() { return first; }
+        std::unique_ptr<node> get_first() { return first; }
         int size() const { return len; }
 };
 }
