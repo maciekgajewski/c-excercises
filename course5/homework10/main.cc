@@ -28,34 +28,33 @@ Test your container with few std algorithms.
 enum TestResult { PASS, FAIL };
 template<typename execT, typename T>
 void test(std::string test_name, const execT& exp, const T& expected)
-// void test(const char* test_name, const execT& exp, const T& expected, bool should_succeed=true)
 {
     auto res = exp();
-    std::cout << res << std::endl;
     bool result_eq_expected = res == expected;
-    // if (should_succeed)
-    // {
-        // auto res = exp();
-        // assert (res == expected);
-    // }
-    // else
-    // {
-    //     TestResult outcome;
-    //     try
-    //     {
-    //         exp();
-    //         outcome = TestResult::FAIL;
-    //     }
-    //     catch(...)
-    //     {
-    //         outcome = TestResult::PASS;
-    //     }
-    //     assert (outcome == TestResult::PASS);
-    // }
+
     if (result_eq_expected)
-        std::cout << "Passed: " << test_name << std::endl;
+        std::cout << "------> Passed: " << test_name << std::endl;
     else
-        std::cout << "Failed: " << test_name << std::endl;
+        std::cout << "------> Failed: " << test_name << std::endl;
+}
+
+template<typename execT>
+void test_fails(std::string test_name, const execT& exp)
+{
+    TestResult outcome;
+    try
+    {
+        exp();
+        outcome = TestResult::FAIL;
+    }
+    catch(...)
+    {
+        outcome = TestResult::PASS;
+    }
+    if (outcome == TestResult::PASS)
+        std::cout << "------> Passed: " << test_name << std::endl;
+    else
+        std::cout << "------> Failed: " << test_name << std::endl;
 }
 
 int main(int, char**)
@@ -66,8 +65,8 @@ int main(int, char**)
     /* Basic tests for construction and assignment */
     LinkedList<int> empty_data;
 
-    // auto call_empty_front = std::bind(&LinkedList<int>::front, &empty_data);
-    // test("calling front on empty linked list raises error", call_empty_front, false, false);
+    auto call_empty_front = std::bind(&LinkedList<int>::front, &empty_data);
+    test_fails("calling front on empty linked list raises error", call_empty_front);
 
     auto call_empty_size = std::bind(&LinkedList<int>::size, &empty_data);
     test("empty linked list has size 0", call_empty_size, 0);
@@ -79,27 +78,29 @@ int main(int, char**)
     auto call_size = std::bind(&LinkedList<double>::size, &pi);
     test("basic construction increments size", call_size, 1);
 
-    // /* Test push/pop front */
-    // std::list<double> doubles = {2.71828, 1.1, 2.2, 3.3};
-    // int size = 1;
-    // for (auto el : doubles)
-    // {
-    //     pi.push_front(el);
-    //     // pi.print_list();
-    //     test("push front adds new item to list: " + std::to_string(el), call_front, el);
-    //     test("push front increments size", call_size, size);
-    //     size++;
-    //
-    // }
-    // pi.push_front(3.14);
-    // doubles.reverse();
+    /* Test push/pop front */
+    std::list<double> doubles = {2.71828, 1.1, 2.2, 3.3};
+    int size = 1;
+    for (auto el : doubles)
+    {
+        pi.push_front(el);
+        size++;
+        assert(pi.front() == el);
+        test("push front adds new item to list: " + std::to_string(el), call_front, el);
+        test("push front increments size: " + std::to_string(size), call_size, size);
+    }
+    pi.print();
 
-    std::cout << "------------------" << std::endl;
+    pi.push_front(3.14);
+    size++;
+    doubles.reverse();
 
-    // for (auto el : doubles)
-    // {
-    //     pi.pop_front();
-    //     test("pop front removes one item from list: " + std::to_string(call_front()), call_front, el);
-    // }
-
+    for (auto el : doubles)
+    {
+        pi.pop_front();
+        size--;
+        pi.print();
+        test("pop front removes one item from list: " + std::to_string(call_front()), call_front, el);
+        test("push front decrements size: " + std::to_string(size), call_size, size);
+    }
 }
