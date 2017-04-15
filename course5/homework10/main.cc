@@ -68,4 +68,9 @@ int main(int, char**)
 
     auto call_size = std::bind(&LinkedList<double>::size, &pi);
     test("basic construction increments size", call_size, 1);
+
+    /* Test push/pop front */
+    pi.push_front(2.71828);
+    call_front = std::bind(&LinkedList<double>::front, &pi);
+    test("push front adds new item to list", call_front, 2.71828);
 }

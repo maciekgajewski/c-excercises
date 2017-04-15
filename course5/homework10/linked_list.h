@@ -19,13 +19,6 @@ struct Node
         data = std::make_unique<T>(val);
         next = &next_node;
     }
-    // Node& operator=(Node&& src) // move construction
-    // {
-    //     std::cout << "Node move Constructor" << std::endl;
-    //     data = src.data;
-    //     next = src.next;
-    //     return this;
-    // }
 
     T getData()
     {
@@ -55,6 +48,20 @@ public:
             return head.getData();
         throw std::range_error("Calling front on empty LinkedList is undefined.");
     }
+    void push_front(const T& val)
+    {
+        head = Node<T>(val, head);
+        mSize += 1;
+    }
+    // void pop_front()
+    // {
+    //     if (next)
+    //     {
+    //         data = next;
+    //     }
+    //         return *data.get();
+    //     throw std::range_error("Calling front on empty LinkedList is undefined.");
+    // }
 
 private:
     Node<T> head;
