@@ -174,26 +174,10 @@ public:
             
         }
 
-        iterator begin() 
-        {
-             iterator it( first.get() );
-             return it;
-        }
-        const_iterator begin() const
-        {
-             const_iterator it( first.get() );
-             return it;
-        }
-        iterator end()
-        { 
-             iterator it;
-             return it;
-        }
-        const_iterator end() const 
-        {
-            const_iterator it;
-            return it;
-        }
+        iterator begin() { return iterator( first.get() ); }
+        const_iterator begin() const{ return const_iterator(first.get() ); }
+        iterator end() { return iterator(); }
+        const_iterator end() const {  return const_iterator(); }
 
         int size() const { return len; }
 };
