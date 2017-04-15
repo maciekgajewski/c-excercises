@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <utility>
+#include <iostream>
 
 namespace course 
 {
@@ -43,13 +44,18 @@ public:
             node* node_ptr;
         };
         llist() : len(0) {}
-        llist(llist&& other) : len( other.size() ) { first = std::move( other.get_first() ); }
+        llist(llist&& other) : len( other.size() ) { first = std::move( other.first ); }
         llist& operator=( llist&& other )
         {
             len = other.size();
-            first = std::move( other.get_first() );
+            first = std::move( other.first );
             return *this;
         }
+
+/*        assign(iterator it1, iterator it2)
+        {
+
+        }*/
 
         llist(const llist& other) : len( other.size() )
         {
@@ -110,6 +116,15 @@ public:
             len++;
         }
 
+        void push_front(T&& val)
+        {
+            std::unique_ptr<node> new_node = std::make_unique<node>();
+            new_node.get()->next = std::move(first);
+            first = std::move(new_node);
+            first.get()->value = std::move(val);
+            len++;
+        }    
+
         void pop_front()
         {
             if (len)
@@ -155,7 +170,7 @@ public:
             return it;
         }
 
-        std::unique_ptr<node> get_first() { return first; }
+  //      std::unique_ptr<node> get_first() { return first; }
         int size() const { return len; }
 };
 }

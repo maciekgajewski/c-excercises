@@ -61,4 +61,5 @@ int main(int, char**)
     auto it4 = v.end();
     course::llist<int> list6(it3, it4);
     assert( list6.front() == 2 );
+    list6.push_front(1+9);
 }
