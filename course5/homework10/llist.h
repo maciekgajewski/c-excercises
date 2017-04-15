@@ -18,7 +18,7 @@ private:
         std::unique_ptr<node> first;
         int len = 0;
 public:
-        struct iterator
+ /*       struct iterator
         {
             iterator() : node_ptr(nullptr) { }
             iterator(node* ptr) : node_ptr(ptr) {}
@@ -42,7 +42,36 @@ public:
             }
             T& operator*() { return node_ptr->value; }
             node* node_ptr;
+        };*/
+        template<class P, class Q>
+        struct iterator_class
+        {
+            iterator_class() : node_ptr(nullptr) { }
+            iterator_class(node* ptr) : node_ptr(ptr) {}
+            iterator_class(const iterator_class& other) : node_ptr(other.node_ptr) { }
+            iterator_class(iterator_class&& other) : node_ptr(other.node_ptr) { }
+            iterator_class& operator=(const iterator_class& other) { return other.node_ptr; }
+            iterator_class& operator=(iterator_class&& other) { return other.node_ptr; }
+            bool operator==(const iterator_class& other) { return node_ptr == other.node_ptr; }
+            bool operator!=(const iterator_class& other) { return node_ptr != other.node_ptr; }
+            iterator_class& operator++() 
+            {
+                if (node_ptr != nullptr)
+                {
+                    node_ptr = node_ptr->next.get();
+                    return *this;
+                }
+                else
+                {
+                    throw std::range_error("End of list");
+                }
+            }
+            Q& operator*() { return node_ptr->value; }
+            P node_ptr;
         };
+        using iterator = iterator_class<node*, T>;
+        using const_iterator = iterator_class<const node*, const T>;
+
         llist() : len(0) {}
         llist(llist&& other) : len( other.size() ) { first = std::move( other.first ); }
         llist& operator=( llist&& other )
@@ -52,10 +81,6 @@ public:
             return *this;
         }
 
-/*        assign(iterator it1, iterator it2)
-        {
-
-        }*/
 
         llist(const llist& other) : len( other.size() )
         {
@@ -154,9 +179,9 @@ public:
              iterator it( first.get() );
              return it;
         }
-        const iterator begin() const
+        const_iterator begin() const
         {
-             iterator it( first.get() );
+             const_iterator it( first.get() );
              return it;
         }
         iterator end()
@@ -164,13 +189,12 @@ public:
              iterator it;
              return it;
         }
-        const iterator end() const 
+        const_iterator end() const 
         {
-            iterator it;
+            const_iterator it;
             return it;
         }
 
-  //      std::unique_ptr<node> get_first() { return first; }
         int size() const { return len; }
 };
 }
