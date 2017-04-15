@@ -79,27 +79,27 @@ int main(int, char**)
     auto call_size = std::bind(&LinkedList<double>::size, &pi);
     test("basic construction increments size", call_size, 1);
 
-    /* Test push/pop front */
-    std::list<double> doubles = {2.71828, 1.1, 2.2, 3.3};
-    int size = 1;
-    for (auto el : doubles)
-    {
-        pi.push_front(el);
-        // pi.print_list();
-        test("push front adds new item to list: " + std::to_string(el), call_front, el);
-        test("push front increments size", call_size, size);
-        size++;
-
-    }
-    pi.push_front(3.14);
-    doubles.reverse();
+    // /* Test push/pop front */
+    // std::list<double> doubles = {2.71828, 1.1, 2.2, 3.3};
+    // int size = 1;
+    // for (auto el : doubles)
+    // {
+    //     pi.push_front(el);
+    //     // pi.print_list();
+    //     test("push front adds new item to list: " + std::to_string(el), call_front, el);
+    //     test("push front increments size", call_size, size);
+    //     size++;
+    //
+    // }
+    // pi.push_front(3.14);
+    // doubles.reverse();
 
     std::cout << "------------------" << std::endl;
 
-    for (auto el : doubles)
-    {
-        pi.pop_front();
-        test("pop front removes one item from list: " + std::to_string(call_front()), call_front, el);
-    }
+    // for (auto el : doubles)
+    // {
+    //     pi.pop_front();
+    //     test("pop front removes one item from list: " + std::to_string(call_front()), call_front, el);
+    // }
 
 }
