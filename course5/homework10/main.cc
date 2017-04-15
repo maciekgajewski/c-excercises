@@ -21,6 +21,8 @@ Cover the class with unit tests; don’t forget about corner cases.
 Test your container with few std algorithms.
 ***/
 
+enum TestResult { PASS, FAIL };
+
 int main(int, char**)
 {
     using namespace linked_list;
@@ -28,7 +30,18 @@ int main(int, char**)
 
     /* Basic tests for construction and assignment */
     LinkedList<int> empty_data;
-    assert (empty_data.size() == 1);
+    TestResult outcome;
+    try
+    {
+        empty_data.front();
+        outcome = TestResult::FAIL;
+    }
+    catch(...)
+    {
+        outcome = TestResult::PASS;
+    }
+    assert (outcome == TestResult::PASS);
+    assert (empty_data.size() == 0);
 
     LinkedList<double> pi = 3.14159;
     assert (pi.front() == 3.14159);
