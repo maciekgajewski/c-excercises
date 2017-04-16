@@ -13,39 +13,41 @@ public:
     LinkedList() = default;
     LinkedList(const T& val) // TODO T&& val ?
     {
-        // std::cout << "Basic construction: from " << val << std::endl;
+        std::cout << "Basic construction: from " << val << std::endl;
         data = std::make_unique<T>(val);
         mSize += 1;
     }
-    // Copy/Move construction
+    // Copy construction
     LinkedList(const LinkedList& src)
     {
-        // std::cout << "Copy construction: from " << src.front() << std::endl;
+        std::cout << "Copy construction: from " << src.front() << std::endl;
         data = std::make_unique<T>(src.front());
         if (src.next)
             next = std::make_unique<LinkedList<T>>(*src.next.get());
         mSize = src.mSize;
     }
+    // Move construction
     LinkedList(LinkedList&& src)
     {
-        // std::cout << "Move construction: from " << src.front() << std::endl;
+        std::cout << "Move construction: from " << src.front() << std::endl;
         data = std::move(src.data);
         next = std::move(src.next);
         mSize = src.mSize;
     }
-    // Copy/Move assignment
+    // Copy assignment
     LinkedList& operator=(const LinkedList& src)
     {
-        // std::cout << "Copy assignment: from " << src.front() << std::endl;
+        std::cout << "Copy assignment: from " << src.front() << std::endl;
         data = std::make_unique<T>(src.front());
         if (src.next)
             next = std::make_unique<LinkedList<T>>(*src.next.get());
         mSize = src.mSize;
         return *this;
     }
+    // Move assignment
     LinkedList& operator=(LinkedList&& src)
     {
-        // std::cout << "Move assignment: from " << src.front() << std::endl;
+        std::cout << "Move assignment: from " << src.front() << std::endl;
         data = std::move(src.data);
         next = std::move(src.next);
         mSize = src.mSize;
@@ -80,12 +82,18 @@ public:
     template< class... Args >
     void emplace_front(Args&&... args)
     {
-        LinkedList<T> new_node;
-        new_node.data = std::move(this->data);
-        new_node.next = std::move(this->next);
-
-        data = std::make_unique<T>(args...);
-        next = std::make_unique<LinkedList<T>>(std::move(new_node));
+        if (mSize > 0)
+        {
+            LinkedList<T> new_node;
+            new_node.data = std::move(this->data);
+            new_node.next = std::move(this->next);
+            data = std::make_unique<T>(args...);
+            next = std::make_unique<LinkedList<T>>(std::move(new_node));
+        }
+        else
+        {
+            data = std::make_unique<T>(args...);
+        }
         mSize++;
     }
 

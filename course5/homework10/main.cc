@@ -25,6 +25,28 @@ Cover the class with unit tests; don’t forget about corner cases.
 Test your container with few std algorithms.
 ***/
 
+struct Twosie
+{
+    Twosie() = default;
+    Twosie(int one, int two)
+    {
+        mOne = one;
+        mTwo = two;
+    }
+    int mOne = 0;
+    int mTwo = 0;
+};
+
+std::ostream& operator<<(std::ostream& s, const Twosie& t)
+{
+    s << "(" << t.mOne << "-|-" << t.mTwo << ")";
+    return s;
+}
+bool operator==(const Twosie& t1, const Twosie& t2)
+{
+    return (t1.mOne == t2.mOne && t1.mTwo == t2.mTwo);
+}
+
 enum TestResult { PASS, FAIL };
 template<typename execT, typename T>
 void test(std::string test_name, const execT& exp, const T& expected)
@@ -71,6 +93,9 @@ int main(int, char**)
     auto call_empty_size = std::bind(&LinkedList<int>::size, &empty_data);
     test("empty linked list has size 0", call_empty_size, 0);
 
+    empty_data.push_front(3);
+    test("push_front on empty linked list sets first value", call_empty_front, 3);
+
     LinkedList<double> pi = 3.14159;
     auto call_front = std::bind(&LinkedList<double>::front, &pi);
     test("basic construction sets first value", call_front, 3.14159);
@@ -85,7 +110,6 @@ int main(int, char**)
     {
         pi.push_front(el);
         size++;
-        assert(pi.front() == el);
         test("push front adds new item to list: " + std::to_string(el), call_front, el);
         test("push front increments size: " + std::to_string(size), call_size, size);
     }
@@ -102,5 +126,21 @@ int main(int, char**)
         pi.print();
         test("pop front removes one item from list: " + std::to_string(call_front()), call_front, el);
         test("push front decrements size: " + std::to_string(size), call_size, size);
+    }
+
+    // test emplace front
+    Twosie some_struct(3, 5);
+    LinkedList<Twosie> emplace_tester;
+    auto emplace_tester_front = std::bind(&LinkedList<Twosie>::front, &emplace_tester);
+    auto emplace_tester_size = std::bind(&LinkedList<Twosie>::size, &emplace_tester);
+
+    std::list<int> ints = {3, 7, 4, 5};
+    size = 0;
+    for (auto el : ints)
+    {
+        emplace_tester.emplace_front(el, 5);
+        size++;
+        test("emplace front adds new item to list: " + std::to_string(el), emplace_tester_front, Twosie(el, 5));
+        test("emplace front increments size: " + std::to_string(size), emplace_tester_size, size);
     }
 }
