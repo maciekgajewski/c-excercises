@@ -5,10 +5,17 @@
 
 namespace linked_list
 {
+
+// This is a very helpful website: https://www.cs.northwestern.edu/~riesbeck/programming/c++/stl-iterator-define.html#TOC23
+template<class T> class LinkedListIter;
+
 template<class T, class Allocator = std::allocator<T>>
 class LinkedList
 {
 public:
+    friend class LinkedListIter<T>;
+    typedef LinkedListIter<T> iterator;
+
     // Basic assignment constructors
     LinkedList() = default;
     LinkedList(const T& val) // TODO T&& val ?
@@ -54,7 +61,7 @@ public:
         return *this;
     }
 
-    int size() { return mSize; }
+    int size() const { return mSize; }
     T front() const // TODO should this be a pointer? const?
     {
         if (data)
@@ -63,7 +70,6 @@ public:
     }
     void push_front(const T& val)
     {
-        std::cout << "pushing front" << std::endl;
         if (mSize > 0)
         {
             LinkedList<T> new_node;
@@ -119,10 +125,29 @@ public:
         std::cout << std::endl;
     }
 
+    iterator begin() { return iterator(*this); }
+    iterator end() { return iterator(nullptr); }
+
 private:
     std::unique_ptr<T> data;
     std::unique_ptr<LinkedList<T>> next;
     int mSize = 0;
 
 }; // LinkedList
+
+template<class T>
+class LinkedListIter {
+    public:
+        LinkedListIter(LinkedList<T>& list_arg) : my_list(list_arg) {}
+        T & operator*() {
+            // if (my_list.data)
+                return *my_list.data.get();
+            // else
+                // return *nullptr;
+        }
+        LinkedListIter & operator++() { return my_list->next; }
+    private:
+        LinkedList<T>& my_list;
+};
+
 } // namespace

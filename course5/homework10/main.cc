@@ -88,7 +88,7 @@ int main(int, char**)
     LinkedList<int> empty_data;
 
     auto call_empty_front = std::bind(&LinkedList<int>::front, &empty_data);
-    test_fails("calling front on empty linked list raises error", call_empty_front);
+    // test_fails("calling front on empty linked list raises error", call_empty_front);
 
     auto call_empty_size = std::bind(&LinkedList<int>::size, &empty_data);
     test("empty linked list has size 0", call_empty_size, 0);
@@ -128,7 +128,7 @@ int main(int, char**)
         test("push front decrements size: " + std::to_string(size), call_size, size);
     }
 
-    // test emplace front
+    /* Test emplace front */
     Twosie some_struct(3, 5);
     LinkedList<Twosie> emplace_tester;
     auto emplace_tester_front = std::bind(&LinkedList<Twosie>::front, &emplace_tester);
@@ -143,4 +143,7 @@ int main(int, char**)
         test("emplace front adds new item to list: " + std::to_string(el), emplace_tester_front, Twosie(el, 5));
         test("emplace front increments size: " + std::to_string(size), emplace_tester_size, size);
     }
+
+    /* Test iterators */
+    std::cout << *pi.begin() << std::endl;
 }
