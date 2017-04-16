@@ -61,11 +61,30 @@ public:
     }
     void push_front(const T& val)
     {
+        std::cout << "pushing front" << std::endl;
+        if (mSize > 0)
+        {
+            LinkedList<T> new_node;
+            new_node.data = std::move(this->data);
+            new_node.next = std::move(this->next);
+            data = std::make_unique<T>(val);
+            next = std::make_unique<LinkedList<T>>(std::move(new_node));
+        }
+        else
+        {
+            data = std::make_unique<T>(val);
+        }
+        mSize++;
+    }
+
+    template< class... Args >
+    void emplace_front(Args&&... args)
+    {
         LinkedList<T> new_node;
         new_node.data = std::move(this->data);
         new_node.next = std::move(this->next);
 
-        data = std::make_unique<T>(val);
+        data = std::make_unique<T>(args...);
         next = std::make_unique<LinkedList<T>>(std::move(new_node));
         mSize++;
     }
@@ -81,12 +100,12 @@ public:
         }
     }
 
-    void print()
+    void print() const
     {
         LinkedList<T> current = *this;
         for (auto i = 0; i < mSize; i++)
         {
-            std::cout << i << " [" << current.front() << '|' << current.next.get() << "]" << std::endl;
+            std::cout << i << " [" << current.front() << "]" << std::endl;
             current = *(current.next.get());
         }
         std::cout << std::endl;
