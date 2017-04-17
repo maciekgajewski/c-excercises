@@ -136,6 +136,32 @@ int main(int, char**)
         test("emplace front increments size: " + std::to_string(size), emplace_tester_size, size);
     }
 
+    /* Test equality */
+    // LinkedList<int> also_empty;
+    // test("empty linked list equality", also_empty, empty_data);
+
     /* Test iterators */
     std::cout << *pi.begin() << std::endl;
+    test("begin iterator returns pointer to first item in list", *pi.begin(), pi.front());
+    pi.print();
+
+    for (auto el : doubles)
+    {
+        pi.push_front(el);
+        test("begin iterator returns pointer to first item in list after incrementing", *pi.begin(), pi.front());
+    }
+    pi.print();
+
+    doubles.reverse();
+    auto it = pi.begin();
+    for (auto el : doubles)
+    {
+        test("begin iterator can be incremented: " + std::to_string(el), *it, el);
+        ++it;
+    }
+
+    // for (auto el : pi)
+    // {
+    //     test("iteration over entire list works: " + std::to_string(el), el, el);
+    // }
 }
