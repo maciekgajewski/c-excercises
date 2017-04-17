@@ -27,11 +27,27 @@ public:
     // Copy construction
     LinkedList(const LinkedList& src)
     {
-        std::cout << "Copy construction: from " << src.front() << std::endl;
-        data = std::make_unique<T>(src.front());
+        if (src.data)
+        {
+            std::cout << "Copy construction: from " << src.front() << std::endl;
+            data = std::make_unique<T>(src.front());
+            std::cout << "copy -- set data" << std::endl;
+        }
+        else
+        {
+            std::cout << "Copy construction: from empty" << std::endl;
+        }
+
         if (src.next)
+        {
+            std::cout << "copy -- setting next" << std::endl;
             next = std::make_unique<LinkedList<T>>(*src.next.get());
+            std::cout << "copy -- set next" << std::endl;
+        }
+        else
+            std::cout << "copy -- no next" << std::endl;
         mSize = src.mSize;
+        std::cout << "copy -- set size" << std::endl;
     }
     // Move construction
     LinkedList(LinkedList&& src)
@@ -59,6 +75,20 @@ public:
         next = std::move(src.next);
         mSize = src.mSize;
         return *this;
+    }
+
+    bool operator==(LinkedList& cmp) const
+    {
+        std::cout << mSize << " " << cmp.mSize << std::endl;
+        if (mSize != cmp.mSize)
+            return false;
+        if (data != cmp.data)
+            return false;
+        if (!(next && cmp.next))
+             return true;
+        if  (next != cmp.next)
+            return false;
+        return true;
     }
 
     int size() const { return mSize; }
@@ -116,11 +146,26 @@ public:
 
     void print() const
     {
+        std::cout << "------------------------------------------------------------------------------" << std::endl;
+        std::cout << "getting this" << std::endl;
         LinkedList<T> current = *this;
+        std::cout << "got this" << std::endl;
         for (auto i = 0; i < mSize; i++)
         {
             std::cout << i << " [" << current.front() << "]" << std::endl;
-            current = *(current.next.get());
+            if (current.next)
+            {
+                std::cout << "getting next ptr" << std::endl;
+                LinkedList<T> *newcurrent = current.next.get();
+                std::cout << "getting next current" << std::endl;
+                current = *(newcurrent);
+                std::cout << "got next" << std::endl;
+            }
+            else
+            {
+                std::cout << "breaking" << std::endl;
+                break;
+            }
         }
         std::cout << std::endl;
     }
@@ -138,16 +183,39 @@ private:
 template<class T>
 class LinkedListIter {
     public:
-        LinkedListIter(LinkedList<T>& list_arg) : my_list(list_arg) {}
+        LinkedListIter(LinkedList<T>& list_arg) : mList(list_arg) {}
+        bool operator==(LinkedListIter & cmp)
+        {
+            return (mList == cmp.mList);
+        }
+        bool operator!=(LinkedListIter & cmp)
+        {
+            return !(this == cmp);
+        }
         T & operator*() {
             // if (my_list.data)
-                return *my_list.data.get();
+                return *mList.data.get();
             // else
                 // return *nullptr;
         }
-        LinkedListIter & operator++() { return my_list->next; }
+        LinkedListIter & operator++() {
+            // if (mList.next)
+            // {
+                mList = *mList.next.get();
+                return *this;
+            // }
+            // else
+            //     return nullptr;
+        }
     private:
-        LinkedList<T>& my_list;
+        LinkedList<T>& mList;
 };
+
+// template<class T>
+// bool operator==(const LinkedList<T>& cmp1, const LinkedList<T>& cmp2)
+// {
+//     std::cout << " binary " << std::endl;
+//     return cmp1.operator==(&cmp2);
+// }
 
 } // namespace

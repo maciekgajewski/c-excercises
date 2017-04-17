@@ -60,20 +60,12 @@ void test(std::string test_name, const execT& exp, const T& expected)
         std::cout << "------> Failed: " << test_name << std::endl;
 }
 
-template<typename execT>
-void test_fails(std::string test_name, const execT& exp)
+template<typename T>
+void test(std::string test_name, const T& exp, const T& expected)
 {
-    TestResult outcome;
-    try
-    {
-        exp();
-        outcome = TestResult::FAIL;
-    }
-    catch(...)
-    {
-        outcome = TestResult::PASS;
-    }
-    if (outcome == TestResult::PASS)
+    bool result_eq_expected = exp == expected;
+
+    if (result_eq_expected)
         std::cout << "------> Passed: " << test_name << std::endl;
     else
         std::cout << "------> Failed: " << test_name << std::endl;
