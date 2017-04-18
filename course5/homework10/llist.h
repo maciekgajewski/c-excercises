@@ -18,31 +18,6 @@ private:
         std::unique_ptr<node> first;
         int len = 0;
 public:
- /*       struct iterator
-        {
-            iterator() : node_ptr(nullptr) { }
-            iterator(node* ptr) : node_ptr(ptr) {}
-            iterator(const iterator& other) : node_ptr(other.node_ptr) { }
-            iterator(iterator&& other) : node_ptr(other.node_ptr) { }
-            iterator& operator=(const iterator& other) { return other.node_ptr; }
-            iterator& operator=(iterator&& other) { return other.node_ptr; }
-            bool operator==(const iterator& other) { return node_ptr == other.node_ptr; }
-            bool operator!=(const iterator& other) { return node_ptr != other.node_ptr; }
-            iterator& operator++() 
-            {
-                if (node_ptr != nullptr)
-                {
-                    node_ptr = node_ptr->next.get();
-                    return *this;
-                }
-                else
-                {
-                    throw std::range_error("End of list");
-                }
-            }
-            T& operator*() { return node_ptr->value; }
-            node* node_ptr;
-        };*/
         template<class P, class Q>
         struct iterator_class
         {
