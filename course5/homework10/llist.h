@@ -85,8 +85,8 @@ public:
             return *this;
         }
 
-        template<typename Q>
-        llist(const Q& it1, const Q& it2)
+        template<typename It>
+        llist(const It& it1, const It& it2)
         {
             first = std::make_unique<node>();
             len = 0;
