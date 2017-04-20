@@ -23,10 +23,6 @@ static void access_benchmark(benchmark::State& state)
 	else
 		v = get_random_vector(size);
 	
-// 	for(int i : v)
-// 		std::cerr << i << " ";
-// 	std::cerr << std::endl;
-	
 	total = 0;
 	while(state.KeepRunning())
 	{
