@@ -53,7 +53,7 @@ static void access_benchmark(benchmark::State& state)
 	
 }
 
-BENCHMARK_TEMPLATE(access_benchmark, SEQ)->RangeMultiplier(2)->Range(1<<4, 1<<24);
-BENCHMARK_TEMPLATE(access_benchmark, RAND)->RangeMultiplier(2)->Range(1<<4, 1<<24);
+BENCHMARK_TEMPLATE(access_benchmark, SEQ)->RangeMultiplier(2)->Range(1<<4, 1<<25);
+BENCHMARK_TEMPLATE(access_benchmark, RAND)->RangeMultiplier(2)->Range(1<<4, 1<<25);
 
 BENCHMARK_MAIN();
