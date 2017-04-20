@@ -41,8 +41,7 @@ static void access_benchmark(benchmark::State& state)
 	std::int64_t expected_total = (size * (size-1)) /2;
 	if (total != expected_total)
 	{
-		std::cerr << "r0=" << state.range(0) << std::endl;
-		//std::cerr << "inc=" << inc << std::endl;
+		std::cerr << "size=" << state.range(0) << std::endl;
 		std::cerr << "tot = " << total << ", exp=" << expected_total << std::endl;
 		throw std::logic_error("Not all elements visited!");
 	}
