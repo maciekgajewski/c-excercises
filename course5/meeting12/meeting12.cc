@@ -1,35 +1,18 @@
 #include <iostream>
+#include <algorithm>
+#include <vector>
+#include <string>
 
-int main(int /*argc*/, char** /*argv*/)
+// functor
+
+
+int main(int argc, char** argv)
 {
-	std::cout << "Hello, world!" << std::endl;
-}
-
-
-template<typename T>
-class Outer
-{
-	template<typename Q>
-	class Inner
-	{
-		int Fun();
-	};
+	std::vector<std::string> strings(argv, argv+argc);
 	
-	template<typename It>
-	void Read(It first, It last);
-};
-
-template<typename T>
-template<typename Q>
-int Outer<T>::Inner<Q>::Fun()
-{
+	auto it = std::find(strings.begin(), strings.end(), "Waldo");
+	if (it == strings.end())
+		std::cout << "No Waldo :(" << std::endl;
+	else
+		std::cout << "Waldo found at pos " << it - strings.begin() << std::endl;
 }
-
-template<typename T>
-template<typename It>
-void Outer<T>::Read(It first, It last)
-{
-}
-
-
-
