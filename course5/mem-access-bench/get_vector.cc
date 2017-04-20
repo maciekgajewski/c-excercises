@@ -3,31 +3,6 @@
 #include <algorithm>
 #include <unordered_map>
 
-std::size_t index_of(const std::vector<int>& v, int val)
-{
-	return std::find(v.begin(), v.end(), val) - v.begin();
-}
-
-static std::vector<int> build_vector(const std::vector<int>& visit_order)
-{
-	std::vector<int> vec;
-	vec.resize(visit_order.size());
-	
-	if (visit_order[0] != 0)
-		throw std::logic_error("invalid visit order");
-		
-	
-	std::size_t current = 0;
-	for(std::size_t i = 1; i < visit_order.size(); i++)
-	{
-		std::size_t next_pos = index_of(visit_order, i);
-		vec[current] = next_pos;
-		current = next_pos;
-	}
-	
-	return vec;
-}
-
 std::vector<int> get_seq_vector(int size)
 {
 	std::vector<int> v;

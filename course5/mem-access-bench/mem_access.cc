@@ -15,7 +15,6 @@ template <Order order>
 static void access_benchmark(benchmark::State& state)
 {
 	std::int64_t size = state.range(0);
-	int use_rand = state.range(1);
 
 	std::vector<int> v;
 	if (order == SEQ)
