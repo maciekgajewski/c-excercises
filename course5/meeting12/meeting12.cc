@@ -1,18 +1,16 @@
 #include <iostream>
 #include <algorithm>
-#include <vector>
-#include <string>
-#include <cassert>
-#include <list>
-#include <deque>
+#include <cstring>
 
 int main(int argc, char** argv)
 {
-	std::deque<std::string> strings(argv, argv+argc);
+	std::sort(argv, argv+argc,
+		[](const char* a, const char* b)
+		{
+			return std::strcmp(a, b) < 0; 
+		});
 	
-	std::sort(strings.begin(), strings.end());
-	
-	for(const auto& s : strings)
-		std::cout << s << std::endl;
+	for(int i = 0; i < argc; i++)
+		std::cout << argv[i] << std::endl;
 	
 }
