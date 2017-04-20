@@ -10,20 +10,18 @@ bool is_waldo_no_case(const std::string& s) { return s == "Waldo" || s == "waldo
 
 // functors:
 
-struct IsWaldo
-{
-	int len;
-	int& count;
-	bool operator() (const std::string& s) { count++; return s.length() == len; }
-};
-
 int main(int argc, char** argv)
 {
 	std::vector<std::string> strings(argv, argv+argc);
 	
 	int counter = 0;
-	IsWaldo pred{7, counter};
-	auto it = std::find_if(strings.begin(), strings.end(), pred);
+	int len = 7;
+	
+	auto it = std::find_if(strings.begin(), strings.end(), 
+					[&counter, len](const std::string& s)
+					{
+						counter++; return s.length() == len;
+					});
 
 	if (it == strings.end())
 		std::cout << "No Waldo :(" << std::endl;
