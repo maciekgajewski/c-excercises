@@ -1,24 +1,18 @@
+#include <boost/range/algorithm.hpp>
+
 #include <iostream>
 #include <algorithm>
 #include <cstring>
+#include <vector>
+#include <string>
+
+using namespace std::literals;
 
 int main(int argc, char** argv)
 {
-	char** start = argv+1;
-	int mul = 1;
-	if (std::strcmp(argv[1], "-d") == 0)
-	{
-		start = argv+2;
-		mul = -1;
-	}
+	std::vector<std::string> args(argv, argv+argc);
 	
-	std::sort(start, argv+argc,
-		[=](const char* a, const char* b)
-		{
-			return mul*std::strcmp(a, b) < 0; 
-		});
+	auto it = boost::find(args, "Waldo");
 	
-	std::for_each(start, argv+argc, [](const char* a) {
-		std::cout << a << std::endl; });
-
+	std::cout << ((it == args.end()) ? "Not found"s : "Found"s) << std::endl;
 }
