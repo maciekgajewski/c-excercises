@@ -63,19 +63,24 @@ int main(int argc, char** argv)
     }
     
     std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
-    
-
     if (vm.count("input"))
     {
         std::string fname = vm["input"].as<std::string>();
         std::ifstream infile(fname);
-        read(infile, *buffer.get());
+        if (infile)
+        {
+            read(infile, *buffer.get());
+        }
+        else
+        {
+            std::string msg = std::strerror(errno);
+            throw std::runtime_error("Failed to open file: " + msg);
+        }
     }
     else 
     {
         read(std::cin, *buffer.get());
     }
-
 
     boost::sort(*buffer.get());
 
