@@ -2,11 +2,13 @@
 #include <boost/program_options.hpp>
 
 #include <iostream>
+#include <fstream>
 #include <algorithm>
 #include <cstring>
 #include <string>
 #include <memory>
 #include <vector>
+#include <stdexcept>
 
 
 /***
@@ -26,61 +28,58 @@ Implementation requirements:
 - Use Boost.ProgramOptions for handling the command-line parameters
 ***/
 
+void read(std::istream& in, std::vector<std::string>& buffer)
+{
+    std::string line;
+    while (std::getline(in, line))
+    {
+        buffer.push_back(line);
+    }
+}
+
 
 int main(int argc, char** argv)
 {
-    /*
-    add params
-    file-based
-    */
-
-	// std::sort(argv, argv+argc,
-	// 	[](const char* a, const char* b)
-	// 	{
-	// 		return std::strcmp(a, b) < 0;
-	// 	});
-    //
-	// for(int i = 0; i < argc; i++)
-	// 	std::cout << argv[i] << std::endl;
-    // std::cerr
     namespace po = boost::program_options;
 
-    po::options_description desc{"Allowed options"};
+    po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "Show this message")
-        // ("file", po::value<std::string>(), "input file (defaults to stdin)")
-        // ("out", po::value<std::vector<std::string>>(), "output file (defaults to stdout)")
+        ("input", po::value<std::string>(), "input file (defaults to stdin)")
+        ("output", po::value<std::string>(), "output file (defaults to stdout)")
         // (help, file, asc/desc, field sep, col num, numeric)
     ;
 
+    po::positional_options_description p;
+    p.add("input", -1);
+
     po::variables_map vm;
-    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
     po::notify(vm);
 
     if (vm.count("help")) {
-        std::cout << desc << "\n";
+        std::cout << desc << std::endl;;
         return 1;
     }
+    
+    std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
+    
 
-    // if (vm.count("compression")) {
-    //     cout << "Compression level was set to "
-    //  << vm["compression"].as<int>() << ".\n";
-    // } else {
-    //     cout << "Compression level was not set.\n";
-    // }
-    //
-    //
-    // std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
-    // std::string input;
-    //
-    // while ( std::getline(std::cin, input) )
-    // {
-    //     buffer->push_back(input);
-    // }
-    //
-    // boost::sort(*buffer.get());
-    //
-    // for(auto item : *buffer.get())
-	// 	std::cout << item << std::endl;
+    if (vm.count("input"))
+    {
+        std::string fname = vm["input"].as<std::string>();
+        std::ifstream infile(fname);
+        read(infile, *buffer.get());
+    }
+    else 
+    {
+        read(std::cin, *buffer.get());
+    }
+
+
+    boost::sort(*buffer.get());
+
+    for(auto item : *buffer.get())
+		std::cout << item << std::endl;
 
 }
