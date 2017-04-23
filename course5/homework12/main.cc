@@ -1,4 +1,5 @@
 #include <boost/range/algorithm.hpp>
+#include <boost/program_options.hpp>
 
 #include <iostream>
 #include <algorithm>
@@ -25,10 +26,11 @@ Implementation requirements:
 - Use Boost.ProgramOptions for handling the command-line parameters
 ***/
 
+
 int main(int argc, char** argv)
 {
     /*
-    add params (help, file, asc/desc, field sep, col num, numeric)
+    add params
     file-based
     */
 
@@ -41,19 +43,44 @@ int main(int argc, char** argv)
 	// for(int i = 0; i < argc; i++)
 	// 	std::cout << argv[i] << std::endl;
     // std::cerr
+    namespace po = boost::program_options;
 
+    po::options_description desc{"Allowed options"};
+    desc.add_options()
+        ("help,h", "Show this message")
+        // ("file", po::value<std::string>(), "input file (defaults to stdin)")
+        // ("out", po::value<std::vector<std::string>>(), "output file (defaults to stdout)")
+        // (help, file, asc/desc, field sep, col num, numeric)
+    ;
 
-    std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
-    std::string input;
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
 
-    while ( std::getline(std::cin, input) )
-    {
-        buffer->push_back(input);
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return 1;
     }
 
-    boost::sort(*buffer.get());
-
-    for(auto item : *buffer.get())
-		std::cout << item << std::endl;
+    // if (vm.count("compression")) {
+    //     cout << "Compression level was set to "
+    //  << vm["compression"].as<int>() << ".\n";
+    // } else {
+    //     cout << "Compression level was not set.\n";
+    // }
+    //
+    //
+    // std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
+    // std::string input;
+    //
+    // while ( std::getline(std::cin, input) )
+    // {
+    //     buffer->push_back(input);
+    // }
+    //
+    // boost::sort(*buffer.get());
+    //
+    // for(auto item : *buffer.get())
+	// 	std::cout << item << std::endl;
 
 }
