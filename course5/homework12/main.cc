@@ -1,3 +1,5 @@
+#include <boost/range/algorithm.hpp>
+
 #include <iostream>
 #include <algorithm>
 #include <cstring>
@@ -26,12 +28,6 @@ Implementation requirements:
 int main(int argc, char** argv)
 {
     /*
-    pipeable
-    install Boost
-        find_package(Boost REQUIRED)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
-        set(CMAKE_CXX_STANDARD 14)
-        include_directories(${Boost_INCLUDE_DIR})
     add params (help, file, asc/desc, field sep, col num, numeric)
     file-based
     */
@@ -55,7 +51,7 @@ int main(int argc, char** argv)
         buffer->push_back(input);
     }
 
-    std::sort(buffer.get()->begin(), buffer.get()->end());
+    boost::sort(*buffer.get());
 
     for(auto item : *buffer.get())
 		std::cout << item << std::endl;
