@@ -37,23 +37,39 @@ void read(std::istream& in, std::vector<std::string>& buffer)
     }
 }
 
-void write(std::ostream& out, std::vector<std::string>& buffer)
+void write(std::ostream& out, const std::vector<std::string>& buffer)
 {
     for(auto item : buffer)
         out << item << std::endl;
 }
+
+struct sorter
+{
+    sorter(bool descending) : m_descending{descending} {}
+
+    bool operator() (const std::string& s1, const std::string& s2) 
+    {
+        if (m_descending)
+            return s1 > s2;
+        return s1 < s2;
+    }
+    
+    bool m_descending = false;
+};
 
 
 int main(int argc, char** argv)
 {
     namespace po = boost::program_options;
 
-    po::options_description desc("Allowed options");
+    bool descending = false;
+
+    po::options_description desc("Sort input according to parameters.\nAllowed options:");
     desc.add_options()
         ("help,h", "Show this message")
         ("input,i", po::value<std::string>(), "input file (defaults to stdin)")
         ("output,o", po::value<std::string>(), "output file (defaults to stdout)")
-        ("desc,d", po::bool_switch(&flag), "description");
+        ("desc,d", po::bool_switch(&descending), "sort input in descending order (defaults to ascending)");
         // (help, file, asc/desc, field sep, col num, numeric)
     ;
 
@@ -89,7 +105,7 @@ int main(int argc, char** argv)
         read(std::cin, *buffer.get());
     }
 
-    boost::sort(*buffer.get());
+    boost::sort(*buffer.get(), sorter(descending));
 
     if (vm.count("output"))
     {
