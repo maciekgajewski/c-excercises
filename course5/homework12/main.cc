@@ -1,6 +1,9 @@
 #include <iostream>
 #include <algorithm>
 #include <cstring>
+#include <string>
+#include <memory>
+#include <vector>
 
 
 /***
@@ -22,7 +25,6 @@ Implementation requirements:
 
 int main(int argc, char** argv)
 {
-    using namespace std::literals;
     /*
     pipeable
     install Boost
@@ -34,13 +36,28 @@ int main(int argc, char** argv)
     file-based
     */
 
-	std::sort(argv, argv+argc,
-		[](const char* a, const char* b)
-		{
-			return std::strcmp(a, b) < 0;
-		});
+	// std::sort(argv, argv+argc,
+	// 	[](const char* a, const char* b)
+	// 	{
+	// 		return std::strcmp(a, b) < 0;
+	// 	});
+    //
+	// for(int i = 0; i < argc; i++)
+	// 	std::cout << argv[i] << std::endl;
+    // std::cerr
 
-	for(int i = 0; i < argc; i++)
-		std::cout << argv[i] << std::endl;
+
+    std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
+    std::string input;
+
+    while ( std::getline(std::cin, input) )
+    {
+        buffer->push_back(input);
+    }
+
+    std::sort(buffer.get()->begin(), buffer.get()->end());
+
+    for(auto item : *buffer.get())
+		std::cout << item << std::endl;
 
 }
