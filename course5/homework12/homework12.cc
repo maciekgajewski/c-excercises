@@ -5,11 +5,9 @@
 
 #include <boost/program_options.hpp>
 
-#include "line_sorter.h"
-
 namespace po = boost::program_options;
 
-po::variables_map parse_args(int argc, char ** argv)
+static po::variables_map parse_args(int argc, char ** argv)
 {
 	try {
 		po::options_description description{"Options"};
@@ -37,6 +35,45 @@ po::variables_map parse_args(int argc, char ** argv)
 	}
 }
 
+static std::vector<std::string> ReadLines(std::istream & source)
+{
+	std::vector<std::string> lines;
+	std::string line;
+	while (source)
+	{
+		std::getline(source, line);
+		if (bool(source) || line.length())
+			lines.push_back(std::move(line));
+	}
+	return lines;
+}
+
+static std::string FindColValue(std::string const & line, char separator, size_t column)
+{
+	size_t pos = 0;
+	size_t currentCol = 1;
+	while (currentCol < column)
+	{
+		size_t found = line.find(separator, pos);
+		if (found == std::string::npos)
+			return std::string();
+		pos = found + 1;
+		currentCol++;
+	}
+	size_t nextColPos = line.find(separator, pos);
+	if (nextColPos == std::string::npos)
+		return line.substr(pos, std::string::npos);
+	else
+		return line.substr(pos, nextColPos - pos);
+}
+
+static int ToNumeric(std::string const & value)
+{
+	try { return std::stoi(value); }
+	catch (std::invalid_argument &) { return std::numeric_limits<int>::max(); }
+	catch (std::out_of_range &) { std::cerr << "Warning: numerical value out of range" << std::endl; return std::numeric_limits<int>::max(); }
+}
+
 int main(int argc, char **argv)
 {
 	po::variables_map args = parse_args(argc, argv);
@@ -48,7 +85,10 @@ int main(int argc, char **argv)
 	{
 		inputFile.open(inputPath, std::ios_base::in);
 		if (!inputFile.is_open())
-			throw std::runtime_error("Could not open input file");
+		{
+			std::cerr << "Could not open input file " << inputPath << std::endl;
+			return 1;
+		}
 		input = &inputFile;
 	}
 	char separator = args["separator"].as<char>();
@@ -62,12 +102,24 @@ int main(int argc, char **argv)
 	{
 		outputFile.open(outputPath, std::ios_base::out);
 		if (!outputFile.is_open())
-			throw std::runtime_error("Could not open output file");
+		{
+			std::cerr << "Could not open output file " << outputPath << std::endl;
+			return 1;
+		}
 		output = &outputFile;
 	}
-	
-	jds::LineSorter sorter(*input, separator, column, reverse, numeric);
-	for (std::string line: sorter)
+
+	auto lines = ReadLines(*input);
+	std::sort(lines.begin(), lines.end(), [&](std::string const & left, std::string const & right)
+		  {
+			auto leftValue = FindColValue(left, separator, column);
+			auto rightValue = FindColValue(right, separator, column);
+			if (numeric)
+				return reverse != (ToNumeric(leftValue) < ToNumeric(rightValue));
+			else
+				return reverse != (leftValue < rightValue);
+		  });
+	for (std::string line: lines)
 	{
 		*output << line << std::endl;
 	}
