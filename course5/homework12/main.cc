@@ -37,6 +37,12 @@ void read(std::istream& in, std::vector<std::string>& buffer)
     }
 }
 
+void write(std::ostream& out, std::vector<std::string>& buffer)
+{
+    for(auto item : buffer)
+        out << item << std::endl;
+}
+
 
 int main(int argc, char** argv)
 {
@@ -45,8 +51,9 @@ int main(int argc, char** argv)
     po::options_description desc("Allowed options");
     desc.add_options()
         ("help,h", "Show this message")
-        ("input", po::value<std::string>(), "input file (defaults to stdin)")
-        ("output", po::value<std::string>(), "output file (defaults to stdout)")
+        ("input,i", po::value<std::string>(), "input file (defaults to stdin)")
+        ("output,o", po::value<std::string>(), "output file (defaults to stdout)")
+        ("desc,d", po::bool_switch(&flag), "description");
         // (help, file, asc/desc, field sep, col num, numeric)
     ;
 
@@ -65,8 +72,8 @@ int main(int argc, char** argv)
     std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
     if (vm.count("input"))
     {
-        std::string fname = vm["input"].as<std::string>();
-        std::ifstream infile(fname);
+        std::string in_fname = vm["input"].as<std::string>();
+        std::ifstream infile(in_fname);
         if (infile)
         {
             read(infile, *buffer.get());
@@ -77,14 +84,29 @@ int main(int argc, char** argv)
             throw std::runtime_error("Failed to open file: " + msg);
         }
     }
-    else 
+    else
     {
         read(std::cin, *buffer.get());
     }
 
     boost::sort(*buffer.get());
 
-    for(auto item : *buffer.get())
-		std::cout << item << std::endl;
-
+    if (vm.count("output"))
+    {
+        std::string out_fname = vm["output"].as<std::string>();
+        std::ofstream outfile(out_fname);
+        if (outfile)
+        {
+            write(outfile, *buffer.get());
+        }
+        else
+        {
+            std::string msg = std::strerror(errno);
+            throw std::runtime_error("Failed to open file: " + msg);
+        }
+    }
+    else 
+    {
+        write(std::cout, *buffer.get());
+    }
 }
