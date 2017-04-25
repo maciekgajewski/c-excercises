@@ -19,9 +19,9 @@ int main(int, char **)
 	assert(jds::ToNumeric("1") == 1);
 	assert(jds::ToNumeric("-1") == -1);
 	assert(jds::ToNumeric("   -2   ") == -2);
-	assert(jds::ToNumeric("") == std::numeric_limits<int>::max());
-	assert(jds::ToNumeric("one hundred") == std::numeric_limits<int>::max());
-	assert(jds::ToNumeric("9000000000") == std::numeric_limits<int>::max());
+	assert(jds::ToNumeric("") == std::numeric_limits<long long>::max());
+	assert(jds::ToNumeric("one hundred") == std::numeric_limits<long long>::max());
+	assert(jds::ToNumeric("90000000000000000000") == std::numeric_limits<long long>::max());
 
 	std::cout << "All tests passed" << std::endl;
 	return 0;
