@@ -1,7 +1,8 @@
 #include <iostream>
 #include <cassert>
+#include <limits>
 
-#include "line_sorter.h"
+#include "line_sorting.h"
 
 int main(int, char **)
 {

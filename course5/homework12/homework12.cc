@@ -5,6 +5,10 @@
 
 #include <boost/program_options.hpp>
 
+#include "line_sorting.h"
+
+using namespace jds;
+
 namespace po = boost::program_options;
 
 static po::variables_map parse_args(int argc, char ** argv)
@@ -33,45 +37,6 @@ static po::variables_map parse_args(int argc, char ** argv)
 		std::cerr << error.what() << std::endl;
 		std::exit(1);
 	}
-}
-
-static std::vector<std::string> ReadLines(std::istream & source)
-{
-	std::vector<std::string> lines;
-	std::string line;
-	while (source)
-	{
-		std::getline(source, line);
-		if (bool(source) || line.length())
-			lines.push_back(std::move(line));
-	}
-	return lines;
-}
-
-static std::string FindColValue(std::string const & line, char separator, size_t column)
-{
-	size_t pos = 0;
-	size_t currentCol = 1;
-	while (currentCol < column)
-	{
-		size_t found = line.find(separator, pos);
-		if (found == std::string::npos)
-			return std::string();
-		pos = found + 1;
-		currentCol++;
-	}
-	size_t nextColPos = line.find(separator, pos);
-	if (nextColPos == std::string::npos)
-		return line.substr(pos, std::string::npos);
-	else
-		return line.substr(pos, nextColPos - pos);
-}
-
-static int ToNumeric(std::string const & value)
-{
-	try { return std::stoi(value); }
-	catch (std::invalid_argument &) { return std::numeric_limits<int>::max(); }
-	catch (std::out_of_range &) { std::cerr << "Warning: numerical value out of range" << std::endl; return std::numeric_limits<int>::max(); }
 }
 
 int main(int argc, char **argv)
