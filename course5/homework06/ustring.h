@@ -17,14 +17,15 @@ public:
 
     String() = default;
 
-    String(const char *str) { *this = str; }
+    String(const char *str);
     String(const char *str, size_t length);
-    String(String const &str) { *this = str; }
+    String(String const &rhs);
     String(String &&rhs);
 
     String& operator=(const char *str);
-    String& operator=(String const &rhs);
-    String& operator=(String &&rhs);
+    String& operator=(String rhs);
+
+    friend void swap(String& lhs, String &rhs);
 
     // Element access
     char& operator[](std::size_t pos) { return data()[pos]; }

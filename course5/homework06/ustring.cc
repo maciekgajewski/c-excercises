@@ -6,48 +6,61 @@ namespace Course {
 
 char String::emptyString[] = "";
 
-String::String(const char *str, size_t length)
+String::String(const char *str)
+    : mLength(strlen(str))
+    , mCapacity(mLength)
+    , mStr(std::make_unique<char[]>(mLength+1))
 {
-    resize(length); // resize takes care of closing zero
+    std::copy(str, str+length()+1, data());
+}
+
+String::String(String const &rhs)
+    : mLength(rhs.length())
+    , mCapacity(mLength)
+    , mStr(std::make_unique<char[]>(mLength+1))
+{
+    std::copy(rhs.cbegin(), rhs.cend()+1, data());
+}
+
+String::String(const char *str, size_t length)
+    : mLength(length)
+    , mCapacity(mLength)
+    , mStr(std::make_unique<char[]>(mLength+1))
+{
     std::copy(str, str+length, data());
+    *(end()) = '\0';
 }
 
 String::String(String &&rhs)
+    : mLength(rhs.mLength)
+    , mCapacity(rhs.mCapacity)
+    , mStr(std::move(rhs.mStr))
 {
-    mCapacity = rhs.mCapacity;
-    mLength = rhs.mLength;
-    mStr = std::move(rhs.mStr);
     rhs.mCapacity = 0;
     rhs.mLength = 0;
-    *(rhs.end()) = '\0';
 }
 
 
 String& String::operator=(const char *str)
 {
-    size_t length = std::strlen(str);
-    resize(length);
-    std::copy(str, str+length+1, data());
+    String tmp(str);
+    std::swap(*this, tmp);
     return *this;
 }
 
-String& String::operator=(String const &rhs)
+String& String::operator=(String rhs)
 {
-    resize(rhs.mLength);
-    std::copy(rhs.cbegin(), rhs.cend()+1, data());
+    swap(*this, rhs);
     return *this;
 }
 
-String& String::operator=(String &&rhs)
+void swap(String& lhs, String &rhs)
 {
-    if (this == &rhs) return *this;
-    mCapacity = rhs.mCapacity;
-    mLength = rhs.mLength;
-    mStr = std::move(rhs.mStr);
-    rhs.mCapacity = 0;
-    rhs.mLength = 0;
-    *(rhs.end()) = '\0';
-    return *this;
+    using std::swap;
+
+    std::swap(lhs.mCapacity, rhs.mCapacity);
+    std::swap(lhs.mLength, rhs.mLength);
+    std::swap(lhs.mStr, rhs.mStr);
 }
 
 void String::resize(std::size_t size)
