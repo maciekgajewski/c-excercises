@@ -108,7 +108,7 @@ private:
 
     std::size_t mCapacity = 0;
     std::size_t mLength = 0;
-    std::unique_ptr<char[]> mStr;
+    std::unique_ptr<char[]> mStr = nullptr;
 };
 
 String operator+(char c, const String &str);
