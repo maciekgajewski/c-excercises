@@ -89,7 +89,7 @@ public:
     class IteratorType : public std::iterator<std::forward_iterator_tag, ValueType>
     {
     public:
-        IteratorType(NodeType node)
+        IteratorType(NodeType *node)
             : node(node)
         {}
 
@@ -126,11 +126,11 @@ public:
             return node->data;
         }
     private:
-        NodeType node;
+        NodeType *node;
     };
 
-    using Iterator = IteratorType<Node*, T>;
-    using ConstIterator = IteratorType<const Node*, const T>;
+    using Iterator = IteratorType<Node, T>;
+    using ConstIterator = IteratorType<const Node, const T>;
 
     Iterator begin()
     {
