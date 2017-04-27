@@ -10,7 +10,13 @@ add_executable(homework06
     ustring.cc
     tuple_pretty_print.h)
 
+add_executable(homework10.1
+    homework10.1.cc
+    ustring.h
+    ustring.cc)
+
 target_link_libraries(homework06 --coverage)
+target_link_libraries(homework10.1 --coverage)
 
 add_custom_target(coverage
     COMMAND lcov --directory . --zerocounters
