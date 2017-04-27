@@ -106,8 +106,8 @@ private:
 
     void buffer_resize(std::size_t size);
 
-    std::size_t mCapacity = 0;
     std::size_t mLength = 0;
+    std::size_t mCapacity = 0;
     std::unique_ptr<char[]> mStr = nullptr;
 };
 
