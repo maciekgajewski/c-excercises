@@ -11,6 +11,8 @@ namespace Course {
 class String
 {
 public:
+    using value_type = char;
+
     static constexpr std::size_t npos = -1;
 
     String() = default;
