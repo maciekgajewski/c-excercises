@@ -204,6 +204,6 @@ public:
     }
 
 private:
-    std::unique_ptr<Node> mHead = nullptr;
+    std::unique_ptr<Node> mHead;
     std::size_t mSize = 0;
 };
