@@ -17,7 +17,7 @@ static po::variables_map parse_args(int argc, char ** argv)
 		po::options_description description{"Options"};
 		description.add_options()
 			("help,h", "Show this help and exit")
-			("separator,s", po::value<char>()->default_value('\t'), "Field separator")
+			("separator,s", po::value<std::string>()->default_value("\t"), "Field separator")
 			("column,c", po::value<size_t>()->default_value(1), "Column number to sort on")
 			("reverse,r", po::bool_switch()->default_value(false), "Sort in reverse order")
 			("numeric,n", po::bool_switch()->default_value(false), "Sort numerically")
@@ -56,7 +56,7 @@ int main(int argc, char **argv)
 		}
 		input = &inputFile;
 	}
-	char separator = args["separator"].as<char>();
+	std::string separators = args["separator"].as<std::string>();
 	size_t column = args["column"].as<size_t>();
 	bool reverse = args["reverse"].as<bool>();
 	bool numeric = args["numeric"].as<bool>();
@@ -77,8 +77,8 @@ int main(int argc, char **argv)
 	auto lines = ReadLines(*input);
 	std::sort(lines.begin(), lines.end(), [&](std::string const & left, std::string const & right)
 		  {
-			auto leftValue = FindColValue(left, separator, column);
-			auto rightValue = FindColValue(right, separator, column);
+			auto leftValue = FindColValue(left, separators.c_str(), column);
+			auto rightValue = FindColValue(right, separators.c_str(), column);
 			if (numeric)
 				return reverse != (ToNumeric(leftValue) < ToNumeric(rightValue));
 			else

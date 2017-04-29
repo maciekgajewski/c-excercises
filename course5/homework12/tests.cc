@@ -7,13 +7,13 @@
 int main(int, char **)
 {
 	std::string line = "1,monkey,in a bag";
-	std::string col1Value = jds::FindColValue(line, ',', 1);
+	std::string col1Value = jds::FindColValue(line, ",", 1);
 	assert(col1Value == "1");
-	std::string col2Value = jds::FindColValue(line, ',', 2);
+	std::string col2Value = jds::FindColValue(line, ",", 2);
 	assert(col2Value == "monkey");
-	std::string col3Value = jds::FindColValue(line, ',', 3);
+	std::string col3Value = jds::FindColValue(line, ",", 3);
 	assert(col3Value == "in a bag");
-	std::string col4Value = jds::FindColValue(line, ',', 4);
+	std::string col4Value = jds::FindColValue(line, ",", 4);
 	assert(col4Value == "");
 
 	assert(jds::ToNumeric("1") == 1);

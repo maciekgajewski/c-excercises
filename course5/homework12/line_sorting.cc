@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <limits>
+#include <boost/tokenizer.hpp>
 
 #include "line_sorting.h"
 
@@ -9,32 +10,25 @@ std::vector<std::string> ReadLines(std::istream & source)
 {
 	std::vector<std::string> lines;
 	std::string line;
-	while (source)
+	while (std::getline(source, line))
 	{
-		std::getline(source, line);
 		if (bool(source) || line.length())
 			lines.push_back(std::move(line));
 	}
 	return lines;
 }
 
-std::string FindColValue(std::string const & line, char separator, size_t column)
+std::string FindColValue(std::string const & line, char const * separators, size_t column)
 {
-	size_t pos = 0;
-	size_t currentCol = 1;
-	while (currentCol < column)
+	boost::tokenizer<boost::char_separator<char>> tokenizer{line, boost::char_separator<char>{separators}};
+	auto current = tokenizer.begin();
+	for (size_t currentCol = 1; currentCol < column && current != tokenizer.end(); ++currentCol)
 	{
-		size_t found = line.find(separator, pos);
-		if (found == std::string::npos)
-			return std::string();
-		pos = found + 1;
-		currentCol++;
+		++current;
 	}
-	size_t nextColPos = line.find(separator, pos);
-	if (nextColPos == std::string::npos)
-		return line.substr(pos, std::string::npos);
-	else
-		return line.substr(pos, nextColPos - pos);
+	if (current == tokenizer.end())
+		return std::string();
+	return *current;
 }
 
 long long ToNumeric(std::string const & value)
