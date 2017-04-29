@@ -207,23 +207,26 @@ int main()
     {
         std::list<NonCopyAble> l1;
         LinkedList<NonCopyAble> l2;
+        LinkedList<NonCopyAble> l3;
         for (int i=0; i<10; ++i)
         {
             l1.emplace_front("Test"+std::to_string(i));
-            l2.emplace_front("Test"+std::to_string(i));
+            NonCopyAble tmp("Test"+std::to_string(i));
+            l2.push_front(std::move(tmp));
+            l3.push_front(NonCopyAble("Test"+std::to_string(i)));
         }
         assert(std::equal(l1.begin(), l1.end(), l2.begin()));
         assert(l2.front().str == l1.front().str);
 
-        LinkedList<NonCopyAble> l3 = std::move(l2);
-        //LinkedList<NonCopyAble> l4 = l2; // non-copyable
-        assert(std::equal(l1.begin(), l1.end(), l3.begin()));
+        LinkedList<NonCopyAble> l5 = std::move(l2);
+        //LinkedList<NonCopyAble> l6 = l2; // non-copyable
+        assert(std::equal(l1.begin(), l1.end(), l5.begin()));
 
-        LinkedList<NonCopyAble> l5;
-        l5 = std::move(l2);
-        //LinkedList<NonCopyAble> l6;
-        //l6 = l2; // non-copyable
-        assert(std::equal(l1.begin(), l1.end(), l3.begin()));
+        LinkedList<NonCopyAble> l7;
+        l7 = std::move(l3);
+        //LinkedList<NonCopyAble> l8;
+        //l8 = l2; // non-copyable
+        assert(std::equal(l1.begin(), l1.end(), l7.begin()));
     }
     {
         LinkedList<int> l;
