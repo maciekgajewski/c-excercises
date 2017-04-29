@@ -70,17 +70,11 @@ public:
     template<typename Iter>
     LinkedList(Iter begin_iter, Iter end_iter)
     {
-        if (begin_iter == end_iter)
-            return;
-        mHead = std::make_unique<Node>(nullptr, *begin_iter);
-        ++mSize;
-        Node *tail = mHead.get();
-        auto it = begin_iter;
-        ++it;
-        for (; it != end_iter; ++it)
+        std::unique_ptr<Node> *tail = &mHead;
+        for (auto it = begin_iter; it != end_iter; ++it)
         {
-            tail->next = std::make_unique<Node>(nullptr, *it);
-            tail = tail->next.get();
+            *tail = std::make_unique<Node>(nullptr, *it);
+            tail = &((*tail)->next);
             ++mSize;
         }
     }
