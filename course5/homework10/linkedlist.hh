@@ -83,7 +83,7 @@ public:
     class IteratorType : public std::iterator<std::forward_iterator_tag, ValueType>
     {
     public:
-        IteratorType(NodeType *node)
+        explicit IteratorType(NodeType *node)
             : node(node)
         {}
 

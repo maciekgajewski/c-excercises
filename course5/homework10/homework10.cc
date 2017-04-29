@@ -12,7 +12,7 @@
 class NonCopyAble
 {
 public:
-    NonCopyAble(const std::string &str) : str(str) {}
+    explicit NonCopyAble(const std::string &str) : str(str) {}
     NonCopyAble() = delete;
     NonCopyAble(const NonCopyAble &) = delete;
     NonCopyAble& operator=(const NonCopyAble &) = delete;
