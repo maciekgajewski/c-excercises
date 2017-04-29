@@ -64,6 +64,19 @@ int main()
         }
     }
     {
+        using Data = std::tuple<std::string, int>;
+        std::list<Data> list;
+        LinkedList<Data> mylist;
+        for (int i=0; i<10; ++i)
+        {
+            list.push_front(Data("mokus"+std::to_string(i), i));
+            mylist.push_front(Data("mokus"+std::to_string(i), i));
+            assert(list.front() == mylist.front());
+            assert(list.size() == mylist.size());
+            assert(std::equal(list.begin(), list.end(), mylist.begin()));
+        }
+    }
+    {
         LinkedList<int> l;
         for (int i=0; i<10; ++i)
             l.push_front(i);
