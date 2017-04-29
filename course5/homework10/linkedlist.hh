@@ -170,7 +170,7 @@ public:
 
     void push_front(T &&e)
     {
-        mHead = std::make_unique<Node>(std::move(mHead), e);
+        mHead = std::make_unique<Node>(std::move(mHead), std::move(e));
         ++mSize;
     }
 
