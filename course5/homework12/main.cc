@@ -1,5 +1,6 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/program_options.hpp>
+#include <boost/algorithm/string.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -16,7 +17,7 @@ Homework
 
 Please, write a program that sorts text files.
 The program should be able to sort files with multiple columns/fields per line.
-The field separator, column number and sort direction should be configurable
+The field separator, column number and sort direction should be configurable.
 Extra: There should be an option to sort by numerical value rather than text (ie “7” goes before “12”)
 
 The program should be familiar, unix-style utility:
@@ -45,16 +46,39 @@ void write(std::ostream& out, const std::vector<std::string>& buffer)
 
 struct sorter
 {
-    sorter(bool descending) : m_descending{descending} {}
+    sorter(bool descending, int column, std::string separator) :
+        m_descending{descending}
+        , m_column{column}
+        , m_separator{separator}
+        {}
 
-    bool operator() (const std::string& s1, const std::string& s2) 
+    bool operator() (const std::string& s1, const std::string& s2)
     {
+        std::string to_cmp_1 = s1;
+        std::string to_cmp_2 = s2;
+
+        std::vector<std::string> split_s1;
+        std::vector<std::string> split_s2;
+
+        if (m_column != 0 && m_separator == "")
+            m_separator = " ";
+        if (m_column != 0)
+        {
+            boost::split(split_s1, s1, boost::is_any_of(m_separator));
+            boost::split(split_s2, s2, boost::is_any_of(m_separator));
+
+            to_cmp_1 = split_s1[m_column];
+            to_cmp_2 = split_s2[m_column];
+        }
+
         if (m_descending)
-            return s1 > s2;
-        return s1 < s2;
+            return to_cmp_1 > to_cmp_2;
+        return to_cmp_1 < to_cmp_2;
     }
-    
+
     bool m_descending = false;
+    int m_column = 0;
+    std::string m_separator = "";
 };
 
 
@@ -63,13 +87,17 @@ int main(int argc, char** argv)
     namespace po = boost::program_options;
 
     bool descending = false;
+    std::string separator = "";
+    int column = 0;
 
     po::options_description desc("Sort input according to parameters.\nAllowed options:");
     desc.add_options()
         ("help,h", "Show this message")
         ("input,i", po::value<std::string>(), "input file (defaults to stdin)")
         ("output,o", po::value<std::string>(), "output file (defaults to stdout)")
-        ("desc,d", po::bool_switch(&descending), "sort input in descending order (defaults to ascending)");
+        ("desc,d", po::bool_switch(&descending), "sort input in descending order (defaults to ascending)")
+        ("col,c", po::value<int>(), "sort input lines by <col>th column (counting from 0), as split by <sep>")
+        ("sep,s", po::value<std::string>(), "break input lines on sep characters (defaults to <space>, if col is specified)");
         // (help, file, asc/desc, field sep, col num, numeric)
     ;
 
@@ -83,6 +111,14 @@ int main(int argc, char** argv)
     if (vm.count("help")) {
         std::cout << desc << std::endl;;
         return 1;
+    }
+
+    if (vm.count("col")) {
+        column = vm["col"].as<int>();
+    }
+
+    if (vm.count("sep")) {
+        separator = vm["sep"].as<std::string>();
     }
     
     std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
@@ -105,7 +141,7 @@ int main(int argc, char** argv)
         read(std::cin, *buffer.get());
     }
 
-    boost::sort(*buffer.get(), sorter(descending));
+    boost::sort(*buffer.get(), sorter(descending, column, separator));
 
     if (vm.count("output"))
     {
