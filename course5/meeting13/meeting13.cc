@@ -2,14 +2,20 @@
 #include <unordered_map>
 #include <string>
 
+#include <set>
+
 using namespace std::literals;
 
-int main(int /*argc*/, char** /*argv*/)
+int main(int argc, char** argv)
 {
-	std::unordered_map<std::string, std::string> settings;
+	std::set<std::string> s(argv+1, argv+argc);
 	
-	settings["Greeting"] = "Hello";
-	settings["Target"] = "World";
-	
-	std::cout << settings["Greeting"] << ", " << settings["Target"] << "!" << std::endl;
+//	auto it = s.find("Waldo");
+//	if (it != s.end())
+	if(s.count("Waldo") > 0)
+		std::cout << "Waldo is in the house!" << std::endl;
+
+		
+	for(const auto& x : s)
+		std::cout << x << std::endl;
 }
