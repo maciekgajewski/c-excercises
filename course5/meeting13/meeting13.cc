@@ -3,7 +3,7 @@
 #include <string>
 
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <vector>
 #include <algorithm>
 
@@ -40,8 +40,8 @@ struct ByName
 
 int main(int argc, char** argv)
 {
-	using Year = int;
-	std::multimap<Year, Person> pplById;
+	using ID = int;
+	std::unordered_map<ID, Person> pplById;
 
 	std::vector<std::pair<Year, Person>> ppl;
 	
