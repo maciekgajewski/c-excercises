@@ -5,6 +5,7 @@
 #include <set>
 #include <map>
 #include <vector>
+#include <algorithm>
 
 using namespace std::literals;
 
@@ -39,34 +40,44 @@ struct ByName
 
 int main(int argc, char** argv)
 {
-	using ID = int;
-	std::map<ID, Person> pplById;
+	using Year = int;
+	std::multimap<Year, Person> pplById;
 
-	std::vector<std::pair<ID, Person>> ppl;
+	std::vector<std::pair<Year, Person>> ppl;
 	
-	ppl.push_back({1234, {"Maciek", 37}});
-	ppl.push_back({1234, {"Alosha", 28}});
- 	ppl.push_back({775554, {"Jens", 33}});
- 	ppl.push_back(std::make_pair(34455, Person{"Daniel", 28}));
+	std::pair<Year, Person> data[] = {
+		{1980, {"Maciek", 37}},
+		{1989, {"Alosha", 28}},
+		{1989, {"Daniel", 28}},
+		{1989, {"Balazs", 28}},
+		{1984, {"Jens", 33}}
+	};
 	
-	for(auto& p : ppl)
-	{
-		auto result = pplById.insert(std::move(p));
-		if (!result.second)
-		{
-			std::cout << "ERROR: duplicate id, person " << p.second.name << " has the same id as "
-				<< result.first->second.name << ", the id is " << p.first << std::endl;
-		}
-	}
+	pplById.insert(std::begin(data), std::end(data));
 	
 	for(auto& p : pplById)
 	{
 		std::cout << p.first << " : " << p.second << std::endl;
 	}
-
-	if (argc > 1)
+	
+	if (argc > 2)
 	{
-		ID id = std::stoi(argv[1]);
-		std::cout << "Person with id " << id << " : " << pplById.at(id) << std::endl;
+		Year first = std::stoi(argv[1]);
+		Year last = std::stoi(argv[2]);
+		
+		auto it_first = pplById.lower_bound(first);
+		auto it_last = pplById.upper_bound(last);
+		
+		std::cout << "ppl born in " << first << " - " << last
+			<< "(found: " << std::distance(it_first, it_last) << ")"
+		<< std::endl;
+		
+		int num = 0;
+		std::for_each(it_first, it_last, [&](auto& p)
+		{
+			std::cout << p.second << std::endl;
+			num++;
+		});
+		std::cout << "(records: " << num << ")" << std::endl;
 	}
 }
