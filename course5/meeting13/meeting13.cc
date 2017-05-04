@@ -3,6 +3,8 @@
 #include <string>
 
 #include <set>
+#include <map>
+#include <vector>
 
 using namespace std::literals;
 
@@ -35,15 +37,36 @@ struct ByName
 	}
 };
 
-int main(int /*argc*/, char** /*argv*/)
+int main(int argc, char** argv)
 {
-	std::multiset<Person, ByName> ppl;
+	using ID = int;
+	std::map<ID, Person> pplById;
+
+	std::vector<std::pair<ID, Person>> ppl;
 	
-	ppl.insert({"Maciek", 37});
-	ppl.insert({"Alosha", 28});
-	ppl.insert({"Jens", 33});
-	ppl.insert({"Daniel", 28});
+	ppl.push_back({1234, {"Maciek", 37}});
+	ppl.push_back({1234, {"Alosha", 28}});
+ 	ppl.push_back({775554, {"Jens", 33}});
+ 	ppl.push_back(std::make_pair(34455, Person{"Daniel", 28}));
 	
-	for(auto& person : ppl)
-		std::cout << person << std::endl;
+	for(auto& p : ppl)
+	{
+		auto result = pplById.insert(std::move(p));
+		if (!result.second)
+		{
+			std::cout << "ERROR: duplicate id, person " << p.second.name << " has the same id as "
+				<< result.first->second.name << ", the id is " << p.first << std::endl;
+		}
+	}
+	
+	for(auto& p : pplById)
+	{
+		std::cout << p.first << " : " << p.second << std::endl;
+	}
+
+	if (argc > 1)
+	{
+		ID id = std::stoi(argv[1]);
+		std::cout << "Person with id " << id << " : " << pplById.at(id) << std::endl;
+	}
 }
