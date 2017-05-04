@@ -6,16 +6,44 @@
 
 using namespace std::literals;
 
-int main(int argc, char** argv)
-{
-	std::set<std::string> s(argv+1, argv+argc);
-	
-//	auto it = s.find("Waldo");
-//	if (it != s.end())
-	if(s.count("Waldo") > 0)
-		std::cout << "Waldo is in the house!" << std::endl;
+struct Person
 
-		
-	for(const auto& x : s)
-		std::cout << x << std::endl;
+{
+	std::string name;
+	int age;
+	
+	bool operator < (const Person& p2) const
+	{
+		return this->age < p2.age;
+	}
+	bool operator > (const Person& p2) const
+	{
+		return this->age > p2.age;
+	}
+};
+
+std::ostream& operator<<(std::ostream& s, const Person& p)
+{
+	return s << "{" << p.name << ", aged " << p.age << "}";
+}
+
+struct ByName
+{
+	bool operator() (const Person& a, const Person& b) const
+	{
+		return a.name < b.name;
+	}
+};
+
+int main(int /*argc*/, char** /*argv*/)
+{
+	std::multiset<Person, ByName> ppl;
+	
+	ppl.insert({"Maciek", 37});
+	ppl.insert({"Alosha", 28});
+	ppl.insert({"Jens", 33});
+	ppl.insert({"Daniel", 28});
+	
+	for(auto& person : ppl)
+		std::cout << person << std::endl;
 }
