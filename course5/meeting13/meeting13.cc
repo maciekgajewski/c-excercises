@@ -3,7 +3,7 @@
 #include <string>
 
 #include <set>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 using namespace std::literals;
@@ -40,7 +40,7 @@ struct ByName
 int main(int argc, char** argv)
 {
 	using ID = int;
-	std::map<ID, Person> pplById;
+	std::unordered_map<ID, Person> pplById;
 
 	std::vector<std::pair<ID, Person>> ppl;
 	
