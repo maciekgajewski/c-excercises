@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <cstring>
 #include <string>
-#include <memory>
 #include <vector>
 #include <stdexcept>
 
@@ -120,15 +119,15 @@ int main(int argc, char** argv)
     if (vm.count("sep")) {
         separator = vm["sep"].as<std::string>();
     }
-    
-    std::unique_ptr<std::vector<std::string>> buffer = std::make_unique<std::vector<std::string>>();
+
+    std::vector<std::string> buffer;
     if (vm.count("input"))
     {
         std::string in_fname = vm["input"].as<std::string>();
         std::ifstream infile(in_fname);
         if (infile)
         {
-            read(infile, *buffer.get());
+            read(infile, buffer);
         }
         else
         {
@@ -138,10 +137,10 @@ int main(int argc, char** argv)
     }
     else
     {
-        read(std::cin, *buffer.get());
+        read(std::cin, buffer);
     }
 
-    boost::sort(*buffer.get(), sorter(descending, column, separator));
+    boost::sort(buffer, sorter(descending, column, separator));
 
     if (vm.count("output"))
     {
@@ -149,7 +148,7 @@ int main(int argc, char** argv)
         std::ofstream outfile(out_fname);
         if (outfile)
         {
-            write(outfile, *buffer.get());
+            write(outfile, buffer);
         }
         else
         {
@@ -157,8 +156,8 @@ int main(int argc, char** argv)
             throw std::runtime_error("Failed to open file: " + msg);
         }
     }
-    else 
+    else
     {
-        write(std::cout, *buffer.get());
+        write(std::cout, buffer);
     }
 }
