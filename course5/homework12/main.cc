@@ -59,8 +59,6 @@ struct sorter
         std::vector<std::string> split_s1;
         std::vector<std::string> split_s2;
 
-        if (m_column != 0 && m_separator == "")
-            m_separator = " ";
         if (m_column != 0)
         {
             boost::split(split_s1, s1, boost::is_any_of(m_separator));
@@ -97,7 +95,6 @@ int main(int argc, char** argv)
         ("desc,d", po::bool_switch(&descending), "sort input in descending order (defaults to ascending)")
         ("col,c", po::value<int>(), "sort input lines by <col>th column (counting from 0), as split by <sep>")
         ("sep,s", po::value<std::string>(), "break input lines on sep characters (defaults to <space>, if col is specified)");
-        // (help, file, asc/desc, field sep, col num, numeric)
     ;
 
     po::positional_options_description p;
@@ -118,6 +115,11 @@ int main(int argc, char** argv)
 
     if (vm.count("sep")) {
         separator = vm["sep"].as<std::string>();
+    }
+
+    if (column != 0 && separator == "")
+    {
+        separator = " ";
     }
 
     std::vector<std::string> buffer;
