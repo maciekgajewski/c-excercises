@@ -43,42 +43,6 @@ void write(std::ostream& out, const std::vector<std::string>& buffer)
         out << item << std::endl;
 }
 
-struct sorter
-{
-    sorter(bool descending, int column, std::string separator) :
-        m_descending{descending}
-        , m_column{column}
-        , m_separator{separator}
-        {}
-
-    bool operator() (const std::string& s1, const std::string& s2)
-    {
-        std::string to_cmp_1 = s1;
-        std::string to_cmp_2 = s2;
-
-        std::vector<std::string> split_s1;
-        std::vector<std::string> split_s2;
-
-        if (m_column != 0)
-        {
-            boost::split(split_s1, s1, boost::is_any_of(m_separator));
-            boost::split(split_s2, s2, boost::is_any_of(m_separator));
-
-            to_cmp_1 = split_s1[m_column];
-            to_cmp_2 = split_s2[m_column];
-        }
-
-        if (m_descending)
-            return to_cmp_1 > to_cmp_2;
-        return to_cmp_1 < to_cmp_2;
-    }
-
-    bool m_descending = false;
-    int m_column = 0;
-    std::string m_separator = "";
-};
-
-
 int main(int argc, char** argv)
 {
     namespace po = boost::program_options;
@@ -142,7 +106,30 @@ int main(int argc, char** argv)
         read(std::cin, buffer);
     }
 
-    boost::sort(buffer, sorter(descending, column, separator));
+    boost::sort(buffer,
+        [&descending, &column, &separator]
+        (const std::string& s1, const std::string& s2)
+        {
+            std::string to_cmp_1 = s1;
+            std::string to_cmp_2 = s2;
+
+            std::vector<std::string> split_s1;
+            std::vector<std::string> split_s2;
+
+            if (column != 0)
+            {
+                boost::split(split_s1, s1, boost::is_any_of(separator));
+                boost::split(split_s2, s2, boost::is_any_of(separator));
+
+                to_cmp_1 = split_s1[column];
+                to_cmp_2 = split_s2[column];
+            }
+
+            if (descending)
+                return to_cmp_1 > to_cmp_2;
+            return to_cmp_1 < to_cmp_2;
+        }
+    );
 
     if (vm.count("output"))
     {
