@@ -1,7 +1,9 @@
-FIND_PACKAGE(Boost COMPONENTS program_options REQUIRED)
-INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -lboost_program_options")
+cmake_minimum_required(VERSION 3.0)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set(CMAKE_CXX_STANDARD 14)
 
+find_package(Boost COMPONENTS program_options REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
+
 add_executable(mysort main.cc)
-TARGET_LINK_LIBRARIES(mysort ${Boost_LIBRARIES})
+target_link_libraries(mysort ${Boost_LIBRARIES})
