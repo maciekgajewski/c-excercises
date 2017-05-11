@@ -1,14 +1,10 @@
 #include <iostream>
 #include <string>
 
-#include <set>
-#include <unordered_map>
 #include <vector>
-#include <algorithm>
+#include <memory>
 
 using namespace std::literals;
-
-enum class PersonTypes { Persons, Employees, Servicemen };
 
 struct IStreamable
 {
@@ -17,7 +13,8 @@ struct IStreamable
 
 struct Person : IStreamable
 {
-	PersonTypes type;
+	virtual ~Person() = default;
+	
 	std::string name;
 	int age;
 	
@@ -59,36 +56,25 @@ std::ostream& operator<<(std::ostream& s, const IStreamable& p)
 
 int main(int /*argc*/, char** /*argv*/)
 {
-	Employee e;
-	e.name = "John Doe";
-	e.age = 66;
-	e.role = "Janitor";
-	e.type = PersonTypes::Employees;
+	std::vector<std::unique_ptr<Person>> ppl;
+
+	auto e = std::make_unique<Employee>();
+	e->name = "John Doe";
+	e->age = 66;
+	e->role = "Janitorrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr";
 	
-	Person* p = &e;
+	auto josef = std::make_unique<Person>();
+	josef->name = "Josef";
+	josef->age = 28;
 	
-	std::cout << "sizeof(Person) = " << sizeof(Person) << std::endl;
-	std::cout << "sizeof(Employee) = " << sizeof(Employee) << std::endl;
-	std::cout << "&e = " << &e << std::endl;
-	std::cout << "p = " << p << std::endl;
-	std::cout << "e = " << e << std::endl;
-	std::cout << "*p = " << *p << std::endl;
+	auto m = std::make_unique<Serviceman>();
+	m->name = "Solider";
 	
-	std::vector<Person*> ppl;
+	ppl.push_back(std::move(e));
+	ppl.push_back(std::move(josef));
+	ppl.push_back(std::move(m));
 	
-	Person josef;
-	josef.type = PersonTypes::Persons;
-	josef.name = "Josef";
-	josef.age = 28;
-	ppl.push_back(&e);
-	ppl.push_back(&josef);
-	
-	Serviceman m;
-	m.name = "Solider";
-	
-	ppl.push_back(&m);
-	
-	for(Person* p : ppl)
+	for(const std::unique_ptr<Person>& p : ppl)
 	{
 		std::cout << p->GetType() << " : " << *p << std::endl;
 	}
