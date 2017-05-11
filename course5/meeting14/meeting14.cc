@@ -10,8 +10,12 @@ using namespace std::literals;
 
 enum class PersonTypes { Persons, Employees, Servicemen };
 
-struct Person
+struct IStreamable
+{
+	virtual void ToStream(std::ostream& s) const = 0;
+};
 
+struct Person : IStreamable
 {
 	PersonTypes type;
 	std::string name;
@@ -26,33 +30,31 @@ struct Person
 		return this->age > p2.age;
 	}
 	
-	std::string GetType() const { return "Person"; }
+	virtual std::string GetType() const { return "Person"; }
+	virtual void ToStream(std::ostream& s) const override { s << "{" << name << ", aged " << age << "}"; }
 };
 
-std::ostream& operator<<(std::ostream& s, const Person& p)
-{
-	return s << "{" << p.name << ", aged " << p.age << "}";
-}
 
-struct Record
-{
-	int id;
-};
-
-struct Employee : Record, Person
+struct Employee : Person
 {
 	std::string role;
-	std::string GetType() const { return "Employee"; }
+	std::string GetType() const override { return "Employee"; }
+	virtual void ToStream(std::ostream& s) const override { s << "{" << name << ", aged " << age << ", role: " << role << "}"; }
 };
 
-std::ostream& operator<<(std::ostream& s, const Employee& p)
+struct Serviceman : Person
 {
-	return s << "{ id=" << p.id << " " << p.name << ", aged " << p.age << ", role: " << p.role << "}";
-}
+	// nope
+	std::string GetType() const override { return "Serviceman"; }
+	virtual void ToStream(std::ostream& s) const override { s << "{" << name << ", aged " << age << ", rank: " << rank << "}"; }
+	
+	std::string rank = "Private";
+};
 
-void PrintRecord(const Record& r)
+std::ostream& operator<<(std::ostream& s, const IStreamable& p)
 {
-	std::cout << "Record id=" << r.id << std::endl;
+	p.ToStream(s);
+	return s;
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -61,7 +63,6 @@ int main(int /*argc*/, char** /*argv*/)
 	e.name = "John Doe";
 	e.age = 66;
 	e.role = "Janitor";
-	e.id = 7777;
 	e.type = PersonTypes::Employees;
 	
 	Person* p = &e;
@@ -75,20 +76,20 @@ int main(int /*argc*/, char** /*argv*/)
 	
 	std::vector<Person*> ppl;
 	
-	Person josef { PersonTypes::Persons, "Josef", 28 };
+	Person josef;
+	josef.type = PersonTypes::Persons;
+	josef.name = "Josef";
+	josef.age = 28;
 	ppl.push_back(&e);
 	ppl.push_back(&josef);
 	
-	PrintRecord(e);
+	Serviceman m;
+	m.name = "Solider";
+	
+	ppl.push_back(&m);
 	
 	for(Person* p : ppl)
 	{
-		if (p->type == PersonTypes::Employees)
-		{
-			Employee* pe = static_cast<Employee*>(p);
-			std::cout << pe->GetType() << " : " << *pe << std::endl;
-		}
-		else
-			std::cout << p->GetType() << " : " << *p << std::endl;
+		std::cout << p->GetType() << " : " << *p << std::endl;
 	}
 }
