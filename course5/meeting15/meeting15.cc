@@ -9,31 +9,27 @@ struct Cls
 	int id;
 };
 
-void fun()
+int fun()
 {
 	Cls x(8);
 	std::cout << "I'm in a fun" << std::endl;
-	throw new std::runtime_error("Hello, world!");
+	//throw new std::runtime_error("Hello, world!");
 	//throw 77;
+	return ERR;
 	
 }
 
-void intermediate()
+int intermediate()
 {
 	Cls i(22);
 	
-	try
-	{
-		fun();
-	} catch (const std::logic_error& e)
+	
+	int r = fun();
+	if(r != 0)
 	{
 		std::cout << "Logic error in fun: " << e.what() << std::endl;
 	}
-	catch(...)
-	{
-		std::cout << "some error in intermediate" << std::endl;
-		throw;
-	}
+	return r;
 }
 
 int main(int /*argc*/, char** /*argv*/)
