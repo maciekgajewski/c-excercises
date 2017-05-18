@@ -91,9 +91,14 @@ public:
 	
 	void push_front(const T& v)
 	{
+		// bad
 		auto rest = std::move(mFirst);
 		mFirst = std::make_unique<Node<T>>(v);
 		mFirst->next = std::move(rest);
+		// good
+		auto newFront = std::make_unique<Node<T>>(v);
+		newFront->next = std::move(mFront);
+		mFront = std::move(newFront);
 	}
 	
 };
