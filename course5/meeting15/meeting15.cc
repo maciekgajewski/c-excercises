@@ -28,8 +28,19 @@ int intermediate()
 	if(r != 0)
 	{
 		std::cout << "Logic error in fun: " << e.what() << std::endl;
+		return r;
 	}
+	r = fun2();
+	// TODO check...
+	r = fun3();
+	// TODO check 
 	return r;
+}
+
+{
+	fun();
+	try { fun2(); } catch(...) { planBforFun2(); }
+	fun3();
 }
 
 int main(int /*argc*/, char** /*argv*/)
@@ -99,6 +110,11 @@ public:
 	
 };
 
-
+int div(double a, double b, double* result)
+{
+	if (b == 0)
+			// what now?
+	return a / b;
+}
 
 
