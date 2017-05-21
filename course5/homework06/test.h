@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cassert>
 
 template <typename T>
 class TestClass

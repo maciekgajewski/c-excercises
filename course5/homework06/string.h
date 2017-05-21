@@ -8,9 +8,8 @@ class String
 {
 public:
     String() = default;
-    String(String &&);
-    String(char* data);
     String(const char* data);
+    String(String &&);
     String(const String& data);
 
     String& operator = (const String& string);
@@ -26,15 +25,15 @@ public:
     bool operator == (const String& s2) const;
     bool operator == (const char * str) const;
 
+    bool operator != (const String& s) const;
+    bool operator != (const char* str) const;
+
     const char * c_str() const;
 
     std::size_t length() const;
     std::size_t size() const;
 
-    ~String();
 private:
-    void free();
-
     std::unique_ptr<char[]> buffer = nullptr;
 };
 

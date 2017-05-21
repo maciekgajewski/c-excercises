@@ -1,7 +1,7 @@
-#include <iostream>
-#include <cassert>
 #include "string.h"
 #include "test.h"
+#include <iostream>
+#include <cassert>
 
 template <typename T>
 void run_all_tests(TestClass<T> & test)
