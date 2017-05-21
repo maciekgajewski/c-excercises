@@ -1,3 +1,4 @@
+#include "comparers.h"
 #include <vector>
 #include <algorithm>
 #include <string>
@@ -11,7 +12,6 @@
 #include <boost/program_options/variables_map.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/tokenizer.hpp>
-#include "comparers.h"
 
 namespace po = boost::program_options;
 namespace homework12{
