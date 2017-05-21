@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE Debug)
 include_directories(${Boost_INCLUDE_DIR})
 
-add_executable(${PROJECT_NAME} homework12.cc comparers.h)
+add_executable(${PROJECT_NAME} homework12.cc comparers.h comparers.cc)
 
 target_link_libraries(${PROJECT_NAME} -static-libgcc -static-libstdc++ ${Boost_LIBRARIES})
 

@@ -7,11 +7,15 @@
 #include <memory>
 
 namespace homework12{
+
 class AComparer
 {
 public:
+
     bool virtual operator() (const std::string& s1, const std::string& s2) = 0;
 };
+
+std::unique_ptr<AComparer> CreateComparer(bool numeric, bool keyed, unsigned int column, char separator);
 
 class BasicComparer : public AComparer
 {
@@ -25,7 +29,7 @@ public:
 class NumericComparer : public AComparer
 {
 public:
-    bool operator() (const std::string& s1, const std::string& s2)
+    bool operator() (const std::string& s1, const std::string& s2) override
     {
         try
         {
@@ -40,12 +44,11 @@ public:
     }
 };
 
-template <typename TComparer>
 struct ColumnComparer: public AComparer
 {
 public:
-    ColumnComparer(int colNumber, char separator, TComparer underlyingComparer)
-                   :colNumber(colNumber), separator(separator), comparer(underlyingComparer)
+    ColumnComparer(int colNumber, char separator, std::unique_ptr<AComparer>& underlyingComparer)
+                   :colNumber(colNumber), separator(separator), comparer(std::move(underlyingComparer))
     {
         if (this->colNumber <= 0)
             throw std::invalid_argument("colNumber");
@@ -55,8 +58,7 @@ public:
     {
         const std::string c1 = this->FindColumnValue(s1);
         const std::string c2 = this->FindColumnValue(s2);
-        auto comp = TComparer();
-        return comp(c1,c2);
+        return (*comparer)(c1,c2);
     }
 
 private:
@@ -74,22 +76,7 @@ private:
 
     int colNumber;
     char separator;
-    const TComparer comparer;
+    const std::unique_ptr<AComparer> comparer;
 };
 
-std::unique_ptr<AComparer> CreateComparer(bool numeric, bool keyed, unsigned int column, char separator)
-{
-    if (keyed)
-    {
-        if (numeric)
-            return std::make_unique<ColumnComparer<NumericComparer>>(column, separator, NumericComparer());
-        return std::make_unique<ColumnComparer<BasicComparer>>(column, separator, BasicComparer());
-    }
-    else
-    {
-        if (numeric)
-            return std::make_unique<NumericComparer>();
-        else return std::make_unique<BasicComparer>();
-    }
-}
 }
