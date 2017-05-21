@@ -4,8 +4,7 @@
 namespace homework12
 {
 std::unique_ptr<AComparer> CreateComparer(bool numeric, bool keyed, unsigned int column, char separator)
-{   
-    std::unique_ptr<AComparer> comparer = nullptr;
+{
     if (keyed)
     {
         if (numeric)
