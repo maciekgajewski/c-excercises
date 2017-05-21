@@ -11,8 +11,7 @@ namespace homework12{
 class AComparer
 {
 public:
-
-    bool virtual operator() (const std::string& s1, const std::string& s2) = 0;
+    bool virtual operator() (const std::string& s1, const std::string& s2) const = 0;
 };
 
 std::unique_ptr<AComparer> CreateComparer(bool numeric, bool keyed, unsigned int column, char separator);
@@ -20,7 +19,7 @@ std::unique_ptr<AComparer> CreateComparer(bool numeric, bool keyed, unsigned int
 class BasicComparer : public AComparer
 {
 public:
-    bool operator() (const std::string& s1, const std::string& s2) override
+    bool operator() (const std::string& s1, const std::string& s2) const override
     {
         return std::strcmp(s1.c_str(), s2.c_str()) < 0;
     }
@@ -29,7 +28,7 @@ public:
 class NumericComparer : public AComparer
 {
 public:
-    bool operator() (const std::string& s1, const std::string& s2) override
+    bool operator() (const std::string& s1, const std::string& s2) const override
     {
         try
         {
@@ -43,28 +42,30 @@ public:
         }
     }
 };
-
+template <typename TComparer>
 struct ColumnComparer: public AComparer
 {
 public:
-    ColumnComparer(int colNumber, char separator, std::unique_ptr<AComparer>& underlyingComparer)
-                   :colNumber(colNumber), separator(separator), comparer(std::move(underlyingComparer))
+    ColumnComparer(int colNumber, char separator)
+                   :colNumber(colNumber), separator(separator), comparer(TComparer())
     {
         if (this->colNumber <= 0)
             throw std::invalid_argument("colNumber");
     }
 
-    bool operator() (const std::string& s1, const std::string& s2) override
+    bool operator() (const std::string& s1, const std::string& s2) const override
     {
         const std::string c1 = this->FindColumnValue(s1);
         const std::string c2 = this->FindColumnValue(s2);
-        return (*comparer)(c1,c2);
+        return this->comparer(c1,c2);
     }
 
 private:
     const std::string FindColumnValue(const std::string& s) const
     {
-        boost::tokenizer<boost::char_separator<char>> tokenizer {s, boost::char_separator<char>(&(this->separator))};
+        const char * separators = {&this->separator};
+        boost::char_separator<char> sep {separators};
+        boost::tokenizer<boost::char_separator<char>> tokenizer {s, sep};
         auto cur = tokenizer.begin();
         int ix = 1;
         for (;ix < this->colNumber && cur != tokenizer.end(); ++ix)
@@ -76,7 +77,7 @@ private:
 
     int colNumber;
     char separator;
-    const std::unique_ptr<AComparer> comparer;
+    const TComparer comparer;
 };
 
 }

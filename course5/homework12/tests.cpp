@@ -17,15 +17,13 @@ void NumericComparerTest()
 
 void ColumnComparerTest()
 {
-    std::unique_ptr<AComparer> basic_comparer = std::make_unique<BasicComparer>();
-    ColumnComparer target1(2, '/t', basic_comparer);
+    ColumnComparer<BasicComparer> target1(2, '/t');
     assert (target1("1/t29", "a/t3"));
     assert (target1("/t/t14", "a/t3"));
     assert (target1("-/t", "/t99/tblaaah"));
     assert (target1("1", "a/tВасилий"));
 
-    std::unique_ptr<AComparer> numeric_comparer = std::make_unique<NumericComparer>();
-    ColumnComparer target2(1, '/n', numeric_comparer);
+    ColumnComparer<NumericComparer> target2(1, '/n');
     assert (!target2("12190.99", "99"));
     assert (!target2("15", "-90"));
     assert (target2("-0999", "8"));
