@@ -3,22 +3,26 @@
 
 String::String(const char *data)
 {
-    std::size_t len = std::strlen(data);
-    if (len > 0)
+    if (data)
     {
-        std::size_t size = len + 1;
-        this->buffer = std::make_unique<char[]>(size);
-        std::strcpy(this->buffer.get(), data);
+        std::size_t len = std::strlen(data);
+        if (len > 0)
+        {
+            std::size_t size = len + 1;
+            this->buffer = std::make_unique<char[]>(size);
+            std::strcpy(this->buffer.get(), data);
+        }
     }
 }
 
 String::String(const String & data)
-    :String(data.buffer.get())
+    :String(data.buffer ? data.buffer.get() : nullptr)
 {}
 
 String::String(String && data)
-    :buffer(std::move(data.buffer))
 {
+    if (data.buffer != nullptr)
+        buffer = std::move(data.buffer);
     data.buffer = nullptr;
 }
 
@@ -97,7 +101,7 @@ String& String::operator +=(const String& s)
 {
     auto new_size = this->size() + s.size();
     auto new_buffer = std::make_unique<char[]>(new_size + 1);
-    std::strcat(new_buffer.get(), this->buffer.get());
+    std::strcat(new_buffer.get(), this->c_str());
     std::strcat(new_buffer.get(), s.c_str());
     this->buffer = std::move(new_buffer);
     return *this;
