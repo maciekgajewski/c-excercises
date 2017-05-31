@@ -66,6 +66,9 @@ BENCHMARK_DEFINE_F(DataSourceFixture, test_is_greater_str)(benchmark::State& st)
     const char* a = s1.c_str();
     const char* b = s2.c_str();
 
+//    const char* a = std::string(dataString, offset, length).c_str();
+//    const char* b = std::string(dataString, offset + 1, length).c_str();
+
     while (st.KeepRunning())
     {
         benchmark::DoNotOptimize(is_greater_str(a, b));
@@ -79,11 +82,14 @@ BENCHMARK_DEFINE_F(DataSourceFixture, test_is_greather_char)(benchmark::State& s
 {
     std::size_t offset = 0;
     std::size_t length = st.range(0);
-    auto s1 = std::string(dataString, offset, length);
-    auto s2 = std::string(dataString, offset+1, length);
+//    auto s1 = std::string(dataString, offset, length);
+//    auto s2 = std::string(dataString, offset+1, length);
 
-    const char* a = s1.c_str();
-    const char* b = s2.c_str();
+//    const char* a = s1.c_str();
+//    const char* b = s2.c_str();
+
+    const char* a = std::string(dataString, offset, length).c_str();
+    const char* b = std::string(dataString, offset + 1, length).c_str();
 
     while (st.KeepRunning())
     {
