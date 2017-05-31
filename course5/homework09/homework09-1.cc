@@ -1,5 +1,4 @@
-#include "benchmark_data.h"
-#include <benchmark/benchmark.h>
+#include "benchmark/benchmark.h"
 #include <cstring>
 #include <string>
 #include <fstream>
@@ -31,7 +30,7 @@ class DataSourceFixture: public benchmark::Fixture
 public:
     DataSourceFixture() = default;
 
-    void SetUp(const benchmark::State&)
+    void SetUp(const benchmark::State&) override
     {
         std::fstream data;
         data.open("data.txt", std::fstream::in);
@@ -42,7 +41,7 @@ public:
         this->dataLength = this->dataString.size();
     }
 
-    void TearDown(const benchmark::State&)
+    void TearDown(const benchmark::State&) override
     {
     }
 
