@@ -1,77 +1,81 @@
-#include <boost/filesystem.hpp>
+#include <boost/optional.hpp>
 
 #include <iostream>
-#include <algorithm>
-#include <iterator>
-#include <chrono>
-#include <thread>
-#include <atomic>
-#include <random>
-#include <functional>
 #include <map>
-#include <tuple>
+#include <string>
 
-using Oper = std::function<double(double, double)>;
-
-double add(double a, double b) { return a+b; }
-
-struct sub
+/*
+template<typename T>
+class optional
 {
-	double operator()(double a, double b) const { return a-b; }
+private:
+	char[sizeof(T)] buffer;
+	bool valid = false;
+public:
+	// ...
 };
+*/
+class Config {...};
 
-double do_something(const std::string& op, double a, double b)
+class Users
 {
-	std::map<std::string, Oper> operations;
-	
-	operations["+"] = add;
-	operations["-"] = sub{};
-	operations["*"] = [](double a, double b) { return a*b; };
-	operations["/"] = [](double a, double b) { return a/b; };
-	
-	auto it = operations.find(op);
-	if (it == operations.end())
+private:
+
+	std::map<int, std::string> mUsers;
+
+	/*
+	// 1
+	std::unique_ptr<Config> mConfg;
+	void SetConf(const std::string& xml) { mConfig = std::make_unique<Config>(xml); }
+	User(const User& other)
 	{
-		throw std::runtime_error("Unknown operation");
+		if (other.mConfig)
+			mConfig = std::make_unique<Config>(*other.mConfig); 
+	}
+
+	// 2
+	boost::optional<Config> mCofig;
+	void SetConf(const std::string& xml) { mConfig.emplace(xml); }
+	*/
+	
+public:
+	
+	
+	Users()
+	{
+		mUsers[0] = "Alosza";
+		mUsers[1] = "Sophia";
 	}
 	
-	Oper& o = it->second;
-	return o(a, b);
-}
+	boost::optional<std::string> Name(int id) const
+	{
+		auto it = mUsers.find(id);
+		if ( it == mUsers.end())
+		{
+			return boost::none;
+		}
+		return it->second;
+	}
+};
 
 int main(int argc, char** argv)
 {
-	if (argc < 4)
+	Users users;
+	
+	int id = std::stoi(argv[1]);
+	
+	auto name = users.Name(id);
+	
+	if (name)
 	{
-		std::cout << "3 params required!" << std::endl;
-		return 2;
+		std::cout << "name of id=" << id << " is " << *name << std::endl;
+	}
+	else
+	{
+		std::cout << "no user with id=" << id << std::endl;
 	}
 	
-	std::string operation = argv[3];
-	double a = std::stod(argv[1]);
-	double b = std::stod(argv[2]);
-	
-	// some magic
-	double result = do_something(operation, a , b);
-	std::cout << result << std::endl;
-	
-	auto t = std::make_tuple(1, 4.4, a);
-	std::tuple<int, double ,double> y = t;
-	
-	auto t0 = std::get<0>(y);
-	auto t1 = std::get<1>(y);
-	
-	
+	name = boost::none;
+	assert(!name);
 }
-
-std::tuple<int, std::string> fun();
-
-int a;
-std::string s;
-
-std::tie(a, s) = fun();
-
-struct point { int x, int y;
-
-bool operator==(const point& other) { return std::tie(x, y) == std::tie(other.x, other.y); }
 
