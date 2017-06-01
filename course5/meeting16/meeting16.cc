@@ -7,55 +7,55 @@
 #include <thread>
 #include <atomic>
 #include <random>
+#include <functional>
+#include <map>
 
-using namespace st	std::thread t;
-d::literals;
 
-int main(int /*argc*/, char** /*argv*/)
+using Oper = std::function<double(double, double)>;
+
+double add(double a, double b) { return a+b; }
+
+struct sub
 {
-	std::cout << "Hello, world!" << std::endl;
-	
-	namespace bfs = boost::filesystem;
-	
-	auto start = std::chrono::high_resolution_clock::now();
-	std::copy(
-			bfs::recursive_direct	std::future<int> res = std::async(fun);
-	// some stuf...
-	
-	int r = res.wait();
-ory_iterator("."),
-			bfs::recursive_directory_iterator(), 
-			std::ostream_iterator<bfs::directory_entry>(std::cout, ", "));
-	auto finish = std::chrono::high_resolution_clock::now();
-	auto duration = finish - start;
-	
-	std::cout << "Listing files took " << duration / 1ms << "ms" << std::endl;
-	
-	std::cout << "sleeping..." << std::endl;
-	
-	std::atomic<int> x = 0;
-	std::thread t([&]()
-	{
-		for(int i = 0; i < 5; i++)
-		{
-			x = i;
-			std::this_thread::sleep_for(1s);
-			std::cout << "boo!" << std::endl;
-		}
-	});
+	double operator()(double a, double b) const { return a-b; }
+};
 
-	std::this_thread::sleep_for(5s);
+double do_something(const std::string& op, double a, double b)
+{
+	std::map<std::string, Oper> operations;
 	
-	std::cout << "x=" << x << std::endl;
-	t.join();
+	operations["+"] = add;
+	operations["-"] = sub{};
+	operations["*"] = [](double a, double b) { return a*b; };
+	operations["/"] = [](double a, double b) { return a/b; };
 	
-	// devices
-	// distributions
+	auto it = operations.find(op);
+	if (it == operations.end())
+	{
+		throw std::runtime_error("Unknown operation");
+	}
 	
-	std::random_device rd;
-	std::uniform_int_distribution<int> dist(-1, 1);
+	Oper& o = it->second;
+	return o(a, b);
+}
+
+int main(int argc, char** argv)
+{
+	if (argc < 4)
+	{
+		std::cout << "3 params required!" << std::endl;
+		return 2;
+	}
 	
-	int r = dist(rd);
+	std::string operation = argv[3];
+	double a = std::stod(argv[1]);
+	double b = std::stod(argv[2]);
+	
+	// some magic
+	double result = do_something(operation, a , b);
+	std::cout << result << std::endl;
+	
+	
 }
 
 
