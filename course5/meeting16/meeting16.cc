@@ -1,81 +1,87 @@
 #include <boost/optional.hpp>
 
 #include <iostream>
-#include <map>
 #include <string>
+#include <cstring>
 
-/*
-template<typename T>
-class optional
+
+bool fun1(const char* a, const char* b) {  std::cout << "Strcmp" << std::endl; return std::strcmp(a, b) > 0;  }
+
+bool fun2(const std::string& a, const std::string&  b) {  std::cout << "std::string" << std::endl;return a > b;}
+
+enum TestType { S, C};
+
+template<TestType>
+bool fun(const char* a, const char* b);
+
+template<>
+bool fun<S>(const char* a, const char* b) { return fun2(a, b); }
+
+template<>
+bool fun<C>(const char* a, const char* b) { return fun1(a, b); }
+
+struct CStrComp
 {
-private:
-	char[sizeof(T)] buffer;
-	bool valid = false;
-public:
-	// ...
-};
-*/
-class Config {...};
-
-class Users
-{
-private:
-
-	std::map<int, std::string> mUsers;
-
-	/*
-	// 1
-	std::unique_ptr<Config> mConfg;
-	void SetConf(const std::string& xml) { mConfig = std::make_unique<Config>(xml); }
-	User(const User& other)
-	{
-		if (other.mConfig)
-			mConfig = std::make_unique<Config>(*other.mConfig); 
-	}
-
-	// 2
-	boost::optional<Config> mCofig;
-	void SetConf(const std::string& xml) { mConfig.emplace(xml); }
-	*/
-	
-public:
-	
-	
-	Users()
-	{
-		mUsers[0] = "Alosza";
-		mUsers[1] = "Sophia";
-	}
-	
-	boost::optional<std::string> Name(int id) const
-	{
-		auto it = mUsers.find(id);
-		if ( it == mUsers.end())
-		{
-			return boost::none;
-		}
-		return it->second;
-	}
+	bool operator()(const char* a, const char* b) const { return fun1(a, b); }
 };
 
-int main(int argc, char** argv)
+struct StringComp
 {
-	Users users;
+	bool operator()(const std::string& a, const std::string&  b) const { return fun2(a, b); }
+};
+
+void test1()
+{
+	const char* a = "aa";
+	const char* b = "bb";
 	
-	int id = std::stoi(argv[1]);
+	// yabdaba
+	bool r = fun1(a, b);
+	assert(!r);
+}
+
+void test2()
+{
+	const char* a = "aa";
+	const char* b = "bb";
 	
-	auto name = users.Name(id);
+	// yabdaba
+	bool r = fun2(a, b);
+	assert(!r);
+}
+
+
+template<typename Comp>
+void test(Comp c)
+{
+	const char* a = "aa";
+	const char* b = "bb";
 	
-	if (name)
-	{
-		std::cout << "name of id=" << id << " is " << *name << std::endl;
-	}
-	else
-	{
-		std::cout << "no user with id=" << id << std::endl;
-	}
+	// yabdaba
+	bool r = c(a, b);
+	assert(!r);
+}
+
+template<TestType TT>
+void test3()
+{
+	const char* a = "aa";
+	const char* b = "bb";
 	
-	name = boost::none;
-	assert(!name);
+	// yabdaba
+	bool r = fun<TT>(a, b);
+	assert(!r);
+}
+
+int main(int /*argc*/, char** /*argv*/)
+{
+	test1();
+	test2();
+	
+	test(CStrComp{});
+	test(StringComp{});
+	
+	test3<C>();
+	test3<S>();
 }
 
