@@ -9,7 +9,7 @@
 #include <random>
 #include <functional>
 #include <map>
-
+#include <tuple>
 
 using Oper = std::function<double(double, double)>;
 
@@ -55,7 +55,23 @@ int main(int argc, char** argv)
 	double result = do_something(operation, a , b);
 	std::cout << result << std::endl;
 	
+	auto t = std::make_tuple(1, 4.4, a);
+	std::tuple<int, double ,double> y = t;
+	
+	auto t0 = std::get<0>(y);
+	auto t1 = std::get<1>(y);
+	
 	
 }
 
+std::tuple<int, std::string> fun();
+
+int a;
+std::string s;
+
+std::tie(a, s) = fun();
+
+struct point { int x, int y;
+
+bool operator==(const point& other) { return std::tie(x, y) == std::tie(other.x, other.y); }
 
