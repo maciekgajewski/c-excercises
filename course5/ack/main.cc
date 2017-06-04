@@ -1,14 +1,10 @@
-#include <boost/range/algorithm.hpp>
 #include <boost/program_options.hpp>
-#include <boost/algorithm/string.hpp>
+#include <boost/filesystem.hpp>
 
 #include <iostream>
 #include <fstream>
-#include <algorithm>
-#include <cstring>
 #include <string>
 #include <vector>
-#include <stdexcept>
 
 
 /***
@@ -45,6 +41,7 @@ void write(std::ostream& out, const std::vector<std::string>& buffer)
 int main(int argc, char** argv)
 {
     namespace po = boost::program_options;
+    namespace bfs = boost::filesystem;
 
     bool fname_w_matches = false;
     bool fname_wo_matches = false;
@@ -55,7 +52,7 @@ int main(int argc, char** argv)
     desc.add_options()
         ("help,h", "Show this message")
         ("pattern,p", po::value<std::string>(), "Search for lines matching this regex pattern")
-        ("input,i", po::value<std::vector<std::string>>(), "List of paths to search (defaults to current directory)")
+        ("search_paths,s", po::value<std::vector<std::string>>(), "List of paths to search (defaults to current directory)")
         ("output,o", po::value<std::string>(), "output file (defaults to stdout)")
         ("files-with-matches,l", po::bool_switch(&fname_w_matches), "Only print the filenames of matching files, instead of the matching text.")
         ("files-without-matches,L", po::bool_switch(&fname_wo_matches), "Only print the filenames of files that do NOT match.")
@@ -64,7 +61,7 @@ int main(int argc, char** argv)
     ;
 
     po::positional_options_description p;
-    p.add("pattern", 1).add("input", -1);
+    p.add("pattern", 1).add("search_paths", -1);
 
     po::variables_map vm;
     po::store(po::command_line_parser(argc, argv).options(desc).positional(p).run(), vm);
@@ -75,16 +72,21 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::string in_files;
-    if (vm.count("input"))
+    std::vector<std::string> search_paths;
+    if (vm.count("search_paths"))
     {
-        in_files = vm["input"].as<std::vector<std::string>>()[0];
-        std::cout << "Searching " << in_files << std::endl;
+        search_paths = vm["search_paths"].as<std::vector<std::string>>();
     }
     else
     {
-        in_files = "current dir";
-        std::cout << "Searching " << in_files << std::endl;
+        search_paths = {"."};
+    }
+    for (std::string path : search_paths)
+    {
+        for (bfs::directory_entry& bfs_path : bfs::recursive_directory_iterator(path))
+        {
+            std::cout << "---> searching: " << bfs_path.path() << std::endl;
+        }
     }
 
     std::string search_pattern;
