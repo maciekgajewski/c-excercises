@@ -13,14 +13,13 @@ Ack allows for grepping for a regex pattern in all files in the entire directory
 Add command-line parameters to select different regex styles, case in/sensibility, coloring of output etc.
 Get inspired by actual “ack”.
 
-Some first steps:
+Next steps:
+* Match by file pattern
+* Search stdin
 -l, --files-with-matches
         Only print the filenames of matching files, instead of the matching text.
-
 -L, --files-without-matches
         Only print the filenames of files that do NOT match.
--n, --no-recurse
-           No descending into subdirectories.
 ***/
 
 void read(std::istream& in, std::vector<std::string>& buffer)
@@ -84,9 +83,33 @@ int main(int argc, char** argv)
     }
     for (std::string path : input_search_paths)
     {
-        for (bfs::directory_entry& bfs_path : bfs::recursive_directory_iterator(path))
+        if (!bfs::exists(path))
         {
-            paths_to_process.push_back(bfs_path);
+            throw std::runtime_error("Path does not exist: " + path);
+        }
+        else if (bfs::is_regular_file(path))
+        {
+            paths_to_process.emplace_back(path);
+        }
+        else if (bfs::is_directory(path) && no_recurse)
+        {
+            for (bfs::directory_entry& bfs_path : bfs::directory_iterator(path))
+            {
+                if (bfs::is_regular_file(bfs_path))
+                    paths_to_process.push_back(bfs_path);
+            }
+        }
+        else if (bfs::is_directory(path))
+        {
+            for (bfs::directory_entry& bfs_path : bfs::recursive_directory_iterator(path))
+            {
+                if (bfs::is_regular_file(bfs_path))
+                    paths_to_process.push_back(bfs_path);
+            }
+        }
+        else
+        {
+            throw std::runtime_error("Path is not a regular file or a directory: " + path);
         }
     }
 
