@@ -72,21 +72,27 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::vector<std::string> search_paths;
+    std::vector<std::string> input_search_paths;
+    std::vector<bfs::directory_entry> paths_to_process;
     if (vm.count("search_paths"))
     {
-        search_paths = vm["search_paths"].as<std::vector<std::string>>();
+        input_search_paths = vm["search_paths"].as<std::vector<std::string>>();
     }
     else
     {
-        search_paths = {"."};
+        input_search_paths = {"."};
     }
-    for (std::string path : search_paths)
+    for (std::string path : input_search_paths)
     {
         for (bfs::directory_entry& bfs_path : bfs::recursive_directory_iterator(path))
         {
-            std::cout << "---> searching: " << bfs_path.path() << std::endl;
+            paths_to_process.push_back(bfs_path);
         }
+    }
+
+    for (bfs::directory_entry& bfs_path : paths_to_process)
+    {
+        std::cout << "Searching: " << bfs_path.path() << std::endl;
     }
 
     std::string search_pattern;
