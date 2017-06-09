@@ -15,7 +15,7 @@ int main(int /*argc*/, char** /*argv*/)
 {
 	param_map params;
 	
-	params["strategy"] = "AEX Basket";
+	params["strategy"] = std::string("AEX Basket");
 	params["reference-price"] = 100.2;
 	params["enabled"] = true;
 	params["algoid"] = std::int64_t(4455);
