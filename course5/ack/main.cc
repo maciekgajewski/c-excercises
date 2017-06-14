@@ -1,5 +1,6 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
+#include <boost/regex.hpp>
 
 #include <iostream>
 #include <fstream>
@@ -16,26 +17,38 @@ Get inspired by actual “ack”.
 Next steps:
 * Match by file pattern
 * Search stdin
+* actually write to file if desired
 -l, --files-with-matches
         Only print the filenames of matching files, instead of the matching text.
 -L, --files-without-matches
         Only print the filenames of files that do NOT match.
 ***/
 
-void read(std::istream& in, std::vector<std::string>& buffer)
+void find_matching_lines(const std::string& fname, const std::string& pattern, std::vector<std::string>& match_buffer)
 {
-    std::string line;
-    while (std::getline(in, line))
+    std::ifstream infile(fname);
+    if (infile)
     {
-        buffer.push_back(line);
+        std::string line;
+        while (std::getline(infile, line))
+        {
+            match_buffer.push_back(line);
+        }
+    }
+    else
+    {
+        std::string msg = std::strerror(errno);
+        throw std::runtime_error("Failed to open file: " + msg);
     }
 }
+
 
 void write(std::ostream& out, const std::vector<std::string>& buffer)
 {
     for(auto item : buffer)
         out << item << std::endl;
 }
+
 
 int main(int argc, char** argv)
 {
@@ -113,11 +126,6 @@ int main(int argc, char** argv)
         }
     }
 
-    for (bfs::directory_entry& bfs_path : paths_to_process)
-    {
-        std::cout << "Searching: " << bfs_path.path() << std::endl;
-    }
-
     std::string search_pattern;
     if (vm.count("pattern"))
     {
@@ -127,9 +135,18 @@ int main(int argc, char** argv)
     else
     {
         std::cout << desc << std::endl;
-        return 1;
     }
-    if (cow) {
+
+    for (bfs::directory_entry& bfs_path : paths_to_process)
+    {
+        std::vector<std::string> match_buffer;
+        std::cout << "Searching: " << bfs_path.path() << std::endl;
+        find_matching_lines(bfs_path.path().string(), search_pattern, match_buffer);
+        write(std::cout, match_buffer);
+    }
+
+    if (cow)
+    {
         std::vector<std::string> cow_pic = {
 "         ______",
 "        < yolo >",
