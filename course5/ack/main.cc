@@ -15,29 +15,26 @@ Add command-line parameters to select different regex styles, case in/sensibilit
 Get inspired by actual “ack”.
 
 Next steps:
-* Match by file pattern
 * Search stdin
 * actually write to file if desired
--l, --files-with-matches
-        Only print the filenames of matching files, instead of the matching text.
--L, --files-without-matches
-        Only print the filenames of files that do NOT match.
+* colors
 ***/
 
-void find_matching_lines(const std::string& fname, const std::regex& pattern, std::vector<std::string>& match_buffer)
+void find_matching_lines(const boost::filesystem::directory_entry& fs_entry, const std::regex& pattern, std::vector<std::string>& match_buffer)
 {
-    std::ifstream infile(fname);
+    std::ifstream infile(fs_entry.path().string());
     if (infile)
     {
         std::string line;
         int line_no = 0;
         std::smatch match;
+        std::string to_print;
         while (std::getline(infile, line))
         {
             line_no++;
             if (std::regex_search(line, match, pattern)) {
-                // match_buffer.emplace_back(std::printf("%i: %s", line_no, line.c_str()));
-                match_buffer.push_back(line);
+                to_print = std::to_string(line_no) + ":" + line;
+                match_buffer.push_back(to_print);
 
             }
         }
@@ -47,6 +44,12 @@ void find_matching_lines(const std::string& fname, const std::regex& pattern, st
         std::string msg = std::strerror(errno);
         throw std::runtime_error("Failed to open file: " + msg);
     }
+}
+
+
+void write(std::ostream& out, const std::string& line)
+{
+    out << line << std::endl;
 }
 
 
@@ -138,7 +141,7 @@ int main(int argc, char** argv)
     {
         search_pattern = std::regex(vm["pattern"].as<std::string>());
     }
-    else
+    else if (! cow)
     {
         std::cout << desc << std::endl;
     }
@@ -146,8 +149,23 @@ int main(int argc, char** argv)
     for (bfs::directory_entry& bfs_path : paths_to_process)
     {
         std::vector<std::string> match_buffer;
-        find_matching_lines(bfs_path.path().string(), search_pattern, match_buffer);
-        write(std::cout, match_buffer);
+        find_matching_lines(bfs_path, search_pattern, match_buffer);
+        if (fname_w_matches)
+        {
+            if (match_buffer.size())
+                write(std::cout, bfs_path.path().string());
+        }
+        else if (fname_wo_matches)
+        {
+            if (!match_buffer.size())
+                write(std::cout, bfs_path.path().string());
+        }
+        else if (match_buffer.size())
+        {
+            write(std::cout, bfs_path.path().string());
+            write(std::cout, match_buffer);
+            write(std::cout, "\n");
+        }
     }
 
     if (cow)
