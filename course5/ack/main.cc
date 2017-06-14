@@ -1,6 +1,6 @@
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 
 #include <iostream>
 #include <fstream>
@@ -24,15 +24,22 @@ Next steps:
         Only print the filenames of files that do NOT match.
 ***/
 
-void find_matching_lines(const std::string& fname, const std::string& pattern, std::vector<std::string>& match_buffer)
+void find_matching_lines(const std::string& fname, const std::regex& pattern, std::vector<std::string>& match_buffer)
 {
     std::ifstream infile(fname);
     if (infile)
     {
         std::string line;
+        int line_no = 0;
+        std::smatch match;
         while (std::getline(infile, line))
         {
-            match_buffer.push_back(line);
+            line_no++;
+            if (std::regex_search(line, match, pattern)) {
+                // match_buffer.emplace_back(std::printf("%i: %s", line_no, line.c_str()));
+                match_buffer.push_back(line);
+
+            }
         }
     }
     else
@@ -126,11 +133,10 @@ int main(int argc, char** argv)
         }
     }
 
-    std::string search_pattern;
+    std::regex search_pattern;
     if (vm.count("pattern"))
     {
-        search_pattern = vm["pattern"].as<std::string>();
-        std::cout << "Searching for " << search_pattern << std::endl;
+        search_pattern = std::regex(vm["pattern"].as<std::string>());
     }
     else
     {
@@ -140,7 +146,6 @@ int main(int argc, char** argv)
     for (bfs::directory_entry& bfs_path : paths_to_process)
     {
         std::vector<std::string> match_buffer;
-        std::cout << "Searching: " << bfs_path.path() << std::endl;
         find_matching_lines(bfs_path.path().string(), search_pattern, match_buffer);
         write(std::cout, match_buffer);
     }
