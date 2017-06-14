@@ -32,7 +32,8 @@ void find_matching_lines(const boost::filesystem::directory_entry& fs_entry, con
         while (std::getline(infile, line))
         {
             line_no++;
-            if (std::regex_search(line, match, pattern)) {
+            if (std::regex_search(line, match, pattern))
+            {
                 to_print = std::to_string(line_no) + ":" + line;
                 match_buffer.push_back(to_print);
 
