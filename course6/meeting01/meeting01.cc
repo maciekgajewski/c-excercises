@@ -1,7 +1,13 @@
 #include <iostream>
+#include <stdint>
 
 int main(int argc, char** argv)
 {
-	std::cout << "Hello, world!" << std::endl;
+	using mynumber = double;
+
+	mynumber a = 3;
+	mynumber b = 7;
+
+	auto c = a+b;
 }
 
