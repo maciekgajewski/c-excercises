@@ -6,7 +6,7 @@ namespace Display {
 
 void Delay(int msec)
 {
-    SDL_Delay(msec);
+	SDL_Delay(msec);
 }
 
 }
