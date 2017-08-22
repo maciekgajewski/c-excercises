@@ -34,7 +34,7 @@ void Window::Display(const Surface& surface)
 
 	SDL_RenderCopy(mRenderer, tex, nullptr, nullptr);
 	SDL_RenderPresent(mRenderer);
-	//SDL_DestroyTexture(tex);
+	SDL_DestroyTexture(tex);
 }
 
 
