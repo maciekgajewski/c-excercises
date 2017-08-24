@@ -1,8 +1,7 @@
 #pragma once
 
 #include "sdlobject.h"
-
-#include <SDL2/SDL.h>
+#include "sdl.h"
 
 #include <string>
 
