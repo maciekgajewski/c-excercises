@@ -3,16 +3,22 @@
 
 int g = 77;
 
+void print(int i) { std::cout << "int: " << i << std::endl; }
+void print(double d) { std::cout << "double: " << d << std::endl; }
+
+// using value = double;
+// int print(value d) { std::cout << "value: " << d << std::endl; return 6; }
+
 int main(int argc, char** argv)
 {
+	int a = 7;
 	std::uint64_t b = 88;
 	double c = 3.14;
-	auto d = 2.71;
+	float d = 6.77;
 
-	std::uint64_t* f = &b;
-	double* g = &c;
-
-	g = reinterpret_cast<double*>(&b);
-	std::cout << *reinterpret_cast<std::uint64_t*>(g) << std::endl;
+	print(a);
+	print(b);
+	print(c);
+	print(d);
 }
 
