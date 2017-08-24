@@ -1,10 +1,11 @@
 #pragma once
 
+#include "cube.h"
+#include "pixel.h"
+#include "rgb.h"
 #include "sdlobject.h"
 
 #include <SDL2/SDL.h>
-
-#include <cstdint>
 
 namespace Display {
 
@@ -14,9 +15,10 @@ public:
 	Surface(int w, int h);
 	~Surface();
 
-	void Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b);
-	void SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
-
+	void Clear(Rgb color);
+	void SetPixel(Pixel position, Rgb color);
+	void DrawVertex(Vector3D vertex, Rgb color);
+	void DrawCube(Cube& cube, Rgb color);
 private:
 
 	friend class Window;
