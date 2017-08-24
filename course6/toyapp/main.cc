@@ -4,22 +4,40 @@
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
 
+namespace {
+	Display::Cube gCube({0, 0, 1.5f}, 1);
+}
+
+static void Draw(Display::Surface& surface)
+{
+	surface.DrawCube(gCube, Display::YELLOW);
+}
+
 int main()
 {
-	std::cout << "Hello" << std::endl;
+	Display::Window win("Hello", 100, 100, 600, 600);
+	Display::Surface surf(200, 200);
 
-	Display::Window win("Hello", 10, 10, 800, 600);
-	Display::Surface surf(200, 150);
-
-	for(int x = 0; x < 100; x++)
+	SDL_Event e;
+	bool quit = false;
+	do
 	{
-		surf.Clear(0, 0, 255); // blue background
-		surf.SetPixel(10+x, 10, 255, 0, 0); // red pixel at 10x10
-		win.Display(surf);
-		Display::Delay(50);
-	}
+		while(SDL_PollEvent(&e)) {
+			if(e.type == SDL_QUIT)
+			{
+				quit = true;
+				break;
+			}
+			else
+			{
+				surf.Clear(Display::BLUE);
+				Draw(surf);
+				win.Display(surf);
+				Display::Delay(50);
+			}
 
-	Display::Delay(1000);
+		}
+	} while(!quit);
 
 	return 0;
 }
