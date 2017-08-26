@@ -4,9 +4,9 @@
 
 namespace Display {
 
-Surface::Surface(int w, int h)
+Surface::Surface(Size size)
 {
-	mSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+	mSurface = SDL_CreateRGBSurface(0, size.mWidth, size.mHeight, 32, 0, 0, 0, 0);
 }
 
 Surface::~Surface()
@@ -15,23 +15,21 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
-void Surface::Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b)
+void Surface::Clear(Color color)
 {
 	assert(mSurface);
 
 	for(int y = 0; y < mSurface->h; y++)
 		for(int x = 0; x < mSurface->w; x++)
-			SetPixel(x, y, r, g, b);
+			SetPixel({x, y}, color);
 }
 
-void Surface::SetPixel(int x, int y, std::uint8_t r, std::uint8_t g, std::uint8_t b)
+void Surface::SetPixel(Vector2D point, Color color)
 {
 	assert(mSurface);
 
-	std::uint32_t pixelValue = (std::uint32_t(r)<<16) + (std::uint32_t(g)<<8) + b;
-
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (y*mSurface->pitch/4 + x);
-	*pixelAddr = pixelValue;
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (point.mY*mSurface->pitch/4 + point.mX);
+	*pixelAddr = color.GetPixelValue();
 }
 
 }

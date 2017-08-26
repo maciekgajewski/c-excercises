@@ -6,9 +6,10 @@
 
 namespace Display {
 
-Window::Window(const std::string& title, int x, int y, int w, int h)
+Window::Window(const std::string& title, Vector2D pos, Size size)
 {
-	mWindow = SDL_CreateWindow(title.c_str(), x, y, w, h, SDL_WINDOW_SHOWN);
+	mWindow = SDL_CreateWindow(title.c_str(), pos.mX, pos.mY,
+							   size.mWidth, size.mHeight, SDL_WINDOW_SHOWN);
 	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 }
 

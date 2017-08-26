@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sdlobject.h"
+#include "types.h"
 
 #include <SDL2/SDL.h>
 
@@ -11,11 +12,11 @@ namespace Display {
 class Surface : private SDLObject
 {
 public:
-	Surface(int w, int h);
+	Surface(Size size);
 	~Surface();
 
-	void Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b);
-	void SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
+	void Clear(Color color);
+	void SetPixel(Vector2D point, Color color);
 
 private:
 

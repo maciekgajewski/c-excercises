@@ -1,6 +1,7 @@
 #pragma once
 
 #include "sdlobject.h"
+#include "types.h"
 
 #include <SDL2/SDL.h>
 
@@ -14,7 +15,7 @@ class Window : private SDLObject
 {
 public:
 
-	Window(const std::string& title, int x, int y, int w, int h);
+	Window(const std::string& title, Vector2D position, Size size);
 	~Window();
 
 	void Display(const Surface& surface);
