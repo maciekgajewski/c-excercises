@@ -13,15 +13,15 @@ int main()
 	Display::Surface surf({200, 150});
 	Display::Color backgroud{0, 0, 255};
 	Display::Color pixelColor{255, 0, 0};
-	for(int x = 0; x < 100; x++)
-	{
-		surf.Clear(backgroud); // blue background
-		surf.SetPixel({10+x, 10}, pixelColor); // red pixel at 10x10
-		win.Display(surf);
-		Display::Delay(50);
-	}
 
-	Display::Delay(1000);
+	surf.Clear(backgroud);
+	Display::Vector2D v1{10, 10};
+	Display::Vector2D v2{100, 10};
+	surf.DrawLine(v1, v2, pixelColor);
+	surf.SetPixel(v1, {0, 0, 0});
+	surf.SetPixel(v2, {0, 0, 0});
+	win.Display(surf);
+	Display::Delay(5000);
 
 	return 0;
 }
