@@ -18,6 +18,13 @@ public:
 	void Clear(Color color);
 	void SetPixel(Vector2D point, Color color);
 	void DrawLine(Vector2D v1, Vector2D v2, Color color);
+	void DrawRect(Rect rect, Color color);
+	void DrawRect(Rect rect, Degree rotationAngle, Color color);
+
+	void DrawPolygon(const Polygon& p, Color color);
+	void DrawPolygon(const Polygon& p, Color color, Color cornerColor);
+
+	void DrawCube(const Polyhedron& p, Color color);
 
 private:
 

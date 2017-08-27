@@ -1,5 +1,7 @@
 #include "surface.h"
 
+#include "functions.h"
+
 #include <cassert>
 #include <algorithm>
 
@@ -76,6 +78,58 @@ void Surface::DrawLine(Vector2D v1, Vector2D v2, Color color)
 			error += dx;
 		}
 	}
+}
+
+void Surface::DrawRect(Rect rect, Color color)
+{
+	DrawPolygon(ToPolygon(rect), color);
+}
+
+void Surface::DrawRect(Rect rect, Degree rotationAngle, Color color)
+{
+	Polygon p = ToPolygon(rect);
+	Polygon rotated = Rotate(p, GetCenter(rect), rotationAngle);
+	DrawPolygon(rotated, color);
+}
+
+void Surface::DrawPolygon(const Polygon &p, Color color)
+{
+	if (p.size() < 3)
+		return;//Polygon needs to have at least three edges
+
+	unsigned lastIndex = p.size()-1;
+	for (unsigned i = 0; i < lastIndex; ++i)
+	{
+		DrawLine(p.at(i), p.at(i+1), color);
+	}
+	DrawLine(p.at(0), p.at(lastIndex), color);
+}
+
+void Surface::DrawPolygon(const Polygon &p, Color color, Color cornerColor)
+{
+	DrawPolygon(p, color);
+
+	for (auto pp: p)
+		SetPixel(pp, cornerColor);
+}
+
+void Surface::DrawCube(const Polyhedron &p, Color color)
+{
+	if (p.size() != 8)
+		return;
+
+	Polygon p1;
+	Polygon p2;
+	for (int i = 0; i < 4; ++i)
+	{
+		p1.push_back(Render(p.at(i)));
+		p2.push_back(Render(p.at(i+4)));
+	}
+
+	DrawPolygon(p1, color);
+	DrawPolygon(p2, color);
+	for (int i = 0; i < 4; ++i)
+		DrawLine(p1.at(i), p2.at(i), color);
 }
 
 }
