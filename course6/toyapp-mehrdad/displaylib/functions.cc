@@ -18,6 +18,7 @@ Vector2D Render(Vector3D v)
 
 Vector2D Rotate(Vector2D v, Vector2D origin, Degree angle)
 {
+	angle = std::fmod(angle, 360.0);
 	const double pi = 3.14159265358;
 	const Radian r = angle * pi / 180.0;
 	const double dX = v.mX - origin.mX;

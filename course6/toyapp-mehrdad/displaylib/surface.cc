@@ -4,6 +4,7 @@
 
 #include <cassert>
 #include <algorithm>
+#include <stdexcept>
 
 namespace Display {
 
@@ -95,7 +96,7 @@ void Surface::DrawRect(Rect rect, Degree rotationAngle, Color color)
 void Surface::DrawPolygon(const Polygon &p, Color color)
 {
 	if (p.size() < 3)
-		return;//Polygon needs to have at least three edges
+		throw std::logic_error("Polygon needs to have at least three edges");
 
 	unsigned lastIndex = p.size()-1;
 	for (unsigned i = 0; i < lastIndex; ++i)
@@ -113,10 +114,11 @@ void Surface::DrawPolygon(const Polygon &p, Color color, Color cornerColor)
 		SetPixel(pp, cornerColor);
 }
 
+//Stupid solution to draw cube! needs enhancement
 void Surface::DrawCube(const Polyhedron &p, Color color)
 {
 	if (p.size() != 8)
-		return;
+		throw std::logic_error("A cube has 8 points");
 
 	Polygon p1;
 	Polygon p2;
