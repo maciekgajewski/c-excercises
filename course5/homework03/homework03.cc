@@ -1,6 +1,27 @@
+// Example program
+#include <string>
 #include <cstdio>
 
-// TODO your code goes here
+void print(std::string value)
+{
+	std::printf("%s", value.c_str());
+}
+
+void print(bool value)
+{
+	std::printf("%s", value ? "true" : "false");
+}
+
+void print(int value)
+{
+	std::printf("%d", value);
+}
+
+void print(float value, uint precision = 0)
+{
+    	std::string format = std::string("%.") + std::to_string(precision).c_str() + std::string("f");
+	std::printf(format.c_str(), value);
+}
 
 int main()
 {
@@ -10,7 +31,7 @@ int main()
 	print(1.0/3.0, 2);// 0.33
 	
 	std::string s = "world!";
-	print("hello, ") // hello, 
+	print("hello, "); // hello, 
 	print(s); // world!
 	
 	float f = 6;
