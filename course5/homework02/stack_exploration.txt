@@ -1,0 +1,66 @@
+Answer the following:
+- which direction does the stack grows?
+    The address of a local variable in each frame gets smaller with each call, so
+    the stack is growing downwards.
+
+- what is the impact of compilation mode (debug/release) on the size of the stack frame
+    The stack frame is bigger in debug mode.
+    Debug: Subtracting each consecutive "start addr" gives 128 bytes.
+    Release: Subtracting each consecutive "start addr" gives 96 bytes.
+
+Here's some sample output:
+--- DEBUG ---
+Frames remaining  : 10
+  frame start addr: 0x7fff52e6805c
+Frames remaining  : 9
+  frame start addr: 0x7fff52e67fdc
+Frames remaining  : 8
+  frame start addr: 0x7fff52e67f5c
+Frames remaining  : 7
+  frame start addr: 0x7fff52e67edc
+Frames remaining  : 6
+  frame start addr: 0x7fff52e67e5c
+Frames remaining  : 5
+  frame start addr: 0x7fff52e67ddc
+Frames remaining  : 4
+  frame start addr: 0x7fff52e67d5c
+Frames remaining  : 3
+  frame start addr: 0x7fff52e67cdc
+Frames remaining  : 2
+  frame start addr: 0x7fff52e67c5c
+Frames remaining  : 1
+  frame start addr: 0x7fff52e67bdc
+Frames remaining  : 0
+  frame start addr: 0x7fff52e67b5c
+16: 4 vs 4
+Initial stack addr: 0x7fff52e680fc
+Last stack addr   : 0x7fff52e67b58
+Average frame size: 32
+
+-- RELEASE ---
+Frames remaining  : 10
+  frame start addr: 0x7fff59e340a4
+Frames remaining  : 9
+  frame start addr: 0x7fff59e34044
+Frames remaining  : 8
+  frame start addr: 0x7fff59e33fe4
+Frames remaining  : 7
+  frame start addr: 0x7fff59e33f84
+Frames remaining  : 6
+  frame start addr: 0x7fff59e33f24
+Frames remaining  : 5
+  frame start addr: 0x7fff59e33ec4
+Frames remaining  : 4
+  frame start addr: 0x7fff59e33e64
+Frames remaining  : 3
+  frame start addr: 0x7fff59e33e04
+Frames remaining  : 2
+  frame start addr: 0x7fff59e33da4
+Frames remaining  : 1
+  frame start addr: 0x7fff59e33d44
+Frames remaining  : 0
+  frame start addr: 0x7fff59e33ce4
+16: 4 vs 4
+Initial stack addr: 0x7fff59e3410c
+Last stack addr   : 0x7fff59e33cf0
+Average frame size: 23
