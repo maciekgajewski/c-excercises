@@ -1,0 +1,28 @@
+Carmack's sqrt with one iteration:
+for x =  0.001: carmack sqrt =    0.0316605, std::sqrt =    0.0316228, error =  3.77409e-05(    0.119347%)
+for x =   0.01: carmack sqrt =     0.100175, std::sqrt =          0.1, error =  0.000175126(    0.175126%)
+for x =    0.1: carmack sqrt =     0.316733, std::sqrt =     0.316228, error =  0.000505358(    0.159808%)
+for x =    0.5: carmack sqrt =     0.707284, std::sqrt =     0.707107, error =  0.000176907(   0.0250184%)
+for x =      1: carmack sqrt =       1.0017, std::sqrt =            1, error =   0.00169551(    0.169551%)
+for x =     10: carmack sqrt =      3.16771, std::sqrt =      3.16228, error =   0.00542998(    0.171711%)
+for x =    100: carmack sqrt =      10.0155, std::sqrt =           10, error =    0.0155382(    0.155382%)
+for x =    500: carmack sqrt =      22.3708, std::sqrt =      22.3607, error =    0.0101261(   0.0452854%)
+for x =  1e+10: carmack sqrt =       100139, std::sqrt =       100000, error =       138.75(     0.13875%)
+for x =  1e+15: carmack sqrt =  3.16346e+07, std::sqrt =  3.16228e+07, error =        11868(   0.0375299%)
+for x =  1e+20: carmack sqrt =  1.00069e+10, std::sqrt =        1e+10, error =  6.94374e+06(   0.0694374%)
+
+Carmack's sqrt with two iterations:
+for x =  0.001: carmack sqrt =    0.0316228, std::sqrt =    0.0316228, error =  6.70552e-08( 0.000212047%)
+for x =   0.01: carmack sqrt =          0.1, std::sqrt =          0.1, error =  4.54485e-07( 0.000454485%)
+for x =    0.1: carmack sqrt =     0.316229, std::sqrt =     0.316228, error =   1.2219e-06( 0.000386397%)
+for x =    0.5: carmack sqrt =     0.707107, std::sqrt =     0.707107, error =  5.96046e-08( 8.42937e-06%)
+for x =      1: carmack sqrt =            1, std::sqrt =            1, error =  4.29153e-06( 0.000429153%)
+for x =     10: carmack sqrt =      3.16229, std::sqrt =      3.16228, error =  1.40667e-05( 0.000444828%)
+for x =    100: carmack sqrt =           10, std::sqrt =           10, error =  3.62396e-05( 0.000362396%)
+for x =    500: carmack sqrt =      22.3607, std::sqrt =      22.3607, error =  7.62939e-06( 3.41197e-05%)
+for x =  1e+10: carmack sqrt =       100000, std::sqrt =       100000, error =      0.28125(  0.00028125%)
+for x =  1e+15: carmack sqrt =  3.16228e+07, std::sqrt =  3.16228e+07, error =            8( 2.52982e-05%)
+for x =  1e+20: carmack sqrt =        1e+10, std::sqrt =        1e+10, error =         8192(   8.192e-05%)
+
+Accuraccy is pretty impressive for the 'original' version with one iteration and for the second version the error is just negligible.
+Pretty well done for shady dark magic using opaque magic numbers.
