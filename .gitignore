@@ -27,3 +27,6 @@ build_
 # Executables
 *.exe
 *.app
+
+# Swap files
+*.swp
