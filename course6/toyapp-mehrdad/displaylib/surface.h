@@ -16,16 +16,12 @@ public:
 	~Surface();
 
 	void Clear(Color color);
-	void SetPixel(Vector2D point, Color color);
-	void DrawLine(Vector2D v1, Vector2D v2, Color color);
-	void DrawRect(Rect rect, Color color);
-	void DrawRect(Rect rect, Degree rotationAngle, Color color);
 
-	void DrawPolygon(const Polygon& p, Color color);
-	void DrawPolygon(const Polygon& p, Color color, Color cornerColor);
+	//Basic drawing functions
+	void SetPixel(Pixel p, Color color);
+	void DrawLine(Pixel p1, Pixel p2, Color color);
 
-	void DrawCube(const Polyhedron& p, Color color);
-
+	Size GetSize() const;
 private:
 
 	friend class Window;

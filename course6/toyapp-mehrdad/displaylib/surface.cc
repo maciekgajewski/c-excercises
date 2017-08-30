@@ -28,40 +28,40 @@ void Surface::Clear(Color color)
 			SetPixel({x, y}, color);
 }
 
-void Surface::SetPixel(Vector2D point, Color color)
+void Surface::SetPixel(Pixel p, Color color)
 {
 	assert(mSurface);
 
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (point.mY*mSurface->pitch/4 + point.mX);
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (p.mY*mSurface->pitch/4 + p.mX);
 	*pixelAddr = color.GetPixelValue();
 }
 
-void Surface::DrawLine(Vector2D v1, Vector2D v2, Color color)
+void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
-	const bool steep = (fabs(v2.mY - v1.mY) > fabs(v2.mX - v1.mX));
+	const bool steep = (fabs(p2.mY - p1.mY) > fabs(p2.mX - p1.mX));
 	if(steep)
 	{
-		std::swap(v1.mX, v1.mY);
-		std::swap(v2.mX, v2.mY);
+		std::swap(p1.mX, p1.mY);
+		std::swap(p2.mX, p2.mY);
 	}
 
-	if(v1.mX > v2.mX)
+	if(p1.mX > p2.mX)
 	{
-		std::swap(v1.mX, v2.mX);
-		std::swap(v1.mY, v2.mY);
+		std::swap(p1.mX, p2.mX);
+		std::swap(p1.mY, p2.mY);
 	}
 
-	const float dx = v2.mX - v1.mX;
-	const float dy = fabs(v2.mY - v1.mY);
+	const float dx = p2.mX - p1.mX;
+	const float dy = fabs(p2.mY - p1.mY);
 
 	float error = dx / 2.0f;
-	const int ystep = (v1.mY < v2.mY) ? 1 : -1;
-	int y = v1.mY;
+	const int ystep = (p1.mY < p2.mY) ? 1 : -1;
+	int y = p1.mY;
 
-	const int maxX = v2.mX;
+	const int maxX = p2.mX;
 
-	for(int x=v1.mX; x<maxX; x++)
+	for(int x=p1.mX; x<maxX; x++)
 	{
 		if(steep)
 		{
@@ -81,57 +81,9 @@ void Surface::DrawLine(Vector2D v1, Vector2D v2, Color color)
 	}
 }
 
-void Surface::DrawRect(Rect rect, Color color)
+Size Surface::GetSize() const
 {
-	DrawPolygon(ToPolygon(rect), color);
-}
-
-void Surface::DrawRect(Rect rect, Degree rotationAngle, Color color)
-{
-	Polygon p = ToPolygon(rect);
-	Polygon rotated = Rotate(p, GetCenter(rect), rotationAngle);
-	DrawPolygon(rotated, color);
-}
-
-void Surface::DrawPolygon(const Polygon &p, Color color)
-{
-	if (p.size() < 3)
-		throw std::logic_error("Polygon needs to have at least three edges");
-
-	unsigned lastIndex = p.size()-1;
-	for (unsigned i = 0; i < lastIndex; ++i)
-	{
-		DrawLine(p.at(i), p.at(i+1), color);
-	}
-	DrawLine(p.at(0), p.at(lastIndex), color);
-}
-
-void Surface::DrawPolygon(const Polygon &p, Color color, Color cornerColor)
-{
-	DrawPolygon(p, color);
-
-	for (auto pp: p)
-		SetPixel(pp, cornerColor);
-}
-
-//Stupid solution to draw cube! needs enhancement
-void Surface::DrawCube(const Polyhedron &p, Color color)
-{
-	if (p.size() != 8)
-		throw std::logic_error("A cube has 8 points");
-
-	Polygon p1;
-	Polygon p2;
-	for (int i = 0; i < 4; ++i)
-	{
-		p1.push_back(Render(p.at(i)));
-		p2.push_back(Render(p.at(i+4)));
-	}
-
-	DrawPolygon(p1, color);
-	DrawPolygon(p2, color);
-	for (int i = 0; i < 4; ++i)
-		DrawLine(p1.at(i), p2.at(i), color);
+	return {mSurface->w, mSurface->h};
 }
 
 }

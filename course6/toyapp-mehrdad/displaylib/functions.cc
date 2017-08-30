@@ -28,27 +28,4 @@ Vector2D Rotate(Vector2D v, Vector2D origin, Degree angle)
 	return {static_cast<int>(x), static_cast<int>(y)};
 }
 
-Polygon Rotate(Polygon p, Vector2D origin, Degree angle)
-{
-	for(auto& v: p)
-		v = Rotate(v, origin, angle);
-	return p;
-}
-
-Polygon ToPolygon(Rect rect)
-{
-	Polygon p;
-	p.push_back(rect.mTopLeft);
-	p.push_back(rect.mTopLeft + Vector2D{rect.mSize.mWidth, 0});
-	p.push_back(rect.mTopLeft + Vector2D{rect.mSize.mWidth, rect.mSize.mHeight});
-	p.push_back(rect.mTopLeft + Vector2D{0, rect.mSize.mHeight});
-	return p;
-}
-
-Vector2D GetCenter(Rect rect)
-{
-	return {rect.mTopLeft.mX + rect.mSize.mWidth / 2,
-			rect.mTopLeft.mY + rect.mSize.mHeight / 2};
-}
-
 }
