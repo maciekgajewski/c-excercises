@@ -4,7 +4,7 @@
 
 namespace Display {
 
-void Color::Redder(int amount)
+void Color::redder(int amount)
 {
 	if(R + amount <= 255)
 	{
