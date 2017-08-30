@@ -23,6 +23,8 @@ Vector2D Vector3D::project2D()
 	Vector2D newVector;
 	newVector.x = x/z;
 	newVector.y = y/z;
-};
+
+	return newVector;
+}
 
 }
