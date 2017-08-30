@@ -1,6 +1,10 @@
 add_library(drawlib
 	primitives.cc primitives.h
 	index.h
+    rgb.h
+    colors.h
+    renderer.cc renderer.h
+    render_object.cc render_object.h
 )
 
 set_property(TARGET drawlib PROPERTY CXX_STANDARD 14)
