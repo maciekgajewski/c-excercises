@@ -1,13 +1,12 @@
 #pragma once
 
 #include <cstdint>
+#include "vector2d.h"
 
 namespace Display {
 
 struct Vector3D {
-    Vector3D(int x, int y, int z);
-
-    int x, y, z;
+    float x, y, z;
 };
 
 }

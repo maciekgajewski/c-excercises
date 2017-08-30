@@ -39,4 +39,19 @@ void Surface::SetPixel(Vector2D point, Color color)
 	*pixelAddr = pixelValue;
 }
 
+Vector2D Surface::getProjection(Vector3D vector)
+{
+	const float scale = 3;
+	
+	int scaleX = mSurface->w / scale;
+	int scaleY = mSurface->h / scale;
+	int centerX = mSurface->w / 2;
+	int centerY = mSurface->h / 2;
+
+	return Vector2D {
+		centerX + static_cast<int>(vector.x / vector.z * scaleX),
+		centerY - static_cast<int>(vector.y / vector.z * scaleY)
+	};;
+}
+
 }

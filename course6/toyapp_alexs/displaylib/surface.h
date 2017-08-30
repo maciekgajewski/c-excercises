@@ -19,6 +19,7 @@ public:
 
 	void Clear(Color color);
 	void SetPixel(Vector2D point, Color color);
+	Vector2D getProjection(Vector3D vector);
 
 private:
 

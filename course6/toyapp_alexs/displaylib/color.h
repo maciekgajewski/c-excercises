@@ -5,9 +5,10 @@
 namespace Display {
 
 struct Color {
-    Color(std::uint8_t r, std::uint8_t g, std::uint8_t b);
-
     std::uint8_t r, g, b;
 };
+
+const Display::Color BLUE {0, 0, 255};
+const Display::Color RED {255, 0, 0};
 
 }
