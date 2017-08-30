@@ -11,7 +11,6 @@
 #include "render_object.h"
 
 namespace Draw {
-namespace Render {
 
 class Renderer {
 public:
@@ -24,5 +23,4 @@ private:
 	Display::Surface surface;
 };
 
-}
 }

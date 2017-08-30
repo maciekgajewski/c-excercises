@@ -2,11 +2,11 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "primitives.h"
 
 namespace Draw {
-namespace Render {
 
 using namespace Draw::Primitives;
 
@@ -14,11 +14,13 @@ class RenderObject {
 public:
 	RenderObject();
 	void Add(Primitive* prim);
-	std::vector<std::unique_ptr<Primitive>>* GetData();
+	std::string ToString();
+	void Print();
+	std::vector<std::unique_ptr<Primitive>>* GetData() {return &data;}
+
 private:
 	std::vector<std::unique_ptr<Primitive>> data;
 };
 
 
-}
 }

@@ -5,6 +5,7 @@ add_library(drawlib
     colors.h
     renderer.cc renderer.h
     render_object.cc render_object.h
+    drawer.cc drawer.h
 )
 
 set_property(TARGET drawlib PROPERTY CXX_STANDARD 14)

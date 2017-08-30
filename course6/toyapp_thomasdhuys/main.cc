@@ -5,22 +5,18 @@
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
 
+#include <drawlib/render_object.h>
 #include <drawlib/primitives.h>
 #include <drawlib/index.h>
+#include <drawlib/drawer.h>
 
 int main()
 {
 	std::cout << "Hello, here I am!" << std::endl;
 
+	Draw::RenderObject ro = Draw::Drawer::Draw();
 
-	auto idx0 = std::make_unique<Draw::Index>();
-	Draw::Primitives::Point 	point(idx0.get());
-	Draw::Primitives::Line 		line(idx0.get(), idx0.get());
-	Draw::Primitives::Triangle 	triangle(idx0.get(), idx0.get(), idx0.get());
-
-	std::cout << point.ToString() << std::endl;
-	std::cout << line.ToString() << std::endl;
-	std::cout << triangle.ToString() << std::endl;
+	ro.Print();
 
 	for(int x = 0; x < 100; x++)
 	{

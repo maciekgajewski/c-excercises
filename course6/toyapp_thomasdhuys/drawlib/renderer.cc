@@ -1,11 +1,10 @@
 #include "renderer.h"
 
 namespace Draw {
-namespace Render {
 
 void Renderer::Render(RenderObject ro)
 {
-	for (const auto& prim : *ro.GetData())
+	for (const auto& prim_ptr : *ro.GetData())
 	{
 
 	}
@@ -23,6 +22,4 @@ Display::Surface Renderer::DefaultSurface()
 	return Display::Surface(200,150);
 }
 
-
-}
 }
