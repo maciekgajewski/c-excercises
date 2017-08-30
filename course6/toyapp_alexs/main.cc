@@ -3,8 +3,8 @@
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
-#include <displaylib/point2d.h>
-#include <displaylib/point3d.h>
+#include <displaylib/vector2d.h>
+#include <displaylib/vector3d.h>
 #include <displaylib/color.h>
 
 int main()
@@ -20,8 +20,7 @@ int main()
 	for(int x = 0; x < 100; x++)
 	{
 		surf.Clear(blue);
-		Display::Point2D point(10+x, 10);
-		surf.SetPixel(point, red);
+		surf.SetPixel({10+x, 10}, red);
 		win.Display(surf);
 		Display::Delay(50);
 	}

@@ -1,8 +1,8 @@
-#include "point2d.h"
+#include "vector2d.h"
 
 namespace Display {
 
-Point2D::Point2D(int x, int y) {
+Vector2D::Vector2D(int x, int y) {
     this->x = x;
     this->y = y;
 }

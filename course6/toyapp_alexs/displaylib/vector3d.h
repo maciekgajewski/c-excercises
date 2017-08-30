@@ -4,8 +4,8 @@
 
 namespace Display {
 
-struct Point3D {
-    Point3D(int x, int y, int z);
+struct Vector3D {
+    Vector3D(int x, int y, int z);
 
     int x, y, z;
 };
