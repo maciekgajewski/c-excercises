@@ -1,4 +1,7 @@
 #include "surface.h"
+#include "color.h"
+#include "point2d.h"
+#include "point3d.h"
 
 #include <cassert>
 
@@ -15,23 +18,31 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
-void Surface::Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b)
+void Surface::Clear(Color color)
 {
 	assert(mSurface);
 
 	for(int y = 0; y < mSurface->h; y++)
 		for(int x = 0; x < mSurface->w; x++)
-			SetPixel(x, y, r, g, b);
+		{
+			Point2D point(x, y);
+			SetPixel(point, color);
+		}
 }
 
-void Surface::SetPixel(int x, int y, std::uint8_t r, std::uint8_t g, std::uint8_t b)
+void Surface::SetPixel(Point2D point, Color color)
 {
 	assert(mSurface);
 
-	std::uint32_t pixelValue = (std::uint32_t(r)<<16) + (std::uint32_t(g)<<8) + b;
+	std::uint32_t pixelValue = (std::uint32_t(color.r)<<16) + (std::uint32_t(color.g)<<8) + color.b;
 
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (y*mSurface->pitch/4 + x);
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (point.y*mSurface->pitch/4 + point.x);
 	*pixelAddr = pixelValue;
+}
+
+void Surface::DrawCube(Point3D point, int size)
+{
+
 }
 
 }

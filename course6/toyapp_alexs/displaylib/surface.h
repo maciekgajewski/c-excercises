@@ -1,6 +1,9 @@
 #pragma once
 
 #include "sdlobject.h"
+#include "color.h"
+#include "point2d.h"
+#include "point3d.h"
 
 #include <SDL2/SDL.h>
 
@@ -14,8 +17,9 @@ public:
 	Surface(int w, int h);
 	~Surface();
 
-	void Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b);
-	void SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
+	void Clear(Color color);
+	void SetPixel(Point2D point, Color color);
+	void DrawCube(Point3D point, int size);
 
 private:
 
