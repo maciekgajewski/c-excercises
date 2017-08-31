@@ -10,7 +10,7 @@ public:
 	static RenderObject Draw();
 
 private:
-	static std::vector<Index> GetSquareIndices();
+	static std::vector<IndexP> GetSquareIndices();
 	static RenderObject DrawSquarePoints();
 };
 

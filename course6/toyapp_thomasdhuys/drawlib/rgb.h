@@ -4,7 +4,7 @@
 
 namespace Draw {
 
-struct rgb {
+struct RGB {
 	std::uint8_t r;
 	std::uint8_t g;
 	std::uint8_t b;

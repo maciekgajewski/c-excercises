@@ -5,9 +5,9 @@
 namespace Draw {
 namespace Colors {
 
-static const rgb Red{255, 0 , 0};
-static const rgb Green{0, 255, 0};
-static const rgb Blue{0, 0, 255};
+static const RGB Red{255, 0 , 0};
+static const RGB Green{0, 255, 0};
+static const RGB Blue{0, 0, 255};
 
 }
 }
