@@ -9,33 +9,22 @@ public:
 	coord x = 0.0;
 	coord y = 3.14;
 
-	void print();
-
-	Vector() { std::cout << "Vector this=" << this << std::endl; }
-	~Vector() { std::cout << "~Vector this=" << this << std::endl; }
+	Vector operator + (Vector b) { return {x+b.x, y+b.y}; }
 };
 
-struct Rectangle
+Vector operator - (Vector l, Vector r) { return { l.x - r.x, l.y - r.y}; }
+
+std::ostream& operator<<(std::ostream& s, Vector v)
 {
-	Rectangle() { std::cout << "Rectangle this=" << this << std::endl; }
-	~Rectangle() { std::cout << "~Rectangle this=" << this << std::endl; }
-
-	Vector topLeft;
-	Vector bottomRight;
-};
+	return s << "Vector(" << x << ", " << y << ")";
+}
 
 int main(int argc, char** argv)
 {
-	Rectangle* p = nullptr;
-	{
-		Rectangle r;
-		p = &r;
-	}
-	p->topLeft.print();
-}
+	Vector a{2, 3};
+	Vector b{6, 7};
 
-void Vector::print(/* Vector* this */)
-{
-	std::cout << "Vector(" << x << ", " << y << ")" << std::endl;
+	std::cout << (a + b) << std::endl;
+	std::cout << a - b << std::endl;
 }
 
