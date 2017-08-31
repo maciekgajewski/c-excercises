@@ -14,20 +14,28 @@ public:
 	static void hello() { std::cout << "hello" << std::endl; }
 
 	static int v;
+
+	struct Sub;
 };
 
-void hey()
+struct Vector::Sub
+{
+	int x;
+}
+
+int hey()
 {
 	static int x = 0;
 	std::cout << "X=" << x << std::endl;
 	x++;
+	 return x;
 }
 
 int main(int argc, char** argv)
 {
 	hey();
 	hey();
-	hey();
+	int g = hey();
 
 	Vector s;
 	
