@@ -4,54 +4,38 @@
 class Vector
 {
 public:
-
 	using coord = double;
 
-	coord x;
-	coord y;
+	coord x = 0.0;
+	coord y = 3.14;
 
-	void print(int x);
-	static void hello() { std::cout << "hello" << std::endl; }
+	void print();
 
-	static int v;
-
-	struct Sub;
+	Vector() { std::cout << "Vector this=" << this << std::endl; }
+	~Vector() { std::cout << "~Vector this=" << this << std::endl; }
 };
 
-struct Vector::Sub
+struct Rectangle
 {
-	int x;
-}
+	Rectangle() { std::cout << "Rectangle this=" << this << std::endl; }
+	~Rectangle() { std::cout << "~Rectangle this=" << this << std::endl; }
 
-int hey()
-{
-	static int x = 0;
-	std::cout << "X=" << x << std::endl;
-	x++;
-	 return x;
-}
+	Vector topLeft;
+	Vector bottomRight;
+};
 
 int main(int argc, char** argv)
 {
-	hey();
-	hey();
-	int g = hey();
-
-	Vector s;
-	
-	s.x = 6;
-	s.y = 7.7;
-
-	s.print(8);
-
-	s.hello();
-	Vector::hello();
-
-	Vector::coord f = 7;
+	Rectangle* p = nullptr;
+	{
+		Rectangle r;
+		p = &r;
+	}
+	p->topLeft.print();
 }
 
-void Vector::print(/* Vector* this */ int x)
+void Vector::print(/* Vector* this */)
 {
-	std::cout << "Vector(" << this->x << ", " << y << ")" << std::endl;
+	std::cout << "Vector(" << x << ", " << y << ")" << std::endl;
 }
 
