@@ -14,22 +14,22 @@ RenderObject Drawer::DrawSquarePoints()
 	RenderObject ro;
 	auto indices = GetSquareIndices();
 
-	for (IndexP& idx : indices){
+	for (Index& idx : indices){
 		ro.Add(new Draw::Primitives::Point(idx));
 	}
 	ro.Print();
 	return ro;
 }
 
-std::vector<IndexP> Drawer::GetSquareIndices()
+std::vector<Index> Drawer::GetSquareIndices()
 {
-	std::vector<IndexP> indices;
+	std::vector<Index> indices;
 	indices.reserve(8);
 
-	for (XCoord x : {-1, 1}) {
-		for (XCoord y : {-1, 1}) {
-			for (XCoord z : {1, 2}) {
-				indices.push_back(std::make_shared<Index>(x,y,z));
+	for (VCoord x : {-1, 1}) {
+		for (VCoord y : {-1, 1}) {
+			for (VCoord z : {1, 2}) {
+				indices.push_back(std::make_shared<Vertex>(x,y,z));
 				std::cout << "GetSqureIndices push_back: " << indices.back()->ToString()<< std::endl;
 			}
 		}

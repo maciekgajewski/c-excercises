@@ -17,8 +17,8 @@ public:
 	Renderer();
 	void Render(RenderObject ro);
 private:
-	static Display::Window DefaultWindow();
-	static Display::Surface DefaultSurface();
+	Display::Window DefaultWindow();
+	Display::Surface DefaultSurface();
 	Display::Window window;
 	Display::Surface surface;
 };

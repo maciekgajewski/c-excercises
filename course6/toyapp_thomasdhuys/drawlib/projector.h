@@ -5,16 +5,16 @@
 
 namespace Draw {
 
-struct Index2D
+struct Pixel
 {
-	XCoord x;
-	XCoord y;
+	VCoord x;
+	VCoord y;
 	RGB color;
 };
 
 class Projector {
 public:
-	static Index2D Project(IndexP& idx);
+	static Pixel Project(Index& idx);
 private:
 
 

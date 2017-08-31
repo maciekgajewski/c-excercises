@@ -20,18 +20,5 @@ int main()
 
 	ro.Print();
 
-
-
-
-	for(int x = 0; x < 100; x++)
-	{
-//		surf.Clear(0, 0, 255); // blue background
-//		surf.SetPixel(10+x, 10, 255, 0, 0); // red pixel at 10x10
-//		win.Display(surf);
-//		Display::Delay(50);
-	}
-
-//	Display::Delay(1000);
-
 	return 0;
 }

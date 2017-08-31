@@ -14,29 +14,29 @@ public:
 
 class Point: public Primitive {
 public:
-	Point(IndexP& idx0);
+	Point(Index& idx0);
 	std::string ToString() override;
 private:
-	IndexP idx0;
+	Index idx0;
 };
 
 class Line: public Primitive {
 public:
-	Line(IndexP& idx0, IndexP& idx1);
+	Line(Index& idx0, Index& idx1);
 	std::string ToString() override;
 private:
-	IndexP idx0;
-	IndexP idx1;
+	Index idx0;
+	Index idx1;
 };
 
 class Triangle: public Primitive {
 public:
-	Triangle(IndexP& idx0, IndexP& idx1, IndexP& idx2);
+	Triangle(Index& idx0, Index& idx1, Index& idx2);
 	std::string ToString() override;
 private:
-	IndexP idx0;
-	IndexP idx1;
-	IndexP idx2;
+	Index idx0;
+	Index idx1;
+	Index idx2;
 };
 
 

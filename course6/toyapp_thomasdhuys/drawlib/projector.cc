@@ -2,9 +2,9 @@
 
 namespace Draw {
 
-Index2D Projector::Project(IndexP& idx)
+Pixel Projector::Project(Index& idx)
 {
-	return Index2D{idx->x, idx->y, idx->color};
+	return Pixel{idx->x, idx->y, idx->color};
 }
 
 }

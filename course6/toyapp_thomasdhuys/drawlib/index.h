@@ -9,20 +9,21 @@
 
 namespace Draw {
 
-struct Index;
-using XCoord = int;
-using IndexP = std::shared_ptr<Index>;
+struct Vertex;
+using VCoord = int;
+using Index = std::shared_ptr<Vertex>;
 
-// Treat Index as a memory intensive object
-struct Index {
-	Index(): x(0), y(0), z(0), color(Draw::Colors::Red) {}
-	Index(XCoord x, XCoord y, XCoord z): x(x), y(y), z(z), color(Draw::Colors::Red) {}
-	Index(XCoord x, XCoord y, XCoord z, RGB color): x(x), y(y), z(z), color(color) {}
-	~Index() { std::cout << "Idx Destructed: " << ToString() << std::endl; }
+struct Vertex {
+	Vertex(): x(0), y(0), z(0), color(Draw::Colors::Red) {}
+	Vertex(VCoord x, VCoord y, VCoord z): x(x), y(y), z(z), color(Draw::Colors::Red) {}
+	Vertex(VCoord x, VCoord y, VCoord z, RGB color): x(x), y(y), z(z), color(color) {}
+	Vertex(const Vertex& v) = delete;
 
-	XCoord x;
-	XCoord y;
-	XCoord z;
+	~Vertex() { std::cout << "Vtx Destructed: " << ToString() << std::endl; }
+
+	VCoord x;
+	VCoord y;
+	VCoord z;
 
 	RGB color;
 
