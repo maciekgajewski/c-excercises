@@ -1,5 +1,6 @@
 #$ build dir
 build_
+build
 # Compiled Object files
 *.slo
 *.lo
@@ -30,3 +31,7 @@ build_
 
 # Swap files
 *.swp
+
+# Project files
+*.kdev4
+*.user
