@@ -1,5 +1,6 @@
 #include "cube.h"
 
+#include "matrix.h"
 #include "surface.h"
 
 namespace Display {
@@ -9,20 +10,23 @@ Cube::Cube(Vector3D center, float size)
 	mHalfSize{size * 0.5f}
 {}
 
-void Cube::Draw(Surface3D& surface, Color color) const
+void Cube::Draw(Surface3D& surface, Matrix44& view, Color color) const
 {
 	auto c = mCenter;
 	auto h = mHalfSize;
 
+	auto model = transform.CreateMatrix();
+	auto modelView = model * view;
+
 	Vector3D v[] = {
-		{c.x - h, c.y - h, c.z - h},
-		{c.x + h, c.y - h, c.z - h},
-		{c.x - h, c.y + h, c.z - h},
-		{c.x + h, c.y + h, c.z - h},
-		{c.x - h, c.y - h, c.z + h},
-		{c.x + h, c.y - h, c.z + h},
-		{c.x - h, c.y + h, c.z + h},
-		{c.x + h, c.y + h, c.z + h}
+		modelView * Vector3D{c.x - h, c.y - h, c.z - h},
+		modelView * Vector3D{c.x + h, c.y - h, c.z - h},
+		modelView * Vector3D{c.x - h, c.y + h, c.z - h},
+		modelView * Vector3D{c.x + h, c.y + h, c.z - h},
+		modelView * Vector3D{c.x - h, c.y - h, c.z + h},
+		modelView * Vector3D{c.x + h, c.y - h, c.z + h},
+		modelView * Vector3D{c.x - h, c.y + h, c.z + h},
+		modelView * Vector3D{c.x + h, c.y + h, c.z + h}
 	};
 
 	surface.DrawLine(v[0], v[1], color);

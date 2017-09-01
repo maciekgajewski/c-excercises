@@ -9,7 +9,7 @@ namespace Display {
 Window::Window(const char* title, int x, int y, int w, int h)
 {
 	mWindow = SDL_CreateWindow(title, x, y, w, h, SDL_WINDOW_SHOWN);
-	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 }
 
 Window::~Window()

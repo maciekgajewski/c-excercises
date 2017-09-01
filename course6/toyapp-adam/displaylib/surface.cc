@@ -32,46 +32,61 @@ void Surface2D::Clear(Color color)
 
 void Surface2D::SetPixel(Pixel position, Color color)
 {
-	auto offset = position.y * mSurface->pitch / 4 + position.x;
-	auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
-	*pixelAddr = (color.r << 16) + (color.g << 8) + color.b;
+	if(position.x > 0 && position.x < mSurface->w && position.y > 0 && position.y < mSurface->h)
+	{
+		auto offset = position.y * mSurface->pitch / 4 + position.x;
+		auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
+		*pixelAddr = (color.r << 16) + (color.g << 8) + color.b;
+	}
 }
 
-void Surface2D::DrawLine(Pixel start, Pixel end, Color color)
+void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
-	const auto stepX = start.x < end.x ? 1 : -1;
-	const auto stepY = start.y < end.y ? 1 : -1;
-
-	if (start.x != end.x)
+	const bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
+	if(steep)
 	{
-		const float deltaX = end.x - start.x;
-		const float deltaY = end.y - start.y;
-		const auto deltaError = std::fabs(deltaY / deltaX);
-		auto error = 0.0f;
+		std::swap(p1.x, p1.y);
+		std::swap(p2.x, p2.y);
+	}
 
-		auto y = start.y;
-		for (auto x = start.x;; x += stepX)
+	if(p1.x > p2.x)
+	{
+		std::swap(p1.x, p2.x);
+		std::swap(p1.y, p2.y);
+	}
+
+	const float dx = p2.x - p1.x;
+	const float dy = std::fabs(p2.y - p1.y);
+	float error = dx * 0.5f;
+
+	int y = p1.y;
+	const int ystep = (p1.y < p2.y) ? 1 : -1;
+
+	if(steep)
+	{
+		for(int x = p1.x; x < p2.x; ++x)
 		{
-			SetPixel({x, y}, color);
-			if(x == end.x)
-				break;
-
-			error += deltaError;
-			if (error > 0.5f)
+			SetPixel({y, x}, color);
+			error -= dy;
+			if(error < 0)
 			{
-				y += stepY;
-				error -= 1.0f;
+				y += ystep;
+				error += dx;
 			}
 		}
 	}
 	else
 	{
-		for (auto y = start.y;; y += stepY)
+		for(int x = p1.x; x < p2.x; ++x)
 		{
-			SetPixel({start.x, y}, color);
-			if(y == end.y)
-				break;
+			SetPixel({x, y}, color);
+			error -= dy;
+			if(error < 0)
+			{
+				y += ystep;
+				error += dx;
+			}
 		}
 	}
 }

@@ -1,8 +1,11 @@
 add_library(displaylib
+	clock.cc
 	cube.cc
-	functions.cc
+	matrix.cc
+	scene.cc
 	sdlobject.cc
 	surface.cc
+	transform.cc
 	vector.cc
 	window.cc)
 
