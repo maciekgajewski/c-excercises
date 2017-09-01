@@ -17,8 +17,8 @@ static void DrawScene(Display::Surface3D& surface)
 
 int main(int argc, char* argv[])
 {
-	Display::Window win("Hello", 100, 100, 600, 600);
-	Display::Surface2D surface2D(200, 200);
+	Display::Window win("Hello", 100, 100, 800, 800);
+	Display::Surface2D surface2D(800, 800);
 	Display::Surface3D surface3D(surface2D);
 
 	SDL_Event e;

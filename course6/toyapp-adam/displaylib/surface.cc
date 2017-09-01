@@ -40,24 +40,23 @@ void Surface2D::SetPixel(Pixel position, Color color)
 void Surface2D::DrawLine(Pixel start, Pixel end, Color color)
 {
 	// Bresenham's line algorithm
-	if (start.x > end.x)
-	{
-		std::swap(start.x, end.x);
-		std::swap(start.y, end.y);
-	}
+	const auto stepX = start.x < end.x ? 1 : -1;
+	const auto stepY = start.y < end.y ? 1 : -1;
 
-	auto stepY = start.y < end.y ? 1 : -1;
-	if (start.x < end.x)
+	if (start.x != end.x)
 	{
 		const float deltaX = end.x - start.x;
 		const float deltaY = end.y - start.y;
-		const float deltaError = std::fabs(deltaY / deltaX);
-		float error = 0.0f;
+		const auto deltaError = std::fabs(deltaY / deltaX);
+		auto error = 0.0f;
 
 		auto y = start.y;
-		for (auto x = start.x; x <= end.x; ++x)
+		for (auto x = start.x;; x += stepX)
 		{
 			SetPixel({x, y}, color);
+			if(x == end.x)
+				break;
+
 			error += deltaError;
 			if (error > 0.5f)
 			{
@@ -68,9 +67,11 @@ void Surface2D::DrawLine(Pixel start, Pixel end, Color color)
 	}
 	else
 	{
-		for (auto y = start.y; y <= end.y; y += stepY)
+		for (auto y = start.y;; y += stepY)
 		{
 			SetPixel({start.x, y}, color);
+			if(y == end.y)
+				break;
 		}
 	}
 }
