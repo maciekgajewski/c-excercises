@@ -4,7 +4,7 @@ namespace Display {
 
 struct Pixel
 {
-	using Coordinate = unsigned;
+	using Coordinate = int;
 
 	Coordinate x;
 	Coordinate y;

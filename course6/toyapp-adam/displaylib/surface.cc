@@ -1,6 +1,8 @@
 #include "surface.h"
 
+#include <algorithm>
 #include <cassert>
+#include <cmath>
 
 namespace Display {
 
@@ -18,19 +20,13 @@ Surface2D::~Surface2D()
 
 Pixel Surface2D::GetDimensions() const
 {
-	return {
-		static_cast<Pixel::Coordinate>(mSurface->w),
-		static_cast<Pixel::Coordinate>(mSurface->h)
-	};
+	return {mSurface->w, mSurface->h};
 }
 
 void Surface2D::Clear(Color color)
 {
-	unsigned w = mSurface->w;
-	unsigned h = mSurface->h;
-
-	for(unsigned y = 0; y < h; ++y)
-		for(unsigned x = 0; x < w; ++x)
+	for(int y = 0; y < mSurface->h; ++y)
+		for(int x = 0; x < mSurface->w; ++x)
 			SetPixel({x, y}, color);
 }
 
@@ -41,27 +37,73 @@ void Surface2D::SetPixel(Pixel position, Color color)
 	*pixelAddr = (color.r << 16) + (color.g << 8) + color.b;
 }
 
+void Surface2D::DrawLine(Pixel start, Pixel end, Color color)
+{
+	// Bresenham's line algorithm
+	if (start.x > end.x)
+	{
+		std::swap(start.x, end.x);
+		std::swap(start.y, end.y);
+	}
+
+	auto stepY = start.y < end.y ? 1 : -1;
+	if (start.x < end.x)
+	{
+		const float deltaX = end.x - start.x;
+		const float deltaY = end.y - start.y;
+		const float deltaError = std::fabs(deltaY / deltaX);
+		float error = 0.0f;
+
+		auto y = start.y;
+		for (auto x = start.x; x <= end.x; ++x)
+		{
+			SetPixel({x, y}, color);
+			error += deltaError;
+			if (error > 0.5f)
+			{
+				y += stepY;
+				error -= 1.0f;
+			}
+		}
+	}
+	else
+	{
+		for (auto y = start.y; y <= end.y; y += stepY)
+		{
+			SetPixel({start.x, y}, color);
+		}
+	}
+}
 
 Surface3D::Surface3D(Surface2D& surface2D)
 :	mSurface(surface2D)
 {
 	auto dimensions = surface2D.GetDimensions();
-	mHalfDimensions.x = dimensions.x / 2u;
-	mHalfDimensions.y = dimensions.y / 2u;
+	mHalfDimensions.x = dimensions.x / 2;
+	mHalfDimensions.y = dimensions.y / 2;
+}
+
+void Surface3D::Clear(Color color)
+{
+	mSurface.Clear(color);
 }
 
 void Surface3D::SetPixel(Vector3D vector, Color color)
 {
-	auto vector2D = Project(vector);
-	auto pixel = GetPixel(vector2D);
-	mSurface.SetPixel(pixel, color);
+	mSurface.SetPixel(GetPixel(vector), color);
 }
 
-Pixel Surface3D::GetPixel(Vector2D point) const
+void Surface3D::DrawLine(Vector3D start, Vector3D end, Color color)
 {
+	mSurface.DrawLine(GetPixel(start), GetPixel(end), color);
+}
+
+Pixel Surface3D::GetPixel(Vector3D point) const
+{
+	auto vector2D = Project(point);
 	return {
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + point.x * mHalfDimensions.x),
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + point.y * mHalfDimensions.y),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.x * mHalfDimensions.x),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.y * mHalfDimensions.y),
 	};
 }
 
