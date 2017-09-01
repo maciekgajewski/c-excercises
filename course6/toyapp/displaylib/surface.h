@@ -50,7 +50,7 @@ class Cube
 
 	void Draw(Surface3D& surf)
 	{
-		tr.DrawLine(tr*{-1, -1, -1}, tr*{-1, -1, +1}, color);
+		tr.DrawLine(tr*Vector3D{-1, -1, -1}, tr*{-1, -1, +1}, color);
 		// etc
 	}
 
