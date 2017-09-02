@@ -7,7 +7,7 @@ add_library(displaylib
     shapes2d.h shapes2d.cc
     shapes3d.h shapes3d.cc
     vector2d.h
-    vector3d.h
+    vector3d.h vector3d.cc
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
 target_link_libraries(displaylib SDL2)
