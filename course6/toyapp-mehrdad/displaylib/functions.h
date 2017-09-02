@@ -1,5 +1,7 @@
 #pragma once
 #include "types.h"
+#include "vector3d.h"
+#include "vector2d.h"
 
 namespace Display {
 

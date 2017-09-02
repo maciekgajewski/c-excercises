@@ -1,7 +1,7 @@
 #pragma
 
 #include "surface.h"
-#include "types.h"
+#include "vector2d.h"
 #include <array>
 
 namespace Display {
@@ -14,15 +14,6 @@ struct Rect
 	void Rotate(Degree rotationAngle);
 
 	std::array<Vector2D, 4> mVertices;
-};
-
-struct Cube
-{
-	Cube();
-
-	void Draw(Surface& surface, Color color) const;
-
-	std::array<Vector3D, 8> mVertices;
 };
 
 }
