@@ -40,8 +40,6 @@ struct Color
 	uint8_t mRed;
 	uint8_t mGreen;
 	uint8_t mBlue;
-
-	uint32_t GetPixelValue() const { return (uint32_t(mRed)<<16) + (uint32_t(mGreen)<<8) + mBlue; }
 };
 
 }
