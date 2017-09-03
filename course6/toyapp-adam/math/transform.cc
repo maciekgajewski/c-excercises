@@ -1,6 +1,6 @@
 #include "transform.h"
 
-namespace Display {
+namespace Math {
 
 Transform::Transform()
 :	mScale(1.0f)

@@ -1,6 +1,6 @@
 #include "vector.h"
 
-namespace Display {
+namespace Math {
 
 Vector3D Vector3D::operator-() const
 {

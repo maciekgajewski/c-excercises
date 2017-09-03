@@ -1,7 +1,6 @@
 #include "scene.h"
 
 #include <cmath> // for test: sin and cos
-#include "keyboard.h"
 #include "surface.h"
 
 namespace Display {

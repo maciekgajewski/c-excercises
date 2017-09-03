@@ -2,7 +2,7 @@
 
 #include <SDL2/SDL.h>
 
-namespace Display {
+namespace Util {
 
 class Clock
 {
@@ -13,7 +13,7 @@ public:
 private:
 	using Counter = decltype(SDL_GetPerformanceCounter());
 
-	Counter mFirst;
+	Counter mStartTime;
 	double mInverseFrequency;
 };
 

@@ -2,11 +2,14 @@
 
 #include "pixel.h"
 #include "color.h"
+#include "math/vector.h"
 #include "sdlobject.h"
-#include "vector.h"
 #include <SDL2/SDL.h>
 
 namespace Display {
+
+using Math::Vector2D;
+using Math::Vector3D;
 
 class Surface2D : private SDLObject
 {

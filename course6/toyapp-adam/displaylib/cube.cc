@@ -1,6 +1,5 @@
 #include "cube.h"
 
-#include "matrix.h"
 #include "surface.h"
 
 namespace Display {

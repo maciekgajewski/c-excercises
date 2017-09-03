@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <SDL2/SDL.h>
 
-namespace Display {
+namespace Util {
 
 class Keyboard
 {

@@ -1,8 +1,6 @@
 #pragma once
 
-#include "color.h"
-
-namespace Display {
+namespace Math {
 
 struct Vector2D
 {

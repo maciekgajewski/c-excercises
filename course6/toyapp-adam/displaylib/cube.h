@@ -1,11 +1,15 @@
 #pragma once
 
-#include "transform.h"
+#include "color.h"
+#include "math/matrix.h"
+#include "math/transform.h"
 
 namespace Display {
 
-class Matrix44;
 class Surface3D;
+using Math::Matrix44;
+using Math::Transform;
+using Math::Vector3D;
 
 class Cube
 {

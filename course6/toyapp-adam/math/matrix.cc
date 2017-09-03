@@ -1,6 +1,6 @@
 #include "matrix.h"
 
-namespace Display {
+namespace Math {
 
 Matrix44 Matrix44::Identity()
 {

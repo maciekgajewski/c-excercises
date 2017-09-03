@@ -2,7 +2,7 @@
 
 #include <cassert>
 
-namespace Display {
+namespace Util {
 
 void Keyboard::Press(KeyCode keyCode)
 {

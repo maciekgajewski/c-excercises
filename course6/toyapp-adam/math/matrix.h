@@ -2,7 +2,7 @@
 
 #include "vector.h"
 
-namespace Display {
+namespace Math {
 
 class Matrix44
 {

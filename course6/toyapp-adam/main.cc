@@ -1,16 +1,16 @@
 #include <iostream>
 
-#include <displaylib/clock.h>
-#include <displaylib/keyboard.h>
 #include <displaylib/scene.h>
 #include <displaylib/surface.h>
 #include <displaylib/window.h>
+#include <util/clock.h>
+#include <util/keyboard.h>
 #include <SDL2/SDL_main.h>
 
 int main(int argc, char* argv[])
 {
-	Display::Keyboard keyboard;
-	Display::Clock clock;
+	Util::Keyboard keyboard;
+	Util::Clock clock;
 
 	Display::Window win("Hello", 100, 100, 800, 800);
 	Display::Surface2D surface2D(800, 800);

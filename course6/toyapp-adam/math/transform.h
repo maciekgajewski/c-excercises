@@ -2,7 +2,7 @@
 
 #include "matrix.h"
 
-namespace Display {
+namespace Math {
 
 class Transform
 {
