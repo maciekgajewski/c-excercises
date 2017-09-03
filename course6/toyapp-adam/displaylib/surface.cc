@@ -128,7 +128,7 @@ Vector2D Surface3D::Project(Vector3D vector) const
 {
 	return {
 		vector.x / vector.z,
-		vector.y / vector.z
+		-vector.y / vector.z
 	};
 }
 

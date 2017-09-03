@@ -5,42 +5,40 @@
 
 namespace Display {
 
-Cube::Cube(Vector3D center, float size)
-:	mCenter{center},
-	mHalfSize{size * 0.5f}
-{}
-
-void Cube::Draw(Surface3D& surface, Matrix44& view, Color color) const
+Cube::Cube(Vector3D center, float size, Color color)
+:	mColor(color)
 {
-	auto c = mCenter;
-	auto h = mHalfSize;
+	transform.SetPosition(center);
+	transform.SetScale(size);
+}
 
-	auto model = transform.CreateMatrix();
-	auto modelView = model * view;
+void Cube::Draw(Surface3D& surface, Matrix44& view) const
+{
+	auto modelView = view * transform.CreateMatrix();
 
 	Vector3D v[] = {
-		modelView * Vector3D{c.x - h, c.y - h, c.z - h},
-		modelView * Vector3D{c.x + h, c.y - h, c.z - h},
-		modelView * Vector3D{c.x - h, c.y + h, c.z - h},
-		modelView * Vector3D{c.x + h, c.y + h, c.z - h},
-		modelView * Vector3D{c.x - h, c.y - h, c.z + h},
-		modelView * Vector3D{c.x + h, c.y - h, c.z + h},
-		modelView * Vector3D{c.x - h, c.y + h, c.z + h},
-		modelView * Vector3D{c.x + h, c.y + h, c.z + h}
+		modelView * Vector3D{-1.0f, -1.0f, -1.0f},
+		modelView * Vector3D{+1.0f, -1.0f, -1.0f},
+		modelView * Vector3D{-1.0f, +1.0f, -1.0f},
+		modelView * Vector3D{+1.0f, +1.0f, -1.0f},
+		modelView * Vector3D{-1.0f, -1.0f, +1.0f},
+		modelView * Vector3D{+1.0f, -1.0f, +1.0f},
+		modelView * Vector3D{-1.0f, +1.0f, +1.0f},
+		modelView * Vector3D{+1.0f, +1.0f, +1.0f}
 	};
 
-	surface.DrawLine(v[0], v[1], color);
-	surface.DrawLine(v[0], v[2], color);
-	surface.DrawLine(v[0], v[4], color);
-	surface.DrawLine(v[1], v[3], color);
-	surface.DrawLine(v[1], v[5], color);
-	surface.DrawLine(v[2], v[3], color);
-	surface.DrawLine(v[2], v[6], color);
-	surface.DrawLine(v[3], v[7], color);
-	surface.DrawLine(v[4], v[5], color);
-	surface.DrawLine(v[4], v[6], color);
-	surface.DrawLine(v[5], v[7], color);
-	surface.DrawLine(v[6], v[7], color);
+	surface.DrawLine(v[0], v[1], mColor);
+	surface.DrawLine(v[0], v[2], mColor);
+	surface.DrawLine(v[0], v[4], mColor);
+	surface.DrawLine(v[1], v[3], mColor);
+	surface.DrawLine(v[1], v[5], mColor);
+	surface.DrawLine(v[2], v[3], mColor);
+	surface.DrawLine(v[2], v[6], mColor);
+	surface.DrawLine(v[3], v[7], mColor);
+	surface.DrawLine(v[4], v[5], mColor);
+	surface.DrawLine(v[4], v[6], mColor);
+	surface.DrawLine(v[5], v[7], mColor);
+	surface.DrawLine(v[6], v[7], mColor);
 }
 
 }

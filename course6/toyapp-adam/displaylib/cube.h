@@ -5,18 +5,18 @@
 namespace Display {
 
 class Matrix44;
+class Surface3D;
 
 class Cube
 {
 public:
 	Transform transform;
 
-	Cube(Vector3D center, float size);
+	Cube(Vector3D center, float size, Color color);
 
-	void Draw(Surface3D& surface, Matrix44& view, Color color) const;
+	void Draw(Surface3D& surface, Matrix44& view) const;
 private:
-	Vector3D mCenter;
-	float mHalfSize;
+	Color mColor;
 };
 
 }
