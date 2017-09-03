@@ -20,6 +20,12 @@ struct Vector3D
 	float z = 0.0f;
 
 	void Draw(Surface3D& surface, Color color) const;
+
+	Vector3D operator-() const;
+	Vector3D operator+(const Vector3D& rhs) const;
+	Vector3D operator-(const Vector3D& rhs) const;
+	Vector3D& operator+=(const Vector3D& rhs);
+	Vector3D& operator-=(const Vector3D& rhs);
 };
 
 }

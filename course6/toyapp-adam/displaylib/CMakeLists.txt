@@ -1,6 +1,7 @@
 add_library(displaylib
 	clock.cc
 	cube.cc
+	keyboard.cc
 	matrix.cc
 	scene.cc
 	sdlobject.cc

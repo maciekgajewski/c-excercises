@@ -9,7 +9,7 @@ static unsigned objectCounter = 0;
 
 SDLObject::SDLObject()
 {
-	if (objectCounter == 0)
+	if(objectCounter == 0)
 	{
 		int res = SDL_Init(SDL_INIT_VIDEO);
 		assert(res == 0);
@@ -20,7 +20,7 @@ SDLObject::SDLObject()
 SDLObject::~SDLObject()
 {
 	objectCounter--;
-	if (objectCounter == 0)
+	if(objectCounter == 0)
 		SDL_Quit();
 }
 

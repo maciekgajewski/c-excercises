@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <displaylib/clock.h>
+#include <displaylib/keyboard.h>
 #include <displaylib/scene.h>
 #include <displaylib/surface.h>
 #include <displaylib/window.h>
@@ -8,11 +9,13 @@
 
 int main(int argc, char* argv[])
 {
+	Display::Keyboard keyboard;
+	Display::Clock clock;
+
 	Display::Window win("Hello", 100, 100, 800, 800);
 	Display::Surface2D surface2D(800, 800);
 	Display::Surface3D surface3D(surface2D);
-	Display::Scene scene(surface3D);
-	Display::Clock clock;
+	Display::Scene scene(keyboard, surface3D);
 
 	SDL_Event e;
 	bool quit = false;
@@ -20,16 +23,25 @@ int main(int argc, char* argv[])
 	{
 		while(SDL_PollEvent(&e))
 		{
-			if(e.type == SDL_QUIT)
+			switch(e.type)
 			{
-				quit = true;
+				case SDL_KEYDOWN:
+					keyboard.Press(SDL_GetScancodeFromKey(e.key.keysym.sym));
+				break;
+				case SDL_KEYUP:
+					keyboard.Release(SDL_GetScancodeFromKey(e.key.keysym.sym));
+				break;
+				case SDL_QUIT:
+					quit = true;
 				break;
 			}
 		}
 
 		surface2D.Clear(Display::BLUE);
-		scene.Draw(clock.GetTotalElapsedSeconds());
+		scene.Update(clock.GetTotalElapsedSeconds());
+		scene.Draw();
 		win.Display(surface2D);
+		keyboard.ClearChanges();
 
 	} while(!quit);
 

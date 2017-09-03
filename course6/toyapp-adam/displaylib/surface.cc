@@ -14,7 +14,7 @@ Surface2D::Surface2D(int w, int h)
 
 Surface2D::~Surface2D()
 {
-	if (mSurface)
+	if(mSurface)
 		SDL_FreeSurface(mSurface);
 }
 
@@ -43,6 +43,7 @@ void Surface2D::SetPixel(Pixel position, Color color)
 void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
+	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
 	const bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
 	if(steep)
 	{

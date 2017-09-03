@@ -5,17 +5,20 @@
 
 namespace Display {
 
+class Keyboard;
 class Surface3D;
 
 class Scene
 {
 public:
-	Scene(Surface3D& surface);
+	Scene(Keyboard& keyboard, Surface3D& surface);
 
-	void Draw(double totalElapsedSeconds);
+	void Update(double totalElapsedSeconds);
+	void Draw();
 
 	Transform camera;
 private:
+	Keyboard& mKeyboard;
 	Surface3D& mSurface;
 	Cube mTestCube1;
 	Cube mTestCube2;

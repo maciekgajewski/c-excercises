@@ -14,10 +14,10 @@ Window::Window(const char* title, int x, int y, int w, int h)
 
 Window::~Window()
 {
-	if (mRenderer)
+	if(mRenderer)
 		SDL_DestroyRenderer(mRenderer);
 
-	if (mWindow)
+	if(mWindow)
 		SDL_DestroyWindow(mWindow);
 }
 
