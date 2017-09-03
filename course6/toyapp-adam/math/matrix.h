@@ -7,8 +7,10 @@ namespace Math {
 class Matrix44
 {
 public:
+	static Matrix44 Zero();
 	static Matrix44 Identity();
 	static Matrix44 Translation(Vector3D position);
+	static Matrix44 Rotation(float yaw, float pitch, float roll);
 	static Matrix44 Scale(float size);
 
 	Matrix44 operator*(const Matrix44& rhs) const;
@@ -24,7 +26,7 @@ private:
 
 	Matrix44() {}
 
-	float mMatrix[16];
+	float mMatrix[4 * 4];
 };
 
 }

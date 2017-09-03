@@ -1,15 +1,27 @@
 #include "matrix.h"
 
+#include <cmath>
+
 namespace Math {
 
-Matrix44 Matrix44::Identity()
+Matrix44 Matrix44::Zero()
 {
 	Matrix44 m;
 
-	m.mMatrix[ 0] = 1.0f; m.mMatrix[ 1] = 0.0f; m.mMatrix[ 2] = 0.0f; m.mMatrix[ 3] = 0.0f;
-	m.mMatrix[ 4] = 0.0f; m.mMatrix[ 5] = 1.0f; m.mMatrix[ 6] = 0.0f; m.mMatrix[ 7] = 0.0f;
-	m.mMatrix[ 8] = 0.0f; m.mMatrix[ 9] = 0.0f; m.mMatrix[10] = 1.0f; m.mMatrix[11] = 0.0f;
-	m.mMatrix[12] = 0.0f; m.mMatrix[13] = 0.0f; m.mMatrix[14] = 0.0f; m.mMatrix[15] = 1.0f;
+	for(unsigned i = 0; i < 16; ++i)
+		m.mMatrix[i] = 0.0f;
+
+	return m;
+}
+
+Matrix44 Matrix44::Identity()
+{
+	Matrix44 m = Zero();
+
+	m.mMatrix[ 0] = 1.0f;
+	m.mMatrix[ 5] = 1.0f;
+	m.mMatrix[10] = 1.0f;
+	m.mMatrix[15] = 1.0f;
 
 	return m;
 }
@@ -21,6 +33,34 @@ Matrix44 Matrix44::Translation(Vector3D position)
 	m.mMatrix[TRANSLATE_X] = position.x;
 	m.mMatrix[TRANSLATE_Y] = position.y;
 	m.mMatrix[TRANSLATE_Z] = position.z;
+
+	return m;
+}
+
+Matrix44 Matrix44::Rotation(float yaw, float pitch, float roll)
+{
+	Matrix44 m = Zero();
+
+	const float ch = std::cos(yaw);
+	const float sh = std::sin(yaw);
+	const float cp = std::cos(pitch);
+	const float sp = std::sin(pitch);
+	const float cb = std::cos(roll);
+	const float sb = std::sin(roll);
+
+	const float shsp = sh * sp;
+	const float chsp = ch * sp;
+
+	m.mMatrix[ 0] =  ch * cb + shsp * sb;
+	m.mMatrix[ 1] = -ch * sb + shsp * cb;
+	m.mMatrix[ 2] =  sh * cp;
+	m.mMatrix[ 4] =  sb * cp;
+	m.mMatrix[ 5] =  cb * cp;
+	m.mMatrix[ 6] = -sp;
+	m.mMatrix[ 8] = -sh * cb + chsp * sb;
+	m.mMatrix[ 9] =  sb * sh + chsp * cb;
+	m.mMatrix[10] =  ch * cp;
+	m.mMatrix[15] =  1.0f;
 
 	return m;
 }

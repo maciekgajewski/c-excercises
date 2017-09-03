@@ -8,9 +8,9 @@ namespace Display {
 Scene::Scene(Keyboard& keyboard, Surface3D& surface)
 :	mKeyboard{keyboard},
 	mSurface{surface},
-	mTestCube1{{0.0f, 0.0f, 1.0f}, 0.5f, Display::YELLOW},
-	mTestCube2{{1.25f, 0.25f, 1.0f}, 0.5f, Display::YELLOW},
-	mTestCube3{{-1.25f, -0.25f, 1.0f}, 0.5f, Display::YELLOW}
+	mTestCube1{{0.0f, 0.0f, 2.0f}, 0.5f, Display::RED},
+	mTestCube2{{1.25f, 0.25f, 2.0f}, 0.5f, Display::GREEN},
+	mTestCube3{{-1.25f, -0.25f, 2.0f}, 0.5f, Display::YELLOW}
 {}
 
 void Scene::Update(double totalElapsedSeconds)
@@ -33,8 +33,12 @@ void Scene::Update(double totalElapsedSeconds)
 
 	camera.Move(cameraMove);
 
-	float test = std::fabs(std::sin(totalElapsedSeconds * 1.0f));
-	mTestCube2.transform.SetScale(0.25f + test * 0.5f);
+	float test1 = std::sin(totalElapsedSeconds);
+	float test2 = std::cos(totalElapsedSeconds * 0.5f);
+
+	mTestCube1.transform.Rotate(cameraMove.x, cameraMove.y, cameraMove.z);
+	mTestCube2.transform.SetScale(0.25f + std::fabs(test1) * 0.5f);
+	mTestCube3.transform.SetOrientation(0.0f, test1, test2);
 }
 
 void Scene::Draw()

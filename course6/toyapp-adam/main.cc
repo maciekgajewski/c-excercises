@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
 			}
 		}
 
-		surface2D.Clear(Display::BLUE);
+		surface2D.Clear(Display::BLACK);
 		scene.Update(clock.GetTotalElapsedSeconds());
 		scene.Draw();
 		win.Display(surface2D);
