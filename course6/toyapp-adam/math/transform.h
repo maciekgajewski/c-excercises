@@ -11,11 +11,11 @@ public:
 
 	void SetPosition(Vector3D position) { mPosition = position; }
 	void SetScale(float size) { mScale = size; }
-	void SetOrientation(float yaw, float pitch, float roll) { mOrientation = {yaw, pitch, roll}; }
+	void SetOrientation(Vector3D yawPitchRoll) { mOrientation = yawPitchRoll; }
 
 	void Move(Vector3D delta) { mPosition += delta; }
 	void Grow(float delta) { mScale += delta; }
-	void Rotate(float yaw, float pitch, float roll) { mOrientation += {yaw, pitch, roll}; }
+	void Rotate(Vector3D yawPitchRoll) { mOrientation += yawPitchRoll; }
 
 	Matrix44 CreateMatrix() const;
 	Matrix44 CreateInverseMatrix() const;

@@ -12,8 +12,8 @@ int main(int argc, char* argv[])
 	Util::Keyboard keyboard;
 	Util::Clock clock;
 
-	Display::Window win("Hello", 100, 100, 800, 800);
-	Display::Surface2D surface2D(800, 800);
+	Display::Window win("Hello", 100, 100, 1280, 720);
+	Display::Surface2D surface2D(640, 360);
 	Display::Surface3D surface3D(surface2D);
 	Display::Scene scene(keyboard, surface3D);
 

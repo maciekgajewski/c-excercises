@@ -17,8 +17,6 @@ public:
 
 	void Update(double totalElapsedSeconds);
 	void Draw();
-
-	Transform camera;
 private:
 	Keyboard& mKeyboard;
 	Surface3D& mSurface;

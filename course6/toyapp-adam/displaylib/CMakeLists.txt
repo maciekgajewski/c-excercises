@@ -1,4 +1,5 @@
 add_library(displaylib
+	camera.cc
 	cube.cc
 	scene.cc
 	sdlobject.cc

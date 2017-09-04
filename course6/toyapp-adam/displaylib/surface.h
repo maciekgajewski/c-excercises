@@ -1,8 +1,9 @@
 #pragma once
 
-#include "pixel.h"
+#include "camera.h"
 #include "color.h"
 #include "math/vector.h"
+#include "pixel.h"
 #include "sdlobject.h"
 #include <SDL2/SDL.h>
 
@@ -31,6 +32,8 @@ private:
 class Surface3D
 {
 public:
+	Camera camera;
+
 	Surface3D(Surface2D& surface2D);
 
 	void Clear(Color color);

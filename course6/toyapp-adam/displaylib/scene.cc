@@ -1,6 +1,6 @@
 #include "scene.h"
 
-#include <cmath> // for test: sin and cos
+#include <cmath>
 #include "surface.h"
 
 namespace Display {
@@ -31,19 +31,20 @@ void Scene::Update(double totalElapsedSeconds)
 	if(mKeyboard.IsDown(SDL_SCANCODE_UP))
 		cameraMove.z = +speed;
 
-	camera.Move(cameraMove);
+	mSurface.camera.transform.Move(cameraMove);
 
 	float test1 = std::sin(totalElapsedSeconds);
 	float test2 = std::cos(totalElapsedSeconds * 0.5f);
 
-	mTestCube1.transform.Rotate(cameraMove.x, cameraMove.y, cameraMove.z);
+	mTestCube1.transform.Rotate(cameraMove * 1.5f);
 	mTestCube2.transform.SetScale(0.25f + std::fabs(test1) * 0.5f);
-	mTestCube3.transform.SetOrientation(0.0f, test1, test2);
+	mTestCube2.transform.Rotate({0.0f, 0.001f, 0.0f});
+	mTestCube3.transform.SetOrientation({0.0f, test1, test2});
 }
 
 void Scene::Draw()
 {
-	auto view = camera.CreateInverseMatrix();
+	auto view = mSurface.camera.transform.CreateInverseMatrix();
 
 	mTestCube1.Draw(mSurface, view);
 	mTestCube2.Draw(mSurface, view);

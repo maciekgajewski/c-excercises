@@ -10,7 +10,7 @@ Matrix44 Transform::CreateMatrix() const
 {
 	return Matrix44::Translation(mPosition) *
 	       Matrix44::Scale(mScale) *
-	       Matrix44::Rotation(mOrientation.x, mOrientation.y, mOrientation.z);
+	       Matrix44::Rotation(mOrientation);
 }
 
 Matrix44 Transform::CreateInverseMatrix() const

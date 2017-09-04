@@ -6,6 +6,8 @@
 
 namespace Display {
 
+using Math::Vector4D;
+
 Surface2D::Surface2D(int w, int h)
 {
 	mSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
@@ -98,6 +100,7 @@ Surface3D::Surface3D(Surface2D& surface2D)
 	auto dimensions = surface2D.GetDimensions();
 	mHalfDimensions.x = dimensions.x / 2;
 	mHalfDimensions.y = dimensions.y / 2;
+	camera.SetScreenSize(dimensions);
 }
 
 void Surface3D::Clear(Color color)
@@ -120,16 +123,14 @@ Pixel Surface3D::GetPixel(Vector3D point) const
 	auto vector2D = Project(point);
 	return {
 		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.x * mHalfDimensions.x),
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.y * mHalfDimensions.y),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.y + vector2D.y * mHalfDimensions.y),
 	};
 }
 
 Vector2D Surface3D::Project(Vector3D vector) const
 {
-	return {
-		vector.x / vector.z,
-		-vector.y / vector.z
-	};
+	auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
+	return {-clipSpace.x / clipSpace.w, clipSpace.y / clipSpace.w};
 }
 
 }

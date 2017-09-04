@@ -4,6 +4,10 @@
 
 namespace Math {
 
+namespace {
+	constexpr auto PI = std::atan(1.0) * 4.0;
+}
+
 Matrix44 Matrix44::Zero()
 {
 	Matrix44 m;
@@ -37,16 +41,16 @@ Matrix44 Matrix44::Translation(Vector3D position)
 	return m;
 }
 
-Matrix44 Matrix44::Rotation(float yaw, float pitch, float roll)
+Matrix44 Matrix44::Rotation(Vector3D yawPitchRoll)
 {
 	Matrix44 m = Zero();
 
-	const float ch = std::cos(yaw);
-	const float sh = std::sin(yaw);
-	const float cp = std::cos(pitch);
-	const float sp = std::sin(pitch);
-	const float cb = std::cos(roll);
-	const float sb = std::sin(roll);
+	const float ch = std::cos(yawPitchRoll.x);
+	const float sh = std::sin(yawPitchRoll.x);
+	const float cp = std::cos(yawPitchRoll.y);
+	const float sp = std::sin(yawPitchRoll.y);
+	const float cb = std::cos(yawPitchRoll.z);
+	const float sb = std::sin(yawPitchRoll.z);
 
 	const float shsp = sh * sp;
 	const float chsp = ch * sp;
@@ -72,6 +76,18 @@ Matrix44 Matrix44::Scale(float size)
 	m.mMatrix[SCALE_X] = size;
 	m.mMatrix[SCALE_Y] = size;
 	m.mMatrix[SCALE_Z] = size;
+
+	return m;
+}
+
+Matrix44 Matrix44::Perspective(float fieldOfViewDegrees, float aspectRatio)
+{
+	Matrix44 m = Zero();
+
+	m.mMatrix[SCALE_Y] = 1.0f / std::tan((PI / 180.0f) * fieldOfViewDegrees * 0.5f);
+	m.mMatrix[SCALE_X] = m.mMatrix[SCALE_Y] / aspectRatio;
+	m.mMatrix[11] = +1.0f;
+	m.mMatrix[14] = -1.0f;
 
 	return m;
 }
@@ -103,6 +119,16 @@ Vector3D Matrix44::operator*(const Vector3D& rhs) const
 		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[3],
 		rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[7],
 		rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11]
+	};
+}
+
+Vector4D Matrix44::operator*(const Vector4D& rhs) const
+{
+	return {
+		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[ 3],
+		rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[ 7],
+		rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11],
+		rhs.x * mMatrix[12] + rhs.y * mMatrix[13] + rhs.z * mMatrix[14] + mMatrix[15]
 	};
 }
 
