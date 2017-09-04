@@ -20,11 +20,6 @@ Surface2D::~Surface2D()
 		SDL_FreeSurface(mSurface);
 }
 
-Pixel Surface2D::GetDimensions() const
-{
-	return {mSurface->w, mSurface->h};
-}
-
 void Surface2D::Clear(Color color)
 {
 	for(int y = 0; y < mSurface->h; ++y)

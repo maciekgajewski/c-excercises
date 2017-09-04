@@ -15,8 +15,8 @@ Matrix44 Transform::CreateMatrix() const
 
 Matrix44 Transform::CreateInverseMatrix() const
 {
-	// @todo remember to mutiply in reversed order!
-	return Matrix44::Translation(-mPosition);
+	return Matrix44::Rotation(-mOrientation) *
+	       Matrix44::Translation(-mPosition);
 }
 
 }

@@ -2,12 +2,13 @@
 
 #include "math/matrix.h"
 #include "math/transform.h"
-#include "pixel.h"
+#include "util/pixel.h"
 
 namespace Display {
 
 using Math::Matrix44;
 using Math::Transform;
+using Util::Pixel;
 
 class Camera
 {
@@ -19,7 +20,7 @@ public:
 	void SetScreenSize(Pixel dimensions);
 	const Matrix44& GetProjectionMatrix() const { return mProjection; }
 private:
-	static constexpr auto DEFAULT_FOV_DEGREES = 90.0f;
+	static constexpr auto DEFAULT_FOV_DEGREES = 60.0f;
 
 	Matrix44 mProjection;
 	float mFieldOfView = DEFAULT_FOV_DEGREES;

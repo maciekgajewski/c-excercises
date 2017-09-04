@@ -3,14 +3,15 @@
 #include "camera.h"
 #include "color.h"
 #include "math/vector.h"
-#include "pixel.h"
 #include "sdlobject.h"
+#include "util/pixel.h"
 #include <SDL2/SDL.h>
 
 namespace Display {
 
 using Math::Vector2D;
 using Math::Vector3D;
+using Util::Pixel;
 
 class Surface2D : private SDLObject
 {
@@ -19,7 +20,7 @@ public:
 	Surface2D(int w, int h);
 	~Surface2D();
 
-	Pixel GetDimensions() const;
+	Pixel GetDimensions() const { return {mSurface->w, mSurface->h}; }
 
 	void Clear(Color color);
 	void SetPixel(Pixel position, Color color);
@@ -35,6 +36,8 @@ public:
 	Camera camera;
 
 	Surface3D(Surface2D& surface2D);
+
+	Pixel GetDimensions() const { return mSurface.GetDimensions(); }
 
 	void Clear(Color color);
 	void SetPixel(Vector3D vector, Color color);

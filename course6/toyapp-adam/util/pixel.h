@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Display {
+namespace Util {
 
 struct Pixel
 {
