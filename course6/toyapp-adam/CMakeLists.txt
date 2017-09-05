@@ -17,7 +17,7 @@ add_executable(toyapp WIN32 main.cc)
 set_property(TARGET toyapp PROPERTY CXX_STANDARD 14)
 
 target_link_libraries(toyapp
-	mingw32                    # HACK, @todo REMOVE and FIX!!
+#	mingw32                    # HACK, @todo REMOVE and FIX!!
 	displaylib
 	math
 	util
