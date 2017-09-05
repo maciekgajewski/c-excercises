@@ -1,5 +1,6 @@
 #$ build dir
 build_
+build
 # Compiled Object files
 *.slo
 *.lo
@@ -27,3 +28,7 @@ build_
 # Executables
 *.exe
 *.app
+
+# Project files
+*.kdev4
+*.user
