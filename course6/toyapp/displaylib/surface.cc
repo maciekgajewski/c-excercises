@@ -15,42 +15,23 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
-void Surface::Clear(Rgb color)
+void Surface::Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b)
 {
 	assert(mSurface);
 
 	for(int y = 0; y < mSurface->h; y++)
 		for(int x = 0; x < mSurface->w; x++)
-			SetPixel(Pixel{x, y}, color);
+			SetPixel(x, y, r, g, b);
 }
 
-void Surface::SetPixel(Pixel position, Rgb color)
+void Surface::SetPixel(int x, int y, std::uint8_t r, std::uint8_t g, std::uint8_t b)
 {
 	assert(mSurface);
 
-	std::uint32_t pixelValue = (std::uint32_t(color.r)<<16) + (std::uint32_t(color.g)<<8) + color.b;
+	std::uint32_t pixelValue = (std::uint32_t(r)<<16) + (std::uint32_t(g)<<8) + b;
 
-	auto offset = position.y*mSurface->pitch/4 + position.x;
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (y*mSurface->pitch/4 + x);
 	*pixelAddr = pixelValue;
-}
-
-void Surface::DrawVertex(Vector3D vertex, Rgb color)
-{
-	auto point2D = vertex.project();
-	Pixel halfScreen{mSurface->w / 2, mSurface->h / 2};
-	Pixel pixel {
-		static_cast<int>(halfScreen.x + point2D.x * halfScreen.x),
-		static_cast<int>(halfScreen.x + point2D.y * halfScreen.y),
-	};
-
-	SetPixel(pixel, color);
-}
-
-void Surface::DrawCube(Cube& cube, Rgb color)
-{
-	for(unsigned i = 0; i < Cube::VERTEX_COUNT; ++i)
-		DrawVertex(cube.vertices[i], color);
 }
 
 }

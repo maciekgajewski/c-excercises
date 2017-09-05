@@ -1,11 +1,10 @@
 #pragma once
 
-#include "cube.h"
-#include "pixel.h"
-#include "rgb.h"
 #include "sdlobject.h"
 
 #include <SDL2/SDL.h>
+
+#include <cstdint>
 
 namespace Display {
 

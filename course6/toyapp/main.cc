@@ -9,32 +9,20 @@
 
 int main(int, char**)
 {
-	surface.DrawCube(gCube, Display::YELLOW);
-}
+	std::cout << "Hello" << std::endl;
 
-int main()
-{
-	Display::Window win("Hello", 100, 100, 600, 600);
-	Display::Surface surf(200, 200);
+	Display::Window win("Hello", 10, 10, 800, 600);
+	Display::Surface surf(200, 150);
 
 	for(int x = 0; x < 20; x++)
 	{
-		while(SDL_PollEvent(&e)) {
-			if(e.type == SDL_QUIT)
-			{
-				quit = true;
-				break;
-			}
-			else
-			{
-				surf.Clear(Display::BLUE);
-				Draw(surf);
-				win.Display(surf);
-				Display::Delay(50);
-			}
+		surf.Clear(0, 0, 255); // blue background
+		surf.SetPixel(10+x, 10, 255, 0, 0); // red pixel at 10x10
+		win.Display(surf);
+		Display::Delay(50);
+	}
 
-		}
-	} while(!quit);
+	Display::Delay(1000);
 
 	return 0;
 }
