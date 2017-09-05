@@ -2,10 +2,6 @@
 
 namespace Math {
 
-Transform::Transform()
-:	mScale(1.0f)
-{}
-
 Matrix44 Transform::CreateMatrix() const
 {
 	return Matrix44::Translation(mPosition) *

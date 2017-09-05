@@ -5,22 +5,22 @@
 
 namespace Display {
 
-static unsigned objectCounter = 0;
+namespace {
+	unsigned gOjectCounter = 0;
+}
 
 SDLObject::SDLObject()
 {
-	if(objectCounter == 0)
+	if(gOjectCounter++ == 0)
 	{
 		int res = SDL_Init(SDL_INIT_VIDEO);
 		assert(res == 0);
 	}
-	objectCounter++;
 }
 
 SDLObject::~SDLObject()
 {
-	objectCounter--;
-	if(objectCounter == 0)
+	if(--gOjectCounter == 0)
 		SDL_Quit();
 }
 

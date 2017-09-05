@@ -1,14 +1,15 @@
 #pragma once
 
 #include "cube.h"
-#include "math/transform.h"
-#include "util/keyboard.h"
-#include "util/mouse.h"
+
+namespace Util {
+	class Keyboard;
+	class Mouse;
+}
 
 namespace Display {
 
 class Surface3D;
-using Math::Transform;
 using Util::Keyboard;
 using Util::Mouse;
 

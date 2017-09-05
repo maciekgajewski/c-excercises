@@ -1,8 +1,11 @@
 #pragma once
 
 #include "color.h"
-#include "math/matrix.h"
 #include "math/transform.h"
+
+namespace Math {
+	struct Matrix44;
+}
 
 namespace Display {
 
@@ -18,7 +21,7 @@ public:
 
 	Cube(Vector3D center, float size, Color color);
 
-	void Draw(Surface3D& surface, Matrix44& view) const;
+	void Draw(Surface3D& surface, const Matrix44& view) const;
 private:
 	Color mColor;
 };

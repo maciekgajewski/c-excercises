@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include <displaylib/scene.h>
 #include <displaylib/surface.h>
 #include <displaylib/window.h>
@@ -7,6 +5,7 @@
 #include <util/keyboard.h>
 #include <util/mouse.h>
 #include <SDL2/SDL_main.h>
+#include <iostream>
 
 int main(int argc, char* argv[])
 {
@@ -19,40 +18,42 @@ int main(int argc, char* argv[])
 	Display::Surface3D surface3D(surface2D);
 	Display::Scene scene(keyboard, mouse, surface3D);
 
-	SDL_Event e;
+	SDL_Event event;
 	SDL_SetRelativeMouseMode(SDL_TRUE);
 
-	bool quit = false;
-	do
+	while(true)
 	{
-		while(SDL_PollEvent(&e))
+		while(SDL_PollEvent(&event))
 		{
-			switch(e.type)
+			switch(event.type)
 			{
 				case SDL_KEYDOWN:
-					keyboard.Press(SDL_GetScancodeFromKey(e.key.keysym.sym));
-				break;
+					keyboard.Press(SDL_GetScancodeFromKey(event.key.keysym.sym));
+					break;
 				case SDL_KEYUP:
-					keyboard.Release(SDL_GetScancodeFromKey(e.key.keysym.sym));
-				break;
+					keyboard.Release(SDL_GetScancodeFromKey(event.key.keysym.sym));
+					break;
 				case SDL_MOUSEMOTION:
-					mouse.AddDeltaPosition({e.motion.xrel, e.motion.yrel});
-				break;
+					mouse.AddDeltaPosition({event.motion.xrel, event.motion.yrel});
+					break;
 				case SDL_QUIT:
-					quit = true;
-				break;
+					goto quit;
 			}
 		}
 
-		surface2D.Clear(Display::BLACK);
+		if(keyboard.IsPressed(SDL_SCANCODE_END))
+			goto quit;
+
 		scene.Update(clock.GetTotalElapsedSeconds());
+
+		surface2D.Clear(Display::BLACK);
 		scene.Draw();
 		win.Display(surface2D);
 
 		keyboard.ClearChanges();
 		mouse.RecordPosition();
+	}
 
-	} while(!quit);
-
+	quit:
 	return 0;
 }

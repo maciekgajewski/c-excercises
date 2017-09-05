@@ -24,7 +24,11 @@ private:
 		std::uint8_t down : 1;
 		std::uint8_t pressed : 1;
 		std::uint8_t released : 1;
+
+		KeyState() : up{0}, down{0}, pressed{0}, released{0} {}
 	};
+
+	static_assert(sizeof(KeyState) == 1);
 
 	static constexpr auto NUM_KEYCODES = SDL_NUM_SCANCODES;
 

@@ -1,7 +1,9 @@
 #include "scene.h"
 
-#include <cmath>
 #include "surface.h"
+#include "util/keyboard.h"
+#include "util/mouse.h"
+#include <cmath>
 
 namespace Display {
 
@@ -37,18 +39,14 @@ void Scene::Update(double totalElapsedSeconds)
 
 	mSurface.camera.transform.Move(cameraMove);
 
-	Pixel screenDimensions = mSurface.GetDimensions();
-	Pixel camRotationPixels = mMouse.GetCursorPositionDelta();
+	const Pixel screenDimensions = mSurface.GetDimensions();
+	const Pixel camRotationPixels = mMouse.GetCursorPositionDelta();
 	const float mouseRatio = camRotationSpeed / static_cast<float>(screenDimensions.y);
 
-	mSurface.camera.transform.Rotate({
-		camRotationPixels.x * mouseRatio,
-		camRotationPixels.y * mouseRatio,
-		0.0f
-	});
+	mSurface.camera.transform.Rotate({camRotationPixels.x * mouseRatio, 0.0f, 0.0f});
 
-	float test1 = std::sin(totalElapsedSeconds);
-	float test2 = std::cos(totalElapsedSeconds * 0.5f);
+	const float test1 = std::sin(totalElapsedSeconds);
+	const float test2 = std::cos(totalElapsedSeconds * 0.5f);
 
 	mTestCube2.transform.SetScale(0.1f + std::fabs(test1) * 0.25f);
 	mTestCube2.transform.Rotate({0.0f, 0.003f, 0.0f});
@@ -57,7 +55,7 @@ void Scene::Update(double totalElapsedSeconds)
 
 void Scene::Draw()
 {
-	auto view = mSurface.camera.transform.CreateInverseMatrix();
+	const auto view = mSurface.camera.transform.CreateInverseMatrix();
 
 	mTestCube1.Draw(mSurface, view);
 	mTestCube2.Draw(mSurface, view);

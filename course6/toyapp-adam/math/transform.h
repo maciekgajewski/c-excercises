@@ -7,8 +7,6 @@ namespace Math {
 class Transform
 {
 public:
-	Transform();
-
 	void SetPosition(Vector3D position) { mPosition = position; }
 	void SetScale(float size) { mScale = size; }
 	void SetOrientation(Vector3D yawPitchRoll) { mOrientation = yawPitchRoll; }
@@ -22,7 +20,7 @@ public:
 private:
 	Vector3D mPosition;
 	Vector3D mOrientation;
-	float mScale;
+	float mScale = 1.0f;
 };
 
 }

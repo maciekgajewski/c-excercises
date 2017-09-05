@@ -16,8 +16,7 @@ Surface2D::Surface2D(int w, int h)
 
 Surface2D::~Surface2D()
 {
-	if(mSurface)
-		SDL_FreeSurface(mSurface);
+	SDL_FreeSurface(mSurface);
 }
 
 void Surface2D::Clear(Color color)
@@ -31,8 +30,8 @@ void Surface2D::SetPixel(Pixel position, Color color)
 {
 	if(position.x > 0 && position.x < mSurface->w && position.y > 0 && position.y < mSurface->h)
 	{
-		auto offset = position.y * mSurface->pitch / 4 + position.x;
-		auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
+		const auto offset = position.y * mSurface->pitch / 4 + position.x;
+		auto* const pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
 		*pixelAddr = (color.r << 16) + (color.g << 8) + color.b;
 	}
 }
@@ -41,6 +40,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
 	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
+	//       then perhaps remove the check from within SetPixel
 	const bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
 	if(steep)
 	{
@@ -58,12 +58,12 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	const float dy = std::fabs(p2.y - p1.y);
 	float error = dx * 0.5f;
 
-	int y = p1.y;
-	const int ystep = (p1.y < p2.y) ? 1 : -1;
+	auto y = p1.y;
+	const auto ystep = (p1.y < p2.y) ? 1 : -1;
 
 	if(steep)
 	{
-		for(int x = p1.x; x < p2.x; ++x)
+		for(auto x = p1.x; x < p2.x; ++x)
 		{
 			SetPixel({y, x}, color);
 			error -= dy;
@@ -76,7 +76,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	}
 	else
 	{
-		for(int x = p1.x; x < p2.x; ++x)
+		for(auto x = p1.x; x < p2.x; ++x)
 		{
 			SetPixel({x, y}, color);
 			error -= dy;
@@ -92,7 +92,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 Surface3D::Surface3D(Surface2D& surface2D)
 :	mSurface(surface2D)
 {
-	auto dimensions = surface2D.GetDimensions();
+	const auto dimensions = surface2D.GetDimensions();
 	mHalfDimensions.x = dimensions.x / 2;
 	mHalfDimensions.y = dimensions.y / 2;
 	camera.SetScreenSize(dimensions);
@@ -115,7 +115,7 @@ void Surface3D::DrawLine(Vector3D start, Vector3D end, Color color)
 
 Pixel Surface3D::GetPixel(Vector3D point) const
 {
-	auto vector2D = Project(point);
+	const auto vector2D = Project(point);
 	return {
 		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.x * mHalfDimensions.x),
 		static_cast<Pixel::Coordinate>(mHalfDimensions.y + vector2D.y * mHalfDimensions.y),
@@ -124,7 +124,7 @@ Pixel Surface3D::GetPixel(Vector3D point) const
 
 Vector2D Surface3D::Project(Vector3D vector) const
 {
-	auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
+	const auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
 	return {-clipSpace.x / clipSpace.w, clipSpace.y / clipSpace.w};
 }
 

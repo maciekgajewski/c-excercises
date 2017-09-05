@@ -1,5 +1,6 @@
 #include "cube.h"
 
+#include "math/matrix.h"
 #include "surface.h"
 
 namespace Display {
@@ -11,11 +12,11 @@ Cube::Cube(Vector3D center, float size, Color color)
 	transform.SetScale(size);
 }
 
-void Cube::Draw(Surface3D& surface, Matrix44& view) const
+void Cube::Draw(Surface3D& surface, const Matrix44& view) const
 {
-	auto modelView = view * transform.CreateMatrix();
+	const auto modelView = view * transform.CreateMatrix();
 
-	Vector3D v[] = {
+	const Vector3D v[] = {
 		modelView * Vector3D{-1.0f, -1.0f, -1.0f},
 		modelView * Vector3D{+1.0f, -1.0f, -1.0f},
 		modelView * Vector3D{-1.0f, +1.0f, -1.0f},

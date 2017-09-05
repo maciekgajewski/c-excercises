@@ -23,10 +23,10 @@ private:
 	static constexpr auto DEFAULT_FOV_DEGREES = 60.0f;
 
 	Matrix44 mProjection;
-	float mFieldOfView = DEFAULT_FOV_DEGREES;
-	float mAspectRatio = 1.0f;
+	float mFieldOfView;
+	float mAspectRatio;
 
-	Matrix44 CreateProjectionMatrix();
+	Matrix44 CreateProjectionMatrix() { return Matrix44::Perspective(mFieldOfView, mAspectRatio); }
 };
 
 }
