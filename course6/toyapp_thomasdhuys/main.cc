@@ -15,10 +15,12 @@ int main()
 {
 	std::cout << "Hello, here I am!" << std::endl;
 
-//	Draw::Renderer r = Draw::Renderer();
+	Draw::Renderer r = Draw::Renderer();
 	Draw::RenderObject ro = Draw::Drawer::Draw();
 
 	ro.Print();
+
+	r.Render(ro);
 
 	return 0;
 }

@@ -2,15 +2,18 @@
 
 namespace Draw {
 
-void Renderer::Render(RenderObject ro)
+void Renderer::Render(RenderObject& ro)
 {
 	for (const auto& prim_ptr : *ro.GetData())
 	{
-
+//		Display::Delay(500);
 	}
 }
 
-Renderer::Renderer(): window(DefaultWindow()), surface(DefaultSurface()) {}
+Renderer::Renderer(): window(DefaultWindow()), surface(DefaultSurface()) {
+	surfaceWidth  = 200;
+	surfaceHeight = 150;
+}
 
 Display::Window Renderer::DefaultWindow()
 {

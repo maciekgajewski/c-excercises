@@ -15,12 +15,15 @@ namespace Draw {
 class Renderer {
 public:
 	Renderer();
-	void Render(RenderObject ro);
+	void Render(RenderObject& ro);
 private:
 	Display::Window DefaultWindow();
 	Display::Surface DefaultSurface();
 	Display::Window window;
 	Display::Surface surface;
+
+	uint16_t surfaceWidth;
+	uint16_t surfaceHeight;
 };
 
 }

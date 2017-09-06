@@ -6,21 +6,22 @@
 
 #include "rgb.h"
 #include "colors.h"
+#include "vector3d.h"
 
 namespace Draw {
 
 struct Vertex;
-using VCoord = int;
 using Index = std::shared_ptr<Vertex>;
 
 struct Vertex {
 	Vertex(): x(0), y(0), z(0), color(Draw::Colors::Red) {}
-	Vertex(VCoord x, VCoord y, VCoord z): x(x), y(y), z(z), color(Draw::Colors::Red) {}
-	Vertex(VCoord x, VCoord y, VCoord z, RGB color): x(x), y(y), z(z), color(color) {}
+	Vertex(VCoord x, VCoord y, VCoord z): vector{x,y,z}, color(Draw::Colors::Red) {}
+	Vertex(VCoord x, VCoord y, VCoord z, RGB color): vector{x,y,z}, color(color) {}
 	Vertex(const Vertex& v) = delete;
 
 	~Vertex() { std::cout << "Vtx Destructed: " << ToString() << std::endl; }
 
+	Vector3D vector;
 	VCoord x;
 	VCoord y;
 	VCoord z;
