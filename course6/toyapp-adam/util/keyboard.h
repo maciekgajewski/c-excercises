@@ -28,7 +28,7 @@ private:
 		KeyState() : up{0}, down{0}, pressed{0}, released{0} {}
 	};
 
-	static_assert(sizeof(KeyState) == 1);
+	static_assert(sizeof(KeyState) == 1, "KeyState bigger than expected");
 
 	static constexpr auto NUM_KEYCODES = SDL_NUM_SCANCODES;
 
