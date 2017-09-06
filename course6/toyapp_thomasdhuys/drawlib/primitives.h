@@ -20,7 +20,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& s, const Point& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
-private:
+public:
 	Index idx0;
 };
 
@@ -30,7 +30,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& s, const Line& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
-private:
+public:
 	Index idx0;
 	Index idx1;
 };
@@ -41,7 +41,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& s, const Triangle& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
-private:
+public:
 	Index idx0;
 	Index idx1;
 	Index idx2;

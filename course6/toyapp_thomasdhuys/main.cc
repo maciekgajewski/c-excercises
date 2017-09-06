@@ -23,7 +23,11 @@ int main()
 	std::cout << ro << std::endl;
 
 	r.Render(ro);
+	
+	Display::Delay(100000);
 
+
+	// Test
 	Draw::Matrix4x4 m;
 
 	m.Set(3,1,3);

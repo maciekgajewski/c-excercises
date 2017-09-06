@@ -32,7 +32,7 @@ std::vector<Index> Drawer::GetSquareIndices()
 		for (VCoord y : {-1, 1}) {
 			for (VCoord z : {1, 2}) {
 				indices.push_back(std::make_shared<Vertex>(x,y,z));
-				std::cout << "GetSqureIndices push_back: " << *indices.back() << std::endl;
+				std::cout << "GetSquareIndices push_back: " << *indices.back() << std::endl;
 			}
 		}
 	}

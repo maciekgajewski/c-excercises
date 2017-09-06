@@ -9,6 +9,7 @@
 
 #include "primitives.h"
 #include "render_object.h"
+#include "pixel.h"
 
 namespace Draw {
 
@@ -19,8 +20,11 @@ public:
 private:
 	Display::Window DefaultWindow();
 	Display::Surface DefaultSurface();
-//	Display::Window window;
-//	Display::Surface surface;
+	Display::Window window;
+	Display::Surface surface;
+
+	void RenderPoint(const Point& point);
+	void SetPixel(Pixel p, RGB c); 
 
 	uint16_t surfaceWidth;
 	uint16_t surfaceHeight;
