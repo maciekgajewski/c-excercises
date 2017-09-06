@@ -14,13 +14,12 @@ class RenderObject {
 public:
 	RenderObject();
 	void Add(Primitive* prim);
-	std::string ToString();
-	void Print();
 	std::vector<std::unique_ptr<Primitive>>* GetData() {return &data;}
+	friend std::ostream& operator<<(std::ostream& s , const RenderObject& ro);
 
 private:
 	std::vector<std::unique_ptr<Primitive>> data;
 };
 
-
+std::ostream& operator<<(std::ostream& s , const RenderObject& ro);
 }

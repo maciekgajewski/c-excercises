@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "drawer.h"
 
 namespace Draw {
@@ -5,7 +7,7 @@ namespace Draw {
 RenderObject Drawer::Draw()
 {
 	auto ro = DrawSquarePoints();
-	ro.Print();
+	std::cout << ro << std::endl;
 	return ro;
 }
 
@@ -17,7 +19,7 @@ RenderObject Drawer::DrawSquarePoints()
 	for (Index& idx : indices){
 		ro.Add(new Draw::Primitives::Point(idx));
 	}
-	ro.Print();
+	std::cout << ro << std::endl;
 	return ro;
 }
 
@@ -30,7 +32,7 @@ std::vector<Index> Drawer::GetSquareIndices()
 		for (VCoord y : {-1, 1}) {
 			for (VCoord z : {1, 2}) {
 				indices.push_back(std::make_shared<Vertex>(x,y,z));
-				std::cout << "GetSqureIndices push_back: " << indices.back()->ToString()<< std::endl;
+				std::cout << "GetSqureIndices push_back: " << *indices.back() << std::endl;
 			}
 		}
 	}

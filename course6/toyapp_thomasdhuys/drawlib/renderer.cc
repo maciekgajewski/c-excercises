@@ -10,7 +10,7 @@ void Renderer::Render(RenderObject& ro)
 	}
 }
 
-Renderer::Renderer(): window(DefaultWindow()), surface(DefaultSurface()) {
+Renderer::Renderer() { //: window(DefaultWindow()), surface(DefaultSurface()) {
 	surfaceWidth  = 200;
 	surfaceHeight = 150;
 }

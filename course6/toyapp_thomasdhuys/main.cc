@@ -10,6 +10,7 @@
 #include <drawlib/primitives.h>
 #include <drawlib/index.h>
 #include <drawlib/drawer.h>
+#include <drawlib/vector3d.h>
 
 int main()
 {
@@ -18,7 +19,7 @@ int main()
 	Draw::Renderer r = Draw::Renderer();
 	Draw::RenderObject ro = Draw::Drawer::Draw();
 
-	ro.Print();
+	std::cout << ro << std::endl;
 
 	r.Render(ro);
 

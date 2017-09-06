@@ -11,18 +11,14 @@ void RenderObject::Add(Primitive* prim)
 	data.emplace_back(prim);
 }
 
-std::string RenderObject::ToString()
+std::ostream& operator<<(std::ostream& s , const RenderObject& ro)
 {
-	std::string s = "RenderObject: (size:" + std::to_string(data.size()) + ")\n";
-	for(auto& prim_ptr : data)
+	s << "RenderObject: (size:" << ro.data.size() << ")\n";
+	for(auto& prim_ptr : ro.data)
 	{
-		s = s + "\t" + prim_ptr->ToString() + "\n";
+		s << "\t" << *prim_ptr << "\n";
 	}
 	return s;
 }
 
-void RenderObject::Print()
-{
-	std::cout << ToString();
-}
 }

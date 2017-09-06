@@ -4,23 +4,14 @@
 namespace Draw {
 namespace Primitives {
 
-Point::Point(Index& idx0): idx0{idx0} {}
-std::string Point::ToString()
-{
-	return "Point(idx0" + idx0->ToString() + ")";
-}
+std::ostream& Point::StreamWrite(   std::ostream& s) const { return s << *this; };
+std::ostream& Line::StreamWrite(    std::ostream& s) const { return s << *this; };
+std::ostream& Triangle::StreamWrite(std::ostream& s) const { return s << *this; };
 
-Line::Line(Index& idx0, Index& idx1): idx0{idx0}, idx1{idx1} {}
-std::string Line::ToString()
-{
-	return "Line(idx0" + idx0->ToString() + ",idx1"+idx1->ToString()+")";
-}
-
-Triangle::Triangle(Index& idx0, Index& idx1, Index& idx2): idx0{idx0}, idx1{idx1}, idx2{idx2} {}
-std::string Triangle::ToString()
-{
-	return "Triangle(idx0" + idx0->ToString() + ",idx1"+idx1->ToString()+",idx2"+idx2->ToString()+")";
-}
+std::ostream& operator<<(std::ostream& s, const Primitive& p) { return p.StreamWrite(s); }
+std::ostream& operator<<(std::ostream& s, const Point& p)     { return s << "Point(idx0"    << *p.idx0 << ")"; }
+std::ostream& operator<<(std::ostream& s, const Line& p)      { return s << "Line(idx0"     << *p.idx0 << ",idx1" << *p.idx1 << ")"; }
+std::ostream& operator<<(std::ostream& s, const Triangle& p)  { return s << "Triangle(idx0" << *p.idx0 << ",idx1" << *p.idx1 << ",idx2" << *p.idx2 << ")"; }
 
 }
 }

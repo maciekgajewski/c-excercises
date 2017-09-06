@@ -19,8 +19,8 @@ public:
 private:
 	Display::Window DefaultWindow();
 	Display::Surface DefaultSurface();
-	Display::Window window;
-	Display::Surface surface;
+//	Display::Window window;
+//	Display::Surface surface;
 
 	uint16_t surfaceWidth;
 	uint16_t surfaceHeight;

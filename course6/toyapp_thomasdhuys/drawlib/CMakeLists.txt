@@ -1,6 +1,6 @@
 add_library(drawlib
 	primitives.cc primitives.h
-	index.h
+	index.cc index.h
     rgb.h
     colors.h
     renderer.cc renderer.h
