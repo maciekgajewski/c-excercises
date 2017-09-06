@@ -1,8 +1,11 @@
 #include "renderingengine.h"
 
-RenderingEngine::RenderingEngine(const int &imageSize) : imageSize(imageSize)
+#include <omp.h>
+#include <cassert>
+
+RenderingEngine::RenderingEngine(const int &imageSize, Display::Surface& surf, Scene &scene) : imageSize(imageSize), surf(surf), scene(scene)
 {
-    image = std::vector<Float3>(imageSize * imageSize);
+    assert(imageSize > 0);
 }
 
 Ray RenderingEngine::CreatePrimaryRay(int x, int y)
@@ -16,18 +19,20 @@ Ray RenderingEngine::CreatePrimaryRay(int x, int y)
     return Ray(rayOrigin, rayDirection);
 }
 
-const std::vector<Float3> RenderingEngine::Render()
+const void RenderingEngine::Render()
 {
+    surf.Clear(0, 0, 0);
+
+#pragma omp parallel for
     for(int i = 0; i < imageSize; i++)
     {
         for(int j = 0; j < imageSize; j++)
         {
             Ray primaryRay = CreatePrimaryRay(i, j);
-            image[i * imageSize + j] = RayTrace(3, primaryRay);
+            Float3 currentPixel = RayTrace(3, primaryRay);
+            surf.SetPixel(i, j, currentPixel.x * 255, currentPixel.y * 255, currentPixel.z * 255); // red pixel at 10x10
         }
     }
-
-    return image;
 }
 
 Float3 RenderingEngine::RayTrace(int depth, const Ray &ray)
@@ -38,16 +43,16 @@ Float3 RenderingEngine::RayTrace(int depth, const Ray &ray)
     }
 
     IntersectionInfo info;
-    if(Intersect(ray, info))
+    if(scene.Intersect(ray, info))
     {
         if(info.GetMaterial().GetMatType() == MaterialType::Diffuse)
         {
-            Float3 position = ray.GetOrigin() + ray.GetDirection() * info.GetT();
-            return GetDirectIllumination(position, info, lightPosition, Float3(12000));
+            Float3 position = ray.GetOrigin() + ray.GetDirection() * info.GetRayParam();
+            return GetDirectIllumination(position, info, scene.GetLightPosition(), Float3(12000));
         }
         else
         {
-            Float3 position = ray.GetOrigin() + ray.GetDirection() * info.GetT();
+            Float3 position = ray.GetOrigin() + ray.GetDirection() * info.GetRayParam();
             Float3 normal = info.GetNormal();
             Float3 reflectionDirection = ray.GetDirection() - normal * 2 * normal.Dot(ray.GetDirection());\
             Ray reflectionRay = Ray(position + normal * 0.001f, reflectionDirection);
@@ -62,33 +67,6 @@ Float3 RenderingEngine::GetDirectIllumination(const Float3& position, Intersecti
     float distL = l.Length();
     l = l / distL;
 
-    Float3 localLighting = info.GetMaterial().GetColor() * Float3::Clamp(info.GetNormal().Dot(l)) * lightIntensity / (distL * distL);
-    return (localLighting + info.GetMaterial().GetColor() * 0.08f).Clamp();
-}
-
-void RenderingEngine::SetLightPosition(const Float3 &lightPosition)
-{
-    this->lightPosition = lightPosition;
-}
-
-void RenderingEngine::AddPrimitive(std::shared_ptr<Primitive> primitive)
-{
-    primitives.push_back(primitive);
-}
-
-bool RenderingEngine::Intersect(const Ray &ray, IntersectionInfo& info)
-{
-    info.SetT(INFINITY);
-    IntersectionInfo current;
-
-    for(int i = 0; i < primitives.size(); i++)
-    {
-        current = primitives[i]->Intersect(ray);
-        if(current.GetT() && current.GetT() < info.GetT())
-        {
-            info = current;
-        }
-    }
-
-    return info.GetT() < INFINITY;
+    Float3 localLighting = info.GetMaterial().GetColor() * Float3::Clamp01(info.GetNormal().Dot(l)) * lightIntensity / (distL * distL);
+    return (localLighting + info.GetMaterial().GetColor() * 0.08f).Clamp01();
 }

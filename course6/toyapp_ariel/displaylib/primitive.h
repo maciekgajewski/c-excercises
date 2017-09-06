@@ -1,5 +1,4 @@
-#ifndef PRIMITIVE_H
-#define PRIMITIVE_H
+#pragma once
 
 #include "ray.h"
 #include "intersectioninfo.h"
@@ -7,7 +6,7 @@
 class Primitive
 {
 public:
-    virtual IntersectionInfo Intersect(const Ray& ray) = 0;
+    virtual IntersectionInfo Intersect(const Ray& ray) const = 0;
+    virtual void ApplyTranslation(const Float3& v) = 0;
+    virtual void ApplyScale(float v) = 0;
 };
-
-#endif // PRIMITIVE_H

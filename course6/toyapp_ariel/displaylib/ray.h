@@ -1,16 +1,23 @@
-#ifndef RAY_H
-#define RAY_H
+#pragma once
 
 #include "float3.h"
 
 class Ray
 {
 public:    
-    Ray(const Float3& o, const Float3& d);
-    Float3 GetOrigin() const {return o;}
-    Float3 GetDirection() const{return d;}
-private:
-    Float3 o, d;
-};
+    Ray(const Float3 &origin, const Float3 &direction) : origin(origin), direction(direction)
+    {
 
-#endif // RAY_H
+    }
+    Float3 GetOrigin() const
+    {
+        return origin;
+    }
+
+    Float3 GetDirection() const
+    {
+        return direction;
+    }
+private:
+    Float3 origin, direction;
+};

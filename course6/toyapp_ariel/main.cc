@@ -2,46 +2,69 @@
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
 #include <displaylib/float3.h>
-
-#include <iostream>
-#include <memory>
-
 #include <displaylib/renderingengine.h>
+#include <displaylib/mat4.h>
+
+#include <chrono>
 
 #define IMAGE_SIZE 512
 
+using Time = std::chrono::time_point<std::chrono::system_clock>;
+using Clock = std::chrono::system_clock;
+using FDuration = std::chrono::duration<float>;
+
 int main(int, char**)
 {
-	std::cout << "Hello" << std::endl;
-
-    RenderingEngine r = RenderingEngine(IMAGE_SIZE);
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(-1e5 - 100, 0, -200), 1e5, Material(Float3(1, 0, 0), MaterialType::Diffuse))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(1e5 + 100, 0, -200), 1e5, Material(Float3(0, 0, 1), MaterialType::Diffuse))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(0, -1e5 - 100, -200), 1e5, Material(Float3(0, 1, 0), MaterialType::Diffuse))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(0, 1e5 + 100, -200), 1e5, Material(Float3(1, 1, 1), MaterialType::Diffuse))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(0, 0, -1e5 - 200), 1e5, Material(Float3(1, 1, 1), MaterialType::Diffuse))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(-15, -10, -50), 10, Material(Float3(0.5f, 1, 1), MaterialType::Specular))));
-    r.AddPrimitive(std::shared_ptr<Primitive>(new Sphere(Float3(15, -10, -40), 10, Material(Float3(0.5f, 1, 1), MaterialType::Diffuse))));
-
-    r.SetLightPosition(Float3(-5, 90, -25));
-    const std::vector<Float3> image = r.Render();
-
     Display::Window win("Hello", 10, 10, IMAGE_SIZE, IMAGE_SIZE);
-    Display::Surface surf(IMAGE_SIZE, IMAGE_SIZE);
+    Display::Surface surf(IMAGE_SIZE, IMAGE_SIZE);    
 
-    for(int i = 0; i < IMAGE_SIZE; i++)
+    Sphere* diffuseSphere (new Sphere(Float3(15, -10, -40), 10, Material(Float3(0.5f, 1, 1), MaterialType::Diffuse)));
+    Sphere* reflectiveSphere (new Sphere(Float3(-15, -10, -70), 10, Material(Float3(0.5f, 1, 1), MaterialType::Specular)));
+
+    Scene scene;
+    scene.AddPrimitive(new Sphere(Float3(-1e5 - 100, 0, -200), 1e5, Material(Float3(1, 0, 0), MaterialType::Diffuse)));
+    scene.AddPrimitive(new Sphere(Float3(1e5 + 100, 0, -200), 1e5, Material(Float3(0, 0, 1), MaterialType::Diffuse)));
+    scene.AddPrimitive(new Sphere(Float3(0, -1e5 - 100, -200), 1e5, Material(Float3(0, 1, 0), MaterialType::Diffuse)));
+    scene.AddPrimitive(new Sphere(Float3(0, 1e5 + 100, -200), 1e5, Material(Float3(1, 1, 1), MaterialType::Diffuse)));
+    scene.AddPrimitive(new Sphere(Float3(0, 0, -1e5 - 200), 1e5, Material(Float3(1, 1, 1), MaterialType::Diffuse)));
+    scene.AddPrimitive(reflectiveSphere);
+    scene.AddPrimitive(diffuseSphere);
+    scene.SetLightPosition(Float3(-5, 90, -25));
+
+    RenderingEngine r = RenderingEngine(IMAGE_SIZE, surf, scene);
+
+    SDL_Event event;
+    bool quit = 0;
+
+    Float3 targetPosition1(15, -10, -50);
+    float targetSize = 25.f;
+
+    Time start, end;
+    start = std::chrono::system_clock::now();
+
+    while (!quit)
     {
-        for(int j = 0; j < IMAGE_SIZE; j++)
+        while(SDL_PollEvent(&event))
         {
-            Float3 currentPixel = image[i * IMAGE_SIZE + j];
-            surf.SetPixel(i, j, currentPixel.x * 255, currentPixel.y * 255, currentPixel.z * 255); // red pixel at 10x10
+            if (event.type == SDL_QUIT)
+            {
+                quit = true;
+                break;
+            }
         }
+
+        FDuration elapsed_seconds = Clock::now() - start;
+        Float3 intermidiatePosition = Float3::Lerp(diffuseSphere->GetBaseOrigin(), targetPosition1, Float3::Clamp01(elapsed_seconds.count() / 5.0f));
+        diffuseSphere->ApplyTranslation(intermidiatePosition - diffuseSphere->GetBaseOrigin());
+
+        float intermediateSize = Float3::Lerp(reflectiveSphere->GetBaseRadius(), targetSize, Float3::Clamp01(elapsed_seconds.count() / 7.0f));
+        reflectiveSphere->ApplyScale(intermediateSize / reflectiveSphere->GetBaseRadius());
+
+        r.Render();
+
+        win.Display(surf);
+        //Display::Delay(50);
     }
-
-    win.Display(surf);
-    Display::Delay(100000);
-
-	Display::Delay(1000);
 
 	return 0;
 }
