@@ -1,15 +1,22 @@
 #pragma once
 
+#include <array>
+
+#include "index.h"
+
 namespace Draw {
 
-class Matrix {
+class Matrix4x4 {
 public:
-	Vector3D row1;
-	Vector3D row2;
-	Vector3D row3;
-	Vector3D row4;
-private:
+	VCoord Get(size_t row, size_t col);
+	void   Set(size_t row, size_t col, VCoord value);
 
+	Matrix4x4 operator*(Vector3D v);
+
+private:
+	static constexpr size_t COLS = 4;
+	static constexpr size_t ROWS = 4;
+	std::array< std::array<VCoord,COLS>, ROWS> data;
 };
 
 }

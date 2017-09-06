@@ -11,6 +11,7 @@
 #include <drawlib/index.h>
 #include <drawlib/drawer.h>
 #include <drawlib/vector3d.h>
+#include <drawlib/matrix.h>
 
 int main()
 {
@@ -22,6 +23,13 @@ int main()
 	std::cout << ro << std::endl;
 
 	r.Render(ro);
+
+	Draw::Matrix4x4 m;
+
+	m.Set(3,1,3);
+
+	std::cout << m.Get(1,3) << std::endl;
+	std::cout << m.Get(3,1) << std::endl;
 
 	return 0;
 }

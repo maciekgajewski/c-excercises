@@ -8,6 +8,7 @@ add_library(drawlib
     drawer.cc drawer.h
     projector.cc projector.h
 	vector3d.cc vector3d.h
+    matrix.cc matrix.h
 )
 
 set_property(TARGET drawlib PROPERTY CXX_STANDARD 14)
