@@ -4,32 +4,30 @@
 
 struct Vector
 {
-private:
-	double x;
-	double y;
-
-	mutable double cachedLen = 0.0;
-
-public:
-
-	Vector(double xx, double yy) { x = xx; y = yy; }
-
-	void SetX(double xx) { x = xx; cachedLen = 0.0; }
-	void SetY(double yy) { y = yy; cachedLen = 0.0; }
-
-	double GetLength() const {
-		if (cachedLen == 0.0)
-			cachedLen = std::sqrt(x*x + y*y);
-		return cachedLen;
-	}
-
+	double x = 0.0;
+	double y = 0.0;
 };
 
 int main(int argc, char** argv)
 {
-	const Vector v{3.0, 4.0};
+	int x = 7;
+	int y = 8;
+	int& ref = x;
 
-	std::cout << "length: " << v.GetLength() << std::endl;
-	std::cout << "length: " << v.GetLength() << std::endl;	
+	ref = y;
+
+	y = 77;
+
+	std::cout << "ref=" << ref << std::endl;	
+	std::cout << "x=" << x << std::endl;
+	std::cout << "y=" << y << std::endl;
+
+	Vector& ref;
+	{
+		Vector v{44, 55};
+		ref = v;
+	}
+	std::cout << ref.x << std::endl;
+
 }
 
