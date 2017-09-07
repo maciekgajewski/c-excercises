@@ -15,7 +15,7 @@ class Surface2D : private SDLObject
 {
 	friend class Window;
 public:
-	Surface2D(int w, int h);
+	Surface2D(Pixel dimensions);
 	~Surface2D();
 
 	Pixel GetDimensions() const { return {mSurface->w, mSurface->h}; }

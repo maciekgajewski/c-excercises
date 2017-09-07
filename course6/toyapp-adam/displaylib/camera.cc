@@ -12,9 +12,9 @@ Camera::Camera()
 	mAspectRatio(1.0f)
 {}
 
-void Camera::SetScreenSize(Pixel dimensions)
+void Camera::SetAspectRatio(float aspectRatio)
 {
-	mAspectRatio = dimensions.x / static_cast<float>(dimensions.y);
+	mAspectRatio = aspectRatio;
 	mProjection = CreateProjectionMatrix();
 }
 

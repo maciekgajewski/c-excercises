@@ -6,10 +6,10 @@
 
 namespace Display {
 
-Surface2D::Surface2D(int w, int h)
-:	mHalfDimensions{w / 2, h / 2}
+Surface2D::Surface2D(Pixel dimensions)
+:	mHalfDimensions{dimensions.x / 2, dimensions.y / 2}
 {
-	mSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+	mSurface = SDL_CreateRGBSurface(0, dimensions.x, dimensions.y, 32, 0, 0, 0, 0);
 	assert(mSurface);
 }
 

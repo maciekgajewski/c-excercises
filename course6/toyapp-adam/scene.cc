@@ -38,13 +38,9 @@ void Scene::Update(double totalElapsedSeconds)
 	if(mKeyboard.IsDown(SDL_SCANCODE_UP))
 		cameraMove.z = +camMovementSpeed;
 
+	auto camRotation = mMouse.GetPositionDelta();
 	mSurface.camera.transform.Move(cameraMove);
-
-	auto screenDimensions = mSurface.GetDimensions();
-	auto camRotationPixels = mMouse.GetCursorPositionDelta();
-	auto mouseRatio = camRotationSpeed / static_cast<float>(screenDimensions.y);
-
-	mSurface.camera.transform.Rotate({camRotationPixels.x * mouseRatio, 0.0f, 0.0f});
+	mSurface.camera.transform.Rotate({camRotation.x * camRotationSpeed, 0.0f, 0.0f});
 
 	float test1 = std::sin(totalElapsedSeconds);
 	float test2 = std::cos(totalElapsedSeconds * 0.5f);

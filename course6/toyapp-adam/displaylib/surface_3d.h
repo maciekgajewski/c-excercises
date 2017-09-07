@@ -9,7 +9,6 @@ namespace Display {
 
 using Math::Vector2D;
 using Math::Vector3D;
-using Util::Pixel;
 
 class Surface3D
 {
@@ -17,8 +16,6 @@ public:
 	Camera camera;
 
 	Surface3D(Surface2D& surface2D);
-
-	Pixel GetDimensions() const { return mSurface.GetDimensions(); }
 
 	void Clear(Color color) { mSurface.Clear(color); }
 	void SetPixel(Vector3D vector, Color color) { mSurface.SetPixel(Project(vector), color); }

@@ -5,17 +5,20 @@
 #include <util/clock.h>
 #include <util/keyboard.h>
 #include <util/mouse.h>
+#include <util/pixel.h>
 #include <SDL2/SDL_main.h>
 #include <iostream>
 
 int main(int argc, char* argv[])
 {
+	Util::Pixel screenDimensions{640, 360};
+
 	Util::Keyboard keyboard;
-	Util::Mouse mouse;
+	Util::Mouse mouse(screenDimensions.y);
 	Util::Clock clock;
 
-	Display::Window win("Hello", 100, 100, 1280, 720);
-	Display::Surface2D surface2D(640, 360);
+	Display::Window win("Hello", 100, 100, screenDimensions.x * 2, screenDimensions.y * 2);
+	Display::Surface2D surface2D(screenDimensions);
 	Display::Surface3D surface3D(surface2D);
 	Scene scene(keyboard, mouse, surface3D);
 

@@ -6,8 +6,8 @@ struct Pixel
 {
 	using Coordinate = int;
 
-	Coordinate x;
-	Coordinate y;
+	Coordinate x = 0;
+	Coordinate y = 0;
 };
 
 }
