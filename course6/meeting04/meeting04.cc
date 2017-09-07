@@ -1,40 +1,54 @@
 #include <iostream>
 #include <string>
 
-struct Vector
+class File
 {
-	double x = 0.0;
-	double y = 0.0;
-};
+public:
 
-struct Person
-{
-	Person(std::string& n, int a)
+	File() = default;
+	File(const std::string& path)
 	{
-		name = n;
-		age = a;
+		name = path;
+		std::cout << "opening file " << path << std::endl;
 	}
 
-	Person(const Person& other) = delete;
-	Person& operator=(const Person&) = delete;
+	File( const File&) = delete;
+	File& operator=(const File&) = delete;
+
+	~File()
+	{
+		if (name.empty())
+			std::cout << "~File: file not open" << std::endl;
+		else
+			std::cout << "closing file " << name << std::endl;
+	}
+
+	File(File&& other)
+	{
+		name = other.name;
+		other.name = "";
+	}
 
 private:
+
 	std::string name;
-	int age;
 };
 
-std::string getName() { return "Thomas"; }
+File loadPathFromConfigAndOpen()
+{
+	File config("cfg.ini");
+	std::cout << "loading config..." << std::endl;
+	return config;
+}
 
 int main(int argc, char** argv)
 {
-	int x = 8;
-	int y = x;
+	File f("one.cpp");
+	File f2("file.txt");
 
-	std::string s = getName();
-	s = getName();
+	File f4(std::move(f2));
 
-	Vector v;
-	Person p("Maciek", 37);
-	Person p2("Adam", 27);
+	File f3 = loadPathFromConfigAndOpen();
+	std::cout << "confdig loaded!" << std::endl;
 }
 
