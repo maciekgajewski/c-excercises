@@ -20,8 +20,6 @@ public:
 	void SetScreenSize(Pixel dimensions);
 	const Matrix44& GetProjectionMatrix() const { return mProjection; }
 private:
-	static constexpr auto DEFAULT_FOV_DEGREES = 60.0f;
-
 	Matrix44 mProjection;
 	float mFieldOfView;
 	float mAspectRatio;

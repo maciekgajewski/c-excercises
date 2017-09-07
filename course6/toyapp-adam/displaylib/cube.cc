@@ -14,9 +14,9 @@ Cube::Cube(Vector3D center, float size, Color color)
 
 void Cube::Draw(Surface3D& surface, const Matrix44& view) const
 {
-	const auto modelView = view * transform.CreateMatrix();
+	auto modelView = view * transform.CreateMatrix();
 
-	const Vector3D v[] = {
+	Vector3D v[] = {
 		modelView * Vector3D{-1.0f, -1.0f, -1.0f},
 		modelView * Vector3D{+1.0f, -1.0f, -1.0f},
 		modelView * Vector3D{-1.0f, +1.0f, -1.0f},

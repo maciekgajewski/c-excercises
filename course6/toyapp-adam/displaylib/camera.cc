@@ -2,6 +2,10 @@
 
 namespace Display {
 
+namespace {
+	const auto DEFAULT_FOV_DEGREES = 60.0f;
+}
+
 Camera::Camera()
 :	mProjection(CreateProjectionMatrix()),
 	mFieldOfView(DEFAULT_FOV_DEGREES),

@@ -1,6 +1,6 @@
-#include <displaylib/scene.h>
 #include <displaylib/surface.h>
 #include <displaylib/window.h>
+#include <scene.h>
 #include <util/clock.h>
 #include <util/keyboard.h>
 #include <util/mouse.h>
@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 	Display::Window win("Hello", 100, 100, 1280, 720);
 	Display::Surface2D surface2D(640, 360);
 	Display::Surface3D surface3D(surface2D);
-	Display::Scene scene(keyboard, mouse, surface3D);
+	Scene scene(keyboard, mouse, surface3D);
 
 	SDL_Event event;
 	SDL_SetRelativeMouseMode(SDL_TRUE);

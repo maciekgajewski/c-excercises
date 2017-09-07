@@ -5,13 +5,13 @@
 namespace Math {
 
 namespace {
-	constexpr auto PI = std::atan(1.0) * 4.0;
-	constexpr auto TRANSLATE_X = 3;
-	constexpr auto TRANSLATE_Y = 7;
-	constexpr auto TRANSLATE_Z = 11;
-	constexpr auto SCALE_X = 0;
-	constexpr auto SCALE_Y = 5;
-	constexpr auto SCALE_Z = 10;
+	const auto PI = std::atan(1.0) * 4.0;
+	const auto TRANSLATE_X = 3;
+	const auto TRANSLATE_Y = 7;
+	const auto TRANSLATE_Z = 11;
+	const auto SCALE_X = 0;
+	const auto SCALE_Y = 5;
+	const auto SCALE_Z = 10;
 }
 
 Matrix44 Matrix44::Zero()
@@ -28,9 +28,9 @@ Matrix44 Matrix44::Identity()
 {
 	Matrix44 m = Zero();
 
-	m.mMatrix[ 0] = 1.0f;
-	m.mMatrix[ 5] = 1.0f;
-	m.mMatrix[10] = 1.0f;
+	m.mMatrix[SCALE_X] = 1.0f;
+	m.mMatrix[SCALE_Y] = 1.0f;
+	m.mMatrix[SCALE_Z] = 1.0f;
 	m.mMatrix[15] = 1.0f;
 
 	return m;
@@ -100,9 +100,9 @@ Matrix44 Matrix44::operator*(const Matrix44& rhs) const
 	Matrix44 result;
 
 	for(unsigned x = 0; x < 4; ++x) {
-		const unsigned row = x * 4;
+		auto row = x * 4;
 		for(unsigned y = 0; y < 4; ++y) {
-			const unsigned i = y + row;
+			auto i = y + row;
 			result.mMatrix[i] = 0;
 			for(unsigned z = 0; z < 4; ++z) {
 				result.mMatrix[i] += mMatrix[z + row] * rhs.mMatrix[y + z * 4];

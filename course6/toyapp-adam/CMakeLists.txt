@@ -18,7 +18,9 @@ add_subdirectory(displaylib)
 add_subdirectory(math)
 add_subdirectory(util)
 
-add_executable(toyapp WIN32 main.cc)
+add_executable(toyapp WIN32
+	scene.cc scene.h
+	main.cc)
 
 if(MINGW)
 	target_link_libraries(toyapp mingw32)

@@ -51,6 +51,7 @@ struct Vector4D
 	float z = 0.0f;
 	float w = 0.0f;
 
+	Vector4D() = default;
 	Vector4D(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
 	Vector4D(Vector3D v, float w) : x(v.x), y(v.y), z(v.z), w(w) {}
 	explicit Vector4D(Vector3D v) : x(v.x), y(v.y), z(v.z), w(1.0f) {}

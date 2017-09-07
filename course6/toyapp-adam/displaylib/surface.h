@@ -29,7 +29,6 @@ private:
 	SDL_Surface* mSurface;
 };
 
-
 class Surface3D
 {
 public:
