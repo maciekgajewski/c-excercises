@@ -1,19 +1,30 @@
 #include <iostream>
 #include <iomanip>
 
+struct Vector
+{
+	int x;
+	int y;
+
+	void print() const
+	{
+		std::cout << "const (" << x << ", " << y << ")" << std::endl;
+	}
+
+	void print()
+	{
+		std::cout << "non const (" << x << ", " << y << ")" << std::endl;
+	}
+
+};
+
 int main(int argc, char** argv)
 {
-	const int v = 7;
-	//v = 8; // ILLEGAL
-	const int* cp = &v;
+	const Vector v{44, 55};
 
-	int x = 8;
-	int* p2 = &x;
+	v.print();
 
-	p2 = const_cast<int*>(&v); // not permitted!
-	*p2 = 99;
-	std::cout << v << std::endl;
-	std::cout << *p2 << std::endl;
-	std::cout << std::boolalpha << (p2 == &v) << std::endl;
+	Vector x = v;
+	x.print();
 }
 
