@@ -1,6 +1,5 @@
 #include <iostream>
-#include <iomanip>
-#include <cmath>
+#include <string>
 
 struct Vector
 {
@@ -8,26 +7,34 @@ struct Vector
 	double y = 0.0;
 };
 
+struct Person
+{
+	Person(std::string& n, int a)
+	{
+		name = n;
+		age = a;
+	}
+
+	Person(const Person& other) = delete;
+	Person& operator=(const Person&) = delete;
+
+private:
+	std::string name;
+	int age;
+};
+
+std::string getName() { return "Thomas"; }
+
 int main(int argc, char** argv)
 {
-	int x = 7;
-	int y = 8;
-	int& ref = x;
+	int x = 8;
+	int y = x;
 
-	ref = y;
+	std::string s = getName();
+	s = getName();
 
-	y = 77;
-
-	std::cout << "ref=" << ref << std::endl;	
-	std::cout << "x=" << x << std::endl;
-	std::cout << "y=" << y << std::endl;
-
-	Vector& ref;
-	{
-		Vector v{44, 55};
-		ref = v;
-	}
-	std::cout << ref.x << std::endl;
-
+	Vector v;
+	Person p("Maciek", 37);
+	Person p2("Adam", 27);
 }
 
