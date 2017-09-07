@@ -18,14 +18,6 @@ public:
 	Vector3D operator*(const Vector3D& rhs) const;
 	Vector4D operator*(const Vector4D& rhs) const;
 private:
-	// this is a row-major matrix
-	static constexpr auto TRANSLATE_X = 3;
-	static constexpr auto TRANSLATE_Y = 7;
-	static constexpr auto TRANSLATE_Z = 11;
-	static constexpr auto SCALE_X = 0;
-	static constexpr auto SCALE_Y = 5;
-	static constexpr auto SCALE_Z = 10;
-
 	Matrix44() {}
 
 	float mMatrix[4 * 4];
