@@ -1,6 +1,6 @@
 #include "scene.h"
 
-#include <displaylib/surface.h>
+#include <displaylib/surface_3d.h>
 #include <util/keyboard.h>
 #include <util/mouse.h>
 #include <cmath>

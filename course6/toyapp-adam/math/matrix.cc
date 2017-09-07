@@ -5,7 +5,7 @@
 namespace Math {
 
 namespace {
-	const auto PI = std::atan(1.0) * 4.0;
+	constexpr auto PI = std::atan(1.0) * 4.0;
 	const auto TRANSLATE_X = 3;
 	const auto TRANSLATE_Y = 7;
 	const auto TRANSLATE_Z = 11;

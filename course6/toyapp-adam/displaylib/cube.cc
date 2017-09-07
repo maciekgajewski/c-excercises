@@ -1,7 +1,7 @@
 #include "cube.h"
 
 #include "math/matrix.h"
-#include "surface.h"
+#include "surface_3d.h"
 
 namespace Display {
 

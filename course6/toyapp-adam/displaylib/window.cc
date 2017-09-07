@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "surface.h"
+#include "surface_2d.h"
 #include <cassert>
 
 namespace Display {

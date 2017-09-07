@@ -1,4 +1,4 @@
-#include "surface.h"
+#include "surface_2d.h"
 
 #include <algorithm>
 #include <cassert>
@@ -6,9 +6,8 @@
 
 namespace Display {
 
-using Math::Vector4D;
-
 Surface2D::Surface2D(int w, int h)
+:	mHalfDimensions{w / 2, h / 2}
 {
 	mSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
 	assert(mSurface);
@@ -23,7 +22,7 @@ void Surface2D::Clear(Color color)
 {
 	for(int y = 0; y < mSurface->h; ++y)
 		for(int x = 0; x < mSurface->w; ++x)
-			SetPixel({x, y}, color);
+			SetPixel(Pixel{x, y}, color);
 }
 
 void Surface2D::SetPixel(Pixel position, Color color)
@@ -65,7 +64,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	{
 		for(auto x = p1.x; x < p2.x; ++x)
 		{
-			SetPixel({y, x}, color);
+			SetPixel(Pixel{y, x}, color);
 			error -= dy;
 			if(error < 0)
 			{
@@ -78,7 +77,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	{
 		for(auto x = p1.x; x < p2.x; ++x)
 		{
-			SetPixel({x, y}, color);
+			SetPixel(Pixel{x, y}, color);
 			error -= dy;
 			if(error < 0)
 			{
@@ -89,43 +88,22 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	}
 }
 
-Surface3D::Surface3D(Surface2D& surface2D)
-:	mSurface(surface2D)
+void Surface2D::SetPixel(Vector2D position, Color color)
 {
-	auto dimensions = surface2D.GetDimensions();
-	mHalfDimensions.x = dimensions.x / 2;
-	mHalfDimensions.y = dimensions.y / 2;
-	camera.SetScreenSize(dimensions);
+	SetPixel(GetPhysicalCoordinates(position), color);
 }
 
-void Surface3D::Clear(Color color)
+void Surface2D::DrawLine(Vector2D start, Vector2D end, Color color)
 {
-	mSurface.Clear(color);
+	DrawLine(GetPhysicalCoordinates(start), GetPhysicalCoordinates(end), color);
 }
 
-void Surface3D::SetPixel(Vector3D vector, Color color)
+Pixel Surface2D::GetPhysicalCoordinates(Vector2D logicalCoordinates)
 {
-	mSurface.SetPixel(GetPixel(vector), color);
-}
-
-void Surface3D::DrawLine(Vector3D start, Vector3D end, Color color)
-{
-	mSurface.DrawLine(GetPixel(start), GetPixel(end), color);
-}
-
-Pixel Surface3D::GetPixel(Vector3D point) const
-{
-	auto vector2D = Project(point);
 	return {
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + vector2D.x * mHalfDimensions.x),
-		static_cast<Pixel::Coordinate>(mHalfDimensions.y + vector2D.y * mHalfDimensions.y),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.x + logicalCoordinates.x * mHalfDimensions.x),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.y + logicalCoordinates.y * mHalfDimensions.y)
 	};
-}
-
-Vector2D Surface3D::Project(Vector3D vector) const
-{
-	auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
-	return {-clipSpace.x / clipSpace.w, clipSpace.y / clipSpace.w};
 }
 
 }

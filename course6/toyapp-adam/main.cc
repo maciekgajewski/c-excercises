@@ -1,4 +1,5 @@
-#include <displaylib/surface.h>
+#include <displaylib/surface_2d.h>
+#include <displaylib/surface_3d.h>
 #include <displaylib/window.h>
 #include <scene.h>
 #include <util/clock.h>
