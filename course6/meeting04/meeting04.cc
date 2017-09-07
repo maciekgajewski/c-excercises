@@ -1,54 +1,44 @@
 #include <iostream>
 #include <string>
 
-class File
+
+struct Point2D {};
+class Surface2D
 {
 public:
+	void Draw(Point2D p) {} 
+};
 
-	File() = default;
-	File(const std::string& path)
+Surface2D globalSurface;
+
+struct Point3D {};
+class Surface3D
+{
+public:
+	void Draw(Point3D p)
 	{
-		name = path;
-		std::cout << "opening file " << path << std::endl;
+		surface2d.Draw(Project(p));
 	}
 
-	File( const File&) = delete;
-	File& operator=(const File&) = delete;
-
-	~File()
+	Surface3D(Surface2D& s) : surface2d(s)
 	{
-		if (name.empty())
-			std::cout << "~File: file not open" << std::endl;
-		else
-			std::cout << "closing file " << name << std::endl;
+		surface2d = s;
 	}
 
-	File(File&& other)
+	Surface3D() : surface2d(globalSurface)
 	{
-		name = other.name;
-		other.name = "";
 	}
 
 private:
-
-	std::string name;
+	Point2D Project(Point3D) const { return {}; }
+	Surface2D& surface2d;
 };
-
-File loadPathFromConfigAndOpen()
-{
-	File config("cfg.ini");
-	std::cout << "loading config..." << std::endl;
-	return config;
-}
 
 int main(int argc, char** argv)
 {
-	File f("one.cpp");
-	File f2("file.txt");
+	Surface2D surface;
+	Surface3D td(surface);
 
-	File f4(std::move(f2));
-
-	File f3 = loadPathFromConfigAndOpen();
-	std::cout << "confdig loaded!" << std::endl;
+	Surface3D td2;
 }
 
