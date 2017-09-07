@@ -26,10 +26,10 @@ void Keyboard::Release(KeyCode keyCode)
 
 void Keyboard::ClearChanges()
 {
-	for(KeyCode i = 0; i < NUM_KEYCODES; ++i)
+	for(auto& key: mKeys)
 	{
-		mKeys[i].pressed = 0;
-		mKeys[i].released = 0;
+		key.pressed = 0;
+		key.released = 0;
 	}
 }
 

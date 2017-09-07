@@ -6,14 +6,20 @@ namespace Math {
 
 namespace {
 	constexpr auto PI = std::atan(1.0) * 4.0;
+	constexpr auto TRANSLATE_X = 3;
+	constexpr auto TRANSLATE_Y = 7;
+	constexpr auto TRANSLATE_Z = 11;
+	constexpr auto SCALE_X = 0;
+	constexpr auto SCALE_Y = 5;
+	constexpr auto SCALE_Z = 10;
 }
 
 Matrix44 Matrix44::Zero()
 {
 	Matrix44 m;
 
-	for(unsigned i = 0; i < 16; ++i)
-		m.mMatrix[i] = 0.0f;
+	for(auto& element : m.mMatrix)
+		element = 0.0f;
 
 	return m;
 }
@@ -45,24 +51,21 @@ Matrix44 Matrix44::Rotation(Vector3D yawPitchRoll)
 {
 	Matrix44 m = Zero();
 
-	const float ch = std::cos(yawPitchRoll.x);
-	const float sh = std::sin(yawPitchRoll.x);
-	const float cp = std::cos(yawPitchRoll.y);
-	const float sp = std::sin(yawPitchRoll.y);
-	const float cb = std::cos(yawPitchRoll.z);
-	const float sb = std::sin(yawPitchRoll.z);
+	float ch = std::cos(yawPitchRoll.x);
+	float sh = std::sin(yawPitchRoll.x);
+	float cp = std::cos(yawPitchRoll.y);
+	float sp = std::sin(yawPitchRoll.y);
+	float cb = std::cos(yawPitchRoll.z);
+	float sb = std::sin(yawPitchRoll.z);
 
-	const float shsp = sh * sp;
-	const float chsp = ch * sp;
-
-	m.mMatrix[ 0] =  ch * cb + shsp * sb;
-	m.mMatrix[ 1] = -ch * sb + shsp * cb;
+	m.mMatrix[ 0] =  ch * cb + sh * sp * sb;
+	m.mMatrix[ 1] = -ch * sb + sh * sp * cb;
 	m.mMatrix[ 2] =  sh * cp;
 	m.mMatrix[ 4] =  sb * cp;
 	m.mMatrix[ 5] =  cb * cp;
 	m.mMatrix[ 6] = -sp;
-	m.mMatrix[ 8] = -sh * cb + chsp * sb;
-	m.mMatrix[ 9] =  sb * sh + chsp * cb;
+	m.mMatrix[ 8] = -sh * cb + ch * sp * sb;
+	m.mMatrix[ 9] =  sb * sh + ch * sp * cb;
 	m.mMatrix[10] =  ch * cp;
 	m.mMatrix[15] =  1.0f;
 
@@ -94,18 +97,15 @@ Matrix44 Matrix44::Perspective(float fieldOfViewDegrees, float aspectRatio)
 
 Matrix44 Matrix44::operator*(const Matrix44& rhs) const
 {
-	constexpr unsigned ROWS = 4;
-	constexpr unsigned COLS = 4;
-
 	Matrix44 result;
 
-	for(unsigned x = 0; x < ROWS; ++x) {
-		const unsigned row = x * ROWS;
-		for(unsigned y = 0; y < COLS; ++y) {
+	for(unsigned x = 0; x < 4; ++x) {
+		const unsigned row = x * 4;
+		for(unsigned y = 0; y < 4; ++y) {
 			const unsigned i = y + row;
 			result.mMatrix[i] = 0;
-			for(unsigned z = 0; z < ROWS; ++z) {
-				result.mMatrix[i] += mMatrix[z + row] * rhs.mMatrix[y + z * ROWS];
+			for(unsigned z = 0; z < 4; ++z) {
+				result.mMatrix[i] += mMatrix[z + row] * rhs.mMatrix[y + z * 4];
 			}
 		}
 	}
