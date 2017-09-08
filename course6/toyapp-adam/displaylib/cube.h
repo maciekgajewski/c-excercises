@@ -19,11 +19,12 @@ class Cube
 public:
 	Transform transform;
 
-	Cube(Vector3D center, float size, Color color);
+	Cube(Vector3D center, float size, Color fillColor, Color edgeColor);
 
 	void Draw(Surface3D& surface, const Matrix44& view) const;
 private:
-	Color mColor;
+	Color mFillColor;
+	Color mEdgeColor;
 };
 
 }

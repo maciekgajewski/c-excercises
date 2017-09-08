@@ -9,11 +9,11 @@ Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 :	mKeyboard{keyboard},
 	mMouse{mouse},
 	mSurface{surface},
-	mTestCube1{{0.0f, 0.0f, 2.5f}, 0.5f, Display::YELLOW},
-	mTestCube2{{1.25f, 0.25f, 2.5f}, 0.5f, Display::GREEN},
-	mTestCube3{{-1.25f, -0.25f, 2.5f}, 0.3f, Display::RED},
-	mTestCube4{{0.0f, 0.75f, 2.5f}, 0.25f, Display::YELLOW},
-	mTestCube5{{0.0f, 1.125f, 2.5f}, 0.125f, Display::YELLOW}
+	mTestCube1{{0.0f, 0.0f, 2.5f}, 0.5f,Display::YELLOW, Display::BLACK},
+	mTestCube2{{1.25f, 0.25f, 2.5f}, 0.5f, Display::GREEN, Display::BLACK},
+	mTestCube3{{-1.25f, -0.25f, 2.5f}, 0.3f, Display::RED, Display::BLACK},
+	mTestCube4{{0.0f, 0.75f, 2.5f}, 0.25f, Display::YELLOW, Display::BLACK},
+	mTestCube5{{0.0f, 1.125f, 2.5f}, 0.125f, Display::YELLOW, Display::BLACK}
 {}
 
 void Scene::Update(double totalElapsedSeconds)

@@ -35,9 +35,9 @@ void Surface2D::SetPixel(Pixel position, Color color)
 	}
 }
 
+// Bresenham's line algorithm
 void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
-	// Bresenham's line algorithm
 	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
 	//       then perhaps remove the check from within SetPixel
 	bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
@@ -88,17 +88,45 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	}
 }
 
+// slow method
+void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
+{
+	Pixel topLeft {
+		std::min(a.x, std::min(b.x, c.x)),
+		std::min(a.y, std::min(b.y, c.y))
+	};
+
+	Pixel bottomRight {
+		std::max(a.x, std::max(b.x, c.x)),
+		std::max(a.y, std::max(b.y, c.y))
+	};
+
+	for(auto y = topLeft.y; y < bottomRight.y; ++y)
+		for(auto x = topLeft.x; x < bottomRight.x; ++x)
+			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) > 0 &&
+			   (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) > 0 &&
+			   (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) > 0)
+			{
+				SetPixel(Pixel{x, y}, color);
+			}
+}
+
 void Surface2D::SetPixel(Vector2D position, Color color)
 {
-	SetPixel(GetPhysicalCoordinates(position), color);
+	SetPixel(ToPixel(position), color);
 }
 
 void Surface2D::DrawLine(Vector2D start, Vector2D end, Color color)
 {
-	DrawLine(GetPhysicalCoordinates(start), GetPhysicalCoordinates(end), color);
+	DrawLine(ToPixel(start), ToPixel(end), color);
 }
 
-Pixel Surface2D::GetPhysicalCoordinates(Vector2D logicalCoordinates)
+void Surface2D::DrawTriangle(const Triangle2D& triangle, Color color)
+{
+	DrawTriangle(ToPixel(triangle[0]), ToPixel(triangle[1]), ToPixel(triangle[2]), color);
+}
+
+Pixel Surface2D::ToPixel(Vector2D logicalCoordinates)
 {
 	return {
 		static_cast<Pixel::Coordinate>(mHalfDimensions.x + logicalCoordinates.x * mHalfDimensions.x),
