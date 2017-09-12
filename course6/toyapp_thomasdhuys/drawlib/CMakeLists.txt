@@ -1,13 +1,13 @@
 add_library(drawlib
 	primitives.cc primitives.h
 	index.cc index.h
-    rgb.h
+    rgb.h rgb.cc
     colors.h
     renderer.cc renderer.h
     render_object.cc render_object.h
     drawer.cc drawer.h
     projector.cc projector.h
-	vector3d.cc vector3d.h
+    vector3d.cc vector3d.h
     matrix.cc matrix.h
 )
 

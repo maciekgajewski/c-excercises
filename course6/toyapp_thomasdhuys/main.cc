@@ -24,7 +24,7 @@ int main()
 
 	r.Render(ro);
 	
-	Display::Delay(100000);
+	Display::Delay(5000);
 
 
 	// Test

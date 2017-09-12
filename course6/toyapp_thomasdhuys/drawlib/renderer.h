@@ -23,7 +23,9 @@ private:
 	Display::Window window;
 	Display::Surface surface;
 
-	void RenderPoint(const Point& point);
+	void Render(const Point& point);
+	void Render(const Line& line);
+	void Render(const Triangle& triangle);
 	void SetPixel(Pixel p, RGB c); 
 
 	uint16_t surfaceWidth;
