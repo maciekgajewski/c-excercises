@@ -32,6 +32,11 @@ public:
 
 	Vector3D& operator[](unsigned index) { return mPoints[index]; }
 	Vector3D operator[](unsigned index) const { return mPoints[index]; }
+
+	Vector3D GetSurfaceNormal() const
+	{
+		return (mPoints[1] - mPoints[0]).Cross(mPoints[2] - mPoints[0]).Normalized();
+	}
 private:
 	Vector3D mPoints[3];
 };

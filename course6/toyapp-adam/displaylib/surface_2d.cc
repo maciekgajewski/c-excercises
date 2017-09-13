@@ -40,7 +40,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
 	//       then perhaps remove the check from within SetPixel
-	bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
+	bool steep = (std::abs(p2.y - p1.y) > std::abs(p2.x - p1.x));
 	if(steep)
 	{
 		std::swap(p1.x, p1.y);
@@ -88,7 +88,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	}
 }
 
-// slow method
+// slow, naive algorithm. it has overdraw when triangles share edges!
 void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
 {
 	Pixel topLeft {
@@ -103,9 +103,9 @@ void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
 
 	for(auto y = topLeft.y; y < bottomRight.y; ++y)
 		for(auto x = topLeft.x; x < bottomRight.x; ++x)
-			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) > 0 &&
-			   (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) > 0 &&
-			   (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) > 0)
+			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) >= 0 &&
+			   (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) >= 0 &&
+			   (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) >= 0)
 			{
 				SetPixel(Pixel{x, y}, color);
 			}
