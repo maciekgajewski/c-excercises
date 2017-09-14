@@ -1,6 +1,5 @@
 #include "renderingengine.h"
 
-#include <omp.h>
 #include <cassert>
 
 RenderingEngine::RenderingEngine(const int &imageSize, Display::Surface& surf, Scene &scene) : imageSize(imageSize), surf(surf), scene(scene)
@@ -23,13 +22,12 @@ const void RenderingEngine::Render()
 {
     surf.Clear(0, 0, 0);
 
-#pragma omp parallel for
     for(int i = 0; i < imageSize; i++)
     {
         for(int j = 0; j < imageSize; j++)
         {
             Ray primaryRay = CreatePrimaryRay(i, j);
-            Float3 currentPixel = RayTrace(3, primaryRay);
+            Float3 currentPixel = RayTrace(10, primaryRay);
             surf.SetPixel(i, j, currentPixel.x * 255, currentPixel.y * 255, currentPixel.z * 255); // red pixel at 10x10
         }
     }
@@ -54,8 +52,8 @@ Float3 RenderingEngine::RayTrace(int depth, const Ray &ray)
         {
             Float3 position = ray.GetOrigin() + ray.GetDirection() * info.GetRayParam();
             Float3 normal = info.GetNormal();
-            Float3 reflectionDirection = ray.GetDirection() - normal * 2 * normal.Dot(ray.GetDirection());\
-            Ray reflectionRay = Ray(position + normal * 0.001f, reflectionDirection);
+            Float3 reflectionDirection = ray.GetDirection() - normal * 2 * normal.Dot(ray.GetDirection());
+            Ray reflectionRay = Ray(position + normal * 0.001f, reflectionDirection.Normalize());
             return RayTrace(depth - 1, reflectionRay);
         }
     }

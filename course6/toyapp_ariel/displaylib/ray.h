@@ -4,7 +4,7 @@
 
 class Ray
 {
-public:    
+public:
     Ray(const Float3 &origin, const Float3 &direction) : origin(origin), direction(direction)
     {
 

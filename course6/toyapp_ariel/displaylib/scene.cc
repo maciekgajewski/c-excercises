@@ -17,8 +17,7 @@ bool Scene::Intersect(const Ray &ray, IntersectionInfo& info)
 
     for(int i = 0; i < primitives.size(); i++)
     {
-        current = primitives[i]->Intersect(ray);
-        if(current.GetRayParam() && current.GetRayParam() < info.GetRayParam())
+        if(primitives[i]->Intersect(ray, current) && current.GetRayParam() < info.GetRayParam())
         {
             info = current;
         }

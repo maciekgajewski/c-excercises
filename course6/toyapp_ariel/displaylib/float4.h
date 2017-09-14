@@ -1,8 +1,8 @@
 #pragma once
 
-#include <cassert>
-
 #include "float3.h"
+
+#include <cassert>
 
 class Float4
 {

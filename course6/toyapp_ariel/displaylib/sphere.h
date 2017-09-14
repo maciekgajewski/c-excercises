@@ -19,20 +19,21 @@ public:
 
     }
 
-    IntersectionInfo Intersect(const Ray &r) const
+    bool Intersect(const Ray &r, IntersectionInfo& intersectionInfo) const
     {
         Float3 op = origin - r.GetOrigin();
         float rayParam, eps = 1e-4f, b = op.Dot(r.GetDirection()), det = b * b - op.Dot(op) + radius * radius;
         if(det < 0)
         {
-            return IntersectionInfo();
+            return false;
         }
         else
         {
             det = std::sqrt(det);
         }
         rayParam = (rayParam = b - det) > eps ? rayParam : ((rayParam = b + det) > eps ? rayParam : 0);
-        return IntersectionInfo(rayParam, ((r.GetOrigin() + r.GetDirection() * rayParam) - origin).Normalize(), material);
+        intersectionInfo = IntersectionInfo(rayParam, ((r.GetOrigin() + r.GetDirection() * rayParam) - origin).Normalize(), material);
+        return rayParam > 0;
     }
 
     void ApplyTranslation(const Float3 &v)

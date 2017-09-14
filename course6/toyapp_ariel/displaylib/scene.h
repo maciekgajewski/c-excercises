@@ -1,12 +1,12 @@
 #pragma once
 
-#include <vector>
-#include <memory>
-
 #include "float3.h"
 #include "ray.h"
 #include "intersectioninfo.h"
 #include "primitive.h"
+
+#include <vector>
+#include <memory>
 
 class Scene
 {

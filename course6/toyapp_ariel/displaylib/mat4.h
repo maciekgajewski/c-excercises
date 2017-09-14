@@ -1,10 +1,9 @@
 ﻿#pragma once
 
-#include <cassert>
-
 #include "float4.h"
 #include "float3.h"
-#include <SDL2/SDL_main.h>
+
+#include <cassert>
 
 class Mat4
 {
