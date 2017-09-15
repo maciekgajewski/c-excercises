@@ -1,29 +1,23 @@
 #include <iostream>
 #include <string>
 
+
+
 int main(int argc, char** argv)
 {
 	std::cout << "Hello" << std::endl;
 
-	int a[3];
+	int a[3] = { 1, 3, 5};
 	std::cout << sizeof(a) << std::endl;
 
-	std::string b[4] = { "a", "b", "c", "d" };
-	std::cout << "sizeof b: " << sizeof(b) << std::endl;
-	std::cout << "sizeof string: " << sizeof(std::string) << std::endl;
+	std::string b[4] = { "abc", "b", "c", "d" };
 
-	std::cout << "b[2] = " << b[2] << std::endl;
-	b[2] = "yo";
-	std::cout << "b[2] = " << b[2] << std::endl;
+	for(auto x : b[0])
+		std::cout << x << std::endl;
 
-	std::string ari;
-
-	ari = "Hello";
-	std::cout << "ari length: " << ari.length() << ", data: " << (void*)ari.data() << std::endl;
-	ari += ", world!";
-	std::cout << "ari length: " << ari.length() << ", data: " << (void*)ari.data() << std::endl;
-	ari = "x123456789012345678901234567890";
-	std::cout << "ari length: " << ari.length() << ", data: " << (void*)ari.data() << std::endl;
-	std::cout << ari << std::endl;
+	for(auto x : a)
+		std::cout << x << std::endl;
+	for(auto& x : b)
+		std::cout << x << std::endl;
 }
 
