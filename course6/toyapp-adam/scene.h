@@ -1,15 +1,18 @@
 #pragma once
 
-#include "cube.h"
+#include <displaylib/cube.h>
+
+namespace Display {
+	class Surface3D;
+}
 
 namespace Util {
 	class Keyboard;
 	class Mouse;
 }
 
-namespace Display {
-
-class Surface3D;
+using Display::Cube;
+using Display::Surface3D;
 using Util::Keyboard;
 using Util::Mouse;
 
@@ -30,5 +33,3 @@ private:
 	Cube mTestCube4;
 	Cube mTestCube5;
 };
-
-}

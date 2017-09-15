@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.0)
 
 set(SDL_ROOT "" CACHE STRING "SDL2 Library root path")
 
-if(NOT SDL_ROOT STREQUAL "")
+if(SDL_ROOT)
 	include_directories(${SDL_ROOT}/include)
 	link_directories(${SDL_ROOT}/lib)
 endif()
@@ -18,7 +18,9 @@ add_subdirectory(displaylib)
 add_subdirectory(math)
 add_subdirectory(util)
 
-add_executable(toyapp WIN32 main.cc)
+add_executable(toyapp WIN32
+	scene.cc scene.h
+	main.cc)
 
 if(MINGW)
 	target_link_libraries(toyapp mingw32)

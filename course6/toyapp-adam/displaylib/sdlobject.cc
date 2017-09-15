@@ -13,7 +13,7 @@ SDLObject::SDLObject()
 {
 	if(gOjectCounter++ == 0)
 	{
-		int res = SDL_Init(SDL_INIT_VIDEO);
+		auto res = SDL_Init(SDL_INIT_VIDEO);
 		assert(res == 0);
 	}
 }
