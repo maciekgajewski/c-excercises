@@ -1,6 +1,7 @@
-#include "renderer.h"
-
 #include <iostream>
+
+#include "renderer.h"
+#include "matrix.h"
 
 namespace Draw {
 
@@ -39,7 +40,6 @@ void Renderer::Render(Shape& shape)
 			Render(dynamic_cast<Triangle&>(*primitive));
 		}
 	}
-
 }
 
 void Renderer::Render(Point& point)
@@ -47,9 +47,20 @@ void Renderer::Render(Point& point)
 	Vector3D v = point.idx0->vector;
 	Color color = point.idx0->color;
 
+	Vector3D vClip = Matrix4x4::Perspective(60.0f, 1.0f) * v;
+
+	std::cout << "VClip: " << vClip << std::endl;
+
+	VCoord x = vClip.x / vClip.w;
+	VCoord y = vClip.y / vClip.w;
+
+	Pixel halfDim;
+	halfDim.x = surfaceWidth/2;
+	halfDim.y = surfaceWidth/2;
+
 	Pixel pixel;
-	pixel.x = v.x * surfaceWidth/20;
-	pixel.y = v.y * surfaceHeight/20;
+	pixel.x = halfDim.x + v.x * halfDim.x;
+	pixel.y = halfDim.y + v.y * halfDim.y;
 	SetPixel(pixel, color);
 }
 

@@ -6,7 +6,8 @@ namespace Draw {
 
 //Shape::Shape(const Shape& shape) : name(shape.name)
 //{
-// std::unordered_set<Index>
+// Implement such that Vertices in new shape are shared as well
+// use std::unordered_set<Index> to check which Vertices are already created 
 //}
 
 Shape::Shape(Shape&& shape) : name(std::move(shape.name)),
@@ -51,6 +52,15 @@ Shape ShapeFactory::GetSquareLines()
 {
 	Shape shape("SquareLines");
 	auto indices = GetSquareIndices();
+
+	for (int j=0; j<4; ++j) {
+		// Two rounds 
+		for (int i : {0, 4}) {
+			shape.AddLine(indices[j%4+i], indices[(j+1)%4+i]);
+		}
+		// Connecting the rounds
+		shape.AddLine(indices[j], indices[j+4]);
+	}
 	return shape;
 }
 
@@ -74,7 +84,7 @@ std::vector<Index> ShapeFactory::GetSquareIndices()
 			}
 		}
 	}
-	std::cout << "GetSqureIndices returns" << std::endl;
+	std::cout << "GetSquareIndices returns" << std::endl;
 	return indices;
 }
 

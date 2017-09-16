@@ -42,7 +42,7 @@ Scenes SceneFactory::GetScenes()
 	// Scene2
 	Scene scene2;
 
-	Shape squarePoints2 = ShapeFactory::GetSquarePoints(); 
+	Shape squarePoints2 = ShapeFactory::GetSquareLines(); 
 	scene1.Add(std::move(squarePoints2));
 
 

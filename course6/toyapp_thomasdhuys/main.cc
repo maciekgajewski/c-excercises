@@ -27,10 +27,10 @@ int main()
 	// Test
 	Draw::Matrix4x4 m;
 
-	m.Set(3,1,3);
+	m[1][3] = 3;
 
-	std::cout << m.Get(1,3) << std::endl;
-	std::cout << m.Get(3,1) << std::endl;
+	std::cout << m[1][3] << std::endl;
+	std::cout << m[3][1] << std::endl;
 
 	return 0;
 }
