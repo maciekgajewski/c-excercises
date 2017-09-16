@@ -11,6 +11,24 @@ struct Color
 	Channel r;
 	Channel g;
 	Channel b;
+
+	Color operator*(float intensity)
+	{
+		return {
+			static_cast<Channel>(r * intensity),
+			static_cast<Channel>(g * intensity),
+			static_cast<Channel>(b * intensity)
+		};
+	}
+
+	Color operator+(const Color& rhs) const
+	{
+		return {
+			static_cast<Channel>(r + rhs.r),
+			static_cast<Channel>(g + rhs.g),
+			static_cast<Channel>(b + rhs.b)
+		};
+	}
 };
 
 const Color BLACK{0, 0, 0};
