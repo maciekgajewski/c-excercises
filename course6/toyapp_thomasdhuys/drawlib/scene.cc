@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cassert>
 
 #include "scene.h"
 #include "shape.h"
@@ -8,14 +9,14 @@ namespace Draw {
 SceneShapes& Scene::GetShapes() { return shapes; }
 const SceneShapes& Scene::GetShapes() const { return shapes; }
  
-void Scene::Add(const Shape& shape)
-{
-	shapes.push_back(shape);
-}
+//void Scene::Add(const Shape& shape)
+//{
+//	shapes.push_back(shape);
+//}
 
 void Scene::Add(Shape&& shape)
 {
-	shapes.push_back(shape);
+	shapes.push_back(std::move(shape));
 }
 
 std::ostream& operator<<(std::ostream& s , const Scene& scene)
@@ -35,19 +36,20 @@ Scenes SceneFactory::GetScenes()
 	// Scene1
 	Scene scene1;
 
-	Shape squarePoints = ShapeFactory::GetSquarePoints(); 
-	scene1.Add(squarePoints);
+	Shape squarePoints1 = ShapeFactory::GetSquarePoints(); 
+	scene1.Add(std::move(squarePoints1));
 
 	// Scene2
-	Scene scene1;
+	Scene scene2;
 
-	Shape squarePoints = ShapeFactory::GetSquarePoints(); 
-	scene1.Add(squarePoints);
+	Shape squarePoints2 = ShapeFactory::GetSquarePoints(); 
+	scene1.Add(std::move(squarePoints2));
 
 
 	// Push all scenes
-	scenes.push_back(std::move(scene1))
-	scenes.push_back(std::move(scene2))
+	scenes.push_back(std::move(scene1));
+	scenes.push_back(std::move(scene2));
+	return scenes;
 }
 
 }

@@ -22,9 +22,12 @@ private:
 	Display::Window DefaultWindow();
 	Display::Surface DefaultSurface();
 
-	void Render(const Point& point);
-	void Render(const Line& line);
-	void Render(const Triangle& triangle);
+	void Render(Scene& scene);
+	void Render(Shape& shape); 
+	void Render(Point& point);
+	void Render(Line& line);
+	void Render(Triangle& triangle);
+
 	void SetPixel(Pixel p, Color c); 
 
 	// Variables

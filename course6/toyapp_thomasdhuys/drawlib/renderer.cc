@@ -7,22 +7,42 @@ namespace Draw {
 void Renderer::Render(Scenes& scenes)
 {
 	for (auto& scene : scenes) {
+		Render(scene);
+		window.Display(surface);
+		Display::Delay(5000);		
+	}
+}
+
+void Renderer::Render(Scene& scene)
+{
 	for (auto& shape : scene.GetShapes()) {
-	for (auto& primitive : shape.GetPrimitives())
-	{
+		Render(shape);
+	}
+}
+
+void Renderer::Render(Shape& shape)
+{
+	for (auto& primitive : shape.GetPrimitives()){
+
 		std::cout << *primitive << std::endl;
-		Render(dynamic_cast<Point&>(*primitive));
-	}}}
-	window.Display(surface);
+
+		if (dynamic_cast<Point*>(primitive.get()))
+		{
+			Render(dynamic_cast<Point&>(*primitive));
+		}
+		else if (dynamic_cast<Line*>(primitive.get()))
+		{
+			Render(dynamic_cast<Line&>(*primitive));
+		}
+		else
+		{
+			Render(dynamic_cast<Triangle&>(*primitive));
+		}
+	}
+
 }
 
-Renderer::Renderer(int surfaceWidth, int surfaceHeight):
-window(DefaultWindow()), surface(DefaultSurface()),
-surfaceWidth(surfaceWidth), surfaceHeight(surfaceHeight) {
-
-}
-
-void Renderer::Render(const Point& point)
+void Renderer::Render(Point& point)
 {
 	Vector3D v = point.idx0->vector;
 	Color color = point.idx0->color;
@@ -33,7 +53,7 @@ void Renderer::Render(const Point& point)
 	SetPixel(pixel, color);
 }
 
-void Renderer::Render(const Line& line)
+void Renderer::Render(Line& line)
 {
 	Vector3D v1 = line.idx0->vector;
 	Color color1 = line.idx0->color;
@@ -47,7 +67,7 @@ void Renderer::Render(const Line& line)
 	SetPixel(pixel, color1);
 }
 
-void Renderer::Render(const Triangle& triangle)
+void Renderer::Render(Triangle& triangle)
 {
 
 }
@@ -67,5 +87,9 @@ Display::Surface Renderer::DefaultSurface()
 {
 	return Display::Surface(200,150);
 }
+
+Renderer::Renderer(int surfaceWidth, int surfaceHeight):
+window(DefaultWindow()), surface(DefaultSurface()),
+surfaceWidth(surfaceWidth), surfaceHeight(surfaceHeight) {}
 
 }

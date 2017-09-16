@@ -5,7 +5,6 @@
 #include "vertex.h"
 
 namespace Draw {
-namespace Primitives {
 
 
 class RawPrimitive {
@@ -57,4 +56,4 @@ std::ostream& operator<<(std::ostream& s, const Point& p);
 std::ostream& operator<<(std::ostream& s, const Line& p);
 std::ostream& operator<<(std::ostream& s, const Triangle& p);
 
-}}
+}

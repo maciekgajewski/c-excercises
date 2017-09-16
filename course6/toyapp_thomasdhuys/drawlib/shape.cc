@@ -4,23 +4,35 @@
 
 namespace Draw {
 
-void Shape::Shape(Shape& shape)
-{
+//Shape::Shape(const Shape& shape) : name(shape.name)
+//{
+// std::unordered_set<Index>
+//}
 
+Shape::Shape(Shape&& shape) : name(std::move(shape.name)),
+primitives(std::move(shape.primitives)), scale(std::move(shape.scale))
+{
+	
 }
+
 void Shape::AddPoint(Index idx0)
 {
-	primitives.push_back(new Primitives::Point(idx0));
+	primitives.emplace_back(new Point(idx0));
 }
 
-void Shape::AddLine(Index idx0; Index idx1)
+void Shape::AddLine(Index idx0, Index idx1)
 {
-	primitives.push_back(new Primitives::Line(idx0, idx1));
+	primitives.emplace_back(new Line(idx0, idx1));
 }
 
 void Shape::AddTriangle(Index idx0, Index idx1, Index idx2)
 {
-	primitives.push_back(new Primitives::Triangle(idx0, idx1, idx2));
+	primitives.emplace_back(new Triangle(idx0, idx1, idx2));
+}
+
+std::ostream& operator<<(std::ostream& s, const Shape& sh)
+{
+	return s << sh.name;
 }
 
 Shape ShapeFactory::GetSquarePoints()
@@ -29,7 +41,7 @@ Shape ShapeFactory::GetSquarePoints()
 	auto indices = GetSquareIndices();
 
 	for (Index& idx : indices){
-		Shape.AddPoint(idx);
+		shape.AddPoint(idx);
 	}
 	std::cout << shape << std::endl;
 	return shape;

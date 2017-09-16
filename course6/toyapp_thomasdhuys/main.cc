@@ -22,8 +22,6 @@ int main()
 	auto renderer = Draw::Renderer(surfaceWidth, surfaceHeight);
 	auto scenes = Draw::SceneFactory::GetScenes();
 
-	std::cout << scenes << std::endl;
-
 	renderer.Render(scenes);
 	
 	// Test
