@@ -1,6 +1,4 @@
 add_library(math
-	matrix.cc
-	transform.cc
-	vector.cc)
-
-set_property(TARGET math PROPERTY CXX_STANDARD 14)
+	matrix.cc matrix.h
+	transform.cc transform.h
+	vector.h)

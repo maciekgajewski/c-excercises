@@ -1,6 +1,7 @@
 add_library(util
-	clock.cc
-	keyboard.cc)
+	clock.h
+	keyboard.cc keyboard.h
+	mouse.h
+	pixel.h)
 
-set_property(TARGET util PROPERTY CXX_STANDARD 14)
 target_link_libraries(util SDL2)

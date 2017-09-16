@@ -1,23 +1,32 @@
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(toyapp)
 cmake_minimum_required(VERSION 3.0)
 
 set(SDL_ROOT "" CACHE STRING "SDL2 Library root path")
 
-include_directories(${SDL_ROOT}/include)
+if(SDL_ROOT)
+	include_directories(${SDL_ROOT}/include)
+	link_directories(${SDL_ROOT}/lib)
+endif()
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
-link_directories(${SDL_ROOT}/lib)
 
 add_subdirectory(displaylib)
 add_subdirectory(math)
 add_subdirectory(util)
 
-add_executable(toyapp WIN32 main.cc)
-set_property(TARGET toyapp PROPERTY CXX_STANDARD 14)
+add_executable(toyapp WIN32
+	scene.cc scene.h
+	main.cc)
+
+if(MINGW)
+	target_link_libraries(toyapp mingw32)
+endif()
 
 target_link_libraries(toyapp
-#	mingw32                    # HACK, @todo REMOVE and FIX!!
 	displaylib
 	math
 	util

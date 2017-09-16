@@ -1,26 +1,27 @@
 #include "sdlobject.h"
 
 #include <SDL2/SDL.h>
+
 #include <cassert>
 
 namespace Display {
 
-namespace {
-	unsigned gOjectCounter = 0;
-}
+static unsigned objectCounter = 0;
 
 SDLObject::SDLObject()
 {
-	if(gOjectCounter++ == 0)
+	if (objectCounter == 0)
 	{
-		auto res = SDL_Init(SDL_INIT_VIDEO);
+		int res = SDL_Init(SDL_INIT_VIDEO);
 		assert(res == 0);
 	}
+	objectCounter++;
 }
 
 SDLObject::~SDLObject()
 {
-	if(--gOjectCounter == 0)
+	objectCounter--;
+	if (objectCounter == 0)
 		SDL_Quit();
 }
 

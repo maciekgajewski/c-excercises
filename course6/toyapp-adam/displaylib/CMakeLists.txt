@@ -1,10 +1,10 @@
 add_library(displaylib
-	camera.cc
-	cube.cc
-	scene.cc
-	sdlobject.cc
-	surface.cc
-	window.cc)
+	camera.cc camera.h
+	color.h
+	cube.cc cube.h
+	sdlobject.cc sdlobject.h
+	surface_2d.cc surface_2d.h
+	surface_3d.cc surface_3d.h
+	window.cc window.h)
 
-set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
 target_link_libraries(displaylib SDL2)

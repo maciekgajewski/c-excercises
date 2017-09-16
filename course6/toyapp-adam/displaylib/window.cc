@@ -1,6 +1,6 @@
 #include "window.h"
 
-#include "surface.h"
+#include "surface_2d.h"
 #include <cassert>
 
 namespace Display {
@@ -24,7 +24,7 @@ void Window::Display(const Surface2D& surface)
 	assert(surface.mSurface);
 	SDL_RenderClear(mRenderer);
 
-	auto* const tex = SDL_CreateTextureFromSurface(mRenderer, surface.mSurface);
+	auto* tex = SDL_CreateTextureFromSurface(mRenderer, surface.mSurface);
 	assert(tex);
 
 	SDL_RenderCopy(mRenderer, tex, nullptr, nullptr);
