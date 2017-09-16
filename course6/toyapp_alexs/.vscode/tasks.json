@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "Build",
+            "type": "shell",
+            "command": "clear && cd ./build_/debug && cmake --DCMAKE_BUILD_TYPE=Debug ../../ && make",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "taskName": "Run",
+            "type": "shell",
+            "command": "clear && cd ./build_/debug && ./toyapp",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
