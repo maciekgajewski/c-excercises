@@ -1,11 +1,10 @@
 add_library(drawlib
 	primitives.cc primitives.h
-	index.cc index.h
-    rgb.h rgb.cc
-    colors.h
+	vertex.cc vertex.h
+    color.h color.cc
     renderer.cc renderer.h
-    render_object.cc render_object.h
-    drawer.cc drawer.h
+    scene.cc scene.h
+    shape.cc shape.h
     projector.cc projector.h
     vector3d.cc vector3d.h
     matrix.cc matrix.h

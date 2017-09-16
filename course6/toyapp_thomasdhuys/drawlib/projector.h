@@ -1,7 +1,7 @@
 #pragma once
 
-#include "index.h"
-#include "rgb.h"
+#include "vertex.h"
+#include "color.h"
 
 namespace Draw {
 
@@ -9,7 +9,7 @@ struct Pixel
 {
 	VCoord x;
 	VCoord y;
-	RGB color;
+	Color color;
 };
 
 class Projector {

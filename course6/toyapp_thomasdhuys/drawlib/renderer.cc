@@ -4,38 +4,42 @@
 
 namespace Draw {
 
-void Renderer::Render(RenderObject& ro)
+void Renderer::Render(Scenes& scenes)
 {
-	for (const auto& prim_ptr : *ro.GetData())
+	for (auto& scene : scenes) {
+	for (auto& shape : scene.GetShapes()) {
+	for (auto& primitive : shape.GetPrimitives())
 	{
-		std::cout << *prim_ptr << std::endl;
-		Render(dynamic_cast<Point&>(*prim_ptr));
-	}
+		std::cout << *primitive << std::endl;
+		Render(dynamic_cast<Point&>(*primitive));
+	}}}
+	window.Display(surface);
 }
 
-Renderer::Renderer(): window(DefaultWindow()), surface(DefaultSurface()) {
-	surfaceWidth  = 200;
-	surfaceHeight = 150;
+Renderer::Renderer(int surfaceWidth, int surfaceHeight):
+window(DefaultWindow()), surface(DefaultSurface()),
+surfaceWidth(surfaceWidth), surfaceHeight(surfaceHeight) {
+
 }
 
 void Renderer::Render(const Point& point)
 {
 	Vector3D v = point.idx0->vector;
-	RGB color = point.idx0->color;
+	Color color = point.idx0->color;
 
 	Pixel pixel;
-	pixel.x = v.x * surfaceWidth/2;
-	pixel.y = v.y * surfaceHeight/2;
+	pixel.x = v.x * surfaceWidth/20;
+	pixel.y = v.y * surfaceHeight/20;
 	SetPixel(pixel, color);
 }
 
 void Renderer::Render(const Line& line)
 {
 	Vector3D v1 = line.idx0->vector;
-	RGB color1 = line.idx0->color;
+	Color color1 = line.idx0->color;
 
 	Vector3D v2 = line.idx1->vector;
-	RGB color2 = line.idx1->color;
+	Color color2 = line.idx1->color;
 
 	Pixel pixel;
 	pixel.x = v1.x;
@@ -48,7 +52,7 @@ void Renderer::Render(const Triangle& triangle)
 
 }
 
-void Renderer::SetPixel(Pixel p, RGB c)
+void Renderer::SetPixel(Pixel p, Color c)
 {
 	std::cout << "SetPixel(" << p.x << "," << p.y << "," << c << ")" << std::endl;
 	surface.SetPixel(p.x, p.y, c.r, c.g, c.b);

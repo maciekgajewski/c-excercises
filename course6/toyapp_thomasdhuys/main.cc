@@ -6,10 +6,9 @@
 #include <displaylib/surface.h>
 
 #include <drawlib/renderer.h>
-#include <drawlib/render_object.h>
+#include <drawlib/scene.h>
 #include <drawlib/primitives.h>
-#include <drawlib/index.h>
-#include <drawlib/drawer.h>
+#include <drawlib/vertex.h>
 #include <drawlib/vector3d.h>
 #include <drawlib/matrix.h>
 
@@ -17,16 +16,16 @@ int main()
 {
 	std::cout << "Hello, here I am!" << std::endl;
 
-	Draw::Renderer r = Draw::Renderer();
-	Draw::RenderObject ro = Draw::Drawer::Draw();
+	int surfaceWidth = 200;
+	int surfaceHeight = 150;
 
-	std::cout << ro << std::endl;
+	auto renderer = Draw::Renderer(surfaceWidth, surfaceHeight);
+	auto scenes = Draw::SceneFactory::GetScenes();
 
-	r.Render(ro);
+	std::cout << scenes << std::endl;
+
+	renderer.Render(scenes);
 	
-	Display::Delay(5000);
-
-
 	// Test
 	Draw::Matrix4x4 m;
 

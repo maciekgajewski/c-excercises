@@ -1,5 +1,5 @@
-#include "index.h"
-#include "rgb.h"
+#include "vertex.h"
+#include "color.h"
 
 namespace Draw {
 
