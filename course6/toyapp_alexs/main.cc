@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
@@ -13,8 +14,8 @@ int main()
 {
 	std::cout << "Hello" << std::endl;
 
-	Display::Window win("Hello", 10, 10, 800, 600);
-	Display::Surface surf(200, 150);
+	Display::Window win("Hello", 10, 10, 800, 800);
+	Display::Surface surf(200, 200);
 	Display::Surface3D surf3d(surf);
 	Display::Cube cube(Display::RED);
 
@@ -34,7 +35,8 @@ int main()
 	surf3d.Clear(Display::BLUE);
 	cube = cube
 		.Transform(Display::Scale3D({1, 1, 5}))
-		.Transform(Display::Move3D({0, 0, -4}));
+		.Transform(Display::Move3D({0, 0, -4}))
+		.Transform(Display::Rotate3D(0, 0, M_PI / 4));
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 

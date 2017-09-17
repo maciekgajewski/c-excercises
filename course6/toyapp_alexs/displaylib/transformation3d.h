@@ -27,4 +27,18 @@ private:
     Vector3D mScale;
 };
 
+class Rotate3D: public Transformation3D {
+public:
+    Rotate3D(double thetaX, double thetaY, double thetaZ);
+    Vector3D Apply(Vector3D vertex) const;
+private:
+    double mThetaX;
+    double mThetaY;
+    double mThetaZ;
+
+    Vector3D ApplyX(Vector3D vertex) const;
+    Vector3D ApplyY(Vector3D vertex) const;
+    Vector3D ApplyZ(Vector3D vertex) const;
+};
+
 }

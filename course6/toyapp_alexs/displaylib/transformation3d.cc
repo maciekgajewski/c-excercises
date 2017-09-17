@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "vector3d.h"
 #include "transformation3d.h"
 
@@ -28,6 +30,45 @@ Vector3D Scale3D::Apply(Vector3D vertex) const
         vertex.x * mScale.x,
         vertex.y * mScale.y,
         vertex.z * mScale.z,
+    };
+}
+
+Rotate3D::Rotate3D(double thetaX, double thetaY, double thetaZ)
+{
+    mThetaX = thetaX;
+    mThetaY = thetaY;
+    mThetaZ = thetaZ;
+}
+
+Vector3D Rotate3D::Apply(Vector3D vertex) const
+{
+    return ApplyZ(ApplyY(ApplyX(vertex)));
+}
+
+Vector3D Rotate3D::ApplyX(Vector3D vertex) const
+{
+    return {
+        vertex.x,
+        cos(mThetaX) * vertex.y - sin(mThetaX) * vertex.z,
+        sin(mThetaX) * vertex.y + cos(mThetaX) * vertex.z,
+    };
+}
+
+Vector3D Rotate3D::ApplyY(Vector3D vertex) const
+{
+    return {
+        cos(mThetaY) * vertex.x + sin(mThetaY) * vertex.z,
+        vertex.y,
+        - sin(mThetaY) * vertex.x + cos(mThetaY) * vertex.z,
+    };
+}
+
+Vector3D Rotate3D::ApplyZ(Vector3D vertex) const
+{
+    return {
+        cos(mThetaZ) * vertex.x - sin(mThetaZ) * vertex.y,
+        sin(mThetaZ) * vertex.x + cos(mThetaZ) * vertex.y,
+        vertex.z,
     };
 }
 
