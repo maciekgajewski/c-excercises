@@ -3,6 +3,7 @@ add_library(displaylib
 	functions.cc functions.h
 	sdlobject.cc sdlobject.h
 	surface.cc surface.h
+	surface3d.cc surface3d.h
 	color.h
 	vector2d.h
 	vector3d.h

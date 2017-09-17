@@ -14,21 +14,14 @@ int main()
 
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
+	Display::Surface3D surf3d(surf);
 
-	surf.Clear(Display::BLUE);
+	surf3d.Clear(Display::BLUE);
 
 	Display::Cube cube({0, 0, 1}, Display::RED,1);
-	cube.Draw(surf);
-
-	win.Display(surf);
-
-	// for(int x = 0; x < 100; x++)
-	// {
-	// 	surf.Clear(blue);
-	// 	surf.SetPixel({10+x, 10}, red);
-	// 	win.Display(surf);
-	// 	Display::Delay(50);
-	// }
+	cube.Draw(surf3d);
+ 
+	win.Display(surf3d);
 
 	Display::Delay(5000);
 
