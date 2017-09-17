@@ -15,15 +15,29 @@ int main()
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
 	Display::Surface3D surf3d(surf);
+	Display::Cube cube(Display::RED);
 
 	surf3d.Clear(Display::BLUE);
 
-	Display::Cube cube({0, 0, 1}, Display::RED,1);
+	surf3d.Clear(Display::BLUE);
 	cube.Draw(surf3d);
- 
 	win.Display(surf3d);
 
-	Display::Delay(5000);
+	Display::Delay(2000);
+
+	surf3d.Clear(Display::BLUE);
+	cube.Move({0, 0, 2});
+	cube.Draw(surf3d);
+	win.Display(surf3d);
+
+	Display::Delay(2000);
+
+	surf3d.Clear(Display::BLUE);
+	cube.Scale({1, 1, 5}).Move({0, 0, -4});
+	cube.Draw(surf3d);
+	win.Display(surf3d);
+
+	Display::Delay(2000);
 
 	return 0;
 }

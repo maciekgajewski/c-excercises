@@ -1,19 +1,23 @@
 #pragma once
 
+#include <array>
+
 #include "vector2d.h"
-#include "shape3d.h"
 #include "surface3d.h"
 #include "color.h"
 
 namespace Display {
 
-class Cube: public Shape3D {
+class Cube {
 public:
-    Cube(Vector3D position, Color color, float size);
+    Cube(Color color);
     void Draw(Surface3D& surface);
+    Cube& Move(Vector3D move);
+    Cube& Scale(Vector3D scale);
 
 private:
-    float size;
+    Color mColor;
+    std::array<Vector3D, 8> mVertices;
 };
 
 }

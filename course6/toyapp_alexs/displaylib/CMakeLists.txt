@@ -7,7 +7,6 @@ add_library(displaylib
 	color.h
 	vector2d.h
 	vector3d.h
-	shape3d.cc shape3d.h
 	cube.cc cube.h
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
