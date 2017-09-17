@@ -1,0 +1,30 @@
+#pragma once
+
+#include "vector3d.h"
+
+namespace Display {
+
+class Transformation3D {
+public:
+    Transformation3D() {};
+    virtual Vector3D Apply(Vector3D vertex) const = 0;
+    virtual ~Transformation3D() = default;
+};
+
+class Move3D: public Transformation3D {
+public:
+    Move3D(Vector3D move);
+    Vector3D Apply(Vector3D vertex) const;
+private:
+    Vector3D mMove;
+};
+
+class Scale3D: public Transformation3D {
+public:
+    Scale3D(Vector3D scale);
+    Vector3D Apply(Vector3D vertex) const;
+private:
+    Vector3D mScale;
+};
+
+}

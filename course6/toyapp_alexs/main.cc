@@ -7,6 +7,7 @@
 #include <displaylib/vector3d.h>
 #include <displaylib/color.h>
 #include <displaylib/cube.h>
+#include <displaylib/transformation3d.h>
 
 int main()
 {
@@ -18,22 +19,22 @@ int main()
 	Display::Cube cube(Display::RED);
 
 	surf3d.Clear(Display::BLUE);
-
-	surf3d.Clear(Display::BLUE);
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 
 	Display::Delay(2000);
 
 	surf3d.Clear(Display::BLUE);
-	cube.Move({0, 0, 2});
+	cube = cube.Transform(Display::Move3D({0, 0, 2}));
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 
 	Display::Delay(2000);
 
 	surf3d.Clear(Display::BLUE);
-	cube.Scale({1, 1, 5}).Move({0, 0, -4});
+	cube = cube
+		.Transform(Display::Scale3D({1, 1, 5}))
+		.Transform(Display::Move3D({0, 0, -4}));
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 

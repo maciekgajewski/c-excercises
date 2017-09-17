@@ -2,18 +2,17 @@
 
 #include <array>
 
-#include "vector2d.h"
 #include "surface3d.h"
 #include "color.h"
+#include "transformation3d.h"
 
 namespace Display {
 
 class Cube {
 public:
     Cube(Color color);
-    void Draw(Surface3D& surface);
-    Cube& Move(Vector3D move);
-    Cube& Scale(Vector3D scale);
+    void Draw(Surface3D& surface) const;
+    Cube Transform(const Transformation3D& transformation) const;
 
 private:
     Color mColor;

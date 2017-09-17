@@ -1,6 +1,7 @@
 #include "surface.h"
 #include "cube.h"
 #include "vector3d.h"
+#include "transformation3d.h"
 
 namespace Display {
 
@@ -17,35 +18,17 @@ Cube::Cube(Color color)
     mVertices[7] = {-1, -1, -1};
 }
 
-Cube& Cube::Move(Vector3D move)
+Cube Cube::Transform(const Transformation3D& transformation) const
 {
+    Cube cube(mColor);
     for (int i = 0; i < mVertices.size(); i++)
     {
-        auto current = mVertices[i];
-        mVertices[i] = {
-            current.x + move.x,
-            current.y + move.y,
-            current.z + move.z
-        };
+        cube.mVertices[i] = transformation.Apply(mVertices[i]);
     }
-    return *this;
+    return cube;
 }
 
-Cube& Cube::Scale(Vector3D scale)
-{
-    for (int i = 0; i < mVertices.size(); i++)
-    {
-        auto current = mVertices[i];
-        mVertices[i] = {
-            current.x * scale.x,
-            current.y * scale.y,
-            current.z * scale.z
-        };
-    }
-    return *this;
-}
-
-void Cube::Draw(Surface3D& surface)
+void Cube::Draw(Surface3D& surface) const
 {
     surface.SetPixel(mVertices[0], this->mColor);
     surface.SetPixel(mVertices[1], this->mColor);
