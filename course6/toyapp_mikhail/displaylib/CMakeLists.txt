@@ -10,6 +10,7 @@ add_library(displaylib
 	cube.h
 	vector2d.h
 	vector3d.h
+	pyramid.h
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
 target_link_libraries(displaylib SDL2)

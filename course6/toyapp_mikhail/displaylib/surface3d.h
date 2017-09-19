@@ -19,14 +19,14 @@ namespace Display {
 		{
 			auto transformed = cameraTransform * p;
 
-			const auto shift = Vector3D{ 1.5, 1.5, 3.5 };
-			auto shited = transformed + shift;
-
+			auto pushBack3dShift = Vector3D{ 0, 0, 3.5 };
 			const auto scaling = 200.0;
+			auto centerScreenShift = Vector2D{ surface.GetW() / 2.0, surface.GetH() / 2.0 };
 
-			return {
-				scaling * shited.x / shited.z,
-				scaling * shited.y / shited.z };
+			auto shifted3d = transformed + pushBack3dShift;
+			auto zfactor = std::abs(shifted3d.z) < 0.001 ? 0.001 : shifted3d.z;
+
+			return centerScreenShift + Vector2D{shifted3d.x, shifted3d.y } * (scaling / zfactor);
 		}
 	public:
 		Surface3D(Surface& s) : surface(s) {}

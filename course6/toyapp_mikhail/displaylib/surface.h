@@ -15,7 +15,6 @@ namespace Display {
 	{
 	public:
 		Surface(int w, int h);
-
 		~Surface();
 
 		void Clear(RGB color);
@@ -26,10 +25,12 @@ namespace Display {
 
 		void DrawLine(Vector2D start, Vector2D end, RGB color);
 
+		int GetH();
+		int GetW();
+
 	private:
 
 		friend class Window;
-
 		SDL_Surface* mSurface;
 	};
 

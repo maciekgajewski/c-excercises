@@ -4,6 +4,7 @@
 #include "displaylib/surface3d.h"
 #include "displaylib/rgb.h"
 #include "displaylib/cube.h"
+#include "displaylib/pyramid.h"
 
 #include <SDL2/SDL_main.h>
 
@@ -54,7 +55,11 @@ int main(int, char**)
 
 	// 3D animation
 	auto cubeColor = Display::RGB{ 210, 10, 10 };
+	auto pyramidColor = Display::RGB{ 10, 210, 10 };
+
 	auto cube = Display::Cube{ Display::Matrix(), cubeColor };
+	auto pyramid = Display::Pyramid{ Display::Matrix(), pyramidColor };
+
 	auto surface3d = Display::Surface3D(surface2d);
 
 	// Let user close window
@@ -63,6 +68,7 @@ int main(int, char**)
 		surface2d.Clear(backgroundColor);
 
 		cube.Draw(surface3d);
+		pyramid.Draw(surface3d);
 		window.Display(surface2d);
 
 		Display::PollEvents(quit);
