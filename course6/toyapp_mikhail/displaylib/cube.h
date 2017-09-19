@@ -10,9 +10,12 @@ namespace Display {
 
 	class Cube
 	{
+	private:
 		Matrix transformation;
 		RGB color;
 
+	public:
+		Cube(Matrix m, RGB color) :transformation(m), color(color) {};
 		void Draw(Surface3D& surface)
 		{
 			Vector2D edges[] = { Vector2D {-1, -1}, Vector2D{ -1, +1 }, Vector2D{ +1, -1 }, Vector2D{ +1, +1 } };
