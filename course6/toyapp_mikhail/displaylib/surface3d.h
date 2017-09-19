@@ -1,6 +1,11 @@
 #pragma once
 
 #include "surface.h"
+#include "matrix.h"
+#include "vector3d.h"
+#include "triangle.h"
+
+#include <vector>
 
 namespace Display {
 
@@ -20,29 +25,19 @@ namespace Display {
 			surface->SetPixel(Transform(p), color);
 		}
 
-		void DrawLine(Vector3D start, Vector3D end, RGB color)
+		void DrawLine(const Vector3D& start, const Vector3D& end, RGB color)
 		{
 			surface->DrawLine(Transform(start), Transform(end), color);
 		}
-	};
 
-	class Cube
-	{
-		Matrix transformation;
-		RGB color;
+		void Draw(const Triangle& t, RGB color);
 
-		void Draw(Surface3D& surface)
+		void Draw(const std::vector<Triangle>& tt, RGB color)
 		{
-			Vector2D edges[] = { Vector2D {-1, -1}, Vector2D{ -1, +1 }, Vector2D{ +1, -1 }, Vector2D{ +1, +1 } };
-
-			for (auto i = 0; i < 4; ++i)
+			for (auto t : tt)
 			{
-				auto v = edges[i];
-				surface.DrawLine(transformation * Vector3D{ v.x, v.y, -1 }, transformation * Vector3D{ v.x, v.y, +1 }, color);
-				surface.DrawLine(transformation * Vector3D{ v.x, -1, v.y }, transformation * Vector3D{ v.x, +1, v.y }, color);
-				surface.DrawLine(transformation * Vector3D{ -1, v.x, v.y }, transformation * Vector3D{ +1, v.x, v.y }, color);
+				Draw(t, color);
 			}
 		}
 	};
-
 };

@@ -16,7 +16,6 @@ int main(int, char**)
 		w * 2, h * 2);
 
 	Display::Surface surf(w, h);
-	SDL_Event event;
 	auto quit = false;
 
 	auto start_x = w / 3, start_y = h / 3;
