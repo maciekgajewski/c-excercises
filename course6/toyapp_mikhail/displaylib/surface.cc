@@ -56,8 +56,8 @@ namespace Display {
 			auto ratio = (x1 == x2) ? 1.0 : 1.0*(y1 - y2) / (x1 - x2);
 			for (auto x = x1; x <= x2; ++x)
 			{
-				auto y = (int)std::round(y1 + ratio * (x-x1));
-				SetPixel( x, y , color);
+				auto y = (int)std::round(y1 + ratio * (x - x1));
+				SetPixel(x, y, color);
 			}
 		}
 		else
@@ -70,8 +70,8 @@ namespace Display {
 			auto ratio = (y1 == y2) ? 1.0 : 1.0*(x1 - x2) / (y1 - y2);
 			for (auto y = y1; y <= y2; ++y)
 			{
-				auto x = (int) x1 + ratio * (y - y1);
-				SetPixel(x, y , color);
+				auto x = (int)std::round(x1 + ratio * (y - y1));
+				SetPixel(x, y, color);
 			}
 		}
 	}
