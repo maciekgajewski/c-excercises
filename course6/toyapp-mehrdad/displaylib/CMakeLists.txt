@@ -3,7 +3,8 @@ add_library(displaylib
 	functions.cc functions.h
 	sdlobject.cc sdlobject.h
 	surface.cc surface.h
-	objects.cc objects.h
+    types.h
+    shapes.h shapes.cc
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
 target_link_libraries(displaylib SDL2)

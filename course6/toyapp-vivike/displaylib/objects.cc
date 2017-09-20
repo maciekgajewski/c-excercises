@@ -4,7 +4,7 @@
 
 namespace Display {
 
-void Color::Redder(int amount)
+void Color::redder(int amount)
 {
 	if(R + amount <= 255)
 	{
@@ -23,6 +23,8 @@ Vector2D Vector3D::project2D()
 	Vector2D newVector;
 	newVector.x = x/z;
 	newVector.y = y/z;
-};
+
+	return newVector;
+}
 
 }
