@@ -23,10 +23,12 @@ public:
 	void SetPixel(Vector3D vector, Color color) { mSurface.SetPixel(Project(vector), color); }
 	void DrawLine(Vector3D start, Vector3D end, Color color) { mSurface.DrawLine(Project(start), Project(end), color); }
 	void DrawTriangle(const Triangle3D& triangle, Color color);
+	void DrawTriangles(const std::vector<Triangle3D>& triangles, Color color);
 private:
 	Surface2D& mSurface;
 
 	Vector2D Project(Vector3D vector) const;
+	Triangle2D Project(Triangle3D triangle) const;
 };
 
 }

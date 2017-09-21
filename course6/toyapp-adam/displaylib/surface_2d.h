@@ -6,6 +6,7 @@
 #include "sdlobject.h"
 #include "util/pixel.h"
 #include <SDL2/SDL.h>
+#include <vector>
 
 namespace Display {
 
@@ -29,6 +30,7 @@ public:
 	void SetPixel(Vector2D position, Color color);
 	void DrawLine(Vector2D start, Vector2D end, Color color);
 	void DrawTriangle(const Triangle2D& triangle, Color color);
+	void DrawTriangles(const std::vector<Triangle2D>& triangles, Color color);
 private:
 	SDL_Surface* mSurface;
 	Pixel mHalfDimensions;

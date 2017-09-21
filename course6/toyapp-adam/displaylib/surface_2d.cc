@@ -126,6 +126,12 @@ void Surface2D::DrawTriangle(const Triangle2D& triangle, Color color)
 	DrawTriangle(ToPixel(triangle[0]), ToPixel(triangle[1]), ToPixel(triangle[2]), color);
 }
 
+void Surface2D::DrawTriangles(const std::vector<Triangle2D>& triangles, Color color)
+{
+	for(auto& triangle : triangles)
+		DrawTriangle(triangle, color);
+}
+
 Pixel Surface2D::ToPixel(Vector2D logicalCoordinates)
 {
 	return {
