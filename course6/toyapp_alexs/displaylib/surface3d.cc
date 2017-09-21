@@ -10,7 +10,6 @@ namespace Display {
 
 Surface3D::Surface3D(Surface& surface) : mSurface(surface)
 {
-	mSurface = surface;
 }
 
 void Surface3D::Clear(Color color)

@@ -13,7 +13,6 @@ public:
 	Surface3D(Surface& surface);
 
 	void Clear(Color color);
-	// TODO ask where it is better to use references and where copy ???
 	void SetPixel(const Vector3D& vector, Color color);
 
 private:

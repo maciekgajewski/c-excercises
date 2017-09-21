@@ -9,6 +9,9 @@ public:
     Transformation3D() {};
     virtual Vector3D Apply(Vector3D vertex) const = 0;
     virtual ~Transformation3D() = default;
+
+    // TODO: implement transformation in terms of matrices and implement Combine
+    // Transformation3D Combine(Transformation3D otherTransformation);
 };
 
 class Move3D: public Transformation3D {

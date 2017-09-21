@@ -1,7 +1,7 @@
-#include <cmath>
-
 #include "vector3d.h"
 #include "transformation3d.h"
+
+#include <cmath>
 
 namespace Display {
 
@@ -49,25 +49,25 @@ Vector3D Rotate3D::ApplyX(Vector3D vertex) const
 {
     return {
         vertex.x,
-        cos(mThetaX) * vertex.y - sin(mThetaX) * vertex.z,
-        sin(mThetaX) * vertex.y + cos(mThetaX) * vertex.z,
+        std::cos(mThetaX) * vertex.y - std::sin(mThetaX) * vertex.z,
+        std::sin(mThetaX) * vertex.y + std::cos(mThetaX) * vertex.z,
     };
 }
 
 Vector3D Rotate3D::ApplyY(Vector3D vertex) const
 {
     return {
-        cos(mThetaY) * vertex.x + sin(mThetaY) * vertex.z,
+        std::cos(mThetaY) * vertex.x + std::sin(mThetaY) * vertex.z,
         vertex.y,
-        - sin(mThetaY) * vertex.x + cos(mThetaY) * vertex.z,
+        - std::sin(mThetaY) * vertex.x + std::cos(mThetaY) * vertex.z,
     };
 }
 
 Vector3D Rotate3D::ApplyZ(Vector3D vertex) const
 {
     return {
-        cos(mThetaZ) * vertex.x - sin(mThetaZ) * vertex.y,
-        sin(mThetaZ) * vertex.x + cos(mThetaZ) * vertex.y,
+        std::cos(mThetaZ) * vertex.x - std::sin(mThetaZ) * vertex.y,
+        std::sin(mThetaZ) * vertex.x + std::cos(mThetaZ) * vertex.y,
         vertex.z,
     };
 }
