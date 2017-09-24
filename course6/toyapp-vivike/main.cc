@@ -19,9 +19,7 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector2D activePixel;
-	activePixel.x = 10;
-	activePixel.y = 10;
+	Display::Vector2D activePixel{10, 10};
 		
 
 	for(int x = 0; x < 20; x++)
@@ -34,7 +32,7 @@ int main(int, char**)
 		Display::Delay(200);
 	}
 
-	Display::Delay(5000);
+	Display::Delay(1000);
 
 	return 0;
 }

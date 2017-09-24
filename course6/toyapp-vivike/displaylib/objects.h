@@ -30,4 +30,9 @@ struct Vector3D
 	Vector2D project2D();
 };
 
+struct Camera
+{
+	Vector2D project2D(Vector3D original);
+};
+
 }
