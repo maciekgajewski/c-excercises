@@ -15,10 +15,7 @@ int main(int, char**)
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
 
-	Display::Color blue;
-	blue.R = 0;
-	blue.G = 0;
-	blue.B = 255;
+	Display::Color blue{0, 0, 255};
 
 	surf.Clear(blue); // blue background
 
@@ -29,10 +26,7 @@ int main(int, char**)
 
 	for(int x = 0; x < 20; x++)
 	{
-		Display::Color red;
-		red.R = 255;
-		red.G = 0;
-		red.B = 0;
+		Display::Color red{255, 0, 0};
 
 		surf.SetPixel(activePixel, red); // red pixel at 10x10
 		activePixel.move(1, 0);
