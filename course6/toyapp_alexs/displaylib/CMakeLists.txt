@@ -1,4 +1,5 @@
 add_library(displaylib
+	matrix.cc matrix.h
 	window.cc window.h
 	functions.cc functions.h
 	sdlobject.cc sdlobject.h

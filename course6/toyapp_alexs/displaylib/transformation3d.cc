@@ -1,74 +1,116 @@
 #include "vector3d.h"
+#include "matrix.h"
 #include "transformation3d.h"
 
 #include <cmath>
+#include <iostream>
 
 namespace Display {
 
-Move3D::Move3D(Vector3D move) : Transformation3D()
+Transformation3D::Transformation3D()
+	: mMatrix({
+	1, 0, 0, 0,
+	0, 1, 0, 0,
+	0, 0, 1, 0,
+	0, 0, 0, 1
+})
 {
-	mMove = move;
 }
 
-Vector3D Move3D::Apply(Vector3D vertex) const
+Transformation3D::Transformation3D(Matrix<4, 4> matrix)
+	: mMatrix(matrix)
+{
+}
+
+Transformation3D::Transformation3D(std::array<std::array<double, 4>, 4> matrix)
+	: mMatrix(matrix)
+{
+}
+
+Transformation3D Transformation3D::Combine(const Transformation3D& otherTransformation) const
 {
 	return {
-		vertex.x + mMove.x,
-				vertex.y + mMove.y,
-				vertex.z + mMove.z,
+		this->mMatrix * otherTransformation.mMatrix
 	};
 }
 
-Scale3D::Scale3D(Vector3D scale) : Transformation3D()
+Transformation3D Transformation3D::WithRotation(double thetaX, double thetaY, double thetaZ) const
 {
-	mScale = scale;
-}
-
-Vector3D Scale3D::Apply(Vector3D vertex) const
-{
-	return {
-		vertex.x * mScale.x,
-				vertex.y * mScale.y,
-				vertex.z * mScale.z,
+	Transformation3D transformationX
+	{
+		{
+			1, 0, 0, 0,
+			0, std::cos(thetaX), -std::sin(thetaX), 0,
+			0, std::sin(thetaX), std::cos(thetaX), 0,
+			0, 0, 0, 1
+		}
 	};
-}
-
-Rotate3D::Rotate3D(double thetaX, double thetaY, double thetaZ)
-{
-	mThetaX = thetaX;
-	mThetaY = thetaY;
-	mThetaZ = thetaZ;
-}
-
-Vector3D Rotate3D::Apply(Vector3D vertex) const
-{
-	return ApplyZ(ApplyY(ApplyX(vertex)));
-}
-
-Vector3D Rotate3D::ApplyX(Vector3D vertex) const
-{
-	return {
-		vertex.x,
-				std::cos(mThetaX) * vertex.y - std::sin(mThetaX) * vertex.z,
-				std::sin(mThetaX) * vertex.y + std::cos(mThetaX) * vertex.z,
+	Transformation3D transformationY
+	{
+		{
+			std::cos(thetaY), 0, std::sin(thetaY), 0,
+			0, 1, 0, 0,
+			-std::sin(thetaY), 0, std::cos(thetaY), 0,
+			0, 0, 0, 1
+		}
 	};
-}
-
-Vector3D Rotate3D::ApplyY(Vector3D vertex) const
-{
-	return {
-		std::cos(mThetaY) * vertex.x + std::sin(mThetaY) * vertex.z,
-				vertex.y,
-				- std::sin(mThetaY) * vertex.x + std::cos(mThetaY) * vertex.z,
+	Transformation3D transformationZ
+	{
+		{
+			std::cos(thetaZ), -std::sin(thetaZ), 0, 0,
+			std::sin(thetaZ), std::cos(thetaZ), 0, 0,
+			0, 0, 1, 0,
+			0, 0, 0, 1
+		}
 	};
+	return Combine(transformationX)
+			.Combine(transformationY)
+			.Combine(transformationZ);
 }
 
-Vector3D Rotate3D::ApplyZ(Vector3D vertex) const
+Transformation3D Transformation3D::WithMoving(const Vector3D& vector) const
 {
+	Transformation3D transformation
+	{
+		{
+			1,0,0,vector.x,
+			0,1,0,vector.y,
+			0,0,1,vector.z,
+			0,0,0,1
+		}
+	};
+	return Combine(transformation);
+}
+
+Transformation3D Transformation3D::WithScaling(const Vector3D& vector) const
+{
+	Transformation3D transformation
+	{
+		{
+			vector.x, 0, 0, 0,
+			0, vector.y, 0, 0,
+			0, 0, vector.z, 0,
+			0, 0, 0, 1
+		}
+	};
+	return Combine(transformation);
+}
+
+Vector3D Transformation3D::Apply(const Vector3D& vector) const
+{
+	Matrix<4, 1> vMatrix {{
+		vector.x,
+		vector.y,
+		vector.z,
+		1
+	}};
+
+	Matrix<4, 1> result = mMatrix * vMatrix;
+
 	return {
-		std::cos(mThetaZ) * vertex.x - std::sin(mThetaZ) * vertex.y,
-				std::sin(mThetaZ) * vertex.x + std::cos(mThetaZ) * vertex.y,
-				vertex.z,
+		result[0][0],
+		result[1][0],
+		result[2][0]
 	};
 }
 
