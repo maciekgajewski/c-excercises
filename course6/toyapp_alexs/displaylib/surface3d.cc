@@ -34,7 +34,7 @@ Vector2D Surface3D::GetProjection(const Vector3D& vector) const
 
 	return Vector2D {
 		centerX + static_cast<int>(vector.x / vector.z * scaleX),
-		centerY - static_cast<int>(vector.y / vector.z * scaleY)
+				centerY - static_cast<int>(vector.y / vector.z * scaleY)
 	};
 }
 

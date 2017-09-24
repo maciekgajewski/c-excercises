@@ -10,13 +10,13 @@ namespace Display {
 
 class Cube {
 public:
-    Cube(Color color);
-    void Draw(Surface3D& surface) const;
-    Cube Transform(const Transformation3D& transformation) const;
+	Cube(Color color);
+	void Draw(Surface3D& surface) const;
+	Cube Transform(const Transformation3D& transformation) const;
 
 private:
-    Color mColor;
-    std::array<Vector3D, 8> mVertices;
+	Color mColor;
+	std::array<Vector3D, 8> mVertices;
 };
 
 }

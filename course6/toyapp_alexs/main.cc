@@ -34,9 +34,9 @@ int main()
 
 	surf3d.Clear(Display::BLUE);
 	cube = cube
-		.Transform(Display::Scale3D({1, 1, 5}))
-		.Transform(Display::Move3D({0, 0, -4}))
-		.Transform(Display::Rotate3D(0, 0, M_PI / 4));
+			.Transform(Display::Scale3D({1, 1, 5}))
+			.Transform(Display::Move3D({0, 0, -4}))
+			.Transform(Display::Rotate3D(0, 0, M_PI / 4));
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 

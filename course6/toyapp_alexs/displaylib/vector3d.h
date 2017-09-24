@@ -6,7 +6,7 @@
 namespace Display {
 
 struct Vector3D {
-    double x, y, z;
+	double x, y, z;
 };
 
 }
