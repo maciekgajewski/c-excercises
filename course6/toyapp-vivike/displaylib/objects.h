@@ -26,8 +26,6 @@ struct Vector3D
 	int x;
 	int y;
 	int z;
-
-	Vector2D project2D();
 };
 
 struct Camera
