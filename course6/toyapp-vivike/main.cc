@@ -34,7 +34,8 @@ int main(int, char**)
 		red.G = 0;
 		red.B = 0;
 
-		surf.SetPixel(activePixel, red); // red pixel at 10x10
+		//surf.SetPixel(activePixel, red); // red pixel at 10x10
+		surf.DrawLine(activePixel, activePixel + Display::Vector2D{0, 5}, red);
 		win.Display(surf);
 		activePixel = activePixel + Display::Vector2D{x, 0};
 		

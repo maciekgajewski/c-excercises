@@ -17,6 +17,7 @@ public:
 
 	void Clear(Color backgroundColor);
 	void SetPixel(Vector2D pixel, Color currentColor);
+	void DrawLine(Vector2D p1, Vector2D p2, Color color);
 
 private:
 

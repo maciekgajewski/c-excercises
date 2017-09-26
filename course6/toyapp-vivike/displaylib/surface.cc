@@ -2,6 +2,7 @@
 #include "objects.h"
 
 #include <cassert>
+#include <algorithm>
 
 namespace Display {
 
@@ -38,6 +39,51 @@ void Surface::SetPixel(Vector2D pixel, Color currentColor)
 
 	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel.y*mSurface->pitch/4 + pixel.x);
 	*pixelAddr = pixelValue;
+}
+
+void Surface::DrawLine(Vector2D p1, Vector2D p2, Color color)
+{
+	// Bresenham's line algorithm
+	const bool steep = (fabs(p2.y - p1.y) > fabs(p2.x - p1.x));
+	if(steep)
+	{
+		std::swap(p1.x, p1.y);
+		std::swap(p2.x, p2.y);
+	}
+
+	if(p1.x > p2.x)
+	{
+		std::swap(p1.x, p2.x);
+		std::swap(p1.y, p2.y);
+	}
+
+	const float dx = p2.x - p1.x;
+	const float dy = fabs(p2.y - p1.y);
+
+	float error = dx / 2.0f;
+	const int ystep = (p1.y < p2.y) ? 1 : -1;
+	int y = p1.y;
+
+	const int maxX = p2.x;
+
+	for(int x=p1.x; x<maxX; x++)
+	{
+		if(steep)
+		{
+			SetPixel({y,x}, color);
+		}
+		else
+		{
+			SetPixel({x,y}, color);
+		}
+
+		error -= dy;
+		if(error < 0)
+		{
+			y += ystep;
+			error += dx;
+		}
+	}
 }
 
 }
