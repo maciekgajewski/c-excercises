@@ -35,8 +35,9 @@ int main(int, char**)
 		red.B = 0;
 
 		surf.SetPixel(activePixel, red); // red pixel at 10x10
-		activePixel.move(1, 0);
 		win.Display(surf);
+		activePixel = 10 + activePixel;
+		
 		Display::Delay(200);
 	}
 

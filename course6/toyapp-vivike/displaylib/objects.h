@@ -19,7 +19,13 @@ struct Vector2D
 	int y;
 
 	void move(int xmove, int ymove);
+	
+	//Vector2D operator +(Vector2D b) { return { x + b.x, y + b.y}; }
+	
 };
+
+//Vector2D operator +(Vector2D a, int b) { return { a.x + b, a.y + b}; }
+Vector2D operator +(int b, Vector2D a) { return { a.x + b, a.y + b}; }
 
 struct Vector3D
 {
