@@ -62,6 +62,6 @@ struct Rectangle
 	Vector3D corner4;
 
 	Rectangle move(Vector3D);
-}
+};
 
 }

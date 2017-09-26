@@ -19,7 +19,7 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector3D activePoint{10, 10, 1};
+	Display::Rectangle rect{{100, 100, 1}, {100, 150, 1}, {150, 150, 1}, {150, 100, 1}};
 	Display::Camera cam;
 		
 
@@ -27,10 +27,15 @@ int main(int, char**)
 	{
 		Display::Color red{255, 0, 0};
 
-		//surf.SetPixel(cam.project2D(activePoint), red);
-		surf.DrawLine(cam.project2D(activePoint), cam.project2D(activePoint + Display::Vector3D{10, 0, 0}), red);
+		surf.Clear(blue); // blue background
+		
+		surf.DrawLine(cam.project2D(rect.corner1), cam.project2D(rect.corner2), red);
+		surf.DrawLine(cam.project2D(rect.corner2), cam.project2D(rect.corner3), red);
+		surf.DrawLine(cam.project2D(rect.corner3), cam.project2D(rect.corner4), red);
+		surf.DrawLine(cam.project2D(rect.corner4), cam.project2D(rect.corner1), red);
+		
 		win.Display(surf);
-		activePoint = activePoint + Display::Vector3D{0, 10, 0};
+		rect = rect.move({0, 0, 1});
 		
 		Display::Delay(100);
 	}
