@@ -20,14 +20,28 @@ void Surface3D::DrawTriangle(const Triangle3D& triangle, Color color)
 	auto halfColor = color * 0.5f;
 	auto shadedColor = halfColor + halfColor * -angle;
 
-	Triangle2D projectedTriangle = {Project(triangle[0]), Project(triangle[1]), Project(triangle[2])};
-	mSurface.DrawTriangle(projectedTriangle, shadedColor);
+	mSurface.DrawTriangle(Project(triangle), shadedColor);
+}
+
+void Surface3D::DrawTriangles(const std::vector<Triangle3D>& triangles, Color color)
+{
+	for(auto& triangle : triangles)
+		DrawTriangle(triangle, color);
 }
 
 Vector2D Surface3D::Project(Vector3D vector) const
 {
 	auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
 	return {clipSpace.x / clipSpace.w, clipSpace.y / clipSpace.w};
+}
+
+Triangle2D Surface3D::Project(Triangle3D triangle) const
+{
+	return {
+		Project(triangle[0]),
+		Project(triangle[1]),
+		Project(triangle[2])
+	};
 }
 
 }

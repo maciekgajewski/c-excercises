@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include <array>
 
 namespace Math {
 
@@ -17,7 +18,7 @@ public:
 	Vector2D& operator[](unsigned index) { return mPoints[index]; }
 	Vector2D operator[](unsigned index) const { return mPoints[index]; }
 private:
-	Vector2D mPoints[3];
+	std::array<Vector2D, 3> mPoints;
 };
 
 class Triangle3D
@@ -38,7 +39,7 @@ public:
 		return (mPoints[1] - mPoints[0]).Cross(mPoints[2] - mPoints[0]).Normalized();
 	}
 private:
-	Vector3D mPoints[3];
+	std::array<Vector3D, 3> mPoints;
 };
 
 }

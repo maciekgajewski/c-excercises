@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.h"
+#include <array>
 
 namespace Math {
 
@@ -20,7 +21,7 @@ public:
 private:
 	Matrix44() {}
 
-	float mMatrix[4 * 4];
+	std::array<float, 4 * 4> mMatrix;
 };
 
 }
