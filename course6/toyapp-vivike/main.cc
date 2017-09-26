@@ -36,7 +36,7 @@ int main(int, char**)
 
 		surf.SetPixel(activePixel, red); // red pixel at 10x10
 		win.Display(surf);
-		activePixel = 10 + activePixel;
+		activePixel = activePixel + Display::Vector2D{x, 0};
 		
 		Display::Delay(200);
 	}

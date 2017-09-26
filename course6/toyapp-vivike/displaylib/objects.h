@@ -20,12 +20,16 @@ struct Vector2D
 
 	void move(int xmove, int ymove);
 	
-	//Vector2D operator +(Vector2D b) { return { x + b.x, y + b.y}; }
-	
-};
+	Vector2D operator +(Vector2D b) { return { x + b.x, y + b.y}; }
+	Vector2D operator +(int b) { return { x + b, y + b}; }	
 
-//Vector2D operator +(Vector2D a, int b) { return { a.x + b, a.y + b}; }
-Vector2D operator +(int b, Vector2D a) { return { a.x + b, a.y + b}; }
+	Vector2D operator *(int b) { return { x * b, y * b}; }
+
+	Vector2D operator -(Vector2D r) { return { x - r.x, y - r.y}; }
+	Vector2D operator -(int r) { return { x - r, y - r}; }
+
+	Vector2D operator /(int b) { return { x / b, y / b}; }
+};
 
 struct Vector3D
 {
