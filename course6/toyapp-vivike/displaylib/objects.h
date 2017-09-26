@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 
 namespace Display {
 
@@ -19,6 +20,16 @@ struct Vector2D
 	int y;
 
 	void move(int xmove, int ymove);
+	
+	Vector2D operator +(Vector2D b) { return { x + b.x, y + b.y}; }
+	Vector2D operator +(int b) { return { x + b, y + b}; }	
+
+	Vector2D operator *(int b) { return { x * b, y * b}; }
+
+	Vector2D operator -(Vector2D r) { return { x - r.x, y - r.y}; }
+	Vector2D operator -(int r) { return { x - r, y - r}; }
+
+	Vector2D operator /(int r) { return { x / r, y / r}; }
 };
 
 struct Vector3D
@@ -27,7 +38,30 @@ struct Vector3D
 	int y;
 	int z;
 
-	Vector2D project2D();
+	Vector3D operator +(Vector3D b) { return { x + b.x, y + b.y, z + b.z}; }
+	Vector3D operator +(int b) { return { x + b, y + b, z + b}; }	
+
+	Vector3D operator *(int b) { return { x * b, y * b, z * b}; }
+
+	Vector3D operator -(Vector3D r) { return { x - r.x, y - r.y, z - r.z}; }
+	Vector3D operator -(int r) { return { x - r, y - r, z - r}; }
+
+	Vector3D operator /(int r) { return { x / r, y / r, z / r}; }
+};
+
+struct Camera
+{
+	Vector2D project2D(Vector3D original);
+};
+
+struct Rectangle
+{
+	Vector3D corner1;
+	Vector3D corner2;
+	Vector3D corner3;
+	Vector3D corner4;
+
+	Rectangle move(Vector3D);
 };
 
 }

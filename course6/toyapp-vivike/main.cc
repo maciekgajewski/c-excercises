@@ -15,32 +15,32 @@ int main(int, char**)
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
 
-	Display::Color blue;
-	blue.R = 0;
-	blue.G = 0;
-	blue.B = 255;
+	Display::Color blue{0, 0, 255};
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector2D activePixel;
-	activePixel.x = 10;
-	activePixel.y = 10;
+	Display::Rectangle rect{{100, 100, 1}, {100, 150, 1}, {150, 150, 1}, {150, 100, 1}};
+	Display::Camera cam;
 		
 
 	for(int x = 0; x < 20; x++)
 	{
-		Display::Color red;
-		red.R = 255;
-		red.G = 0;
-		red.B = 0;
+		Display::Color red{255, 0, 0};
 
-		surf.SetPixel(activePixel, red); // red pixel at 10x10
-		activePixel.move(1, 0);
+		surf.Clear(blue); // blue background
+		
+		surf.DrawLine(cam.project2D(rect.corner1), cam.project2D(rect.corner2), red);
+		surf.DrawLine(cam.project2D(rect.corner2), cam.project2D(rect.corner3), red);
+		surf.DrawLine(cam.project2D(rect.corner3), cam.project2D(rect.corner4), red);
+		surf.DrawLine(cam.project2D(rect.corner4), cam.project2D(rect.corner1), red);
+		
 		win.Display(surf);
-		Display::Delay(200);
+		rect = rect.move({0, 0, 1});
+		
+		Display::Delay(100);
 	}
 
-	Display::Delay(5000);
+	Display::Delay(1000);
 
 	return 0;
 }
