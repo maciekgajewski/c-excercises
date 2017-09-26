@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
 
 namespace Display {
 
@@ -52,5 +53,15 @@ struct Camera
 {
 	Vector2D project2D(Vector3D original);
 };
+
+struct Rectangle
+{
+	Vector3D corner1;
+	Vector3D corner2;
+	Vector3D corner3;
+	Vector3D corner4;
+
+	Rectangle move(Vector3D);
+}
 
 }
