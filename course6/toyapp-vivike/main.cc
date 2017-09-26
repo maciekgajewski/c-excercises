@@ -38,10 +38,10 @@ int main(int, char**)
 		win.Display(surf);
 		activePixel = activePixel + Display::Vector2D{x, 0};
 		
-		Display::Delay(200);
+		Display::Delay(100);
 	}
 
-	Display::Delay(5000);
+	Display::Delay(1000);
 
 	return 0;
 }
