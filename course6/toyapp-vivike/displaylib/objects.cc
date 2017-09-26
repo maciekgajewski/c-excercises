@@ -27,4 +27,13 @@ Vector2D Vector3D::project2D()
 	return newVector;
 }
 
+Rectangle Rectangle::move(Vector3D move)
+{
+	Rectangle newRectangle;
+	newRectangle.corner1 = corner1 + move
+	newRectangle.corner2 = corner2 + move
+	newRectangle.corner3 = corner3 + move
+	newRectangle.corner4 = corner4 + move
+}
+
 }
