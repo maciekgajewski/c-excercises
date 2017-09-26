@@ -18,11 +18,11 @@ void Vector2D::move(int xmove, int ymove)
 	y = y + ymove;
 };
 
-Vector2D Vector3D::project2D()
+Vector2D Camera::project2D(Vector3D original)
 {
 	Vector2D newVector;
-	newVector.x = x/z;
-	newVector.y = y/z;
+	newVector.x = original.x/original.z;
+	newVector.y = original.y/original.z;
 
 	return newVector;
 }

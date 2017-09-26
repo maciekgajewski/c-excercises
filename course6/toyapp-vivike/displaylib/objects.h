@@ -37,8 +37,6 @@ struct Vector3D
 	int y;
 	int z;
 
-	Vector2D project2D();
-
 	Vector3D operator +(Vector3D b) { return { x + b.x, y + b.y, z + b.z}; }
 	Vector3D operator +(int b) { return { x + b, y + b, z + b}; }	
 
@@ -48,6 +46,11 @@ struct Vector3D
 	Vector3D operator -(int r) { return { x - r, y - r, z - r}; }
 
 	Vector3D operator /(int r) { return { x / r, y / r, z / r}; }
+};
+
+struct Camera
+{
+	Vector2D project2D(Vector3D original);
 };
 
 }
