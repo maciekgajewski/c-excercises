@@ -2,192 +2,100 @@
 
 #include <iostream>
 #include <cstring>
+#include <iterator>
 
-class Str
+namespace mstr
 {
-public:
-    Str()
+    class Str
     {
-        start = mid = end = nullptr;
-    }
-
-    Str(const char* s)
-    {
-        int size = std::strlen(s);
-        start = new char[size];
-        end = start;
-
-        while (*s != '\0')
+    public:
+        Str()
         {
-            *end++ = *s++;
+            start = mid = end = nullptr;
         }
 
-        mid = end;
-    }
-
-    Str(const Str& str)
-    {
-        int size = str.Size();
-        start = new char[size];
-        end = start;
-
-        for (int i = 0; i < size; i++)
+        Str(const char* s)
         {
-            *end++ = str[i];
+            Initialize(s);
         }
 
-        mid = end;
-    }
-
-    Str(Str&& str) :start(str.start), mid(str.mid), end(str.end)
-    {
-        str.start = str.mid = str.end = nullptr;
-    }
-
-    ~Str()
-    {
-        Dispose();
-    }
-
-    char operator[](int i) const
-    {
-        return *(start + i);
-    }
-
-    char& operator[](int i)
-    {
-        return *(start + i);
-    }
-
-    Str& operator = (const Str& str)
-    {
-        if (str.Size() > Capacity())
+        Str(const Str& str)
         {
-            Str temp(str);
-            Swap(*this, temp);
-        }
-        else
-        {
-            mid = start + str.Size();
-            Copy(str);
+            Initialize(str.start);
         }
 
-        return *this;
-    }
-
-    Str& operator = (const char* s)
-    {
-        int size = std::strlen(s);
-        if (size > Capacity())
+        Str(Str&& str) : start(str.start), mid(str.mid), end(str.end)
         {
-            Str temp(s);
-            Swap(*this, temp);
-        }
-        else
-        {
-            mid = start + size;
-            Copy(s);
+            str.start = str.mid = str.end = nullptr;
         }
 
-        return *this;
-    }
-
-    Str operator + (const Str& rh)
-    {
-        return Str(*this, rh);
-    }
-
-    Str& operator += (const Str& rh)
-    {
-        if(rh.Size() + Size() <= Capacity())
+        ~Str()
         {
-            for(int i = 0; i < rh.Size(); i++)
-            {
-                *mid++ = rh[i];
-            }
-        }
-        else
-        {
-            Str temp = *this + rh;
-            Swap(*this, temp);
+            delete[] start;
         }
 
-        return *this;
-    }
-
-    int Size() const
-    {
-        return mid - start;
-    }
-
-    int Capacity() const
-    {
-        return end - start;
-    }
-
-    friend std::ostream &operator<<(std::ostream &os, const Str& str);
-
-private:
-    char* start, *end, *mid;
-
-    Str(const Str& str1, const Str& str2)
-    {
-        int size1 = str1.Size();
-        int size2 = str2.Size();
-
-        start = new char[size1 + size2];
-        end = start;
-
-        for (int i = 0; i < size1; i++)
+        char operator[](int i) const
         {
-            *end++ = str1[i];
+            return start[i];
         }
 
-        for (int i = 0; i < size2; i++)
+        char& operator[](int i)
         {
-            *end++ = str2[i];
+            return start[i];
         }
 
-        mid = end;
-    }
-
-    friend void Swap(Str& str1, Str& str2)
-    {
-        std::swap(str1.start, str2.start);
-        std::swap(str1.mid, str2.mid);
-        std::swap(str1.end, str2.end);
-    }
-
-    void Dispose()
-    {
-        delete[] start;
-    }
-
-    void Copy(const char* s)
-    {
-        char* index = start;
-        while (*s != '\0')
+        Str& operator = (const Str& str)
         {
-            *index++ = *s++;
-        }
-    }
+            Assign(str.start, str.size());
 
-    void Copy(const Str& str)
-    {
-        char* index = start;
-        for (int i = 0; i < Size(); i++)
+            return *this;
+        }
+
+        Str& operator = (const char* s)
         {
-            *index++ = str[i];
+            Assign(s, std::strlen(s));
+
+            return *this;
         }
-    }
-};
 
-std::ostream &operator<<(std::ostream &os, const Str& str) {
-    char* index = str.start;
-    while (index != str.mid)
-    {
-        os << *index++;
-    }
+        Str operator + (const Str& rh)
+        {
+            return Str(*this, rh);
+        }
 
-    return os;
+        Str& operator += (const Str& rh)
+        {
+            Assign((*this + rh).start, this->size() + rh.size());
+
+            return *this;
+        }
+
+        int size() const
+        {
+            return mid - start - 1;
+        }
+
+        int capacity() const
+        {
+            return end - start - 1;
+        }
+
+        void swap(Str& str)
+        {
+            std::swap(start, str.start);
+            std::swap(mid, str.mid);
+            std::swap(end, str.end);
+        }
+
+        friend std::ostream &operator<<(std::ostream &os, const Str& str);
+
+    private:
+        char* start, *end, *mid;
+
+        Str(const Str& str1, const Str& str2);
+
+        void Initialize(const char* s);
+
+        void Assign(const char* s, int size);
+    };
 }

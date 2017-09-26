@@ -1,9 +1,14 @@
 #include "str.h"
+#include <string>
+
+using namespace mstr;
 
 int main()
 {
     //Constructor
-    Str s1 = "foo";
+    Str s1 = "a4444";
+    s1 = Str("a1");
+
     std::cout << s1 << std::endl;
 
     //Copy Constructor
@@ -21,7 +26,7 @@ int main()
     s3[0] = 'm';
     std::cout << s3 << std::endl;
 
-    for(int i = 0; i < s3.Size(); i++)
+    for(int i = 0; i < s3.size(); i++)
     {
         std::cout << s3[i] << std::endl;
     }
