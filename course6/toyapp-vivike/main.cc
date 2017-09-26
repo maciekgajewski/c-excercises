@@ -19,17 +19,18 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector2D activePixel{10, 10};
+	Display::Vector3D activePoint{10, 10, 1};
+	Display::Camera cam;
 		
 
 	for(int x = 0; x < 20; x++)
 	{
 		Display::Color red{255, 0, 0};
 
-		//surf.SetPixel(activePixel, red); // red pixel at 10x10
-		surf.DrawLine(activePixel, activePixel + Display::Vector2D{0, 5}, red);
+		//surf.SetPixel(cam.project2D(activePoint), red);
+		surf.DrawLine(cam.project2D(activePoint), cam.project2D(activePoint + Display::Vector3D{10, 0, 0}), red);
 		win.Display(surf);
-		activePixel = activePixel + Display::Vector2D{x, 0};
+		activePoint = activePoint + Display::Vector3D{0, 10, 0};
 		
 		Display::Delay(100);
 	}
