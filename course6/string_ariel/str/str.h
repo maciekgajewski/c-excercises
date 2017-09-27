@@ -87,6 +87,11 @@ namespace mstr
             std::swap(end, str.end);
         }
 
+        char* c_str()
+        {
+            return start;
+        }
+
         friend std::ostream &operator<<(std::ostream &os, const Str& str);
 
     private:
