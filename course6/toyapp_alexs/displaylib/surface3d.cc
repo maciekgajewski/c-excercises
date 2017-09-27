@@ -23,6 +23,13 @@ void Surface3D::SetPixel(const Vector3D& vector, Color color)
 	mSurface.SetPixel(projection, color);
 }
 
+void Surface3D::DrawLine(const Vector3D& a, const Vector3D& b, Color color)
+{
+	auto projectionA = GetProjection(a);
+	auto projectionB = GetProjection(b);
+	mSurface.DrawLine(projectionA, projectionB, color);
+}
+
 Vector2D Surface3D::GetProjection(const Vector3D& vector) const
 {
 	const float scale = 3;

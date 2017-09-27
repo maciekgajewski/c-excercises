@@ -14,6 +14,7 @@ public:
 
 	void Clear(Color color);
 	void SetPixel(const Vector3D& vector, Color color);
+	void DrawLine(const Vector3D& a, const Vector3D& b, Color color);
 
 private:
 	Vector2D GetProjection(const Vector3D& vector) const;

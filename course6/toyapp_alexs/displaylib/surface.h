@@ -18,6 +18,7 @@ public:
 
 	void Clear(Color color);
 	void SetPixel(const Vector2D& point, Color color);
+	void DrawLine(const Vector2D& a, const Vector2D& b, Color color);
 
 private:
 

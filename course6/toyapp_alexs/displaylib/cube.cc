@@ -30,14 +30,18 @@ Cube Cube::Transform(const Transformation3D& transformation) const
 
 void Cube::Draw(Surface3D& surface) const
 {
-	surface.SetPixel(mVertices[0], this->mColor);
-	surface.SetPixel(mVertices[1], this->mColor);
-	surface.SetPixel(mVertices[2], this->mColor);
-	surface.SetPixel(mVertices[3], this->mColor);
-	surface.SetPixel(mVertices[4], this->mColor);
-	surface.SetPixel(mVertices[5], this->mColor);
-	surface.SetPixel(mVertices[6], this->mColor);
-	surface.SetPixel(mVertices[7], this->mColor);
+	surface.DrawLine(mVertices[0], mVertices[1], mColor);
+	surface.DrawLine(mVertices[0], mVertices[2], mColor);
+	surface.DrawLine(mVertices[0], mVertices[3], mColor);
+	surface.DrawLine(mVertices[7], mVertices[4], mColor);
+	surface.DrawLine(mVertices[7], mVertices[5], mColor);
+	surface.DrawLine(mVertices[7], mVertices[6], mColor);
+	surface.DrawLine(mVertices[6], mVertices[3], mColor);
+	surface.DrawLine(mVertices[6], mVertices[2], mColor);
+	surface.DrawLine(mVertices[2], mVertices[4], mColor);
+	surface.DrawLine(mVertices[4], mVertices[1], mColor);
+	surface.DrawLine(mVertices[1], mVertices[5], mColor);
+	surface.DrawLine(mVertices[5], mVertices[3], mColor);
 }
 
 }

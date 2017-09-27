@@ -22,6 +22,7 @@ int main()
 	surf3d.Clear(Display::BLUE);
 
 	cube.Draw(surf3d);
+
 	win.Display(surf3d);
 
 	Display::Delay(2000);
