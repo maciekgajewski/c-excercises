@@ -21,32 +21,28 @@ int main()
 
 	surf3d.Clear(Display::BLUE);
 
-	cube.Draw(surf3d);
-
-	win.Display(surf3d);
-
-	Display::Delay(2000);
-
-	surf3d.Clear(Display::BLUE);
-	cube = cube.Transform(Display::Transformation3D().WithMoving({0, 0, 2}));
-	cube.Draw(surf3d);
-	win.Display(surf3d);
-
-	Display::Delay(2000);
-
-	surf3d.Clear(Display::BLUE);
-
-	auto transformation = Display::Transformation3D()
-			.WithMoving({0, 0, -4})
-			.WithScaling({1, 1, 5})
-			.WithRotation(0, 0, M_PI / 4);
-
-	cube = cube.Transform(transformation);
+	cube = cube.Transform(Display::Transformation3D()
+						  .WithMoving({0.2, 0.1, 2})
+						  .WithScaling({1, 1, 0.5}));
 
 	cube.Draw(surf3d);
 	win.Display(surf3d);
 
-	Display::Delay(2000);
+	Display::Delay(1000);
+
+	auto rotation = Display::Transformation3D().WithRotation(0, 0, M_PI / 180);
+
+	for (int i = 0; i <= 360 * 2; i++)
+	{
+		surf3d.Clear(Display::BLUE);
+
+		cube = cube.Transform(rotation);
+
+		cube.Draw(surf3d);
+		win.Display(surf3d);
+
+		Display::Delay(20);
+	}
 
 	return 0;
 }
