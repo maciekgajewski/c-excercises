@@ -2,36 +2,19 @@
 #include <string>
 #include <cstring>
 
-using namespace std::literals;
-
-template<typename Type>
-std::string type_name(); // primary template
-
-template<>
-std::string type_name<int>() { return "int"; }
-
-template<>
-std::string type_name<double>() { return "double"; }
-
-template<>
-std::string type_name<std::string>() { return "std::string"; }
-
-template<typename T>
-void print(const T& v)
-{
-	std::cout << type_name<T>() << " : " << v << std::endl;
-}
-
-struct Boo {};
+#include "vector.hh"
 
 int main(int argc, char** argv)
 {
-	print("Thomas"s);
-	print(66);
+	Vec2<int> v{1, 4};
+	Vec2<double> v2{5.6, 6.6};
 
-	auto p = std::stol(argv[1]);
-	print(p);
+	Vec2<std::string> v3{"hey", "you!"};
 
-	print(Boo{});
+	v.print();
+	v2.print();
+	v3.print();
+
+	Vec2<float>{5.5,6.6}.print();
 }
 
