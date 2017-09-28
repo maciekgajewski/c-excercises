@@ -9,7 +9,7 @@ using namespace std::literals;
 // std::string max(std::string a, std::string b) { return a < b ? b : a; }
 
 template<typename T>
-T Max(const T& a, const T& b)
+T Max(T a, T b)
 {
 	if (a < b)
 		return b;
@@ -17,13 +17,16 @@ T Max(const T& a, const T& b)
 		return a;
 }
 
-const char* Max(const char* a, const char* b)
+template<>
+const char* Max<const char*>(const char* a, const char* b)
 {
-	if (std::strcmp(a, b) < 0)
-		return b;
-	else
+	if (std::strcmp(a, b) > 0)
 		return a;
+	else
+		return b;
 }
+
+
 
 int main(int argc, char** argv)
 {
