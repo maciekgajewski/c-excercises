@@ -4,17 +4,32 @@
 
 #include "vector.hh"
 
+template<typename T>
+struct Type
+{
+	static std::string name();
+};
+
+template<>
+struct Type<int>
+{
+	static std::string name() { return "int"; }
+};
+
+template<>
+struct Type<double>
+{
+	static std::string name() { return "double"; }
+};
+
+template<typename X>
+struct Type<X*>
+{
+	static std::string name() { return "pointer to " + Type<X>::name(); }
+};
+
 int main(int argc, char** argv)
 {
-	Vec2<int> v{1, 4};
-	Vec2<double> v2{5.6, 6.6};
-
-	Vec2<std::string> v3{"hey", "you!"};
-
-	v.print();
-	v2.print();
-	v3.print();
-
-	Vec2<float>{5.5,6.6}.print();
+	std::cout << Type<double***>::name() << std::endl;
 }
 
