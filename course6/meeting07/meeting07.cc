@@ -4,37 +4,34 @@
 
 using namespace std::literals;
 
-// int max(int a, int b) { return a < b ? b : a; }
-// double max(double a, double b) { return a < b ? b : a; }
-// std::string max(std::string a, std::string b) { return a < b ? b : a; }
-
-template<typename T>
-T Max(T a, T b)
-{
-	if (a < b)
-		return b;
-	else
-		return a;
-}
+template<typename Type>
+std::string type_name(); // primary template
 
 template<>
-const char* Max<const char*>(const char* a, const char* b)
+std::string type_name<int>() { return "int"; }
+
+template<>
+std::string type_name<double>() { return "double"; }
+
+template<>
+std::string type_name<std::string>() { return "std::string"; }
+
+template<typename T>
+void print(const T& v)
 {
-	if (std::strcmp(a, b) > 0)
-		return a;
-	else
-		return b;
+	std::cout << type_name<T>() << " : " << v << std::endl;
 }
 
-
+struct Boo {};
 
 int main(int argc, char** argv)
 {
-	std::cout << Max<int>(7, 99) << std::endl;
-	std::cout << Max(5.5, 42.7) << std::endl;
-	std::cout << Max("Ariel"s, "Maciek"s) << std::endl;
-	std::cout << Max<const float>(1, 1.1) << std::endl;
+	print("Thomas"s);
+	print(66);
 
-	std::cout << Max<const char*>("Aris", "Misha") << std::endl;
+	auto p = std::stol(argv[1]);
+	print(p);
+
+	print(Boo{});
 }
 
