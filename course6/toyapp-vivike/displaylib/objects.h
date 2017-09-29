@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <array>
+#include <iostream>
 
 namespace Display {
 
@@ -13,6 +14,66 @@ struct Color
 
 	void redder(int amount);
 };
+
+
+template<typename T, int length>
+struct Vector
+{
+	int vec[length];
+
+	Vector<T, length> operator +(Vector& b) 
+	{ 
+		Vector<T, length> newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] + b.vec[i];
+		}
+		return newVec;
+	}
+
+	Vector<T, length> operator *(int b) 
+	{ 
+		Vector<T, length> newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] * b;
+		}
+		return newVec;
+	}
+
+	Vector<T, length> operator -(Vector& r) 
+	{ 
+		Vector<T, length> newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] - r.vec[i];
+		}
+		return newVec;
+	}
+
+	Vector<T, length> operator /(int r) 
+	{ 
+		Vector<T, length> newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] / r;
+		}
+		return newVec;
+	}	
+
+	void print()
+	{
+		std::string mystr;
+		for(T v : vec)
+		{
+			std::cout << v << std::endl;
+		}
+		
+
+	}
+};
+
+
 
 struct Vector2D
 {

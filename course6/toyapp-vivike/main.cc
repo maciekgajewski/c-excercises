@@ -12,6 +12,11 @@ int main(int, char**)
 {
 	std::cout << "Hello" << std::endl;
 
+	Display::Vector<int, 2> myvec{2, 3};
+	Display::Vector<int, 2> myothervec{2, 3};
+	Display::Vector<int, 2> mythirdvec = myvec + myothervec;
+	mythirdvec.print();
+
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
 
