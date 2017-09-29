@@ -27,7 +27,7 @@ int main(int, char**)
 	Display::Camera cam;
 		
 
-	for(int x = 0; x < 2; x++)
+	for(int x = 0; x < 20; x++)
 	{
 		Display::Color red{255, 0, 0};
 
@@ -41,11 +41,6 @@ int main(int, char**)
 		corner3Proj = cam.project2D(rect.corner3);
 		Display::Vector<int, 2> corner4Proj;
 		corner4Proj = cam.project2D(rect.corner4);
-		std::cout << "x " << x << std::endl;
-		corner1Proj.print();
-		corner2Proj.print();
-		corner3Proj.print();
-		corner4Proj.print();
 		surf.DrawLine(corner1Proj, corner2Proj, red);
 		surf.DrawLine(corner2Proj, corner3Proj, red);
 		surf.DrawLine(corner3Proj, corner4Proj, red);
