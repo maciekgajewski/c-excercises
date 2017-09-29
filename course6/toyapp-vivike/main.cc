@@ -12,11 +12,6 @@ int main(int, char**)
 {
 	std::cout << "Hello" << std::endl;
 
-	Display::Vector<int, 2> myvec{2, 3};
-	Display::Vector<int, 2> myothervec{2, 3};
-	Display::Vector<int, 2> mythirdvec = myvec + myothervec;
-	mythirdvec.print();
-
 	Display::Window win("Hello", 10, 10, 800, 600);
 	Display::Surface surf(200, 150);
 
@@ -24,25 +19,44 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Rectangle rect{{100, 100, 1}, {100, 150, 1}, {150, 150, 1}, {150, 100, 1}};
+	Display::Vector<int, 3> corner1{100, 100, 1};
+	Display::Vector<int, 3> corner2{100, 150, 1};
+	Display::Vector<int, 3> corner3{150, 150, 1};
+	Display::Vector<int, 3> corner4{150, 100, 1};
+	Display::Rectangle rect{corner1, corner2, corner3, corner4};
 	Display::Camera cam;
 		
 
-	for(int x = 0; x < 20; x++)
+	for(int x = 0; x < 2; x++)
 	{
 		Display::Color red{255, 0, 0};
 
 		surf.Clear(blue); // blue background
 		
-		surf.DrawLine(cam.project2D(rect.corner1), cam.project2D(rect.corner2), red);
-		surf.DrawLine(cam.project2D(rect.corner2), cam.project2D(rect.corner3), red);
-		surf.DrawLine(cam.project2D(rect.corner3), cam.project2D(rect.corner4), red);
-		surf.DrawLine(cam.project2D(rect.corner4), cam.project2D(rect.corner1), red);
+		Display::Vector<int, 2> corner1Proj;
+		corner1Proj = cam.project2D(rect.corner1);
+		Display::Vector<int, 2> corner2Proj;
+		corner2Proj = cam.project2D(rect.corner2);
+		Display::Vector<int, 2> corner3Proj;
+		corner3Proj = cam.project2D(rect.corner3);
+		Display::Vector<int, 2> corner4Proj;
+		corner4Proj = cam.project2D(rect.corner4);
+		std::cout << "x " << x << std::endl;
+		corner1Proj.print();
+		corner2Proj.print();
+		corner3Proj.print();
+		corner4Proj.print();
+		surf.DrawLine(corner1Proj, corner2Proj, red);
+		surf.DrawLine(corner2Proj, corner3Proj, red);
+		surf.DrawLine(corner3Proj, corner4Proj, red);
+		surf.DrawLine(corner4Proj, corner1Proj, red);
 		
 		win.Display(surf);
-		rect = rect.move({0, 0, 1});
+
+		Display::Vector<int, 3> moveVec{0, 0, 1};
+		rect = rect.move(moveVec);
 		
-		Display::Delay(100);
+		Display::Delay(200);
 	}
 
 	Display::Delay(1000);

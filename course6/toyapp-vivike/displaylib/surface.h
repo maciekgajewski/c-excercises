@@ -16,8 +16,8 @@ public:
 	~Surface();
 
 	void Clear(Color backgroundColor);
-	void SetPixel(Vector2D pixel, Color currentColor);
-	void DrawLine(Vector2D p1, Vector2D p2, Color color);
+	void SetPixel(Vector<int, 2>& pixel, Color currentColor);
+	void DrawLine(Vector<int, 2>& p1, Vector<int, 2>& p2, Color color);
 
 private:
 
