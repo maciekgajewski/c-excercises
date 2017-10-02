@@ -73,19 +73,22 @@ struct Vector
 	}
 };
 
+using Pixel = Vector<int, 2>;
+using Vector3D = Vector<float, 3>;
+
 struct Camera
 {
-	Vector<int, 2> project2D(Vector<int, 3>& original);
+	Pixel project2D(Vector3D& original);
 };
 
 struct Rectangle
 {
-	Vector<int, 3> corner1;
-	Vector<int, 3> corner2;
-	Vector<int, 3> corner3;
-	Vector<int, 3> corner4;
+	Vector3D corner1;
+	Vector3D corner2;
+	Vector3D corner3;
+	Vector3D corner4;
 
-	Rectangle move(Vector<int, 3>&);
+	Rectangle move(Vector3D&);
 };
 
 }
