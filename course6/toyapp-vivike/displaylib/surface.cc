@@ -44,7 +44,7 @@ void Surface::SetPixel(Vector2D pixel, Color currentColor)
 void Surface::DrawLine(Vector2D p1, Vector2D p2, Color color)
 {
 	// Bresenham's line algorithm
-	const bool steep = (fabs(p2.y - p1.y) > fabs(p2.x - p1.x));
+	bool steep = (std::fabs(p2.y - p1.y) > std::fabs(p2.x - p1.x));
 	if(steep)
 	{
 		std::swap(p1.x, p1.y);
@@ -58,7 +58,7 @@ void Surface::DrawLine(Vector2D p1, Vector2D p2, Color color)
 	}
 
 	const float dx = p2.x - p1.x;
-	const float dy = fabs(p2.y - p1.y);
+	const float dy = std::fabs(p2.y - p1.y);
 
 	float error = dx / 2.0f;
 	const int ystep = (p1.y < p2.y) ? 1 : -1;
