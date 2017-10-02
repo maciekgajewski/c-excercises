@@ -7,23 +7,23 @@
 
 #include <SDL2/SDL.h>
 
-#include <cstdint>
-
 namespace Display {
 
 class Surface : private SDLObject
 {
+
 public:
 	Surface(int w, int h);
 	~Surface();
 
 	void Clear(Color color);
-	void SetPixel(Vector2D point, Color color);
-	Vector2D getProjection(Vector3D vector);
+	void SetPixel(const Vector2D& point, Color color);
+	void DrawLine(const Vector2D& a, const Vector2D& b, Color color);
 
 private:
 
 	friend class Window;
+	friend class Surface3D;
 
 	SDL_Surface* mSurface;
 };

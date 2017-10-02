@@ -3,7 +3,11 @@
 #include "vector2d.h"
 #include "vector3d.h"
 
+#include <cmath>
+#include <algorithm>
 #include <cassert>
+
+#include <iostream>
 
 namespace Display {
 
@@ -29,7 +33,7 @@ void Surface::Clear(Color color)
 		}
 }
 
-void Surface::SetPixel(Vector2D point, Color color)
+void Surface::SetPixel(const Vector2D& point, Color color)
 {
 	assert(mSurface);
 
@@ -39,19 +43,34 @@ void Surface::SetPixel(Vector2D point, Color color)
 	*pixelAddr = pixelValue;
 }
 
-Vector2D Surface::getProjection(Vector3D vector)
+void Surface::DrawLine(const Vector2D& a, const Vector2D& b, Color color)
 {
-	const float scale = 3;
-	
-	int scaleX = mSurface->w / scale;
-	int scaleY = mSurface->h / scale;
-	int centerX = mSurface->w / 2;
-	int centerY = mSurface->h / 2;
+	if (std::abs(a.y - b.y) < std::abs(a.x - b.x) || a.y == b.y)
+	{
+		double k = (double)(a.y - b.y) / (double)(a.x - b.x);
+		double m = k * a.x - a.y;
 
-	return Vector2D {
-		centerX + static_cast<int>(vector.x / vector.z * scaleX),
-		centerY - static_cast<int>(vector.y / vector.z * scaleY)
-	};;
+		int min = std::min(a.x, b.x);
+		int max = std::max(a.x, b.x);
+
+		for (int x = min; x <= max; x++)
+		{
+			SetPixel({ x, (int)(k * x - m)}, color);
+		}
+	}
+	else
+	{
+		double k =  (double)(a.x - b.x) / (double)(a.y - b.y);
+		double m = k * a.y - a.x;
+
+		int min = std::min(a.y, b.y);
+		int max = std::max(a.y, b.y);
+
+		for (int y = min; y <= max; y++)
+		{
+			SetPixel({ (int)(k * y - m) , y}, color);
+		}
+	}
 }
 
 }

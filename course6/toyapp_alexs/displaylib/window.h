@@ -1,6 +1,8 @@
 #pragma once
 
 #include "sdlobject.h"
+#include "surface.h"
+#include "surface3d.h"
 
 #include <SDL2/SDL.h>
 
@@ -18,6 +20,7 @@ public:
 	~Window();
 
 	void Display(const Surface& surface);
+	void Display(const Surface3D& surface);
 
 private:
 
