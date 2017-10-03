@@ -31,8 +31,8 @@ void Surface3D::DrawTriangles(const std::vector<Triangle3D>& triangles, Color co
 
 Vector2D Surface3D::Project(Vector3D vector) const
 {
-	auto clipSpace = camera.GetProjectionMatrix() * Vector4D(vector);
-	return {clipSpace.x / clipSpace.w, clipSpace.y / clipSpace.w};
+	auto clipSpace = camera.GetProjectionMatrix() * Vector4D{vector, 1.0f};
+	return {clipSpace[0] / clipSpace[3], clipSpace[1] / clipSpace[3]};
 }
 
 Triangle2D Surface3D::Project(Triangle3D triangle) const
