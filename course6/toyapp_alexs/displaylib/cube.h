@@ -17,7 +17,7 @@ public:
 
 private:
 	Color mColor;
-	std::array<Vector<double, 3>, 8> mVertices;
+	std::array<Vector3D, 8> mVertices;
 };
 
 }

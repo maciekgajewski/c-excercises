@@ -23,4 +23,7 @@ namespace Display
 		double y;
 		double z;
 	};
+
+	using Pixel = Vector<int, 2>;
+	using Vector3D = Vector<double, 3>;
 }

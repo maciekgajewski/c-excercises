@@ -65,7 +65,7 @@ Transformation3D Transformation3D::WithRotation(double thetaX, double thetaY, do
 			.Combine(transformationZ);
 }
 
-Transformation3D Transformation3D::WithMoving(const Vector<double, 3>& vector) const
+Transformation3D Transformation3D::WithMoving(const Vector3D& vector) const
 {
 	Transformation3D transformation
 	{
@@ -79,7 +79,7 @@ Transformation3D Transformation3D::WithMoving(const Vector<double, 3>& vector) c
 	return Combine(transformation);
 }
 
-Transformation3D Transformation3D::WithScaling(const Vector<double, 3>& vector) const
+Transformation3D Transformation3D::WithScaling(const Vector3D& vector) const
 {
 	Transformation3D transformation
 	{
@@ -93,7 +93,7 @@ Transformation3D Transformation3D::WithScaling(const Vector<double, 3>& vector) 
 	return Combine(transformation);
 }
 
-Vector<double, 3> Transformation3D::Apply(const Vector<double, 3>& vector) const
+Vector3D Transformation3D::Apply(const Vector3D& vector) const
 {
 	Matrix<4, 1> vMatrix {{
 		vector.x,

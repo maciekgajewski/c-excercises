@@ -16,8 +16,8 @@ public:
 	~Surface();
 
 	void Clear(Color color);
-	void SetPixel(const Vector<int, 2>& point, Color color);
-	void DrawLine(const Vector<int, 2>& a, const Vector<int, 2>& b, Color color);
+	void SetPixel(const Pixel& point, Color color);
+	void DrawLine(const Pixel& a, const Pixel& b, Color color);
 
 private:
 

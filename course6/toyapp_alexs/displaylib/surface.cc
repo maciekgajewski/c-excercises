@@ -28,7 +28,7 @@ void Surface::Clear(Color color)
 		}
 }
 
-void Surface::SetPixel(const Vector<int, 2>& point, Color color)
+void Surface::SetPixel(const Pixel& point, Color color)
 {
 	assert(mSurface);
 
@@ -38,7 +38,7 @@ void Surface::SetPixel(const Vector<int, 2>& point, Color color)
 	*pixelAddr = pixelValue;
 }
 
-void Surface::DrawLine(const Vector<int, 2>& a, const Vector<int, 2>& b, Color color)
+void Surface::DrawLine(const Pixel& a, const Pixel& b, Color color)
 {
 	if (std::abs(a.y - b.y) < std::abs(a.x - b.x) || a.y == b.y)
 	{

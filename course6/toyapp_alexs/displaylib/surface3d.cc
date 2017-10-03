@@ -11,20 +11,20 @@ void Surface3D::Clear(Color color)
 	mSurface.Clear(color);
 }
 
-void Surface3D::SetPixel(const Vector<double, 3>& vector, Color color)
+void Surface3D::SetPixel(const Vector3D& vector, Color color)
 {
 	auto projection = GetProjection(vector);
 	mSurface.SetPixel(projection, color);
 }
 
-void Surface3D::DrawLine(const Vector<double, 3>& a, const Vector<double, 3>& b, Color color)
+void Surface3D::DrawLine(const Vector3D& a, const Vector3D& b, Color color)
 {
 	auto projectionA = GetProjection(a);
 	auto projectionB = GetProjection(b);
 	mSurface.DrawLine(projectionA, projectionB, color);
 }
 
-Vector<int, 2> Surface3D::GetProjection(const Vector<double, 3>& vector) const
+Pixel Surface3D::GetProjection(const Vector3D& vector) const
 {
 	const float scale = 3;
 	
