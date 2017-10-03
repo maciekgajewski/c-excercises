@@ -135,8 +135,8 @@ void Surface2D::DrawTriangles(const std::vector<Triangle2D>& triangles, Color co
 Pixel Surface2D::ToPixel(Vector2D logicalCoordinates)
 {
 	return {
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + logicalCoordinates.x * mHalfDimensions.x),
-		static_cast<Pixel::Coordinate>(mHalfDimensions.y + logicalCoordinates.y * mHalfDimensions.y)
+		static_cast<Pixel::Coordinate>(mHalfDimensions.x + logicalCoordinates[0] * mHalfDimensions.x),
+		static_cast<Pixel::Coordinate>(mHalfDimensions.y + logicalCoordinates[1] * mHalfDimensions.y)
 	};
 }
 

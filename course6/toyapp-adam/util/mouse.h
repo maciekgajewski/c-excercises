@@ -22,8 +22,8 @@ public:
 	{
 		mCursorPositionDelta.x += delta.x;
 		mCursorPositionDelta.y += delta.y;
-		mPositionDelta.x = mCursorPositionDelta.x * mScale;
-		mPositionDelta.y = mCursorPositionDelta.y * mScale;
+		mPositionDelta[0] = mCursorPositionDelta.x * mScale;
+		mPositionDelta[1] = mCursorPositionDelta.y * mScale;
 	}
 
 	void RecordPosition()

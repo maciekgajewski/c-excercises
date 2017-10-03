@@ -17,6 +17,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(displaylib)
 add_subdirectory(math)
 add_subdirectory(util)
+add_subdirectory(tests)
 
 add_executable(toyapp WIN32
 	scene.cc scene.h
