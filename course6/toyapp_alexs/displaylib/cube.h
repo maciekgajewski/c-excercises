@@ -5,6 +5,7 @@
 #include "surface3d.h"
 #include "color.h"
 #include "transformation3d.h"
+#include "vector.h"
 
 namespace Display {
 
@@ -16,7 +17,7 @@ public:
 
 private:
 	Color mColor;
-	std::array<Vector3D, 8> mVertices;
+	std::array<Vector<double, 3>, 8> mVertices;
 };
 
 }

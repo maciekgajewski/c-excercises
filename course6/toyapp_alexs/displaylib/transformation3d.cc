@@ -1,9 +1,6 @@
-#include "vector3d.h"
-#include "matrix.h"
 #include "transformation3d.h"
 
 #include <cmath>
-#include <iostream>
 
 namespace Display {
 
@@ -68,7 +65,7 @@ Transformation3D Transformation3D::WithRotation(double thetaX, double thetaY, do
 			.Combine(transformationZ);
 }
 
-Transformation3D Transformation3D::WithMoving(const Vector3D& vector) const
+Transformation3D Transformation3D::WithMoving(const Vector<double, 3>& vector) const
 {
 	Transformation3D transformation
 	{
@@ -82,7 +79,7 @@ Transformation3D Transformation3D::WithMoving(const Vector3D& vector) const
 	return Combine(transformation);
 }
 
-Transformation3D Transformation3D::WithScaling(const Vector3D& vector) const
+Transformation3D Transformation3D::WithScaling(const Vector<double, 3>& vector) const
 {
 	Transformation3D transformation
 	{
@@ -96,7 +93,7 @@ Transformation3D Transformation3D::WithScaling(const Vector3D& vector) const
 	return Combine(transformation);
 }
 
-Vector3D Transformation3D::Apply(const Vector3D& vector) const
+Vector<double, 3> Transformation3D::Apply(const Vector<double, 3>& vector) const
 {
 	Matrix<4, 1> vMatrix {{
 		vector.x,

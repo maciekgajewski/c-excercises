@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector3d.h"
+#include "vector.h"
 #include "matrix.h"
 
 #include <array>
@@ -14,9 +14,9 @@ public:
 	Transformation3D(std::array<std::array<double, 4>, 4> matrix);
 	Transformation3D Combine(const Transformation3D& otherTransformation) const;
 	Transformation3D WithRotation(double thetaX, double thetaY, double thetaZ) const;
-	Transformation3D WithMoving(const Vector3D& vector) const;
-	Transformation3D WithScaling(const Vector3D& vector) const;
-	Vector3D Apply(const Vector3D& vector) const;
+	Transformation3D WithMoving(const Vector<double, 3>& vector) const;
+	Transformation3D WithScaling(const Vector<double, 3>& vector) const;
+	Vector<double, 3> Apply(const Vector<double, 3>& vector) const;
 private:
 	Matrix<4, 4> mMatrix
 	{

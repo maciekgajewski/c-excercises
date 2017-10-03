@@ -1,13 +1,8 @@
 #include "surface.h"
-#include "color.h"
-#include "vector2d.h"
-#include "vector3d.h"
 
 #include <cmath>
 #include <algorithm>
 #include <cassert>
-
-#include <iostream>
 
 namespace Display {
 
@@ -33,7 +28,7 @@ void Surface::Clear(Color color)
 		}
 }
 
-void Surface::SetPixel(const Vector2D& point, Color color)
+void Surface::SetPixel(const Vector<int, 2>& point, Color color)
 {
 	assert(mSurface);
 
@@ -43,7 +38,7 @@ void Surface::SetPixel(const Vector2D& point, Color color)
 	*pixelAddr = pixelValue;
 }
 
-void Surface::DrawLine(const Vector2D& a, const Vector2D& b, Color color)
+void Surface::DrawLine(const Vector<int, 2>& a, const Vector<int, 2>& b, Color color)
 {
 	if (std::abs(a.y - b.y) < std::abs(a.x - b.x) || a.y == b.y)
 	{

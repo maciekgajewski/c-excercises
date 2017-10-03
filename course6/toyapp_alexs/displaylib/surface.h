@@ -2,8 +2,7 @@
 
 #include "sdlobject.h"
 #include "color.h"
-#include "vector2d.h"
-#include "vector3d.h"
+#include "vector.h"
 
 #include <SDL2/SDL.h>
 
@@ -17,8 +16,8 @@ public:
 	~Surface();
 
 	void Clear(Color color);
-	void SetPixel(const Vector2D& point, Color color);
-	void DrawLine(const Vector2D& a, const Vector2D& b, Color color);
+	void SetPixel(const Vector<int, 2>& point, Color color);
+	void DrawLine(const Vector<int, 2>& a, const Vector<int, 2>& b, Color color);
 
 private:
 

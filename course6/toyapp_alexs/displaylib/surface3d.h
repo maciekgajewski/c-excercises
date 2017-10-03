@@ -2,8 +2,7 @@
 
 #include "surface.h"
 #include "color.h"
-#include "vector2d.h"
-#include "vector3d.h"
+#include "vector.h"
 
 namespace Display {
 
@@ -13,11 +12,11 @@ public:
 	Surface3D(Surface& surface);
 
 	void Clear(Color color);
-	void SetPixel(const Vector3D& vector, Color color);
-	void DrawLine(const Vector3D& a, const Vector3D& b, Color color);
+	void SetPixel(const Vector<double, 3>& vector, Color color);
+	void DrawLine(const Vector<double, 3>& a, const Vector<double, 3>& b, Color color);
 
 private:
-	Vector2D GetProjection(const Vector3D& vector) const;
+	Vector<int, 2> GetProjection(const Vector<double, 3>& vector) const;
 
 	friend class Window;
 
