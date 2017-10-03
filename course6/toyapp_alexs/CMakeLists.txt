@@ -11,3 +11,6 @@ set_property(TARGET toyapp PROPERTY CXX_STANDARD 14)
 
 target_link_libraries(toyapp
     displaylib)
+
+enable_testing()
+add_subdirectory(test)
