@@ -7,9 +7,9 @@
 namespace Display {
 
 Surface2D::Surface2D(Pixel dimensions)
-:	mHalfDimensions{dimensions.x / 2, dimensions.y / 2}
+:	mHalfDimensions{dimensions * 0.5f}
 {
-	mSurface = SDL_CreateRGBSurface(0, dimensions.x, dimensions.y, 32, 0, 0, 0, 0);
+	mSurface = SDL_CreateRGBSurface(0, dimensions[0], dimensions[1], 32, 0, 0, 0, 0);
 	assert(mSurface);
 }
 
@@ -27,9 +27,9 @@ void Surface2D::Clear(Color color)
 
 void Surface2D::SetPixel(Pixel position, Color color)
 {
-	if(position.x > 0 && position.x < mSurface->w && position.y > 0 && position.y < mSurface->h)
+	if(position[0] > 0 && position[0] < mSurface->w && position[1] > 0 && position[1] < mSurface->h)
 	{
-		auto offset = position.y * mSurface->pitch / 4 + position.x;
+		auto offset = position[1] * mSurface->pitch / 4 + position[0];
 		auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
 		*pixelAddr = (color.r << 16) + (color.g << 8) + color.b;
 	}
@@ -40,29 +40,29 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
 	//       then perhaps remove the check from within SetPixel
-	bool steep = (std::abs(p2.y - p1.y) > std::abs(p2.x - p1.x));
+	bool steep = (std::abs(p2[1] - p1[1]) > std::abs(p2[0] - p1[0]));
 	if(steep)
 	{
-		std::swap(p1.x, p1.y);
-		std::swap(p2.x, p2.y);
+		std::swap(p1[0], p1[1]);
+		std::swap(p2[0], p2[1]);
 	}
 
-	if(p1.x > p2.x)
+	if(p1[0] > p2[0])
 	{
-		std::swap(p1.x, p2.x);
-		std::swap(p1.y, p2.y);
+		std::swap(p1[0], p2[0]);
+		std::swap(p1[1], p2[1]);
 	}
 
-	auto dx = p2.x - p1.x;
-	auto dy = std::fabs(p2.y - p1.y);
+	auto dx = p2[0] - p1[0];
+	auto dy = std::fabs(p2[1] - p1[1]);
 	auto error = dx * 0.5f;
 
-	auto y = p1.y;
-	auto ystep = (p1.y < p2.y) ? 1 : -1;
+	auto y = p1[1];
+	auto ystep = (p1[1] < p2[1]) ? 1 : -1;
 
 	if(steep)
 	{
-		for(auto x = p1.x; x < p2.x; ++x)
+		for(auto x = p1[0]; x < p2[0]; ++x)
 		{
 			SetPixel(Pixel{y, x}, color);
 			error -= dy;
@@ -75,7 +75,7 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 	}
 	else
 	{
-		for(auto x = p1.x; x < p2.x; ++x)
+		for(auto x = p1[0]; x < p2[0]; ++x)
 		{
 			SetPixel(Pixel{x, y}, color);
 			error -= dy;
@@ -92,20 +92,20 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
 {
 	Pixel topLeft {
-		std::min(a.x, std::min(b.x, c.x)),
-		std::min(a.y, std::min(b.y, c.y))
+		std::min(a[0], std::min(b[0], c[0])),
+		std::min(a[1], std::min(b[1], c[1]))
 	};
 
 	Pixel bottomRight {
-		std::max(a.x, std::max(b.x, c.x)),
-		std::max(a.y, std::max(b.y, c.y))
+		std::max(a[0], std::max(b[0], c[0])),
+		std::max(a[1], std::max(b[1], c[1]))
 	};
 
-	for(auto y = topLeft.y; y < bottomRight.y; ++y)
-		for(auto x = topLeft.x; x < bottomRight.x; ++x)
-			if((a.x - b.x) * (y - a.y) - (a.y - b.y) * (x - a.x) >= 0 &&
-			   (b.x - c.x) * (y - b.y) - (b.y - c.y) * (x - b.x) >= 0 &&
-			   (c.x - a.x) * (y - c.y) - (c.y - a.y) * (x - c.x) >= 0)
+	for(auto y = topLeft[1]; y < bottomRight[1]; ++y)
+		for(auto x = topLeft[0]; x < bottomRight[0]; ++x)
+			if((a[0] - b[0]) * (y - a[1]) - (a[1] - b[1]) * (x - a[0]) >= 0 &&
+			   (b[0] - c[0]) * (y - b[1]) - (b[1] - c[1]) * (x - b[0]) >= 0 &&
+			   (c[0] - a[0]) * (y - c[1]) - (c[1] - a[1]) * (x - c[0]) >= 0)
 			{
 				SetPixel(Pixel{x, y}, color);
 			}
@@ -135,8 +135,8 @@ void Surface2D::DrawTriangles(const std::vector<Triangle2D>& triangles, Color co
 Pixel Surface2D::ToPixel(Vector2D logicalCoordinates)
 {
 	return {
-		static_cast<Pixel::Coordinate>(mHalfDimensions.x + logicalCoordinates[0] * mHalfDimensions.x),
-		static_cast<Pixel::Coordinate>(mHalfDimensions.y + logicalCoordinates[1] * mHalfDimensions.y)
+		static_cast<Pixel::Component>(mHalfDimensions[0] + logicalCoordinates[0] * mHalfDimensions[0]),
+		static_cast<Pixel::Component>(mHalfDimensions[1] + logicalCoordinates[1] * mHalfDimensions[1])
 	};
 }
 

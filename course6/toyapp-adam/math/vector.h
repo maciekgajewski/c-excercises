@@ -3,13 +3,16 @@
 #include <cassert>
 #include <array>
 #include <cmath>
+#include <limits>
 
 namespace Math {
 
-template<typename Type, unsigned Dimensions>
+template<typename Type, unsigned Dimensions, typename FloatType = float>
 class Vector
 {
 public:
+	using Component = Type;
+
 	Vector()
 	:	mComponents{{0}}
 	{}
@@ -39,6 +42,19 @@ public:
 		return result;
 	}
 
+	friend bool operator==(const Vector& lhs, const Vector& rhs)
+	{
+		for (unsigned i = 0; i < Dimensions; ++i)
+			if (!ApproximatelyEquals(lhs[i], rhs[i]))
+				return false;
+		return true;
+	}
+
+	friend bool operator!=(const Vector& lhs, const Vector& rhs)
+	{
+		return !operator==(lhs, rhs);
+	}
+
 	Vector& operator=(const Vector& other)
 	{
 		for (unsigned i = 0; i < Dimensions; ++i)
@@ -53,7 +69,7 @@ public:
 		return *this;
 	}
 
-	Vector& operator*=(float scalar)
+	Vector& operator*=(FloatType scalar)
 	{
 		for (unsigned i = 0; i < Dimensions; ++i)
 			mComponents[i] *= scalar;
@@ -90,7 +106,7 @@ public:
 		return Vector{*this} += rhs;
 	}
 
-	Vector operator*(float scalar) const
+	Vector operator*(FloatType scalar) const
 	{
 		return Vector{*this} *= scalar;
 	}
@@ -102,24 +118,39 @@ public:
 
 	Vector Normalized() const
 	{
-		return Vector{*this} *= 1.0f / Length();
+		auto length = Length();
+		return !ApproximatelyEquals(length, 0.0)
+				? Vector{*this} *= 1.0 / length
+				: Vector{Type{1.0}, Type{0.0}};
 	}
 
-	float Dot(const Vector& rhs) const
+	FloatType Dot(const Vector& rhs) const
 	{
-		float result = 0.0f;
+		FloatType result{0.0};
 		for (unsigned i = 0; i < Dimensions; ++i)
 			result += mComponents[i] * rhs[i];
 		return result;
 	}
 
-	float Length() const
+	FloatType Length() const
 	{
 		return std::sqrt(Dot(*this));
 	}
 
+	friend std::ostream& operator<<(std::ostream& stream, const Vector& vector)
+	{
+		stream << vector[0] << ',' << vector[1];
+		return stream;
+	}
+
 private:
 	std::array<Type, Dimensions> mComponents;
+
+	static bool ApproximatelyEquals(Type a, Type b)
+	{
+		using std::abs;
+		return abs(a - b) <= (abs(a) < abs(b) ? abs(b) : abs(a)) * std::numeric_limits<Type>::epsilon();
+	};
 };
 
 

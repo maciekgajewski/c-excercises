@@ -10,7 +10,7 @@ Surface3D::Surface3D(Surface2D& surface2D)
 :	mSurface(surface2D)
 {
 	auto dimensions = surface2D.GetDimensions();
-	camera.SetAspectRatio(dimensions.x / static_cast<float>(dimensions.y));
+	camera.SetAspectRatio(dimensions[0] / static_cast<float>(dimensions[1]));
 }
 
 void Surface3D::DrawTriangle(const Triangle3D& triangle, Color color)
