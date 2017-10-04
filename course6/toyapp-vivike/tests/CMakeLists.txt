@@ -7,18 +7,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_subdirectory(displaylib
-	tests)
-
-add_library(test
-	test_objects.cc
-)
-
-add_executable(${PROJECT_NAME}
-    test_objects.cc)
+add_executable(tests
+	tests/test_objects.cc)
 
 target_link_libraries(displaylib 
 	SDL2 
-	tests
-	toyapp
-	toyapp-vivike)
+	tests)
