@@ -20,3 +20,12 @@ TEST(Vector_int_2, Initialization)
 	ASSERT_EQ(v.x, 1);
 	ASSERT_EQ(v.y, 2);
 }
+
+TEST(Vector_int_3, Initialization)
+{
+	Vector<int, 3> v {{1,2,3}};
+
+	ASSERT_EQ(v[0], 1);
+	ASSERT_EQ(v[1], 2);
+	ASSERT_EQ(v[2], 3);
+}

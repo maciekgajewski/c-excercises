@@ -4,26 +4,38 @@
 
 namespace Display
 {
-	template<class T, std::size_t S>
-	struct Vector
+template<class T, std::size_t S>
+struct Vector
+{
+public:
+	Vector(std::array<T, S> data)
+		:mData(data)
 	{
-	};
+	}
 
-	template<>
-	struct Vector<int, 2>
+	T operator [](int index)
 	{
-		int x;
-		int y;
-	};
+		return mData[index];
+	}
+private:
+	std::array<T, S> mData;
+};
 
-	template<>
-	struct Vector<double, 3>
-	{
-		double x;
-		double y;
-		double z;
-	};
+template<>
+struct Vector<int, 2>
+{
+	int x;
+	int y;
+};
 
-	using Pixel = Vector<int, 2>;
-	using Vector3D = Vector<double, 3>;
+template<>
+struct Vector<double, 3>
+{
+	double x;
+	double y;
+	double z;
+};
+
+using Pixel = Vector<int, 2>;
+using Vector3D = Vector<double, 3>;
 }
