@@ -6,7 +6,6 @@ cmake_minimum_required(VERSION 3.0)
 add_subdirectory(displaylib
 tests)
 
-
 add_executable(toyapp WIN32
 	main.cc)
 
