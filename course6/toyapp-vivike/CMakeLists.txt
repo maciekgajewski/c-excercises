@@ -7,7 +7,9 @@ add_subdirectory(displaylib
 tests)
 
 add_executable(toyapp WIN32
-	main.cc)
+	main.cc
+	tests
+	tests/test_objects.cc)
 
 set_property(TARGET toyapp PROPERTY CXX_STANDARD 14)
 

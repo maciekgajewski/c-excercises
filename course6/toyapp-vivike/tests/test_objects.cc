@@ -21,7 +21,10 @@ BOOST_AUTO_TEST_CASE (operator_tests)
   Vector<int, 3> vec_a{1, 2, 3};
   Vector<int, 3> vec_b{1, 2, 3};
 
-  BOOST_REQUIRE(vec_a + vec_b == Vector<int, 3>{2, 4, 6};);
+  Vector<int, 3> sumvec = vec_a + vec_b;
+  BOOST_REQUIRE(sumvec.vec[0] == 2);
+  BOOST_REQUIRE(sumvec.vec[1] == 4);
+  BOOST_REQUIRE(sumvec.vec[2] == 6);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
