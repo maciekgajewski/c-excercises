@@ -13,7 +13,7 @@ public:
 	{
 	}
 
-	T operator [](int index)
+	const T& operator [](int index)
 	{
 		return mData[index];
 	}

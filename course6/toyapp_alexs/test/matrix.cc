@@ -6,7 +6,7 @@ using namespace Display;
 
 TEST(Matrix_2x2, Multiplication)
 {
-	Matrix<2, 2> matrix1
+	Matrix<2, 2, int> matrix1
 	{
 		{
 			1, 2,
@@ -14,7 +14,7 @@ TEST(Matrix_2x2, Multiplication)
 		}
 	};
 
-	Matrix<2, 2> matrix2
+	Matrix<2, 2, int> matrix2
 	{
 		{
 			1, 2,
