@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.0)
 
 add_subdirectory(displaylib)
 
-
 add_executable(toyapp
     main.cc)
 

@@ -9,7 +9,9 @@ class Matrix
 {
 public:
 	Matrix() {}
-	Matrix(std::array<std::array<T, B>, A> data): mMatrix(data) {}
+
+	template<class... E>
+	Matrix(E... data): mMatrix {static_cast<T>(data)...} {}
 
 	std::array<T, B>& operator [](int i)
 	{
