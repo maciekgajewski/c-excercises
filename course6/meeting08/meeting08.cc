@@ -13,19 +13,27 @@ struct Record
 	float factor;
 };
 
+Record global;
+
+Record* recordFactory(int x)
+{
+	global.id = x;
+	return &global;
+}
+
 int main(int argc, char** argv)
 {
-	std::unique_ptr<Record> datumPtr = std::make_unique<Record>(77);
+	Record* datumPtr = recordFactory(77);
 	datumPtr->name = "Hello 1234567890 1234567890";
 
-	std::unique_ptr<Record[]> a = std::make_unique<Record[]>(3);
-	a[1].name = "qwertyuiopasdfghjklzxcvbnm,.";
+	std::shared_ptr<Record> shared = std::make_shared<Record>(8);
+	std::shared_ptr<Record> another = shared;
 
-	Record b[3]
 
-	b[1].name = "zzzzzzzzzzzzzzzzzzzzzz";
+	Record x;
+	Record* xptr = &x;
 
 	std::cout << datumPtr->name << std::endl;
-	std::cout << a[1].name << std::endl;
+	delete datumPtr;
 }
 
