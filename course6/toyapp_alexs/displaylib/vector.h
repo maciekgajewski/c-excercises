@@ -8,12 +8,13 @@ template<class T, std::size_t S>
 struct Vector
 {
 public:
-	Vector(std::array<T, S> data)
-		:mData(data)
+	template<class... E>
+	Vector(E... data)
+		: mData {static_cast<T>(data)...}
 	{
 	}
 
-	const T& operator [](int index)
+	T& operator [](int index)
 	{
 		return mData[index];
 	}
@@ -21,21 +22,58 @@ private:
 	std::array<T, S> mData;
 };
 
-template<>
-struct Vector<int, 2>
+struct Pixel: public Vector<int, 2>
 {
-	int x;
-	int y;
+	Pixel()
+		: Vector(),
+		  x((*this)[0]),
+		  y((*this)[1])
+	{}
+
+	Pixel(int x, int y)
+		: Vector(x, y),
+		  x((*this)[0]),
+		  y((*this)[1])
+	{}
+
+	Pixel& operator =(const Pixel& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		return *this;
+	}
+
+	int& x;
+	int& y;
 };
 
-template<>
-struct Vector<double, 3>
+struct Vector3D: Vector<double, 3>
 {
-	double x;
-	double y;
-	double z;
+	Vector3D()
+		: Vector(),
+		  x((*this)[0]),
+		  y((*this)[1]),
+		  z((*this)[2])
+	{}
+
+	Vector3D(double x, double y, double z)
+		: Vector(x, y, z),
+		  x((*this)[0]),
+		  y((*this)[1]),
+		  z((*this)[2])
+	{}
+
+	Vector3D& operator =(const Vector3D& other)
+	{
+		this->x = other.x;
+		this->y = other.y;
+		this->z = other.z;
+		return *this;
+	}
+
+	double& x;
+	double& y;
+	double& z;
 };
 
-using Pixel = Vector<int, 2>;
-using Vector3D = Vector<double, 3>;
 }
