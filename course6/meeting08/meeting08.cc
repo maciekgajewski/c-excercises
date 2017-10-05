@@ -18,9 +18,14 @@ int main(int argc, char** argv)
 	std::unique_ptr<Record> datumPtr = std::make_unique<Record>(77);
 	datumPtr->name = "Hello 1234567890 1234567890";
 
-	auto p = std::make_unique<int>(7);
+	std::unique_ptr<Record[]> a = std::make_unique<Record[]>(3);
+	a[1].name = "qwertyuiopasdfghjklzxcvbnm,.";
+
+	Record b[3]
+
+	b[1].name = "zzzzzzzzzzzzzzzzzzzzzz";
 
 	std::cout << datumPtr->name << std::endl;
-	std::cout << *p << std::endl;
+	std::cout << a[1].name << std::endl;
 }
 
