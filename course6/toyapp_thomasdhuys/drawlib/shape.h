@@ -15,9 +15,9 @@ public:
 	Shape(const Shape& shape);
 	Shape(Shape&& shape);
 
-	void AddPoint(Index idx0);
-	void AddLine(Index idx0, Index idx1);
-	void AddTriangle(Index idx0, Index idx1, Index idx2);
+	void AddPoint(Vertex idx0);
+	void AddLine(Vertex idx0, Vertex idx1);
+	void AddTriangle(Vertex idx0, Vertex idx1, Vertex idx2);
 
 	ShapePrimitives& GetPrimitives() {return primitives;}
 
@@ -37,7 +37,7 @@ public:
 	static Shape GetSquareLines();
 	static Shape GetSquareTriangles();
 private:
-	static std::vector<Index> GetSquareIndices();
+	static std::vector<Vertex> GetSquareIndices();
 };
 
 }

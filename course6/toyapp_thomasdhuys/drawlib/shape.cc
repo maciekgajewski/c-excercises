@@ -7,7 +7,7 @@ namespace Draw {
 Shape::Shape(const Shape& shape) : name(shape.name), scale(shape.scale)
 {
  //TODO: Implement such that Vertices in new shape are shared as well
- //use std::unordered_set<Index> to check which Vertices are already created
+ //use std::unordered_set<Vertex> to check which Vertices are already created
  //TODO: step2:
 
 }
@@ -18,17 +18,17 @@ primitives(std::move(shape.primitives)), scale(std::move(shape.scale))
 
 }
 
-void Shape::AddPoint(Index idx0)
+void Shape::AddPoint(Vertex idx0)
 {
 	primitives.push_back(std::make_unique<Point>(idx0));
 }
 
-void Shape::AddLine(Index idx0, Index idx1)
+void Shape::AddLine(Vertex idx0, Vertex idx1)
 {
 	primitives.push_back(std::make_unique<Line>(idx0, idx1));
 }
 
-void Shape::AddTriangle(Index idx0, Index idx1, Index idx2)
+void Shape::AddTriangle(Vertex idx0, Vertex idx1, Vertex idx2)
 {
 	primitives.push_back(std::make_unique<Triangle>(idx0, idx1, idx2));
 }
@@ -43,7 +43,7 @@ Shape ShapeFactory::GetSquarePoints()
 	Shape shape("SquarePoints");
 	auto indices = GetSquareIndices();
 
-	for (Index& idx : indices){
+	for (Vertex& idx : indices){
 		shape.AddPoint(idx);
 	}
 	return shape;
@@ -72,19 +72,19 @@ Shape ShapeFactory::GetSquareTriangles()
 	return shape;
 }
 
-std::vector<Index> ShapeFactory::GetSquareIndices()
+std::vector<Vertex> ShapeFactory::GetSquareIndices()
 {
-	std::vector<Index> indices;
-	indices.reserve(8);
+	std::vector<Vertex> vertices;
+	vertices.reserve(8);
 
 	for (VCoord x : {-1, 1}) {
 		for (VCoord y : {-1, 1}) {
 			for (VCoord z : {-1, 1}) {
-				indices.push_back(std::make_shared<Vertex>(x,y,z));
+				vertices.emplace_back(x,y,z);
 			}
 		}
 	}
-	return indices;
+	return vertices;
 }
 
 }

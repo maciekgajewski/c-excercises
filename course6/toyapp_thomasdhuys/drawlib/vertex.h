@@ -9,15 +9,14 @@
 namespace Draw {
 
 struct Vertex;
-using Index = std::shared_ptr<Vertex>;
 
 struct Vertex {
 	// Ctor and Dtor
 	Vertex(): vector{0,0,0}, color(Draw::Colors::Green) {}
 	Vertex(VCoord x, VCoord y, VCoord z): vector{x,y,z}, color(Draw::Colors::Green) {}
 	Vertex(VCoord x, VCoord y, VCoord z, Color color): vector{x,y,z}, color(color) {}
-	Vertex(const Vertex& v) = delete;
-	~Vertex();
+//	Vertex(const Vertex& v);
+//	~Vertex();
 
 	// Data
 	Vector3D vector;

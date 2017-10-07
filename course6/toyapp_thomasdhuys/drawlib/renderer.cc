@@ -45,8 +45,8 @@ void Renderer::Render(Shape& shape)
 
 void Renderer::Render(Point& point)
 {
-	Vector3D v = point.idx0->vector;
-	Color color = point.idx0->color;
+	Vector3D v = point.vtx0.vector;
+	Color color = point.vtx0.color;
 
     v = Matrix4x4::Scale(0.5) * v;
     v = Matrix4x4::Translation({0.0f,0.0f,3.0f}) * v;
@@ -68,11 +68,11 @@ void Renderer::Render(Point& point)
 
 void Renderer::Render(Line& line)
 {
-	Vector3D v1 = line.idx0->vector;
-	Color color1 = line.idx0->color;
+	Vector3D v1 = line.vtx0.vector;
+	Color color1 = line.vtx0.color;
 
-	Vector3D v2 = line.idx1->vector;
-	Color color2 = line.idx1->color;
+	Vector3D v2 = line.vtx1.vector;
+	Color color2 = line.vtx1.color;
 
 	Pixel pixel;
 	pixel.x = v1.x;

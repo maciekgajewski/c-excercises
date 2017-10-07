@@ -19,35 +19,35 @@ using Primitive = std::unique_ptr<RawPrimitive>;
 
 class Point: public RawPrimitive {
 public:
-	Point(Index& idx0): idx0{idx0} {}
+	Point(Vertex& vtx0): vtx0{vtx0} {}
 	friend std::ostream& operator<<(std::ostream& s, const Point& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
 public:
-	Index idx0;
+	Vertex vtx0;
 };
 
 class Line: public RawPrimitive {
 public:
-	Line(Index& idx0, Index& idx1): idx0{idx0}, idx1{idx1} {}
+	Line(Vertex& vtx0, Vertex& vtx1): vtx0{vtx0}, vtx1{vtx1} {}
 	friend std::ostream& operator<<(std::ostream& s, const Line& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
 public:
-	Index idx0;
-	Index idx1;
+	Vertex vtx0;
+	Vertex vtx1;
 };
 
 class Triangle: public RawPrimitive {
 public:
-	Triangle(Index& idx0, Index& idx1, Index& idx2): idx0{idx0}, idx1{idx1}, idx2{idx2} {}
+	Triangle(Vertex& vtx0, Vertex& vtx1, Vertex& vtx2): vtx0{vtx0}, vtx1{vtx1}, vtx2{vtx2} {}
 	friend std::ostream& operator<<(std::ostream& s, const Triangle& p);
 protected:
 	virtual std::ostream& StreamWrite(std::ostream& s) const;
 public:
-	Index idx0;
-	Index idx1;
-	Index idx2;
+	Vertex vtx0;
+	Vertex vtx1;
+	Vertex vtx2;
 };
 
 std::ostream& operator<<(std::ostream& s, const Primitive& p);

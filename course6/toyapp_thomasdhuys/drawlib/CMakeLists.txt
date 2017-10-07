@@ -5,7 +5,6 @@ add_library(drawlib
 	renderer.cc renderer.h
 	scene.cc scene.h
 	shape.cc shape.h
-	projector.cc projector.h
 	vector3d.cc vector3d.h
 	matrix.cc matrix.h
 	pixel.h
