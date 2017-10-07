@@ -12,7 +12,7 @@ using ShapePrimitives = std::vector<Primitive>;
 class Shape {
 public:
 	Shape(std::string name): name(name) {}
-	Shape(const Shape& shape) = delete;
+	Shape(const Shape& shape);
 	Shape(Shape&& shape);
 
 	void AddPoint(Index idx0);

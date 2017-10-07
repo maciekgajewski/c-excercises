@@ -15,7 +15,7 @@ namespace Draw {
 
 class Renderer {
 public:
-	Renderer(int surfaceWidth, int surfaceHeight);
+	Renderer();
 	void Render(Scenes& scenes);
 private:
 	// Methods
@@ -23,12 +23,12 @@ private:
 	Display::Surface DefaultSurface();
 
 	void Render(Scene& scene);
-	void Render(Shape& shape); 
+	void Render(Shape& shape);
 	void Render(Point& point);
 	void Render(Line& line);
 	void Render(Triangle& triangle);
 
-	void SetPixel(Pixel p, Color c); 
+	void SetPixel(Pixel p, Color c);
 
 	// Variables
 	uint16_t surfaceWidth;

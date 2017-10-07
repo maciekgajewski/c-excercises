@@ -13,8 +13,8 @@ using Index = std::shared_ptr<Vertex>;
 
 struct Vertex {
 	// Ctor and Dtor
-	Vertex(): vector{0,0,0}, color(Draw::Colors::Red) {}
-	Vertex(VCoord x, VCoord y, VCoord z): vector{x,y,z}, color(Draw::Colors::Red) {}
+	Vertex(): vector{0,0,0}, color(Draw::Colors::Green) {}
+	Vertex(VCoord x, VCoord y, VCoord z): vector{x,y,z}, color(Draw::Colors::Green) {}
 	Vertex(VCoord x, VCoord y, VCoord z, Color color): vector{x,y,z}, color(color) {}
 	Vertex(const Vertex& v) = delete;
 	~Vertex();

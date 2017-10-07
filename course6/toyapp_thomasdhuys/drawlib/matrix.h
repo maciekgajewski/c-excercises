@@ -31,6 +31,8 @@ public:
 	RowType& operator[](std::size_t index) {return data[index];}
 	const RowType& operator[](std::size_t index) const {return data[index];}
 
+	friend std::ostream& operator<<(std::ostream& s, const Matrix4x4& m);
 };
 
+std::ostream& operator<<(std::ostream& s , const Matrix4x4& m);
 }

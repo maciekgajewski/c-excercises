@@ -58,9 +58,9 @@ Matrix4x4 Matrix4x4::operator*(Matrix4x4& rhs)
 {
 	Matrix4x4 m{};
 	for (int row=0; row<4; ++row) {
-		for (int col=0; col<4; ++col) {	
+		for (int col=0; col<4; ++col) {
 			for (int k=0; k<4; ++k) {
-				m[row][col] += data[row][k] * rhs[k][col]; 	
+				m[row][col] += data[row][k] * rhs[k][col];
 			}
 		}
 	}
@@ -69,13 +69,22 @@ Matrix4x4 Matrix4x4::operator*(Matrix4x4& rhs)
 
 Vector3D Matrix4x4::operator*(Vector3D& rhs)
 {
-	Vector3D v{};
+	Vector3D v{}; v[3]=0;
 	for (int row=0; row<4; ++row) {
 		for (int k=0; k<4; ++k) {
-			v.x += data[row][k] * rhs[k]; 
+			v[row] += data[row][k] * rhs[k];
 		}
 	}
 	return v;
+}
+
+std::ostream& operator<<(std::ostream& s , const Matrix4x4& m)
+{
+	s << "[" << m[0][0] << "," << m[0][1] << "," << m[0][2] << "," << m[0][3] << "\n";
+	s << " " << m[1][0] << "," << m[1][1] << "," << m[1][2] << "," << m[1][3] << "\n";
+	s << " " << m[2][0] << "," << m[2][1] << "," << m[2][2] << "," << m[2][3] << "\n";
+	s << " " << m[3][0] << "," << m[3][1] << "," << m[3][2] << "," << m[3][3] << "]";
+    return s;
 }
 
 
