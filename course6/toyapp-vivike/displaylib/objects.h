@@ -61,17 +61,18 @@ struct Vector
 		return newVec;
 	}	
 
-	void print()
-	{
-		std::string mystr;
-		for(T v : vec)
-		{
-			std::cout << v << std::endl;
-		}
-		
-
-	}
 };
+
+template<typename T, int length>
+std::ostream& operator <<(std::ostream& stream, Vector<T, length> vec) 
+{ 
+	for(int i=0; i<length; i++)
+	{
+		stream << vec.vec[i];
+	}
+	return stream;
+}
+
 
 using Pixel = Vector<int, 2>;
 using Vector3D = Vector<float, 3>;
