@@ -9,7 +9,7 @@
 #include <drawlib/scene.h>
 #include <drawlib/primitives.h>
 #include <drawlib/vertex.h>
-#include <drawlib/vector3d.h>
+#include <drawlib/vector.h>
 #include <drawlib/matrix.h>
 
 using namespace Draw;
@@ -23,7 +23,7 @@ int main()
 	auto renderer = Draw::Renderer();
 	auto scenes = Draw::SceneFactory::GetScenes();
 
-	renderer.Render(scenes);
+    renderer.Render(scenes);
 
     //test();
 
@@ -32,7 +32,6 @@ int main()
 
 void test()
 {
-    // Test
     Vector3D v = {1,2,3};
 	Matrix4x4 m = Matrix4x4::Scale(0.5);
 

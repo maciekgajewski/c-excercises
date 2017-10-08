@@ -9,7 +9,6 @@
 
 #include "primitives.h"
 #include "scene.h"
-#include "pixel.h"
 
 namespace Draw {
 

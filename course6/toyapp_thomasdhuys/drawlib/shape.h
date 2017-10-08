@@ -20,6 +20,7 @@ public:
 	void AddTriangle(Vertex idx0, Vertex idx1, Vertex idx2);
 
 	ShapePrimitives& GetPrimitives() {return primitives;}
+	const ShapePrimitives& GetPrimitives() const {return primitives;}
 
 private:
 	ShapePrimitives primitives;

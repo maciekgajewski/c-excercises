@@ -9,10 +9,10 @@ namespace Draw {
 SceneShapes& Scene::GetShapes() { return shapes; }
 const SceneShapes& Scene::GetShapes() const { return shapes; }
 
-//void Scene::Add(const Shape& shape)
-//{
-//	shapes.push_back(shape);
-//}
+void Scene::Add(const Shape& shape)
+{
+	shapes.push_back(shape);
+}
 
 void Scene::Add(Shape&& shape)
 {

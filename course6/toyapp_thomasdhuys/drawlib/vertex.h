@@ -3,7 +3,7 @@
 #include <iostream>
 #include <memory>
 
-#include "vector3d.h"
+#include "vector.h"
 #include "color.h"
 
 namespace Draw {
@@ -15,8 +15,6 @@ struct Vertex {
 	Vertex(): vector{0,0,0}, color(Draw::Colors::Green) {}
 	Vertex(VCoord x, VCoord y, VCoord z): vector{x,y,z}, color(Draw::Colors::Green) {}
 	Vertex(VCoord x, VCoord y, VCoord z, Color color): vector{x,y,z}, color(color) {}
-//	Vertex(const Vertex& v);
-//	~Vertex();
 
 	// Data
 	Vector3D vector;

@@ -6,17 +6,15 @@ namespace Draw {
 
 Shape::Shape(const Shape& shape) : name(shape.name), scale(shape.scale)
 {
- //TODO: Implement such that Vertices in new shape are shared as well
- //use std::unordered_set<Vertex> to check which Vertices are already created
- //TODO: step2:
-
+    primitives.clear();
+    for(const auto& primitive :shape.GetPrimitives())
+    {
+        primitives.push_back(primitive->Copy());
+    }
 }
 
 Shape::Shape(Shape&& shape) : name(std::move(shape.name)),
-primitives(std::move(shape.primitives)), scale(std::move(shape.scale))
-{
-
-}
+primitives(std::move(shape.primitives)), scale(std::move(shape.scale)) {}
 
 void Shape::AddPoint(Vertex idx0)
 {
@@ -32,6 +30,11 @@ void Shape::AddTriangle(Vertex idx0, Vertex idx1, Vertex idx2)
 {
 	primitives.push_back(std::make_unique<Triangle>(idx0, idx1, idx2));
 }
+
+//void Shape::Move(Vector3D v)
+//{
+   //TODO 
+//}
 
 std::ostream& operator<<(std::ostream& s, const Shape& sh)
 {

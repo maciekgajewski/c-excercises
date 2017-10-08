@@ -5,9 +5,8 @@ add_library(drawlib
 	renderer.cc renderer.h
 	scene.cc scene.h
 	shape.cc shape.h
-	vector3d.cc vector3d.h
+	vector.cc vector.h
 	matrix.cc matrix.h
-	pixel.h
 )
 
 set_property(TARGET drawlib PROPERTY CXX_STANDARD 14)

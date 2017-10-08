@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "vector3d.h"
+#include "vector.h"
 
 namespace Draw{
 
@@ -27,9 +27,9 @@ Matrix4x4 Matrix4x4::Identity()
 Matrix4x4 Matrix4x4::Translation(Vector3D position)
 {
 	Matrix4x4 m = Identity();
-	m[0][3] = position.x;
-	m[1][3] = position.y;
-	m[2][3] = position.z;
+	m[0][3] = position[0];
+	m[1][3] = position[1];
+	m[2][3] = position[2];
 	return m;
 }
 
@@ -69,13 +69,14 @@ Matrix4x4 Matrix4x4::operator*(Matrix4x4& rhs)
 
 Vector3D Matrix4x4::operator*(Vector3D& rhs)
 {
-	Vector3D v{}; v[3]=0;
+	Vector4D rhs4(rhs, 1);
+	Vector4D v{0,0,0,0};
 	for (int row=0; row<4; ++row) {
 		for (int k=0; k<4; ++k) {
-			v[row] += data[row][k] * rhs[k];
+			v[row] += data[row][k] * rhs4[k];
 		}
 	}
-	return v;
+	return Vector3D{v[0],v[1],v[2]};
 }
 
 std::ostream& operator<<(std::ostream& s , const Matrix4x4& m)
