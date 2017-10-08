@@ -21,9 +21,9 @@ struct Vector
 {
 	int vec[length];
 
-	Vector<T, length> operator +(Vector& b) 
+	Vector operator +(Vector& b) 
 	{ 
-		Vector<T, length> newVec;
+		Vector newVec;
 		for(int i=0; i<length; i++)
 		{
 			newVec.vec[i] = this->vec[i] + b.vec[i];
@@ -31,9 +31,9 @@ struct Vector
 		return newVec;
 	}
 
-	Vector<T, length> operator *(int b) 
+	Vector operator *(int b) 
 	{ 
-		Vector<T, length> newVec;
+		Vector newVec;
 		for(int i=0; i<length; i++)
 		{
 			newVec.vec[i] = this->vec[i] * b;
@@ -41,9 +41,9 @@ struct Vector
 		return newVec;
 	}
 
-	Vector<T, length> operator -(Vector& r) 
+	Vector operator -(Vector& r) 
 	{ 
-		Vector<T, length> newVec;
+		Vector newVec;
 		for(int i=0; i<length; i++)
 		{
 			newVec.vec[i] = this->vec[i] - r.vec[i];
@@ -51,9 +51,9 @@ struct Vector
 		return newVec;
 	}
 
-	Vector<T, length> operator /(int r) 
+	Vector operator /(int r) 
 	{ 
-		Vector<T, length> newVec;
+		Vector newVec;
 		for(int i=0; i<length; i++)
 		{
 			newVec.vec[i] = this->vec[i] / r;
