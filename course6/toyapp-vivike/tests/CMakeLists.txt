@@ -7,8 +7,10 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 14)
 
+add_directory(tests)
+
 add_executable(tests
-	tests/test_objects.cc)
+	test_objects.cc)
 
 target_link_libraries(displaylib 
 	SDL2 
