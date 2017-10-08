@@ -41,6 +41,7 @@ int main(int, char**)
 		corner3Proj = cam.project2D(rect.corner3);
 		Display::Pixel corner4Proj;
 		corner4Proj = cam.project2D(rect.corner4);
+		std::cout << corner4Proj << std::endl;
 		surf.DrawLine(corner1Proj, corner2Proj, red);
 		surf.DrawLine(corner2Proj, corner3Proj, red);
 		surf.DrawLine(corner3Proj, corner4Proj, red);

@@ -68,7 +68,7 @@ std::ostream& operator <<(std::ostream& stream, Vector<T, length> vec)
 { 
 	for(int i=0; i<length; i++)
 	{
-		stream << vec.vec[i];
+		stream << vec.vec[i] << ", ";
 	}
 	return stream;
 }
