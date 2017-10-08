@@ -31,7 +31,7 @@ void Surface::Clear(Color backgroundColor)
 		}
 }
 
-void Surface::SetPixel(Pixel& pixel, Color currentColor)
+void Surface::SetPixel(Pixel pixel, Color currentColor)
 {
 	assert(mSurface);
 
@@ -41,13 +41,13 @@ void Surface::SetPixel(Pixel& pixel, Color currentColor)
 	*pixelAddr = pixelValue;
 }
 
-void Surface::DrawLine(Pixel& p1, Pixel& p2, Color color)
+void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
-	int v1x = p1.vec[0];
-	int v1y = p1.vec[1];
-	int v2x = p2.vec[0];
-	int v2y = p2.vec[1];
+	int v1x = p1[0];
+	int v1y = p1[1];
+	int v2x = p2[0];
+	int v2y = p2[1];
 
 	bool steep = (std::fabs(v2y - v1y) > std::fabs(v2x - v1x));
 	if(steep)

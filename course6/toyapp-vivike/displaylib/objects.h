@@ -17,11 +17,14 @@ struct Color
 
 
 template<typename T, int length>
-struct Vector
+class Vector
 {
-	int vec[length];
+public:
+	std::array<T, length> vec;
 
-	Vector operator +(Vector& b) 
+	//Vector(std::array<T, length> newvec): vec(newvec) {};
+
+	Vector operator +(Vector b) 
 	{ 
 		Vector newVec;
 		for(int i=0; i<length; i++)
@@ -41,7 +44,7 @@ struct Vector
 		return newVec;
 	}
 
-	Vector operator -(Vector& r) 
+	Vector operator -(Vector r) 
 	{ 
 		Vector newVec;
 		for(int i=0; i<length; i++)
@@ -61,6 +64,11 @@ struct Vector
 		return newVec;
 	}	
 
+	int operator [](int elem) 
+	{ 
+		return this->vec[elem];
+	}
+
 };
 
 template<typename T, int length>
@@ -79,7 +87,7 @@ using Vector3D = Vector<float, 3>;
 
 struct Camera
 {
-	Pixel project2D(Vector3D& original);
+	Pixel project2D(Vector3D original);
 };
 
 struct Rectangle
@@ -89,7 +97,7 @@ struct Rectangle
 	Vector3D corner3;
 	Vector3D corner4;
 
-	Rectangle move(Vector3D&);
+	Rectangle move(Vector3D);
 };
 
 }

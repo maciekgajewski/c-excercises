@@ -33,15 +33,10 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		Display::Pixel corner1Proj;
-		corner1Proj = cam.project2D(rect.corner1);
-		Display::Pixel corner2Proj;
-		corner2Proj = cam.project2D(rect.corner2);
-		Display::Pixel corner3Proj;
-		corner3Proj = cam.project2D(rect.corner3);
-		Display::Pixel corner4Proj;
-		corner4Proj = cam.project2D(rect.corner4);
-		std::cout << corner4Proj << std::endl;
+		Display::Pixel corner1Proj = cam.project2D(rect.corner1);
+		Display::Pixel corner2Proj = cam.project2D(rect.corner2);
+		Display::Pixel corner3Proj = cam.project2D(rect.corner3);
+		Display::Pixel corner4Proj = cam.project2D(rect.corner4);
 		surf.DrawLine(corner1Proj, corner2Proj, red);
 		surf.DrawLine(corner2Proj, corner3Proj, red);
 		surf.DrawLine(corner3Proj, corner4Proj, red);
