@@ -117,8 +117,8 @@ Vector3D Matrix44::operator*(const Vector3D& rhs) const
 {
 	return {
 		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[3],
-		rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[7],
-		rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11]
+			rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[7],
+			rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11]
 	};
 }
 
@@ -126,9 +126,9 @@ Vector4D Matrix44::operator*(const Vector4D& rhs) const
 {
 	return {
 		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[ 3],
-		rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[ 7],
-		rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11],
-		rhs.x * mMatrix[12] + rhs.y * mMatrix[13] + rhs.z * mMatrix[14] + mMatrix[15]
+			rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[ 7],
+			rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11],
+			rhs.x * mMatrix[12] + rhs.y * mMatrix[13] + rhs.z * mMatrix[14] + mMatrix[15]
 	};
 }
 
