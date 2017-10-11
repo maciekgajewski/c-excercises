@@ -1,8 +1,6 @@
 #include "math/vector.h"
-
-#define BOOST_TEST_MODULE VectorTests
-#include <boost/test/included/unit_test.hpp>
 #include <boost/test/floating_point_comparison.hpp>
+#include <boost/test/unit_test.hpp>
 
 // the boost one is just inconvenient...
 #define APPROX_EQUAL(a, b) BOOST_CHECK_CLOSE(a, b, 0.001)
