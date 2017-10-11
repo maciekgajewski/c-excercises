@@ -19,7 +19,11 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Rectangle rect{{100, 100, 1}, {100, 150, 1}, {150, 150, 1}, {150, 100, 1}};
+	Display::Vector3D corner1{100, 100, 1};
+	Display::Vector3D corner2{100, 150, 1};
+	Display::Vector3D corner3{150, 150, 1};
+	Display::Vector3D corner4{150, 100, 1};
+	Display::Rectangle rect{corner1, corner2, corner3, corner4};
 	Display::Camera cam;
 		
 
@@ -29,15 +33,21 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		surf.DrawLine(cam.project2D(rect.corner1), cam.project2D(rect.corner2), red);
-		surf.DrawLine(cam.project2D(rect.corner2), cam.project2D(rect.corner3), red);
-		surf.DrawLine(cam.project2D(rect.corner3), cam.project2D(rect.corner4), red);
-		surf.DrawLine(cam.project2D(rect.corner4), cam.project2D(rect.corner1), red);
+		Display::Pixel corner1Proj = cam.project2D(rect.corner1);
+		Display::Pixel corner2Proj = cam.project2D(rect.corner2);
+		Display::Pixel corner3Proj = cam.project2D(rect.corner3);
+		Display::Pixel corner4Proj = cam.project2D(rect.corner4);
+		surf.DrawLine(corner1Proj, corner2Proj, red);
+		surf.DrawLine(corner2Proj, corner3Proj, red);
+		surf.DrawLine(corner3Proj, corner4Proj, red);
+		surf.DrawLine(corner4Proj, corner1Proj, red);
 		
 		win.Display(surf);
-		rect = rect.move({0, 0, 1});
+
+		Display::Vector3D moveVec{0, 0, 1};
+		rect = rect.move(moveVec);
 		
-		Display::Delay(100);
+		Display::Delay(200);
 	}
 
 	Display::Delay(1000);
