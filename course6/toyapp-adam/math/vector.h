@@ -4,10 +4,14 @@
 #include <array>
 #include <cmath>
 #include <limits>
+#include <type_traits>
 
 namespace Math {
 
-template<typename Type, unsigned Dimensions, typename FloatType = float>
+template<typename T>
+using IsFloatingPoint = std::enable_if_t<std::is_floating_point<T>::value>;
+
+template<typename Type, unsigned Dimensions>
 class Vector
 {
 public:
@@ -42,17 +46,17 @@ public:
 		return result;
 	}
 
-	friend bool operator==(const Vector& lhs, const Vector& rhs)
+	bool operator==(const Vector& other) const
 	{
 		for (unsigned i = 0; i < Dimensions; ++i)
-			if (!ApproximatelyEquals(lhs[i], rhs[i]))
+			if (!ApproximatelyEquals(mComponents[i], other[i]))
 				return false;
 		return true;
 	}
 
-	friend bool operator!=(const Vector& lhs, const Vector& rhs)
+	bool operator!=(const Vector& other) const
 	{
-		return !operator==(lhs, rhs);
+		return !this->operator==(other);
 	}
 
 	Vector& operator=(const Vector& other)
@@ -69,6 +73,7 @@ public:
 		return *this;
 	}
 
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
 	Vector& operator*=(FloatType scalar)
 	{
 		for (unsigned i = 0; i < Dimensions; ++i)
@@ -106,6 +111,7 @@ public:
 		return Vector{*this} += rhs;
 	}
 
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
 	Vector operator*(FloatType scalar) const
 	{
 		return Vector{*this} *= scalar;
@@ -116,6 +122,7 @@ public:
 		return Vector{*this} -= rhs;
 	}
 
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
 	Vector Normalized() const
 	{
 		auto length = Length();
@@ -124,6 +131,7 @@ public:
 				: Vector{Type{1.0}, Type{0.0}};
 	}
 
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
 	FloatType Dot(const Vector& rhs) const
 	{
 		FloatType result{0.0};
@@ -132,6 +140,7 @@ public:
 		return result;
 	}
 
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
 	FloatType Length() const
 	{
 		return std::sqrt(Dot(*this));
@@ -139,7 +148,9 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& stream, const Vector& vector)
 	{
-		stream << vector[0] << ',' << vector[1];
+		for (unsigned i = 0; i < Dimensions - 1; ++i)
+			stream << vector[i] << ',';
+		stream << vector[Dimensions - 1];
 		return stream;
 	}
 
