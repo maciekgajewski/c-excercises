@@ -12,17 +12,11 @@ void Color::redder(int amount)
 	}
 };
 
-void Vector2D::move(int xmove, int ymove)
+Pixel Camera::project2D(Vector3D original)
 {
-	x = x + xmove;
-	y = y + ymove;
-};
-
-Vector2D Camera::project2D(Vector3D original)
-{
-	Vector2D newVector;
-	newVector.x = original.x/original.z;
-	newVector.y = original.y/original.z;
+	Pixel newVector;
+	newVector.vec[0] = int(original[0]/original[2]);
+	newVector.vec[1] = int(original[1]/original[2]);
 
 	return newVector;
 }

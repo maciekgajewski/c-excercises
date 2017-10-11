@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <array>
+#include <iostream>
 
 namespace Display {
 
@@ -14,44 +15,79 @@ struct Color
 	void redder(int amount);
 };
 
-struct Vector2D
+
+template<typename T, int length>
+class Vector
 {
-	int x;
-	int y;
+public:
+	std::array<T, length> vec;
 
-	void move(int xmove, int ymove);
-	
-	Vector2D operator +(Vector2D b) { return { x + b.x, y + b.y}; }
-	Vector2D operator +(int b) { return { x + b, y + b}; }	
+	//Vector(std::array<T, length> newvec): vec(newvec) {};
 
-	Vector2D operator *(int b) { return { x * b, y * b}; }
+	Vector operator +(Vector b) 
+	{ 
+		Vector newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] + b.vec[i];
+		}
+		return newVec;
+	}
 
-	Vector2D operator -(Vector2D r) { return { x - r.x, y - r.y}; }
-	Vector2D operator -(int r) { return { x - r, y - r}; }
+	Vector operator *(int b) 
+	{ 
+		Vector newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] * b;
+		}
+		return newVec;
+	}
 
-	Vector2D operator /(int r) { return { x / r, y / r}; }
+	Vector operator -(Vector r) 
+	{ 
+		Vector newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] - r.vec[i];
+		}
+		return newVec;
+	}
+
+	Vector operator /(int r) 
+	{ 
+		Vector newVec;
+		for(int i=0; i<length; i++)
+		{
+			newVec.vec[i] = this->vec[i] / r;
+		}
+		return newVec;
+	}	
+
+	int operator [](int elem) 
+	{ 
+		return this->vec[elem];
+	}
+
 };
 
-struct Vector3D
-{
-	int x;
-	int y;
-	int z;
+template<typename T, int length>
+std::ostream& operator <<(std::ostream& stream, Vector<T, length> vec) 
+{ 
+	for(int i=0; i<length; i++)
+	{
+		stream << vec.vec[i] << ", ";
+	}
+	return stream;
+}
 
-	Vector3D operator +(Vector3D b) { return { x + b.x, y + b.y, z + b.z}; }
-	Vector3D operator +(int b) { return { x + b, y + b, z + b}; }	
 
-	Vector3D operator *(int b) { return { x * b, y * b, z * b}; }
-
-	Vector3D operator -(Vector3D r) { return { x - r.x, y - r.y, z - r.z}; }
-	Vector3D operator -(int r) { return { x - r, y - r, z - r}; }
-
-	Vector3D operator /(int r) { return { x / r, y / r, z / r}; }
-};
+using Pixel = Vector<int, 2>;
+using Vector3D = Vector<float, 3>;
 
 struct Camera
 {
-	Vector2D project2D(Vector3D original);
+	Pixel project2D(Vector3D original);
 };
 
 struct Rectangle
