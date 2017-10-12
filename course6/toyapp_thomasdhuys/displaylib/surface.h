@@ -1,7 +1,6 @@
 #pragma once
 
 #include "sdlobject.h"
-#include "objects.h"
 
 #include <SDL2/SDL.h>
 
@@ -15,9 +14,8 @@ public:
 	Surface(int w, int h);
 	~Surface();
 
-	void Clear(Color backgroundColor);
-	void SetPixel(Pixel pixel, Color currentColor);
-	void DrawLine(Pixel p1, Pixel p2, Color color);
+	void Clear(std::uint8_t r, std::uint8_t g, std::uint8_t b);
+	void SetPixel(int x, int y, uint8_t r, uint8_t g, uint8_t b);
 
 private:
 

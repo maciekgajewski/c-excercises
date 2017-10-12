@@ -26,21 +26,21 @@ void Scene::Update(double totalElapsedSeconds)
 	Vector3D cameraMove;
 
 	if(mKeyboard.IsDown(SDL_SCANCODE_LEFT))
-		cameraMove.x = -camMovementSpeed;
+		cameraMove[0] = -camMovementSpeed;
 	if(mKeyboard.IsDown(SDL_SCANCODE_RIGHT))
-		cameraMove.x = +camMovementSpeed;
+		cameraMove[0] = +camMovementSpeed;
 	if(mKeyboard.IsDown(SDL_SCANCODE_PAGEUP))
-		cameraMove.y = +camMovementSpeed;
+		cameraMove[1] = +camMovementSpeed;
 	if(mKeyboard.IsDown(SDL_SCANCODE_PAGEDOWN))
-		cameraMove.y = -camMovementSpeed;
+		cameraMove[1] = -camMovementSpeed;
 	if(mKeyboard.IsDown(SDL_SCANCODE_DOWN))
-		cameraMove.z = -camMovementSpeed;
+		cameraMove[2] = -camMovementSpeed;
 	if(mKeyboard.IsDown(SDL_SCANCODE_UP))
-		cameraMove.z = +camMovementSpeed;
+		cameraMove[2] = +camMovementSpeed;
 
 	auto camRotation = mMouse.GetPositionDelta();
 	mSurface.camera.transform.Move(cameraMove);
-	mSurface.camera.transform.Rotate({camRotation.x * camRotationSpeed, 0.0f, 0.0f});
+	mSurface.camera.transform.Rotate({camRotation[0] * camRotationSpeed, 0.0f, 0.0f});
 
 	float test1 = std::sin(totalElapsedSeconds);
 	float test2 = std::cos(totalElapsedSeconds * 0.5f);
