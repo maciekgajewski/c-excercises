@@ -8,8 +8,6 @@ add_library(displaylib
 	rgb.h
 	matrix.h
 	cube.h
-	vector2d.cc vector2d.h
-	vector3d.cc vector3d.h
 	pyramid.h
 	vector_common.cc vector_common.h
 )

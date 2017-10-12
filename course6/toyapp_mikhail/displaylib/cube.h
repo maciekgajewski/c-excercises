@@ -1,8 +1,7 @@
 #pragma once
 
 #include "matrix.h"
-#include "vector2d.h"
-#include "vector3d.h"
+#include "vector_common.h"
 #include "surface3d.h"
 #include "rgb.h"
 

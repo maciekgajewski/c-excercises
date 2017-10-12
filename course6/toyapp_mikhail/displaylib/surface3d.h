@@ -2,7 +2,7 @@
 
 #include "surface.h"
 #include "matrix.h"
-#include "vector3d.h"
+#include "vector_common.h"
 #include "triangle.h"
 #include "surface.h"
 

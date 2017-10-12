@@ -2,7 +2,7 @@
 
 #include "sdlobject.h"
 #include "rgb.h"
-#include "vector2d.h"
+#include "vector_common.h"
 
 #include <cstdint>
 #include <cmath>

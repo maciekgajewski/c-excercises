@@ -1,6 +1,6 @@
 #pragma once
 
-#include "vector3d.h"
+#include "vector_common.h"
 
 #include <array>
 

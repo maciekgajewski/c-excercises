@@ -1,57 +1,105 @@
 #pragma once
 
-namespace Display{
+#include <array>
 
-template <class TValue, int TDimentions>
+namespace Display {
+
+template <class TValue, size_t TDimentions, class TDecoratedType = TValue>
 class VectorCommon
 {
-	// No constructor for vector without specification
-	VectorCommon() = delete;
+private:
+	using TSelf = VectorCommon<TValue, TDimentions>;
+protected:
+	std::array<TValue, TDimentions> _data;
+
+public:
+	TDecoratedType operator + (const TDecoratedType& right)
+	{
+		auto return_value = TDecoratedType(*this);
+		for (auto i = 0; i < TDimentions; i++)
+			return_value._data[i] += right._data[i];
+		return return_value;
+	}
+
+	TDecoratedType operator * (double scale)
+	{
+		auto return_value = TDecoratedType(*this);
+		for (auto i = 0; i < TDimentions; i++)
+			return_value._data[i] *= scale;
+		return return_value;
+	}
+
+	TValue& operator[] (int i) { return _data[i]; }
+	const TValue& operator[] (int i) const { return _data[i]; }
+
 };
 
-// Specification for 2 dimentional vector
+// 2 dimentional template vector decorator. Decorator needed only to provide x, y
 template <class TValue>
-class VectorCommon<TValue, 2>
+class Vector2DimDecorator : public VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>
 {
 private:
-	using TSelf = VectorCommon<TValue, 2>;
+	using TBase = VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>;
+
 public:
-	TValue x, y;
+	TValue &x, &y;
 
-	TSelf operator + (const TSelf& v)
+	Vector2DimDecorator() :
+		x(_data[0]),
+		y(_data[1])
+	{}
+
+	Vector2DimDecorator(TValue xx, TValue yy) :
+		Vector2DimDecorator()
 	{
-		auto r = TSelf(*this);
-		r.x += v.x;
-		r.y += v.y;
-		return r;
+		(*this)[0] = xx;
+		(*this)[1] = yy;
 	}
 
-	TSelf operator * (double scale)
-	{
-		auto r = TSelf(*this);
-		r.x *= scale;
-		r.y *= scale;
-		return r;
-	}
+	Vector2DimDecorator(TBase undecorated) :
+		Vector2DimDecorator(undecorated[0], undecorated[1])
+	{}
+
+	Vector2DimDecorator(const Vector2DimDecorator& original) :
+		Vector2DimDecorator(original[0], original[1])
+	{}
 };
 
-// Specification for 3d vector
+
+// 3 dimentional templte vector. Decorator needed only to provide x, y, z
 template <class TValue>
-class VectorCommon<TValue, 3>
+class Vector3DimDecorator : public VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>
 {
 private:
-	using TSelf = VectorCommon<TValue, 3>;
+	using TBase = VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>;
 public:
-	TValue x, y, z;
+	TValue &x, &y, &z;
 
-	TSelf operator + (const TSelf& v)
+	Vector3DimDecorator() :
+		x(_data[0]),
+		y(_data[1]),
+		z(_data[2])
+	{}
+
+	Vector3DimDecorator(TValue xx, TValue yy, TValue zz) :
+		Vector3DimDecorator()
 	{
-		auto r = TSelf(*this);
-		r.x += v.x;
-		r.y += v.y;
-		r.z += v.z;
-		return r;
+		(*this)[0] = xx;
+		(*this)[1] = yy;
+		(*this)[2] = zz;
 	}
+
+	Vector3DimDecorator(TBase undecorated) :
+		Vector3DimDecorator(undecorated[0], undecorated[1], undecorated[2])
+	{}
+
+	Vector3DimDecorator(const Vector3DimDecorator& original) :
+		Vector3DimDecorator(original[0], original[1], original[2])
+	{}
 };
+
+using Vector2D = Vector2DimDecorator<double>;
+
+using Vector3D = Vector3DimDecorator<double>;
 
 }
