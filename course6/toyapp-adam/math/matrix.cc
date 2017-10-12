@@ -40,9 +40,9 @@ Matrix44 Matrix44::Translation(Vector3D position)
 {
 	Matrix44 m = Identity();
 
-	m.mMatrix[TRANSLATE_X] = position.x;
-	m.mMatrix[TRANSLATE_Y] = position.y;
-	m.mMatrix[TRANSLATE_Z] = position.z;
+	m.mMatrix[TRANSLATE_X] = position[0];
+	m.mMatrix[TRANSLATE_Y] = position[1];
+	m.mMatrix[TRANSLATE_Z] = position[2];
 
 	return m;
 }
@@ -51,12 +51,12 @@ Matrix44 Matrix44::Rotation(Vector3D yawPitchRoll)
 {
 	Matrix44 m = Zero();
 
-	float ch = std::cos(yawPitchRoll.x);
-	float sh = std::sin(yawPitchRoll.x);
-	float cp = std::cos(yawPitchRoll.y);
-	float sp = std::sin(yawPitchRoll.y);
-	float cb = std::cos(yawPitchRoll.z);
-	float sb = std::sin(yawPitchRoll.z);
+	float ch = std::cos(yawPitchRoll[0]);
+	float sh = std::sin(yawPitchRoll[0]);
+	float cp = std::cos(yawPitchRoll[1]);
+	float sp = std::sin(yawPitchRoll[1]);
+	float cb = std::cos(yawPitchRoll[2]);
+	float sb = std::sin(yawPitchRoll[2]);
 
 	m.mMatrix[ 0] =  ch * cb + sh * sp * sb;
 	m.mMatrix[ 1] = -ch * sb + sh * sp * cb;
@@ -116,19 +116,19 @@ Matrix44 Matrix44::operator*(const Matrix44& rhs) const
 Vector3D Matrix44::operator*(const Vector3D& rhs) const
 {
 	return {
-		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[3],
-			rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[7],
-			rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11]
+		rhs[0] * mMatrix[ 0] + rhs[1] * mMatrix[ 1] + rhs[2] * mMatrix[ 2] + mMatrix[3],
+		rhs[0] * mMatrix[ 4] + rhs[1] * mMatrix[ 5] + rhs[2] * mMatrix[ 6] + mMatrix[7],
+		rhs[0] * mMatrix[ 8] + rhs[1] * mMatrix[ 9] + rhs[2] * mMatrix[10] + mMatrix[11]
 	};
 }
 
 Vector4D Matrix44::operator*(const Vector4D& rhs) const
 {
 	return {
-		rhs.x * mMatrix[ 0] + rhs.y * mMatrix[ 1] + rhs.z * mMatrix[ 2] + mMatrix[ 3],
-			rhs.x * mMatrix[ 4] + rhs.y * mMatrix[ 5] + rhs.z * mMatrix[ 6] + mMatrix[ 7],
-			rhs.x * mMatrix[ 8] + rhs.y * mMatrix[ 9] + rhs.z * mMatrix[10] + mMatrix[11],
-			rhs.x * mMatrix[12] + rhs.y * mMatrix[13] + rhs.z * mMatrix[14] + mMatrix[15]
+		rhs[0] * mMatrix[ 0] + rhs[1] * mMatrix[ 1] + rhs[2] * mMatrix[ 2] + mMatrix[ 3],
+		rhs[0] * mMatrix[ 4] + rhs[1] * mMatrix[ 5] + rhs[2] * mMatrix[ 6] + mMatrix[ 7],
+		rhs[0] * mMatrix[ 8] + rhs[1] * mMatrix[ 9] + rhs[2] * mMatrix[10] + mMatrix[11],
+		rhs[0] * mMatrix[12] + rhs[1] * mMatrix[13] + rhs[2] * mMatrix[14] + mMatrix[15]
 	};
 }
 
