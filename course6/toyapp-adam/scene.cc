@@ -1,20 +1,23 @@
 #include "scene.h"
 
+#include <displaylib/mesh_util.h>
 #include <displaylib/surface_3d.h>
 #include <util/keyboard.h>
 #include <util/mouse.h>
-#include <cmath>
 
 Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 :	mKeyboard{keyboard},
 	mMouse{mouse},
-	mSurface{surface},
-	mTestCube1{{0.0f, 0.0f, 2.5f}, 0.5f,Display::YELLOW, Display::BLACK},
-	mTestCube2{{1.25f, 0.25f, 2.5f}, 0.5f, Display::GREEN, Display::BLACK},
-	mTestCube3{{-1.25f, -0.25f, 2.5f}, 0.3f, Display::RED, Display::BLACK},
-	mTestCube4{{0.0f, 0.75f, 2.5f}, 0.25f, Display::YELLOW, Display::BLACK},
-	mTestCube5{{0.0f, 1.125f, 2.5f}, 0.125f, Display::YELLOW, Display::BLACK}
+	mSurface{surface}
 {}
+
+void Scene::Populate()
+{
+	mMesh = Display::CreateMeshFromFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\tesh_shapes\\cube.txt");
+	mMesh.transform.SetPosition({0.0f, 0.0f, 1.0f});
+	mMesh.transform.SetScale(0.25f);
+	mMesh.fillColor = Display::GREEN;
+}
 
 void Scene::Update(double totalElapsedSeconds)
 {
@@ -42,21 +45,12 @@ void Scene::Update(double totalElapsedSeconds)
 	mSurface.camera.transform.Move(cameraMove);
 	mSurface.camera.transform.Rotate({camRotation[0] * camRotationSpeed, 0.0f, 0.0f});
 
-	float test1 = std::sin(totalElapsedSeconds);
-	float test2 = std::cos(totalElapsedSeconds * 0.5f);
-
-	mTestCube2.transform.SetScale(0.1f + std::fabs(test1) * 0.25f);
-	mTestCube2.transform.Rotate({0.0f, 0.003f, 0.0f});
-	mTestCube3.transform.SetOrientation({0.0f, test1, test2});
+	mMesh.transform.Rotate({0.003f, 0.0f, 0.0f});
 }
 
 void Scene::Draw()
 {
 	auto view = mSurface.camera.transform.CreateInverseMatrix();
 
-	mTestCube1.Draw(mSurface, view);
-	mTestCube2.Draw(mSurface, view);
-	mTestCube3.Draw(mSurface, view);
-	mTestCube4.Draw(mSurface, view);
-	mTestCube5.Draw(mSurface, view);
+	mSurface.DrawMesh(mMesh, view);
 }

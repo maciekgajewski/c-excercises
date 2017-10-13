@@ -29,6 +29,24 @@ void Surface3D::DrawTriangles(const std::vector<Triangle3D>& triangles, Color co
 		DrawTriangle(triangle, color);
 }
 
+void Surface3D::DrawMesh(const Mesh& mesh, const Matrix44& view)
+{
+	auto modelView = view * mesh.transform.CreateMatrix();
+	for (auto& triangle : mesh.triangles)
+	{
+		Triangle3D viewTransformedTriangle = {
+			modelView * triangle[0],
+			modelView * triangle[1],
+			modelView * triangle[2]
+		};
+
+		DrawTriangle(viewTransformedTriangle, mesh.fillColor);
+		DrawLine(viewTransformedTriangle[0], viewTransformedTriangle[1], mesh.edgeColor);
+		DrawLine(viewTransformedTriangle[0], viewTransformedTriangle[2], mesh.edgeColor);
+		DrawLine(viewTransformedTriangle[1], viewTransformedTriangle[2], mesh.edgeColor);
+	}
+}
+
 Vector2D Surface3D::Project(Vector3D vector) const
 {
 	auto clipSpace = camera.GetProjectionMatrix() * Vector4D{vector, 1.0f};

@@ -5,6 +5,7 @@
 #include "math/vector.h"
 #include "sdlobject.h"
 #include "util/pixel.h"
+#include <memory>
 #include <SDL2/SDL.h>
 #include <vector>
 
@@ -33,6 +34,7 @@ public:
 	void DrawTriangles(const std::vector<Triangle2D>& triangles, Color color);
 private:
 	SDL_Surface* mSurface;
+	std::unique_ptr<float[]> mDepthBuffer;
 	Pixel mHalfDimensions;
 
 	Pixel ToPixel(Vector2D logicalCoordinates);

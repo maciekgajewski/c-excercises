@@ -9,6 +9,7 @@ namespace Display {
 Surface2D::Surface2D(Pixel dimensions)
 :	mHalfDimensions{dimensions * 0.5f}
 {
+	mDepthBuffer = std::make_unique<float[]>(dimensions[0] * dimensions[1]);
 	mSurface = SDL_CreateRGBSurface(0, dimensions[0], dimensions[1], 32, 0, 0, 0, 0);
 	assert(mSurface);
 }
@@ -100,6 +101,17 @@ void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
 		std::max(a[0], std::max(b[0], c[0])),
 		std::max(a[1], std::max(b[1], c[1]))
 	};
+
+	auto edge1 = b - a;
+	auto edge2 = c - a;
+
+	// flip winding if necessary
+	if (edge1[0] * edge2[1] - edge1[1] * edge2[0] > 0.0f)
+	{
+		auto temp = a;
+		a = b;
+		b = temp;
+	}
 
 	for(auto y = topLeft[1]; y < bottomRight[1]; ++y)
 		for(auto x = topLeft[0]; x < bottomRight[0]; ++x)

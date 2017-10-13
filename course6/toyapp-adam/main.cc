@@ -20,7 +20,9 @@ int main(int argc, char* argv[])
 	Display::Window win("Hello", 100, 100, screenDimensions[0] * 2, screenDimensions[1] * 2);
 	Display::Surface2D surface2D(screenDimensions);
 	Display::Surface3D surface3D(surface2D);
+
 	Scene scene(keyboard, mouse, surface3D);
+	scene.Populate();
 
 	SDL_Event event;
 	SDL_SetRelativeMouseMode(SDL_TRUE);
