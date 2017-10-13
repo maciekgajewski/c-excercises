@@ -13,9 +13,9 @@ Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 
 void Scene::Populate()
 {
-	mMesh = Display::CreateMeshFromFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\tesh_shapes\\cube.txt");
-	mMesh.transform.SetPosition({0.0f, 0.0f, 1.0f});
-	mMesh.transform.SetScale(0.25f);
+	mMesh = Display::CreateMeshFromObjFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\tesh_shapes\\teapot.obj");
+	mMesh.transform.SetPosition({0.0f, -1.0f, 2.5f});
+	mMesh.transform.SetScale(0.5f);
 	mMesh.fillColor = Display::GREEN;
 }
 
@@ -45,7 +45,7 @@ void Scene::Update(double totalElapsedSeconds)
 	mSurface.camera.transform.Move(cameraMove);
 	mSurface.camera.transform.Rotate({camRotation[0] * camRotationSpeed, 0.0f, 0.0f});
 
-	mMesh.transform.Rotate({0.003f, 0.0f, 0.0f});
+	mMesh.transform.Rotate({0.006f, 0.0f, 0.0f});
 }
 
 void Scene::Draw()

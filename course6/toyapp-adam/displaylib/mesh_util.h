@@ -5,6 +5,7 @@
 
 namespace Display {
 
-Mesh CreateMeshFromFile(const std::string& filePath);
+Mesh CreateMeshFromTxtFile(const std::string& filePath);
+Mesh CreateMeshFromObjFile(const std::string& filePath);
 
 }
