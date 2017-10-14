@@ -45,7 +45,7 @@ void Scene::Update(double totalElapsedSeconds)
 	mSurface.camera.transform.Move(cameraMove);
 	mSurface.camera.transform.Rotate({camRotation[0] * camRotationSpeed, 0.0f, 0.0f});
 
-	mMesh.transform.Rotate({0.006f, 0.0f, 0.0f});
+	mMesh.transform.Rotate({0.01f, 0.0f, 0.0f});
 }
 
 void Scene::Draw()
