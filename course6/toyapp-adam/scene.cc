@@ -13,9 +13,9 @@ Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 
 void Scene::Populate()
 {
-	mMesh = Display::CreateMeshFromObjFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\tesh_shapes\\teapot.obj");
-	mMesh.transform.SetPosition({0.0f, -1.0f, 2.5f});
-	mMesh.transform.SetScale(0.5f);
+	mMesh = Display::CreateMeshFromObjFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\test_shapes\\cow.obj");
+	mMesh.transform.SetPosition({0.0f, 0.0f, 2.5f});
+	mMesh.transform.SetScale(0.3f);
 	mMesh.fillColor = Display::GREEN;
 }
 

@@ -35,9 +35,9 @@ void Surface3D::DrawMesh(const Mesh& mesh, const Matrix44& view)
 		};
 
 		DrawTriangle(viewTransformedTriangle, mesh.fillColor);
-		/*DrawLine(viewTransformedTriangle[0], viewTransformedTriangle[1], mesh.edgeColor);
+		DrawLine(viewTransformedTriangle[0], viewTransformedTriangle[1], mesh.edgeColor);
 		DrawLine(viewTransformedTriangle[0], viewTransformedTriangle[2], mesh.edgeColor);
-		DrawLine(viewTransformedTriangle[1], viewTransformedTriangle[2], mesh.edgeColor);*/
+		DrawLine(viewTransformedTriangle[1], viewTransformedTriangle[2], mesh.edgeColor);
 	}
 }
 

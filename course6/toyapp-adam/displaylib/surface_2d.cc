@@ -38,18 +38,21 @@ void Surface2D::SetDepth(Pixel position, float depth)
 
 bool Surface2D::CheckSetDepth(Pixel position, float depth)
 {
-	auto& currentDepth = mDepthBuffer[position[1] * mSurface->w + position[0]];
-	if (currentDepth >= depth)
+	if(position[0] >= 0 && position[0] < mSurface->w && position[1] >= 0 && position[1] < mSurface->h)
 	{
-		currentDepth = depth;
-		return true;
+		auto& currentDepth = mDepthBuffer[position[1] * mSurface->w + position[0]];
+		if (currentDepth >= depth)
+		{
+			currentDepth = depth;
+			return true;
+		}
 	}
 	return false;
 }
 
 void Surface2D::SetPixel(Pixel position, Color color)
 {
-	if(position[0] > 0 && position[0] < mSurface->w && position[1] > 0 && position[1] < mSurface->h)
+	if(position[0] >= 0 && position[0] < mSurface->w && position[1] >= 0 && position[1] < mSurface->h)
 	{
 		auto offset = position[1] * mSurface->pitch / 4 + position[0];
 		auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
@@ -75,39 +78,33 @@ void Surface2D::DrawLine(Pixel p1, float p1Depth, Pixel p2, float p2Depth, Color
 		std::swap(p1[1], p2[1]);
 	}
 
-	auto dx = p2[0] - p1[0];
-	auto dy = std::fabs(p2[1] - p1[1]);
-	auto error = dx * 0.5f;
+	auto delta = p2 - p1;
+	delta[1] = std::fabs(delta[1]);
+	auto error = delta[0] * 0.5f;
+	auto length = delta.Length();
 
 	auto y = p1[1];
 	auto ystep = (p1[1] < p2[1]) ? 1 : -1;
 
-	if(steep)
+	for(auto x = p1[0]; x < p2[0]; ++x)
 	{
-		for(auto x = p1[0]; x < p2[0]; ++x)
+		Pixel pixel{x, y};
+		Pixel p = pixel;
+
+		if (steep)
+			p = Pixel{y, x};
+
+		auto distance = Pixel{p2 - pixel}.Length() / length;
+		auto depth = p1Depth + distance * (p2Depth - p1Depth);
+
+		if (CheckSetDepth(p, depth))
+				SetPixel(p, color);
+
+		error -= delta[1];
+		if(error < 0)
 		{
-			// @todo check agains interpolated depth
-			SetPixel(Pixel{y, x}, color);
-			error -= dy;
-			if(error < 0)
-			{
-				y += ystep;
-				error += dx;
-			}
-		}
-	}
-	else
-	{
-		for(auto x = p1[0]; x < p2[0]; ++x)
-		{
-			// @todo check agains interpolated depth
-			SetPixel(Pixel{x, y}, color);
-			error -= dy;
-			if(error < 0)
-			{
-				y += ystep;
-				error += dx;
-			}
+			y += ystep;
+			error += delta[0];
 		}
 	}
 }
