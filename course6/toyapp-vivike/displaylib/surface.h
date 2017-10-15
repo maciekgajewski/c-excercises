@@ -2,6 +2,7 @@
 
 #include "sdlobject.h"
 #include "objects.h"
+#include "vector.h"
 
 #include <SDL2/SDL.h>
 
