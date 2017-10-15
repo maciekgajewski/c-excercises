@@ -14,10 +14,10 @@ int main(int argc, char* argv[])
 	Util::Pixel screenDimensions{640, 360};
 
 	Util::Keyboard keyboard;
-	Util::Mouse mouse(screenDimensions.y);
+	Util::Mouse mouse(screenDimensions[1]);
 	Util::Clock clock;
 
-	Display::Window win("Hello", 100, 100, screenDimensions.x * 2, screenDimensions.y * 2);
+	Display::Window win("Hello", 100, 100, screenDimensions[0] * 2, screenDimensions[1] * 2);
 	Display::Surface2D surface2D(screenDimensions);
 	Display::Surface3D surface3D(surface2D);
 	Scene scene(keyboard, mouse, surface3D);

@@ -1,113 +1,183 @@
 #pragma once
 
+#include <cassert>
+#include <array>
 #include <cmath>
+#include <limits>
+#include <type_traits>
 
 namespace Math {
 
-struct Vector2D
+template<typename T>
+using IsFloatingPoint = std::enable_if_t<std::is_floating_point<T>::value>;
+
+template<typename Type, unsigned Dimensions>
+class Vector
 {
-	float x = 0.0f;
-	float y = 0.0f;
+public:
+	using Component = Type;
 
-	Vector2D operator-() const { return {-x, -y}; }
-	Vector2D operator+(const Vector2D& rhs) const { return {x + rhs.x, y + rhs.y}; }
-	Vector2D operator-(const Vector2D& rhs) const { return {x - rhs.x, y - rhs.y}; }
-	Vector2D operator*(float scalar) const { return {x * scalar, y * scalar}; }
+	Vector()
+	:	mComponents{{0}}
+	{}
 
-	Vector2D& operator+=(const Vector2D& rhs)
+	template<typename... Args>
+	Vector(Args... args)
+	:	mComponents{{args...}}
+	{}
+
+	Vector(const Vector<Type, Dimensions-1>& other, Type lastComponent)
 	{
-		x += rhs.x;
-		y += rhs.y;
+		for (unsigned i = 0; i < Dimensions-1; ++i)
+			mComponents[i] = other[i];
+		mComponents[Dimensions-1] = lastComponent;
+	}
+
+	Vector(const Vector& other)
+	{
+		operator=(other);
+	}
+
+	operator Vector<Type, Dimensions-1>() const
+	{
+		Vector<Type, Dimensions-1> result;
+		for (unsigned i = 0; i < Dimensions-1; ++i)
+			result[i] = mComponents[i];
+		return result;
+	}
+
+	bool operator==(const Vector& other) const
+	{
+		for (unsigned i = 0; i < Dimensions; ++i)
+			if (!ApproximatelyEquals(mComponents[i], other[i]))
+				return false;
+		return true;
+	}
+
+	bool operator!=(const Vector& other) const
+	{
+		return !this->operator==(other);
+	}
+
+	Vector& operator=(const Vector& other)
+	{
+		for (unsigned i = 0; i < Dimensions; ++i)
+			mComponents[i] = other[i];
 		return *this;
 	}
 
-	Vector2D& operator-=(const Vector2D& rhs)
+	Vector& operator+=(const Vector& other)
 	{
-		x -= rhs.x;
-		y -= rhs.y;
+		for (unsigned i = 0; i < Dimensions; ++i)
+			mComponents[i] += other[i];
 		return *this;
 	}
 
-	Vector2D& operator*=(float scalar)
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
+	Vector& operator*=(FloatType scalar)
 	{
-		x *= scalar;
-		y *= scalar;
+		for (unsigned i = 0; i < Dimensions; ++i)
+			mComponents[i] *= scalar;
 		return *this;
 	}
 
-};
-
-struct Vector3D
-{
-	float x = 0.0f;
-	float y = 0.0f;
-	float z = 0.0f;
-
-	Vector3D operator-() const { return {-x, -y, -z}; }
-	Vector3D operator+(const Vector3D& rhs) const { return {x + rhs.x, y + rhs.y, z + rhs.z}; }
-	Vector3D operator-(const Vector3D& rhs) const { return {x - rhs.x, y - rhs.y, z - rhs.z}; }
-	Vector3D operator*(float scalar) const { return {x * scalar, y * scalar, z * scalar}; }
-
-	Vector3D& operator+=(const Vector3D& rhs)
+	Vector& operator-=(const Vector& other)
 	{
-		x += rhs.x;
-		y += rhs.y;
-		z += rhs.z;
-		return *this;
+		return operator+=(-other);
 	}
 
-	Vector3D& operator-=(const Vector3D& rhs)
+	Type& operator[](unsigned index)
 	{
-		x -= rhs.x;
-		y -= rhs.y;
-		z -= rhs.z;
-		return *this;
+		assert(index < Dimensions);
+		return mComponents[index];
 	}
 
-	Vector3D& operator*=(float scalar)
+	Type operator[](unsigned index) const
 	{
-		x *= scalar;
-		y *= scalar;
-		z *= scalar;
-		return *this;
+		assert(index < Dimensions);
+		return mComponents[index];
 	}
 
-	Vector3D Normalized() const
+	Vector operator-() const
 	{
-		auto inverseLength = 1.0f / Length();
-		return {
-			x * inverseLength,
-			y * inverseLength,
-			z * inverseLength
-		};
+		Vector result;
+		for (unsigned i = 0; i < Dimensions; ++i)
+			result[i] = -mComponents[i];
+		return result;
+	}
+
+	Vector operator+(const Vector& rhs) const
+	{
+		return Vector{*this} += rhs;
+	}
+
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
+	Vector operator*(FloatType scalar) const
+	{
+		return Vector{*this} *= scalar;
+	}
+
+	Vector operator-(const Vector& rhs) const
+	{
+		return Vector{*this} -= rhs;
+	}
+
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
+	Vector Normalized() const
+	{
+		auto length = Length();
+		return !ApproximatelyEquals(length, 0.0)
+				? Vector{*this} *= 1.0 / length
+				: Vector{Type{1.0}, Type{0.0}};
+	}
+
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
+	FloatType Dot(const Vector& rhs) const
+	{
+		FloatType result{0.0};
+		for (unsigned i = 0; i < Dimensions; ++i)
+			result += mComponents[i] * rhs[i];
+		return result;
+	}
+
+	template<typename FloatType = float, typename = IsFloatingPoint<FloatType>>
+	FloatType Length() const
+	{
+		return std::sqrt(Dot(*this));
+	}
+
+	friend std::ostream& operator<<(std::ostream& stream, const Vector& vector)
+	{
+		for (unsigned i = 0; i < Dimensions - 1; ++i)
+			stream << vector[i] << ',';
+		stream << vector[Dimensions - 1];
+		return stream;
+	}
+
+private:
+	std::array<Type, Dimensions> mComponents;
+
+	static bool ApproximatelyEquals(Type a, Type b)
+	{
+		using std::abs;
+		return abs(a - b) <= (abs(a) < abs(b) ? abs(b) : abs(a)) * std::numeric_limits<Type>::epsilon();
 	};
-
-	Vector3D Cross(const Vector3D& rhs) const
-	{
-		return {
-			y * rhs.z - z * rhs.y,
-			z * rhs.x - x * rhs.z,
-			x * rhs.y - y * rhs.x
-		};
-	}
-
-	float Dot(const Vector3D& rhs) const { return x * rhs.x + y * rhs.y + z * rhs.z; }
-	float Length() const { return std::sqrt(x * x + y * y + z * z); }
 };
 
-struct Vector4D
+
+template<typename Type>
+inline Vector<Type, 3> Cross(const Vector<Type, 3>& lhs, const Vector<Type, 3>& rhs)
 {
-	float x = 0.0f;
-	float y = 0.0f;
-	float z = 0.0f;
-	float w = 0.0f;
+	return {
+		lhs[1] * rhs[2] - lhs[2] * rhs[1],
+		lhs[2] * rhs[0] - lhs[0] * rhs[2],
+		lhs[0] * rhs[1] - lhs[1] * rhs[0]
+	};
+}
 
-	Vector4D() = default;
-	Vector4D(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {}
-	Vector4D(Vector3D v, float w) : x(v.x), y(v.y), z(v.z), w(w) {}
-	explicit Vector4D(Vector3D v) : x(v.x), y(v.y), z(v.z), w(1.0f) {}
 
-	operator Vector3D() const { return {x, y, z}; }
-};
+using Vector2D = Vector<float, 2>;
+using Vector3D = Vector<float, 3>;
+using Vector4D = Vector<float, 4>;
 
 }
