@@ -11,6 +11,12 @@
 
 int main(int argc, char* argv[])
 {
+	if (argc < 2)
+	{
+		std::cerr << "Usage: " << argv[0] << " <OBJ_FILE>" << std::endl;
+		return 1;
+	}
+
 	Util::Pixel screenDimensions{1280, 720};
 
 	Util::Keyboard keyboard;
@@ -22,7 +28,7 @@ int main(int argc, char* argv[])
 	Display::Surface3D surface3D(surface2D);
 
 	Scene scene(keyboard, mouse, surface3D);
-	scene.Populate();
+	scene.LoadMesh(argv[1]);
 
 	SDL_Event event;
 	SDL_SetRelativeMouseMode(SDL_TRUE);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <displaylib/mesh.h>
+#include <string>
 
 namespace Display {
 	class Surface3D;
@@ -21,7 +22,7 @@ class Scene
 public:
 	Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface);
 
-	void Populate();
+	void LoadMesh(const std::string& filePath);
 	void Update(double totalElapsedSeconds);
 	void Draw();
 private:

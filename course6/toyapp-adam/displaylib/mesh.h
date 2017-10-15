@@ -13,6 +13,8 @@ struct Mesh
 	Math::Transform transform;
 	Color fillColor;
 	Color edgeColor;
+
+	void NormalizeSize();
 };
 
 }

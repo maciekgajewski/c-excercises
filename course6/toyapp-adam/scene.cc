@@ -11,22 +11,20 @@ Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 	mSurface{surface}
 {}
 
-void Scene::Populate()
+void Scene::LoadMesh(const std::string& filePath)
 {
-	mMesh = Display::CreateMeshFromObjFile("C:\\dev\\c-excercises\\course6\\toyapp-adam\\test_shapes\\cow.obj");
-	mMesh.transform.SetPosition({0.0f, 0.0f, 2.5f});
-	mMesh.transform.SetScale(0.3f);
+	mMesh = Display::CreateMeshFromObjFile(filePath);
+	mMesh.NormalizeSize();
+	mMesh.transform.SetPosition({0.0f, 0.0f, 1.5f}); // hardcoded for now
 	mMesh.fillColor = Display::GREEN;
 }
 
 void Scene::Update(double totalElapsedSeconds)
 {
-	using Math::Vector3D;
-
 	const float camMovementSpeed = 0.01f;
 	const float camRotationSpeed = 0.8f;
 
-	Vector3D cameraMove;
+	Math::Vector3D cameraMove;
 
 	if(mKeyboard.IsDown(SDL_SCANCODE_LEFT))
 		cameraMove[0] = -camMovementSpeed;
@@ -45,7 +43,7 @@ void Scene::Update(double totalElapsedSeconds)
 	mSurface.camera.transform.Move(cameraMove);
 	mSurface.camera.transform.Rotate({camRotation[0] * camRotationSpeed, 0.0f, 0.0f});
 
-	mMesh.transform.Rotate({0.01f, 0.0f, 0.0f});
+	mMesh.transform.Rotate({0.01f, camRotation[1] * camRotationSpeed , 0.0f});
 }
 
 void Scene::Draw()

@@ -17,10 +17,7 @@ void Surface3D::DrawTriangle(const Triangle3D& triangle, Color color)
 {
 	auto angle = std::min(0.0f, triangle.GetSurfaceNormal().Dot({0.0f, 0.0f, 1.0f}));
 
-	auto halfColor = color * 0.5f;
-	auto shadedColor = halfColor + halfColor * -angle;
-
-	mSurface.DrawTriangle(Project(triangle), shadedColor);
+	mSurface.DrawTriangle(Project(triangle), color * -angle);
 }
 
 void Surface3D::DrawMesh(const Mesh& mesh, const Matrix44& view)
