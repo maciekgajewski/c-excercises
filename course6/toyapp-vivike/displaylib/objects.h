@@ -19,10 +19,11 @@ struct Color
 template<typename T, int length>
 class Vector
 {
-public:
 	std::array<T, length> vec;
 
-	//Vector(std::array<T, length> newvec): vec(newvec) {};
+public:
+	Vector(): vec{{0}} {};
+	Vector(std::array<T, length> newvec): vec(newvec) {};
 
 	Vector operator +(Vector b) 
 	{ 
@@ -76,7 +77,7 @@ std::ostream& operator <<(std::ostream& stream, Vector<T, length> vec)
 { 
 	for(int i=0; i<length; i++)
 	{
-		stream << vec.vec[i] << ", ";
+		stream << vec[i] << ", ";
 	}
 	return stream;
 }

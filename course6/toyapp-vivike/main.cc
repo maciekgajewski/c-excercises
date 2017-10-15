@@ -19,10 +19,10 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector3D corner1{100, 100, 1};
-	Display::Vector3D corner2{100, 150, 1};
-	Display::Vector3D corner3{150, 150, 1};
-	Display::Vector3D corner4{150, 100, 1};
+	Display::Vector3D corner1({100, 100, 1});
+	Display::Vector3D corner2({100, 150, 1});
+	Display::Vector3D corner3({150, 150, 1});
+	Display::Vector3D corner4({150, 100, 1});
 	Display::Rectangle rect{corner1, corner2, corner3, corner4};
 	Display::Camera cam;
 		
@@ -44,7 +44,7 @@ int main(int, char**)
 		
 		win.Display(surf);
 
-		Display::Vector3D moveVec{0, 0, 1};
+		Display::Vector3D moveVec({0, 0, 1});
 		rect = rect.move(moveVec);
 		
 		Display::Delay(200);
