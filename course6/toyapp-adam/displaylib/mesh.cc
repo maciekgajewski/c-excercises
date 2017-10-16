@@ -2,7 +2,7 @@
 
 namespace Display {
 
-void Mesh::NormalizeSize()
+void Mesh::NormalizeScale()
 {
 	auto maxDimension = 0.0f;
 

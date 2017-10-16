@@ -14,7 +14,7 @@ struct Mesh
 	Color fillColor;
 	Color edgeColor;
 
-	void NormalizeSize();
+	void NormalizeScale();
 };
 
 }

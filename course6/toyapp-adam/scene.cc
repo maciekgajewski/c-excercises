@@ -14,7 +14,7 @@ Scene::Scene(Keyboard& keyboard, Mouse& mouse, Surface3D& surface)
 void Scene::LoadMesh(const std::string& filePath)
 {
 	mMesh = Display::CreateMeshFromObjFile(filePath);
-	mMesh.NormalizeSize();
+	mMesh.NormalizeScale();
 	mMesh.transform.SetPosition({0.0f, 0.0f, 1.5f}); // hardcoded for now
 	mMesh.fillColor = Display::GREEN;
 }
