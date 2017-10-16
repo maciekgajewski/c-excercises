@@ -30,7 +30,7 @@ Mesh CreateMeshFromObjFile(const std::string& filePath)
 		std::stringstream stream(line);
 		if (line[0] == 'v')
 		{
-			if (line[1] != 't')
+			if (line[1] != 'n' && line[1] != 't')
 			{
 				stream.ignore(2);
 
@@ -45,33 +45,17 @@ Mesh CreateMeshFromObjFile(const std::string& filePath)
 
 			Math::Vector<unsigned, 3> indices;
 			auto slashCount = std::count(line.begin(), line.end(), '/');
-			if (slashCount < 3)
+			if (slashCount == 0) // enough for now
 			{
 				stream >> indices[0] >> indices[1] >> indices[2];
-			}
-			else if (slashCount < 6)
-			{
-				char slash;
-				unsigned dummy;
-				stream >> indices[0] >> slash >> dummy;
-				stream >> indices[1] >> slash >> dummy;
-				stream >> indices[2];
-			}
-			else
-			{
-				char slash;
-				unsigned dummy;
-				stream >> indices[0] >> slash >> dummy >> slash >> dummy;
-				stream >> indices[1] >> slash >> dummy >> slash >> dummy;
-				stream >> indices[2];
-			}
 
-			auto vertexCount = static_cast<unsigned>(vertices.size());
-			mesh.triangles.push_back({
-				vertices[GetFaceIndex(indices[0], vertexCount)],
-				vertices[GetFaceIndex(indices[1], vertexCount)],
-				vertices[GetFaceIndex(indices[2], vertexCount)]
-			});
+				auto vertexCount = static_cast<unsigned>(vertices.size());
+				mesh.triangles.push_back({
+					vertices[GetFaceIndex(indices[0], vertexCount)],
+					vertices[GetFaceIndex(indices[1], vertexCount)],
+					vertices[GetFaceIndex(indices[2], vertexCount)]
+				});
+			}
 		}
 	}
 
