@@ -17,11 +17,20 @@ public:
 	Matrix(): matrix{{0}} {};
 	Matrix(std::array<std::array<T, cols>, rows> newMatrix);
 
+
 	T operator [](MatrixElement location) 
 	{ 
 		return this->matrix[location[0]][location[1]];
 	}
 
+	Matrix Zeroes();
+};
+
+template<typename T, int rows, int cols>
+Matrix<T, rows, cols>::Zeroes()
+{
+	Matrix<T, rows, cols> m;
+	return m;
 };
 
 }
