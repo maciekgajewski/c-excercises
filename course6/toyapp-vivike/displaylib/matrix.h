@@ -8,29 +8,26 @@
 
 namespace Display {
 
-template<typename T, int rows, int cols>
-class Matrix
+class Matrix44
 {
-	std::array<std::array<T, cols>, rows> matrix;
+	std::array<std::array<float, 4>, 4> matrix;
 
 public:
-	Matrix(): matrix{{0}} {};
-	Matrix(std::array<std::array<T, cols>, rows> newMatrix);
+	Matrix44(): matrix{{0}} {};
+	Matrix44(std::array<std::array<float, 4>, 4> newMatrix);
 
 
-	T operator [](MatrixElement location) 
+	std::array<float, 4>& operator [](int element) 
 	{ 
-		return this->matrix[location[0]][location[1]];
+		return matrix[element];
 	}
 
-	Matrix Zeroes();
-};
+	const std::array<float, 4>& operator [](int element) const
+	{
+		return matrix[element];
+	}
 
-template<typename T, int rows, int cols>
-Matrix<T, rows, cols>::Zeroes()
-{
-	Matrix<T, rows, cols> m;
-	return m;
+	Matrix44 Zero();
 };
 
 }
