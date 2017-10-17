@@ -4,13 +4,13 @@
 
 namespace Display {
 
-	class Matrix
+class Matrix
+{
+public:
+	Vector3D operator * (Vector3D v)
 	{
-	public:
-		Vector3D operator * (Vector3D v)
-		{
-			return v;
-		}
-	};
+		return v;
+	}
+};
 
 }
