@@ -16,11 +16,6 @@ BOOST_AUTO_TEST_CASE (constructor_tests)
   float element = myMat[0][0];
   BOOST_REQUIRE_EQUAL(element, 0);
 
-  Matrix44 zeroMatrix;
-  zeroMatrix.Zero();
-  float zeroElement = zeroMatrix[0][0];
-  BOOST_REQUIRE_EQUAL(zeroElement, 0);
-
 }
 
 BOOST_AUTO_TEST_SUITE_END()
