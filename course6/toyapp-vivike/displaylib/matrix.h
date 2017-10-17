@@ -28,6 +28,7 @@ public:
 	}
 
 	Matrix44 Zero();
+	Matrix44 Eye();
 };
 
 }

@@ -20,5 +20,18 @@ Matrix44 Matrix44::Zero()
 	return m;
 }
 
+Matrix44 Matrix44::Eye()
+{
+	Matrix44 m;
+
+	for(int i = 0; i < 4; i++)
+	{
+		m[i][i] = 1.0f;
+	
+	}
+
+	return m;
+}
+
 
 }
