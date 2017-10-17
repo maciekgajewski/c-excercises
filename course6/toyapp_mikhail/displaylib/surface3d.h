@@ -24,9 +24,9 @@ namespace Display {
 			auto centerScreenShift = Vector2D{ surface.GetW() / 2.0, surface.GetH() / 2.0 };
 
 			auto shifted3d = transformed + pushBack3dShift;
-			auto zfactor = std::abs(shifted3d.z) < 0.001 ? 0.001 : shifted3d.z;
+			auto zfactor = std::abs(shifted3d.z()) < 0.001 ? 0.001 : shifted3d.z();
 
-			return centerScreenShift + Vector2D{shifted3d.x, shifted3d.y } * (scaling / zfactor);
+			return centerScreenShift + Vector2D{shifted3d.x(), shifted3d.y() } * (scaling / zfactor);
 		}
 	public:
 		Surface3D(Surface& s) : surface(s) {}

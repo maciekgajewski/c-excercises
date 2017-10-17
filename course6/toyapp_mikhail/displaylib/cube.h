@@ -22,9 +22,9 @@ namespace Display {
 			for (auto i = 0; i < 4; ++i)
 			{
 				auto v = edges[i];
-				surface.DrawLine(transformation * Vector3D{ v.x, v.y, -1 }, transformation * Vector3D{ v.x, v.y, +1 }, color);
-				surface.DrawLine(transformation * Vector3D{ v.x, -1, v.y }, transformation * Vector3D{ v.x, +1, v.y }, color);
-				surface.DrawLine(transformation * Vector3D{ -1, v.x, v.y }, transformation * Vector3D{ +1, v.x, v.y }, color);
+				surface.DrawLine(transformation * Vector3D{ v.x(), v.y(), -1 }, transformation * Vector3D{ v.x(), v.y(), +1 }, color);
+				surface.DrawLine(transformation * Vector3D{ v.x(), -1, v.y() }, transformation * Vector3D{ v.x(), +1, v.y() }, color);
+				surface.DrawLine(transformation * Vector3D{ -1, v.x(), v.y() }, transformation * Vector3D{ +1, v.x(), v.y() }, color);
 			}
 		}
 	};

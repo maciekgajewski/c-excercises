@@ -9,6 +9,7 @@ class VectorCommon
 {
 private:
 	using TSelf = VectorCommon<TValue, TDimentions>;
+
 protected:
 	std::array<TValue, TDimentions> _data;
 
@@ -30,11 +31,11 @@ public:
 	}
 
 	TValue& operator[] (int i) { return _data[i]; }
-	const TValue& operator[] (int i) const { return _data[i]; }
 
+	const TValue& operator[] (int i) const { return _data[i]; }
 };
 
-// 2 dimentional template vector decorator. Decorator needed only to provide x, y
+// 2 dimentional template vector decorator. Decorator needed only to provide x(), y() interface.
 template <class TValue>
 class Vector2DimDecorator : public VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>
 {
@@ -42,12 +43,7 @@ private:
 	using TBase = VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>;
 
 public:
-	TValue &x, &y;
-
-	Vector2DimDecorator() :
-		x(_data[0]),
-		y(_data[1])
-	{}
+	Vector2DimDecorator() {}
 
 	Vector2DimDecorator(TValue xx, TValue yy) :
 		Vector2DimDecorator()
@@ -56,30 +52,35 @@ public:
 		(*this)[1] = yy;
 	}
 
-	Vector2DimDecorator(TBase undecorated) :
-		Vector2DimDecorator(undecorated[0], undecorated[1])
-	{}
-
-	Vector2DimDecorator(const Vector2DimDecorator& original) :
+	Vector2DimDecorator(const TBase& original) :
 		Vector2DimDecorator(original[0], original[1])
 	{}
+
+	TValue& x() { return _data[0]; }
+	TValue& y() { return _data[1]; }
+
+	const TValue& x() const { return _data[0]; }
+	const TValue& y() const { return _data[1]; }
 };
 
 
-// 3 dimentional templte vector. Decorator needed only to provide x, y, z
+// 3 dimentional template vector. Decorator needed only to provide x(), y(), z() interface.
 template <class TValue>
 class Vector3DimDecorator : public VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>
 {
 private:
 	using TBase = VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>;
-public:
-	TValue &x, &y, &z;
 
-	Vector3DimDecorator() :
-		x(_data[0]),
-		y(_data[1]),
-		z(_data[2])
-	{}
+public:
+	TValue& x() { return _data[0]; }
+	TValue& y() { return _data[1]; }
+	TValue& z() { return _data[2]; }
+
+	const TValue& x() const { return _data[0]; }
+	const TValue& y() const { return _data[1]; }
+	const TValue& z() const { return _data[2]; }
+
+	Vector3DimDecorator() {}
 
 	Vector3DimDecorator(TValue xx, TValue yy, TValue zz) :
 		Vector3DimDecorator()
@@ -89,11 +90,7 @@ public:
 		(*this)[2] = zz;
 	}
 
-	Vector3DimDecorator(TBase undecorated) :
-		Vector3DimDecorator(undecorated[0], undecorated[1], undecorated[2])
-	{}
-
-	Vector3DimDecorator(const Vector3DimDecorator& original) :
+	Vector3DimDecorator(const TBase& original) :
 		Vector3DimDecorator(original[0], original[1], original[2])
 	{}
 };

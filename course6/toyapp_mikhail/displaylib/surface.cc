@@ -41,10 +41,10 @@ namespace Display {
 
 	void Surface::DrawLine(Vector2D start, Vector2D end, RGB color)
 	{
-		auto x1 = (int)std::round(start.x);
-		auto x2 = (int)std::round(end.x);
-		auto y1 = (int)std::round(start.y);
-		auto y2 = (int)std::round(end.y);
+		auto x1 = (int)std::round(start.x());
+		auto x2 = (int)std::round(end.x());
+		auto y1 = (int)std::round(start.y());
+		auto y2 = (int)std::round(end.y());
 
 		if (std::abs(x1 - x2) > std::abs(y1 - y2))
 		{
