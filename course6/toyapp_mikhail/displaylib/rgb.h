@@ -4,9 +4,8 @@
 
 namespace Display {
 
-class RGB
+struct RGB
 {
-public:
 	uint8_t r, g, b;
 };
 

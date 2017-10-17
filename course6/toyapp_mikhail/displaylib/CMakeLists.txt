@@ -7,8 +7,8 @@ add_library(displaylib
 	triangle.cc triangle.h
 	rgb.h
 	matrix.h
-	cube.h
-	pyramid.h
+	cube.cc cube.h
+	pyramid.cc pyramid.h
 	vector_common.cc vector_common.h
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
