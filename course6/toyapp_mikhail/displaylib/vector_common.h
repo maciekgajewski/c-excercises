@@ -5,24 +5,24 @@
 namespace Display {
 
 namespace Detail {
-template <class TValue, size_t DIMENTIONS, class TDecoratedType>
+template <class TValue, size_t DIMENTIONS, class TConcreteVector>
 class VectorBase
 {
 protected:
 	std::array<TValue, DIMENTIONS> mData;
 
 public:
-	TDecoratedType operator + (const TDecoratedType& right)
+	TConcreteVector operator + (const TConcreteVector& right)
 	{
-		auto return_value = TDecoratedType(*this);
+		auto return_value = TConcreteVector(*this);
 		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] += right[i];
 		return return_value;
 	}
 
-	TDecoratedType operator * (double scale)
+	TConcreteVector operator * (double scale)
 	{
-		auto return_value = TDecoratedType(*this);
+		auto return_value = TConcreteVector(*this);
 		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] *= scale;
 		return return_value;
