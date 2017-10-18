@@ -19,6 +19,18 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
+int Display::Surface::GetW()
+{
+	assert(mSurface);
+	return mSurface->w;
+}
+
+int Display::Surface::GetH()
+{
+	assert(mSurface);
+		return mSurface->h;
+}
+
 void Surface::Clear(Color backgroundColor)
 {
 	assert(mSurface);

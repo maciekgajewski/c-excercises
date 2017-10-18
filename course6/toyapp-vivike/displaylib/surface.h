@@ -20,6 +20,9 @@ public:
 	void SetPixel(Pixel pixel, Color currentColor);
 	void DrawLine(Pixel p1, Pixel p2, Color color);
 
+	int GetH();
+	int GetW();
+
 private:
 
 	friend class Window;

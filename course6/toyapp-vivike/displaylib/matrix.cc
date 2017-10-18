@@ -27,7 +27,42 @@ Matrix44 Matrix44::Eye()
 	for(int i = 0; i < 4; i++)
 	{
 		m[i][i] = 1.0f;
-	
+	}
+
+	return m;
+}
+
+Matrix44 Matrix44::Scale(float scaling)
+{
+	Matrix44 m = Matrix44::Zero();
+
+	for(int i = 0; i < 4; i++)
+	{
+		m[i][i] = scaling;
+	}
+
+	return m;
+}
+
+Matrix44 Matrix44::Scale(Vector3D scaling)
+{
+	Matrix44 m = Matrix44::Eye();
+
+	for(int i = 0; i < 3; i++)
+	{
+		m[i][i] = scaling[i];
+	}
+
+	return m;
+}
+
+Matrix44 Matrix44::Translate(Vector3D translation)
+{
+	Matrix44 m = Matrix44::Eye();
+
+	for(int i = 0; i < 3; i++)
+	{
+		m[i][3] = translation[i];
 	}
 
 	return m;
@@ -55,14 +90,13 @@ Vector3D Matrix44::operator*(const Vector3D& rhs) const
 
 	for(int row = 0; row < 3; ++row) {
 		result[row] = 0;
-		for(int col = 0; col < 4; ++col) {
+		for(int col = 0; col < 3; ++col) {
 			result[row] += matrix[row][col] * rhs[col];
-			
 		}
+		result[row] += matrix[row][3];
 	}
 
 	return result;
 }
-
 
 }

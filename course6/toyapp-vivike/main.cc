@@ -1,6 +1,7 @@
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
+#include <displaylib/surface3D.h>
 #include <displaylib/objects.h>
 
 #include <SDL2/SDL_main.h>
@@ -25,7 +26,7 @@ int main(int, char**)
 	Vector3D corner3({150, 150, 1});
 	Vector3D corner4({150, 100, 1});
 	Rectangle rect{corner1, corner2, corner3, corner4};
-	Camera cam;
+	Surface3D cam(surf);
 		
 
 	for(int x = 0; x < 20; x++)
@@ -34,14 +35,10 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		Pixel corner1Proj = cam.project2D(rect.corner1);
-		Pixel corner2Proj = cam.project2D(rect.corner2);
-		Pixel corner3Proj = cam.project2D(rect.corner3);
-		Pixel corner4Proj = cam.project2D(rect.corner4);
-		surf.DrawLine(corner1Proj, corner2Proj, red);
-		surf.DrawLine(corner2Proj, corner3Proj, red);
-		surf.DrawLine(corner3Proj, corner4Proj, red);
-		surf.DrawLine(corner4Proj, corner1Proj, red);
+		cam.DrawLine(rect.corner1, rect.corner2, red);
+		cam.DrawLine(rect.corner2, rect.corner3, red);
+		cam.DrawLine(rect.corner3, rect.corner4, red);
+		cam.DrawLine(rect.corner4, rect.corner1, red);
 		
 		win.Display(surf);
 

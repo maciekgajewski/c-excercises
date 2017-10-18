@@ -32,6 +32,10 @@ public:
 
 	static Matrix44 Zero();
 	static Matrix44 Eye();
+
+	static Matrix44 Scale(float scaling);
+	static Matrix44 Scale(Vector3D scaling);
+	static Matrix44 Translate(Vector3D translation);
 };
 
 /*std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
