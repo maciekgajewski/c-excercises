@@ -49,5 +49,20 @@ Matrix44 Matrix44::operator*(const Matrix44& rhs) const
 	return result;
 }
 
+Vector3D Matrix44::operator*(const Vector3D& rhs) const
+{
+	std::array<float, 3> result;
+
+	for(int row = 0; row < 3; ++row) {
+		result[row] = 0;
+		for(int col = 0; col < 4; ++col) {
+			result[row] += matrix[row][col] * rhs[col];
+			
+		}
+	}
+
+	return result;
+}
+
 
 }

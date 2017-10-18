@@ -28,12 +28,13 @@ public:
 	}
 
 	Matrix44 operator*(const Matrix44& rhs) const;
+	Vector3D operator*(const Vector3D& rhs) const;
 
 	static Matrix44 Zero();
 	static Matrix44 Eye();
 };
 
-std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
+/*std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
 { 
 	for(int row=0; row<4; row++)
 	{
@@ -44,6 +45,6 @@ std::ostream& operator <<(std::ostream& stream, Matrix44 mat)
 		stream << std::endl;
 	}
 	return stream;
-}
+}*/
 
 }

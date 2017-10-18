@@ -61,6 +61,18 @@ public:
 		return this->vec[elem];
 	}
 
+	const T operator [](int elem) const
+	{ 
+		return this->vec[elem];
+	}
+
+	Vector& operator=(const Vector& other)
+	{
+		for (unsigned i = 0; i < size; ++i)
+			vec[i] = other[i];
+		return *this;
+	}
+
 	float length();
 	T dot(Vector<T, size>);
 	//Vector<T, size> cross(Vector<T, size>);
