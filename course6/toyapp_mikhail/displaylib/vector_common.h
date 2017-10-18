@@ -4,20 +4,18 @@
 
 namespace Display {
 
-template <class TValue, size_t TDimentions, class TDecoratedType = TValue>
-class VectorCommon
+namespace Detail{
+template <class TValue, size_t DIMENTIONS, class TDecoratedType>
+class VectorBase
 {
-private:
-	using TSelf = VectorCommon<TValue, TDimentions>;
-
 protected:
-	std::array<TValue, TDimentions> mData;
+	std::array<TValue, DIMENTIONS> mData;
 
 public:
 	TDecoratedType operator + (const TDecoratedType& right)
 	{
 		auto return_value = TDecoratedType(*this);
-		for (auto i = 0; i < TDimentions; i++)
+		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] += right[i];
 		return return_value;
 	}
@@ -25,7 +23,7 @@ public:
 	TDecoratedType operator * (double scale)
 	{
 		auto return_value = TDecoratedType(*this);
-		for (auto i = 0; i < TDimentions; i++)
+		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] *= scale;
 		return return_value;
 	}
@@ -34,25 +32,26 @@ public:
 
 	const TValue& operator[] (int i) const { return mData[i]; }
 };
+}
 
-// 2 dimentional template vector decorator. Decorator needed only to provide x(), y() interface.
+// 2 dimentional template vector. Implementetion needed only to provide x(), y() interface.
 template <class TValue>
-class Vector2DimDecorator : public VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>
+class Vector2 : public Detail::VectorBase<TValue, 2, Vector2DimDecorator<TValue>>
 {
 private:
-	using TBase = VectorCommon<TValue, 2, Vector2DimDecorator<TValue>>;
+	using TBase = Detail::VectorBase<TValue, 2, Vector2<TValue>>;
 
 public:
-	Vector2DimDecorator() = default;
+	Vector2() = default;
 
-	Vector2DimDecorator(TValue xx, TValue yy)
+	Vector2(TValue xx, TValue yy)
 	{
 		(*this)[0] = xx;
 		(*this)[1] = yy;
 	}
 
-	Vector2DimDecorator(const TBase& original) :
-		Vector2DimDecorator(original[0], original[1])
+	Vector2(const TBase& original) :
+		Vector2(original[0], original[1])
 	{}
 
 	TValue& x() { return mData[0]; }
@@ -63,12 +62,12 @@ public:
 };
 
 
-// 3 dimentional template vector. Decorator needed only to provide x(), y(), z() interface.
+// 3 dimentional template vector. Implementetion needed to provide x(), y(), z() interface.
 template <class TValue>
-class Vector3DimDecorator : public VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>
+class Vector3 : public Detail::VectorBase<TValue, 3, Vector3<TValue>>
 {
 private:
-	using TBase = VectorCommon<TValue, 3, Vector3DimDecorator<TValue>>;
+	using TBase = Detail::VectorBase<TValue, 3, Vector3<TValue>>;
 
 public:
 	TValue& x() { return mData[0]; }
@@ -79,22 +78,37 @@ public:
 	const TValue& y() const { return mData[1]; }
 	const TValue& z() const { return mData[2]; }
 
-	Vector3DimDecorator() = default;
+	Vector3() = default;
 
-	Vector3DimDecorator(TValue xx, TValue yy, TValue zz)
+	Vector3(TValue xx, TValue yy, TValue zz)
 	{
 		(*this)[0] = xx;
 		(*this)[1] = yy;
 		(*this)[2] = zz;
 	}
 
-	Vector3DimDecorator(const TBase& original) :
-		Vector3DimDecorator(original[0], original[1], original[2])
+	Vector3(const TBase& original) :
+		Vector3(original[0], original[1], original[2])
 	{}
 };
 
-using Vector2D = Vector2DimDecorator<double>;
+// N dimentional template vector.
+template <class TValue, size_t DIMENTIONS>
+class VectorN : public Detail::VectorBase<TValue, DIMENTIONS, VectorN<TValue, DIMENTIONS>>
+{
+private:
+	using TBase = Detail::VectorBase<TValue, DIMENTIONS, VectorN<TValue>>;
 
-using Vector3D = Vector3DimDecorator<double>;
+public:
+	VectorN() = default;
+
+	VectorN(const TBase& original) :
+		mData(original.mData)
+	{}
+};
+
+using Vector2D = Vector2<double>;
+
+using Vector3D = Vector3<double>;
 
 }
