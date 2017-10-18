@@ -14,7 +14,7 @@ class Matrix44
 
 public:
 	Matrix44(): matrix{{0}} {};
-	Matrix44(std::array<std::array<float, 4>, 4> newMatrix);
+	Matrix44(std::array<std::array<float, 4>, 4> newMatrix): matrix(newMatrix) {};;
 
 
 	std::array<float, 4>& operator [](int element) 
@@ -27,8 +27,23 @@ public:
 		return matrix[element];
 	}
 
+	Matrix44 operator*(const Matrix44& rhs) const;
+
 	Matrix44 Zero();
 	Matrix44 Eye();
 };
+
+/*std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
+{ 
+	for(int row=0; row<4; row++)
+	{
+		for(int col=0; col<4; col++)
+		{
+			stream << mat[row][col] << ", ";
+		}
+		stream << std::endl;
+	}
+	return stream;
+}*/
 
 }

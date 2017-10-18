@@ -33,5 +33,21 @@ Matrix44 Matrix44::Eye()
 	return m;
 }
 
+Matrix44 Matrix44::operator*(const Matrix44& rhs) const
+{
+	Matrix44 result;
+
+	for(int row = 0; row < 4; ++row) {
+		for(int col = 0; col < 4; ++col) {
+			result[row][col] = 0;
+			for(int z = 0; z < 4; ++z) {
+				result[row][col] += matrix[row][z] * rhs[z][col];
+			}
+		}
+	}
+
+	return result;
+}
+
 
 }
