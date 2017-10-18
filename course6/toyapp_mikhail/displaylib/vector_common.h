@@ -14,7 +14,7 @@ protected:
 public:
 	TConcreteVector operator + (const TConcreteVector& right)
 	{
-		auto return_value = TConcreteVector(*this);
+		auto return_value = TConcreteVector(static_cast<TConcreteVector&>(*this));
 		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] += right[i];
 		return return_value;
@@ -22,7 +22,7 @@ public:
 
 	TConcreteVector operator * (double scale)
 	{
-		auto return_value = TConcreteVector(*this);
+		auto return_value = TConcreteVector(static_cast<TConcreteVector&>(*this));
 		for (auto i = 0; i < DIMENTIONS; i++)
 			return_value[i] *= scale;
 		return return_value;
@@ -38,21 +38,15 @@ public:
 template <class TValue>
 class Vector2 : public Detail::VectorBase<TValue, 2, Vector2<TValue>>
 {
-private:
-	using TBase = Detail::VectorBase<TValue, 2, Vector2<TValue>>;
-
 public:
 	Vector2() = default;
 
-	Vector2(TValue xx, TValue yy)
+	Vector2(TValue xx, TValue yy) :
+		Vector2()
 	{
 		(*this)[0] = xx;
 		(*this)[1] = yy;
 	}
-
-	Vector2(const TBase& original) :
-		Vector2(original[0], original[1])
-	{}
 
 	TValue& x() { return mData[0]; }
 	TValue& y() { return mData[1]; }
@@ -66,9 +60,6 @@ public:
 template <class TValue>
 class Vector3 : public Detail::VectorBase<TValue, 3, Vector3<TValue>>
 {
-private:
-	using TBase = Detail::VectorBase<TValue, 3, Vector3<TValue>>;
-
 public:
 	TValue& x() { return mData[0]; }
 	TValue& y() { return mData[1]; }
@@ -80,16 +71,13 @@ public:
 
 	Vector3() = default;
 
-	Vector3(TValue xx, TValue yy, TValue zz)
+	Vector3(TValue xx, TValue yy, TValue zz) :
+		Vector3()
 	{
 		(*this)[0] = xx;
 		(*this)[1] = yy;
 		(*this)[2] = zz;
 	}
-
-	Vector3(const TBase& original) :
-		Vector3(original[0], original[1], original[2])
-	{}
 };
 
 // N dimentional template vector.
