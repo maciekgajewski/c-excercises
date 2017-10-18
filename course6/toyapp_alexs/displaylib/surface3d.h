@@ -2,8 +2,7 @@
 
 #include "surface.h"
 #include "color.h"
-#include "vector2d.h"
-#include "vector3d.h"
+#include "vector.h"
 
 namespace Display {
 
@@ -17,7 +16,7 @@ public:
 	void DrawLine(const Vector3D& a, const Vector3D& b, Color color);
 
 private:
-	Vector2D GetProjection(const Vector3D& vector) const;
+	Pixel GetProjection(const Vector3D& vector) const;
 
 	friend class Window;
 
