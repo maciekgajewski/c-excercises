@@ -21,15 +21,17 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Vector3D corner1({100, 100, 1});
-	Vector3D corner2({100, 150, 1});
-	Vector3D corner3({150, 150, 1});
-	Vector3D corner4({150, 100, 1});
+	Vector3D corner1({100.0, 100.0, 1.0});
+	Vector3D corner2({100.0, 150.0, 1.0});
+	Vector3D corner3({150.0, 150.0, 1.0});
+	Vector3D corner4({150.0, 100.0, 1.0});
 	Rectangle rect{corner1, corner2, corner3, corner4};
-	Surface3D cam(surf);
+
+	Vector3D cameraLocation({0, 0, 0});
+	Surface3D cam(surf, cameraLocation);
 		
 
-	for(int x = 0; x < 20; x++)
+	for(int x = 0; x < 10; x++)
 	{
 		Color red{255, 0, 0};
 
@@ -42,7 +44,7 @@ int main(int, char**)
 		
 		win.Display(surf);
 
-		Vector3D moveVec({0, 0, 1});
+		Vector3D moveVec({0.0, 0.0, 1.0});
 		rect = rect.move(moveVec);
 		
 		Delay(200);

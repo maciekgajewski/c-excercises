@@ -26,7 +26,7 @@ public:
 		return newVec;
 	}
 
-	Vector operator *(int b) 
+	Vector operator *(float b) 
 	{ 
 		Vector newVec;
 		for(int i=0; i<size; i++)
