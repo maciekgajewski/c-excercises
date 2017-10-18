@@ -3,12 +3,14 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <limits>
 
 namespace Display {
 
 Surface2D::Surface2D(Pixel dimensions)
 :	mHalfDimensions{dimensions * 0.5f}
 {
+	mDepthBuffer = std::make_unique<float[]>(dimensions[0] * dimensions[1]);
 	mSurface = SDL_CreateRGBSurface(0, dimensions[0], dimensions[1], 32, 0, 0, 0, 0);
 	assert(mSurface);
 }
@@ -22,12 +24,35 @@ void Surface2D::Clear(Color color)
 {
 	for(int y = 0; y < mSurface->h; ++y)
 		for(int x = 0; x < mSurface->w; ++x)
-			SetPixel(Pixel{x, y}, color);
+		{
+			Pixel pixel{x, y};
+			SetPixel(pixel, color);
+			SetDepth(pixel, std::numeric_limits<float>::max());
+		}
+}
+
+void Surface2D::SetDepth(Pixel position, float depth)
+{
+	mDepthBuffer[position[1] * mSurface->w + position[0]] = depth;
+}
+
+bool Surface2D::CheckSetDepth(Pixel position, float depth)
+{
+	if(position[0] >= 0 && position[0] < mSurface->w && position[1] >= 0 && position[1] < mSurface->h)
+	{
+		auto& currentDepth = mDepthBuffer[position[1] * mSurface->w + position[0]];
+		if (currentDepth >= depth)
+		{
+			currentDepth = depth;
+			return true;
+		}
+	}
+	return false;
 }
 
 void Surface2D::SetPixel(Pixel position, Color color)
 {
-	if(position[0] > 0 && position[0] < mSurface->w && position[1] > 0 && position[1] < mSurface->h)
+	if(position[0] >= 0 && position[0] < mSurface->w && position[1] >= 0 && position[1] < mSurface->h)
 	{
 		auto offset = position[1] * mSurface->pitch / 4 + position[0];
 		auto* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + offset;
@@ -36,7 +61,7 @@ void Surface2D::SetPixel(Pixel position, Color color)
 }
 
 // Bresenham's line algorithm
-void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
+void Surface2D::DrawLine(Pixel p1, float p1Depth, Pixel p2, float p2Depth, Color color)
 {
 	// @todo clamp p1 and p2 to borders, and don't start drawing if it's completely outside
 	//       then perhaps remove the check from within SetPixel
@@ -53,44 +78,52 @@ void Surface2D::DrawLine(Pixel p1, Pixel p2, Color color)
 		std::swap(p1[1], p2[1]);
 	}
 
-	auto dx = p2[0] - p1[0];
-	auto dy = std::fabs(p2[1] - p1[1]);
-	auto error = dx * 0.5f;
+	auto delta = p2 - p1;
+	delta[1] = std::fabs(delta[1]);
+	auto error = delta[0] * 0.5f;
+	auto length = delta.Length();
 
 	auto y = p1[1];
 	auto ystep = (p1[1] < p2[1]) ? 1 : -1;
 
-	if(steep)
+	for(auto x = p1[0]; x < p2[0]; ++x)
 	{
-		for(auto x = p1[0]; x < p2[0]; ++x)
+		Pixel pixel{x, y};
+		Pixel p = pixel;
+
+		if (steep)
+			p = Pixel{y, x};
+
+		auto distance = Pixel{p2 - pixel}.Length() / length;
+		auto depth = p1Depth + distance * (p2Depth - p1Depth);
+
+		if (CheckSetDepth(p, depth))
+				SetPixel(p, color);
+
+		error -= delta[1];
+		if(error < 0)
 		{
-			SetPixel(Pixel{y, x}, color);
-			error -= dy;
-			if(error < 0)
-			{
-				y += ystep;
-				error += dx;
-			}
-		}
-	}
-	else
-	{
-		for(auto x = p1[0]; x < p2[0]; ++x)
-		{
-			SetPixel(Pixel{x, y}, color);
-			error -= dy;
-			if(error < 0)
-			{
-				y += ystep;
-				error += dx;
-			}
+			y += ystep;
+			error += delta[0];
 		}
 	}
 }
 
 // slow, naive algorithm. it has overdraw when triangles share edges!
-void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
+void Surface2D::DrawTriangle(Pixel a, float aDepth, Pixel b, float bDepth, Pixel c, float cDepth, Color color)
 {
+	auto v0 = c - a;
+	auto v1 = b - a;
+
+	// cull back-facing triangles
+	if (v1[0] * v0[1] - v1[1] * v0[0] > 0.0f)
+		return;
+
+	auto dot00 = v0.Dot(v0);
+	auto dot01 = v0.Dot(v1);
+	auto dot11 = v1.Dot(v1);
+	auto invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
+
 	Pixel topLeft {
 		std::min(a[0], std::min(b[0], c[0])),
 		std::min(a[1], std::min(b[1], c[1]))
@@ -103,36 +136,46 @@ void Surface2D::DrawTriangle(Pixel a, Pixel b, Pixel c, Color color)
 
 	for(auto y = topLeft[1]; y < bottomRight[1]; ++y)
 		for(auto x = topLeft[0]; x < bottomRight[0]; ++x)
-			if((a[0] - b[0]) * (y - a[1]) - (a[1] - b[1]) * (x - a[0]) >= 0 &&
-			   (b[0] - c[0]) * (y - b[1]) - (b[1] - c[1]) * (x - b[0]) >= 0 &&
-			   (c[0] - a[0]) * (y - c[1]) - (c[1] - a[1]) * (x - c[0]) >= 0)
+		{
+			Pixel p{x, y};
+
+			auto v2 = p - a;
+			auto dot02 = v0.Dot(v2);
+			auto dot12 = v1.Dot(v2);
+			auto u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+			auto v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+			if ((u >= 0) && (v >= 0) && (u + v < 1.0f))
 			{
-				SetPixel(Pixel{x, y}, color);
+				float depth = aDepth * u + bDepth * v + cDepth * (1.0f - u - v);
+				if (CheckSetDepth(p, depth))
+					SetPixel(p, color);
 			}
+		}
 }
 
-void Surface2D::SetPixel(Vector2D position, Color color)
+void Surface2D::SetPixel(Vector3D position, Color color)
 {
-	SetPixel(ToPixel(position), color);
+	auto pixel = ToPixel(position);
+	if (CheckSetDepth(pixel, position[2]))
+		SetPixel(pixel, color);
 }
 
-void Surface2D::DrawLine(Vector2D start, Vector2D end, Color color)
+void Surface2D::DrawLine(Vector3D start, Vector3D end, Color color)
 {
-	DrawLine(ToPixel(start), ToPixel(end), color);
+	DrawLine(ToPixel(start), start[2], ToPixel(end), end[2], color);
 }
 
-void Surface2D::DrawTriangle(const Triangle2D& triangle, Color color)
+void Surface2D::DrawTriangle(const Triangle3D& triangle, Color color)
 {
-	DrawTriangle(ToPixel(triangle[0]), ToPixel(triangle[1]), ToPixel(triangle[2]), color);
+	auto a = triangle[0];
+	auto b = triangle[1];
+	auto c = triangle[2];
+
+	DrawTriangle(ToPixel(a), a[2], ToPixel(b), b[2], ToPixel(c), c[2], color);
 }
 
-void Surface2D::DrawTriangles(const std::vector<Triangle2D>& triangles, Color color)
-{
-	for(auto& triangle : triangles)
-		DrawTriangle(triangle, color);
-}
-
-Pixel Surface2D::ToPixel(Vector2D logicalCoordinates)
+Pixel Surface2D::ToPixel(Vector3D logicalCoordinates)
 {
 	return {
 		static_cast<Pixel::Component>(mHalfDimensions[0] + logicalCoordinates[0] * mHalfDimensions[0]),
