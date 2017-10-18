@@ -22,7 +22,7 @@ Matrix44 Matrix44::Zero()
 
 Matrix44 Matrix44::Eye()
 {
-	Matrix44 m;
+	Matrix44 m = Matrix44::Zero();
 
 	for(int i = 0; i < 4; i++)
 	{

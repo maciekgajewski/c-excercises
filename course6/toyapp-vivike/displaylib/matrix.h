@@ -29,8 +29,8 @@ public:
 
 	Matrix44 operator*(const Matrix44& rhs) const;
 
-	Matrix44 Zero();
-	Matrix44 Eye();
+	static Matrix44 Zero();
+	static Matrix44 Eye();
 };
 
 /*std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 

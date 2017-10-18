@@ -26,13 +26,8 @@ BOOST_AUTO_TEST_CASE (constructor_tests)
 
 BOOST_AUTO_TEST_CASE (operator_tests)
 {
-  std::array row1({1, 2, 3, 4});
-  std::array other_rows({0, 0, 0, 0});
-  //Matrix44 lhs({row1, other_rows, other_rows, other_rows});
-  //Matrix44 rhs({row1, other_rows, other_rows, other_rows});
-
-  Matrix44 lhs({{1, 2, 3, 4}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}});
-  Matrix44 rhs({{1, 2, 3, 4}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}});
+  Matrix44 lhs = Matrix44::Eye();
+  Matrix44 rhs = Matrix44::Eye();
 
   Matrix44 mult = lhs * rhs;
 
