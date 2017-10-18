@@ -4,7 +4,7 @@
 
 namespace Display {
 
-namespace Detail{
+namespace Detail {
 template <class TValue, size_t DIMENTIONS, class TDecoratedType>
 class VectorBase
 {
@@ -36,7 +36,7 @@ public:
 
 // 2 dimentional template vector. Implementetion needed only to provide x(), y() interface.
 template <class TValue>
-class Vector2 : public Detail::VectorBase<TValue, 2, Vector2DimDecorator<TValue>>
+class Vector2 : public Detail::VectorBase<TValue, 2, Vector2<TValue>>
 {
 private:
 	using TBase = Detail::VectorBase<TValue, 2, Vector2<TValue>>;
@@ -97,7 +97,7 @@ template <class TValue, size_t DIMENTIONS>
 class VectorN : public Detail::VectorBase<TValue, DIMENTIONS, VectorN<TValue, DIMENTIONS>>
 {
 private:
-	using TBase = Detail::VectorBase<TValue, DIMENTIONS, VectorN<TValue>>;
+	using TBase = Detail::VectorBase<TValue, DIMENTIONS, VectorN<TValue, DIMENTIONS>>;
 
 public:
 	VectorN() = default;
