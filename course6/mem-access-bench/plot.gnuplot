@@ -4,4 +4,4 @@ set logscale xy
 set xlabel "size [bytes]"
 set ylabel "time [ns]"
 
-plot "seq.csv" using 11:3, "rand.csv" using 11:3
+plot "seq.csv" using 11:3 with lines, "rand.csv" using 11:3 with lines

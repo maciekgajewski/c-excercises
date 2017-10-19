@@ -4,31 +4,21 @@
 #include <list>
 #include <algorithm>
 
-template<typename Iterator>
-void print(Iterator begin, Iterator end)
-{
-	for (auto ptr = begin; ptr != end; ptr++)
-	{
-		std::cout << *ptr << std::endl;
-	}
-}
 
+struct Args
+{
+	int mArgc;
+	char** mArgv;
+
+	char** begin() const { return mArgv; }
+	char** end() const { return mArgv + mArgc; }
+};
 
 int main(int argc, char** argv)
 {
-	std::vector<const char*> l{"aa", "bb", "cc"};
-	int numbers[] = {1, 12, 3, 7};
+	Args arguments{argc, argv};
 
-	for(auto it = std::begin(numbers); it != std::end(numbers); ++it)
-	{
-		auto e = *it;
-		std::cout << e << std::endl;
-	}
-
-	for(auto e : l) // use this
-	{
-		std::cout << e << std::endl;
-	}
+	for(auto a : arguments)
+		std::cout << a << std::endl;
 }
-
  
