@@ -3,6 +3,9 @@
 #include <cstdint>
 #include <array>
 #include <iostream>
+#include <cmath>
+
+#include "vector.h"
 
 namespace Display {
 
@@ -14,76 +17,6 @@ struct Color
 
 	void redder(int amount);
 };
-
-
-template<typename T, int length>
-class Vector
-{
-public:
-	std::array<T, length> vec;
-
-	//Vector(std::array<T, length> newvec): vec(newvec) {};
-
-	Vector operator +(Vector b) 
-	{ 
-		Vector newVec;
-		for(int i=0; i<length; i++)
-		{
-			newVec.vec[i] = this->vec[i] + b.vec[i];
-		}
-		return newVec;
-	}
-
-	Vector operator *(int b) 
-	{ 
-		Vector newVec;
-		for(int i=0; i<length; i++)
-		{
-			newVec.vec[i] = this->vec[i] * b;
-		}
-		return newVec;
-	}
-
-	Vector operator -(Vector r) 
-	{ 
-		Vector newVec;
-		for(int i=0; i<length; i++)
-		{
-			newVec.vec[i] = this->vec[i] - r.vec[i];
-		}
-		return newVec;
-	}
-
-	Vector operator /(int r) 
-	{ 
-		Vector newVec;
-		for(int i=0; i<length; i++)
-		{
-			newVec.vec[i] = this->vec[i] / r;
-		}
-		return newVec;
-	}	
-
-	int operator [](int elem) 
-	{ 
-		return this->vec[elem];
-	}
-
-};
-
-template<typename T, int length>
-std::ostream& operator <<(std::ostream& stream, Vector<T, length> vec) 
-{ 
-	for(int i=0; i<length; i++)
-	{
-		stream << vec.vec[i] << ", ";
-	}
-	return stream;
-}
-
-
-using Pixel = Vector<int, 2>;
-using Vector3D = Vector<float, 3>;
 
 struct Camera
 {
