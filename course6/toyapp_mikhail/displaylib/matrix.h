@@ -1,16 +1,16 @@
 #pragma once
 
-#include "vector3d.h"
+#include "vector_common.h"
 
 namespace Display {
 
-	class Matrix
+class Matrix
+{
+public:
+	Vector3D operator * (Vector3D v)
 	{
-	public:
-		Vector3D operator * (Vector3D v)
-		{
-			return v;
-		}
-	};
+		return v;
+	}
+};
 
 }
