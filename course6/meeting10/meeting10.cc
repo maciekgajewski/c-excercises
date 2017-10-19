@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <list>
+#include <algorithm>
 
 template<typename Iterator>
 void print(Iterator begin, Iterator end)
@@ -15,14 +16,12 @@ void print(Iterator begin, Iterator end)
 
 int main(int argc, char** argv)
 {
-	print(argv, argv + argc);
-
-	std::vector<int> v({1, 3, 5, 7, 9});
-	print(v.begin(), v.end());
-
+	int inArgs = std::count(argv, argv+argc, std::string("Ariel"));
+	std::cout << "Ariels in arguments: " << inArgs << std::endl;
+	
 	std::list<std::string> l{"aa", "bb", "cc"};
-	print(l.begin(), l.end());
-
+	int inList = std::count(l.begin(), l.end(), 66);
+	std::cout << "Ariels in list: " << inList << std::endl;
 }
 
  
