@@ -20,6 +20,7 @@ template<typename ContainerT>
 static void AccumulateBenchmark(benchmark::State& state)
 {
 	auto size = state.range(0);
+	state.counters["size"] = size*sizeof(int);
 	ContainerT container;
 	Fill(container, size);
 
@@ -27,6 +28,6 @@ static void AccumulateBenchmark(benchmark::State& state)
 		benchmark::DoNotOptimize(std::accumulate(container.begin(), container.end(), 0));
 }
 
-BENCHMARK_TEMPLATE(AccumulateBenchmark, std::vector<int>)->RangeMultiplier(4)->Range(1<<10, 1<<22);
-BENCHMARK_TEMPLATE(AccumulateBenchmark, std::list<int>)->RangeMultiplier(4)->Range(1<<10, 1<<22);
+BENCHMARK_TEMPLATE(AccumulateBenchmark, std::vector<int>)->RangeMultiplier(4)->Range(1<<10, 1<<24);
+BENCHMARK_TEMPLATE(AccumulateBenchmark, std::list<int>)->RangeMultiplier(4)->Range(1<<10, 1<<24);
 BENCHMARK_MAIN();
