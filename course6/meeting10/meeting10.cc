@@ -16,12 +16,19 @@ void print(Iterator begin, Iterator end)
 
 int main(int argc, char** argv)
 {
-	int inArgs = std::count(argv, argv+argc, std::string("Ariel"));
-	std::cout << "Ariels in arguments: " << inArgs << std::endl;
-	
-	std::list<std::string> l{"aa", "bb", "cc"};
-	int inList = std::count(l.begin(), l.end(), 66);
-	std::cout << "Ariels in list: " << inList << std::endl;
+	std::vector<const char*> l{"aa", "bb", "cc"};
+	int numbers[] = {1, 12, 3, 7};
+
+	for(auto it = std::begin(numbers); it != std::end(numbers); ++it)
+	{
+		auto e = *it;
+		std::cout << e << std::endl;
+	}
+
+	for(auto e : l) // use this
+	{
+		std::cout << e << std::endl;
+	}
 }
 
  
