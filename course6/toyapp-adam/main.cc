@@ -11,16 +11,24 @@
 
 int main(int argc, char* argv[])
 {
-	Util::Pixel screenDimensions{640, 360};
+	if (argc < 2)
+	{
+		std::cerr << "Usage: " << argv[0] << " <OBJ_FILE>" << std::endl;
+		return 1;
+	}
+
+	Util::Pixel screenDimensions{1280, 720};
 
 	Util::Keyboard keyboard;
-	Util::Mouse mouse(screenDimensions.y);
+	Util::Mouse mouse(screenDimensions[1]);
 	Util::Clock clock;
 
-	Display::Window win("Hello", 100, 100, screenDimensions.x * 2, screenDimensions.y * 2);
+	Display::Window win("Hello", 100, 100, screenDimensions[0], screenDimensions[1]);
 	Display::Surface2D surface2D(screenDimensions);
 	Display::Surface3D surface3D(surface2D);
+
 	Scene scene(keyboard, mouse, surface3D);
+	scene.LoadMesh(argv[1]);
 
 	SDL_Event event;
 	SDL_SetRelativeMouseMode(SDL_TRUE);

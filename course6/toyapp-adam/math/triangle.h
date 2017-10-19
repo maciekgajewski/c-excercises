@@ -24,6 +24,8 @@ private:
 class Triangle3D
 {
 public:
+	Triangle3D() = default;
+
 	Triangle3D(Vector3D pointA, Vector3D pointB, Vector3D pointC)
 	{
 		mPoints[0] = pointA;
@@ -36,7 +38,7 @@ public:
 
 	Vector3D GetSurfaceNormal() const
 	{
-		return (mPoints[1] - mPoints[0]).Cross(mPoints[2] - mPoints[0]).Normalized();
+		return Cross(mPoints[1] - mPoints[0], mPoints[2] - mPoints[0]).Normalized();
 	}
 private:
 	std::array<Vector3D, 3> mPoints;

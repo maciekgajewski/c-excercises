@@ -4,6 +4,8 @@
 #include <cassert>
 #include <algorithm>
 
+#include <iostream>
+
 namespace Display {
 
 Surface::Surface(int w, int h)
@@ -17,6 +19,18 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
+int Display::Surface::GetW()
+{
+	assert(mSurface);
+	return mSurface->w;
+}
+
+int Display::Surface::GetH()
+{
+	assert(mSurface);
+		return mSurface->h;
+}
+
 void Surface::Clear(Color backgroundColor)
 {
 	assert(mSurface);
@@ -24,57 +38,62 @@ void Surface::Clear(Color backgroundColor)
 	for(int y = 0; y < mSurface->h; y++)
 		for(int x = 0; x < mSurface->w; x++)
 		{
-			Vector2D pixel;
-			pixel.x = x;
-			pixel.y = y;
+			Pixel pixel({x, y});
 			SetPixel(pixel, backgroundColor);
 		}
 }
 
-void Surface::SetPixel(Vector2D pixel, Color currentColor)
+void Surface::SetPixel(Pixel pixel, Color currentColor)
 {
 	assert(mSurface);
 
 	std::uint32_t pixelValue = (std::uint32_t(currentColor.R)<<16) + (std::uint32_t(currentColor.G)<<8) + currentColor.B;
 
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel.y*mSurface->pitch/4 + pixel.x);
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel[1]*mSurface->pitch/4 + pixel[0]);
 	*pixelAddr = pixelValue;
 }
 
-void Surface::DrawLine(Vector2D p1, Vector2D p2, Color color)
+void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
 {
 	// Bresenham's line algorithm
-	const bool steep = (fabs(p2.y - p1.y) > fabs(p2.x - p1.x));
+	int v1x = p1[0];
+	int v1y = p1[1];
+	int v2x = p2[0];
+	int v2y = p2[1];
+
+	bool steep = (std::fabs(v2y - v1y) > std::fabs(v2x - v1x));
 	if(steep)
 	{
-		std::swap(p1.x, p1.y);
-		std::swap(p2.x, p2.y);
+		std::swap(v1x, v1y);
+		std::swap(v2x, v2y);
 	}
 
-	if(p1.x > p2.x)
+	if(v1x > v2x)
 	{
-		std::swap(p1.x, p2.x);
-		std::swap(p1.y, p2.y);
+		std::swap(v1x, v2x);
+		std::swap(v1y, v2y);
 	}
 
-	const float dx = p2.x - p1.x;
-	const float dy = fabs(p2.y - p1.y);
+	const float dx = v2x - v1x;
+	const float dy = std::fabs(v2y - v1y);
 
 	float error = dx / 2.0f;
-	const int ystep = (p1.y < p2.y) ? 1 : -1;
-	int y = p1.y;
+	const int ystep = (v1y < v2y) ? 1 : -1;
+	int y = v1y;
 
-	const int maxX = p2.x;
+	const int maxX = v2x;
 
-	for(int x=p1.x; x<maxX; x++)
+	for(int x=v1x; x<=maxX; x++)
 	{
 		if(steep)
 		{
-			SetPixel({y,x}, color);
+			Pixel pixel({y,x});
+			SetPixel(pixel, color);
 		}
 		else
 		{
-			SetPixel({x,y}, color);
+			Pixel pixel({x,y});
+			SetPixel(pixel, color);
 		}
 
 		error -= dy;

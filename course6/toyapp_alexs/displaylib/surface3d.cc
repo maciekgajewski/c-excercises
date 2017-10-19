@@ -1,10 +1,4 @@
-#include "surface.h"
 #include "surface3d.h"
-#include "color.h"
-#include "vector2d.h"
-#include "vector3d.h"
-
-#include <cassert>
 
 namespace Display {
 
@@ -30,7 +24,7 @@ void Surface3D::DrawLine(const Vector3D& a, const Vector3D& b, Color color)
 	mSurface.DrawLine(projectionA, projectionB, color);
 }
 
-Vector2D Surface3D::GetProjection(const Vector3D& vector) const
+Pixel Surface3D::GetProjection(const Vector3D& vector) const
 {
 	const float scale = 3;
 	
@@ -39,7 +33,7 @@ Vector2D Surface3D::GetProjection(const Vector3D& vector) const
 	int centerX = mSurface.mSurface->w / 2;
 	int centerY = mSurface.mSurface->h / 2;
 
-	return Vector2D {
+	return {
 		centerX + static_cast<int>(vector.x / vector.z * scaleX),
 				centerY - static_cast<int>(vector.y / vector.z * scaleY)
 	};

@@ -1,37 +1,38 @@
 #pragma once
 
-#include "vector3d.h"
 #include <array>
 
 namespace Display {
 
-template<std::size_t A, std::size_t B>
+template<std::size_t A, std::size_t B, class T = double>
 class Matrix
 {
 public:
 	Matrix() {}
-	Matrix(std::array<std::array<double, B>, A> data): mMatrix(data) {}
 
-	std::array<double, B>& operator [](int i)
+	template<class... E>
+	Matrix(E... data): mMatrix {static_cast<T>(data)...} {}
+
+	std::array<T, B>& operator [](int i)
 	{
 		return mMatrix[i];
 	}
 
-	const std::array<double, B>& operator [](int i) const
+	const std::array<T, B>& operator [](int i) const
 	{
 		return mMatrix[i];
 	}
 
 	template<std::size_t C>
-	Matrix<A, C> operator*(const Matrix<B, C> matrix) const
+	Matrix<A, C, T> operator*(const Matrix<B, C, T> matrix) const
 	{
-		Matrix<A, C> result;
+		Matrix<A, C, T> result;
 
 		for (int i = 0; i < A; i++)
 		{
 			for (int j = 0; j < C; j++)
 			{
-				double value = 0;
+				T value = 0;
 				for (int k = 0; k < B; k++)
 				{
 					value += (*this)[i][k] * matrix[k][j];
@@ -44,7 +45,7 @@ public:
 	}
 
 private:
-	std::array<std::array<double, B>, A> mMatrix;
+	std::array<std::array<T, B>, A> mMatrix;
 };
 
 }

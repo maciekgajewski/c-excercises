@@ -1,13 +1,9 @@
 #pragma once
 
+#include "math/vector.h"
+
 namespace Util {
 
-struct Pixel
-{
-	using Coordinate = int;
-
-	Coordinate x = 0;
-	Coordinate y = 0;
-};
+using Pixel = Math::Vector<int, 2>;
 
 }

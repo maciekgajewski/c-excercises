@@ -12,28 +12,16 @@ void Color::redder(int amount)
 	}
 };
 
-void Vector2D::move(int xmove, int ymove)
+Pixel Camera::project2D(Vector3D original)
 {
-	x = x + xmove;
-	y = y + ymove;
-};
-
-Vector2D Camera::project2D(Vector3D original)
-{
-	Vector2D newVector;
-	newVector.x = original.x/original.z;
-	newVector.y = original.y/original.z;
+	Pixel newVector({int(original[0]/original[2]), int(original[1]/original[2])});
 
 	return newVector;
 }
 
 Rectangle Rectangle::move(Vector3D move)
 {
-	Rectangle newRectangle;
-	newRectangle.corner1 = corner1 + move;
-	newRectangle.corner2 = corner2 + move;
-	newRectangle.corner3 = corner3 + move;
-	newRectangle.corner4 = corner4 + move;
+	Rectangle newRectangle({corner1 + move, corner2 + move, corner3 + move, corner4 + move});
 
 	return newRectangle;
 }

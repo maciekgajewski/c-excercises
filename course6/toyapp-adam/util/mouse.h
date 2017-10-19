@@ -10,7 +10,7 @@ using Math::Vector2D;
 class Mouse
 {
 public:
-	Mouse(Pixel::Coordinate physicalResolution)
+	Mouse(Pixel::Component physicalResolution)
 	:	mScale{1.0f / static_cast<float>(physicalResolution)}
 	{}
 
@@ -20,16 +20,16 @@ public:
 
 	void AddDeltaPosition(Pixel delta)
 	{
-		mCursorPositionDelta.x += delta.x;
-		mCursorPositionDelta.y += delta.y;
-		mPositionDelta.x = mCursorPositionDelta.x * mScale;
-		mPositionDelta.y = mCursorPositionDelta.y * mScale;
+		mCursorPositionDelta[0] += delta[0];
+		mCursorPositionDelta[1] += delta[1];
+		mPositionDelta[0] = mCursorPositionDelta[0] * mScale;
+		mPositionDelta[1] = mCursorPositionDelta[1] * mScale;
 	}
 
 	void RecordPosition()
 	{
-		mCursorPosition.x += mCursorPositionDelta.x;
-		mCursorPosition.y += mCursorPositionDelta.y;
+		mCursorPosition[0] += mCursorPositionDelta[0];
+		mCursorPosition[1] += mCursorPositionDelta[1];
 		mCursorPositionDelta = {};
 		mPositionDelta = {};
 	}

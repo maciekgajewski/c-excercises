@@ -1,7 +1,4 @@
-#include "surface.h"
 #include "cube.h"
-#include "vector3d.h"
-#include "transformation3d.h"
 
 namespace Display {
 
