@@ -22,11 +22,9 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Vector3D corner1({0.8, 0.8, 1.0});
-	Vector3D corner2({0.8, -0.8, 1.0});
-	Vector3D corner3({-0.8, -0.8, 1.0});
-	Vector3D corner4({-0.8, 0.8, 1.0});
-	Rectangle rect{corner1, corner2, corner3, corner4};
+	Vector3D center({0, 0, 1.0});
+	Vector3D orientation({0, 0, 0});
+	Square square{1.6, center, orientation};
 
 	Vector3D cameraLocation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation);
@@ -37,15 +35,15 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		cam.DrawLine(rect.corner1, rect.corner2, red);
-		cam.DrawLine(rect.corner2, rect.corner3, red);
-		cam.DrawLine(rect.corner3, rect.corner4, red);
-		cam.DrawLine(rect.corner4, rect.corner1, red);
+		for(auto line : square.edges())
+		{
+			cam.DrawLine(line[0], line[1], red);
+		}
 		
 		win.Display(surf);
 
 		Vector3D moveVec({0.0, 0.0, 1.0});
-		rect = rect.move(moveVec);
+		square.move(moveVec);
 		
 		Delay(100);
 	}

@@ -23,14 +23,22 @@ struct Camera
 	Pixel project2D(Vector3D original);
 };
 
-struct Rectangle
+class Square
 {
-	Vector3D corner1;
-	Vector3D corner2;
-	Vector3D corner3;
-	Vector3D corner4;
+	std::array<Vector3D, 4> base_square;
+	float len;
+	Vector3D loc_center;
+	Vector3D orient;
 
-	Rectangle move(Vector3D);
+	Vector3D transformCorner(Vector3D corner);
+
+public:
+	Square(float edge_length, Vector3D center_location, Vector3D orientation);
+
+	void move(Vector3D);
+	std::array<std::array<Vector3D, 2>, 4> edges();
 };
+
+
 
 }
