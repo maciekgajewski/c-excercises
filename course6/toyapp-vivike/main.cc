@@ -3,6 +3,7 @@
 #include <displaylib/surface.h>
 #include <displaylib/surface3D.h>
 #include <displaylib/objects.h>
+#include <displaylib/matrix.h>
 
 #include <SDL2/SDL_main.h>
 
@@ -21,17 +22,20 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Vector3D corner1({100.0, 100.0, 1.0});
-	Vector3D corner2({100.0, 150.0, 1.0});
-	Vector3D corner3({150.0, 150.0, 1.0});
-	Vector3D corner4({150.0, 100.0, 1.0});
+	Vector3D corner1({0.8, 0.8, 1.0});
+	Vector3D corner2({0.8, -0.8, 1.0});
+	Vector3D corner3({-0.8, -0.8, 1.0});
+	Vector3D corner4({-0.8, 0.8, 1.0});
 	Rectangle rect{corner1, corner2, corner3, corner4};
 
 	Vector3D cameraLocation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation);
+
+	Matrix44 myMat = Matrix44::Eye();
+	std::cout << myMat <<std::endl;
 		
 
-	for(int x = 0; x < 10; x++)
+	for(int x = 0; x < 3; x++)
 	{
 		Color red{255, 0, 0};
 
@@ -47,7 +51,7 @@ int main(int, char**)
 		Vector3D moveVec({0.0, 0.0, 1.0});
 		rect = rect.move(moveVec);
 		
-		Delay(200);
+		Delay(100);
 	}
 
 	Delay(1000);

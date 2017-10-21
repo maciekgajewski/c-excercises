@@ -33,7 +33,7 @@ foreach(testSrc ${TEST_SRCS})
         #link to Boost libraries AND your targets and dependencies
         target_link_libraries(${testName} ${Boost_LIBRARIES} displaylib SDL2main)
 
-        #I like to move testing binaries into a testBin directory
+        #move testing binaries into a testBin directory
         set_target_properties(${testName} PROPERTIES 
             RUNTIME_OUTPUT_DIRECTORY  ./testBin)
 

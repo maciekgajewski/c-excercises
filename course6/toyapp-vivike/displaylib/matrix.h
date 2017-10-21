@@ -36,19 +36,9 @@ public:
 	static Matrix44 Scale(float scaling);
 	static Matrix44 Scale(Vector3D scaling);
 	static Matrix44 Translate(Vector3D translation);
+ 
 };
 
-std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
-{ 
-	for(int row=0; row<4; row++)
-	{
-		for(int col=0; col<4; col++)
-		{
-			stream << mat[row][col] << ", ";
-		}
-		stream << std::endl;
-	}
-	return stream;
-}
+std::ostream& operator <<(std::ostream& stream, Matrix44 mat);
 
 }
