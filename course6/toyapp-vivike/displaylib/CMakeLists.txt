@@ -5,7 +5,7 @@ add_library(displaylib
 	surface.cc surface.h
 	surface3D.cc surface3D.h
 	objects.cc objects.h
-	vector.h
+	vector.cc vector.h
 	matrix.cc matrix.h
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)

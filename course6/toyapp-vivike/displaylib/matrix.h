@@ -38,7 +38,7 @@ public:
 	static Matrix44 Translate(Vector3D translation);
 };
 
-/*std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
+std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
 { 
 	for(int row=0; row<4; row++)
 	{
@@ -49,6 +49,6 @@ public:
 		stream << std::endl;
 	}
 	return stream;
-}*/
+}
 
 }
