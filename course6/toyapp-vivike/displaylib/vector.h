@@ -75,7 +75,7 @@ public:
 
 	float length();
 	T dot(Vector<T, size>);
-	//Vector<T, size> cross(Vector<T, size>);
+	Vector<T, size> cross(Vector<T, size>);
 };
 
 template<typename T, int size>
@@ -113,16 +113,5 @@ T Vector<T, size>::dot(Vector<T, size> vecb)
 using Pixel = Vector<int, 2>;
 using MatrixElement = Vector<int, 2>;
 using Vector3D = Vector<float, 3>;
-
-/* Don't think I want to go through the effort of implementing this, since it only works in 3D.
-Vector3D Vector3D::dot(Vector3D vecr)
-{
-	Vector3D result;
-	result[0] = this->vec[1] * vecr[2] - this->vec[2] * vecr[1];
-	result[1] = this->vec[2] * vecr[0] - this->vec[0] * vecr[2];
-	result[2] = this->vec[1] * vecr[1] - this->vec[1] * vecr[0];
-	
-	return result;
-}*/
 
 }
