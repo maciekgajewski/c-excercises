@@ -41,6 +41,7 @@ public:
 
 	void SetPixel(Vector3D p, Color color);
 	void DrawLine(const Vector3D& start, const Vector3D& end, Color color);
+	void DrawTriangle(Triangle triangle, Color color);
 
 };
 

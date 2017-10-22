@@ -36,10 +36,7 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		for(auto line : triangle.edges())
-		{
-			cam.DrawLine(line[0], line[1], red);
-		}
+		cam.DrawTriangle(triangle, red);
 		
 		win.Display(surf);
 

@@ -11,4 +11,12 @@ namespace Display {
 	{
 		surface.DrawLine(Transform(start), Transform(end), color);
 	}
+
+	void Surface3D::DrawTriangle(Triangle triangle, Color color)
+	{
+		for(auto line : triangle.edges())
+		{
+			DrawLine(line[0], line[1], color);
+		}
+	}
 }
