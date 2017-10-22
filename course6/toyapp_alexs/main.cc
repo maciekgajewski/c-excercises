@@ -4,8 +4,6 @@
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
-#include <displaylib/vector2d.h>
-#include <displaylib/vector3d.h>
 #include <displaylib/color.h>
 #include <displaylib/cube.h>
 #include <displaylib/transformation3d.h>

@@ -1,8 +1,5 @@
 #include "window.h"
 
-#include "surface.h"
-#include "surface3d.h"
-
 #include <cassert>
 
 namespace Display {

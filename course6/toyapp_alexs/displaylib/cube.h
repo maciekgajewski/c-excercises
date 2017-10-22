@@ -5,6 +5,7 @@
 #include "surface3d.h"
 #include "color.h"
 #include "transformation3d.h"
+#include "vector.h"
 
 namespace Display {
 

@@ -24,6 +24,8 @@ private:
 class Triangle3D
 {
 public:
+	Triangle3D() = default;
+
 	Triangle3D(Vector3D pointA, Vector3D pointB, Vector3D pointC)
 	{
 		mPoints[0] = pointA;

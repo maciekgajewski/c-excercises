@@ -1,9 +1,6 @@
-#include "vector3d.h"
-#include "matrix.h"
 #include "transformation3d.h"
 
 #include <cmath>
-#include <iostream>
 
 namespace Display {
 
@@ -18,11 +15,6 @@ Transformation3D::Transformation3D()
 }
 
 Transformation3D::Transformation3D(Matrix<4, 4> matrix)
-	: mMatrix(matrix)
-{
-}
-
-Transformation3D::Transformation3D(std::array<std::array<double, 4>, 4> matrix)
 	: mMatrix(matrix)
 {
 }
@@ -98,12 +90,12 @@ Transformation3D Transformation3D::WithScaling(const Vector3D& vector) const
 
 Vector3D Transformation3D::Apply(const Vector3D& vector) const
 {
-	Matrix<4, 1> vMatrix {{
+	Matrix<4, 1> vMatrix {
 		vector.x,
 		vector.y,
 		vector.z,
 		1
-	}};
+	};
 
 	Matrix<4, 1> result = mMatrix * vMatrix;
 
