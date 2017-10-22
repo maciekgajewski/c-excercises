@@ -20,6 +20,24 @@ Pixel Camera::project2D(Vector3D original)
 	return newVector;
 }
 
+void Triangle::move(Vector3D move)
+{
+	corners[0] = corners[0] + move;
+	corners[1] = corners[1] + move;
+	corners[2] = corners[2] + move;
+}
+	
+std::array<std::array<Vector3D, 2>, 3> Triangle::edges()
+{
+	std::array<Vector3D, 2> line1{corners[0], corners[1]};
+	std::array<Vector3D, 2> line2{corners[0], corners[2]};
+	std::array<Vector3D, 2> line3{corners[1], corners[2]};
+
+	std::array<std::array<Vector3D, 2>, 3> result{line1, line2, line3};
+
+	return result;
+}
+
 Square::Square(float edge_length, Vector3D center_location, Vector3D orientation) {
 	len = edge_length;
 	loc_center = center_location;

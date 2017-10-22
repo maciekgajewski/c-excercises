@@ -23,6 +23,32 @@ struct Camera
 	Pixel project2D(Vector3D original);
 };
 
+class Triangle
+{
+	std::array<Vector3D, 3> corners;
+
+public:
+	Triangle(Vector3D point1, Vector3D point2, Vector3D point3)
+	{
+		corners[0] = point1;
+		corners[1] = point2;
+		corners[2] = point3;
+	}
+
+	Vector3D& operator [](int elem) 
+	{ 
+		return this->corners[elem];
+	}
+
+	Vector3D operator [](int elem) const
+	{ 
+		return this->corners[elem];
+	}
+
+	void move(Vector3D);
+	std::array<std::array<Vector3D, 2>, 3> edges();
+};
+
 class Square
 {
 	std::array<Vector3D, 4> base_square;

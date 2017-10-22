@@ -22,9 +22,10 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Vector3D center({0, 0, 1.0});
-	Vector3D orientation({0, 0, 0});
-	Square square{1.6, center, orientation};
+	Vector3D corner1({0, 0, 1.0});
+	Vector3D corner2({0, 1, 1.0});
+	Vector3D corner3({1, 0, 1.0});
+	Triangle triangle{corner1, corner2, corner3};
 
 	Vector3D cameraLocation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation);
@@ -35,7 +36,7 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		for(auto line : square.edges())
+		for(auto line : triangle.edges())
 		{
 			cam.DrawLine(line[0], line[1], red);
 		}
@@ -43,7 +44,7 @@ int main(int, char**)
 		win.Display(surf);
 
 		Vector3D moveVec({0.0, 0.0, 1.0});
-		square.move(moveVec);
+		triangle.move(moveVec);
 		
 		Delay(100);
 	}
