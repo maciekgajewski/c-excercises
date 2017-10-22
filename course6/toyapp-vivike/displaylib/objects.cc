@@ -1,4 +1,5 @@
 #include "objects.h"
+#include "matrix.h"
 
 #include <SDL2/SDL.h>
 
@@ -33,8 +34,11 @@ Square::Square(float edge_length, Vector3D center_location, Vector3D orientation
 
 Vector3D Square::transformCorner(Vector3D corner)
 {
-	// apply the transformations for scaling, location and rotation
-	return corner;
+	Matrix44 scaleMatrix = Matrix44::Scale(len);
+	Matrix44 moveMatrix = Matrix44::Translate(loc_center);
+
+	// todo: rotation
+	return moveMatrix * scaleMatrix * corner;
 }
 
 void Square::move(Vector3D move)

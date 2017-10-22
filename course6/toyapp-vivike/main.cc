@@ -29,7 +29,7 @@ int main(int, char**)
 	Vector3D cameraLocation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation);
 
-	for(int x = 0; x < 3; x++)
+	for(int x = 0; x < 20; x++)
 	{
 		Color red{255, 0, 0};
 
