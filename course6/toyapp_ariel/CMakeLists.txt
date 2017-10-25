@@ -12,3 +12,6 @@ target_link_libraries(toyapp
 	displaylib
 	SDL2main
 	)
+
+enable_testing()
+add_subdirectory(test)
