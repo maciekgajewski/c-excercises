@@ -1,32 +1,51 @@
 #include <iostream>
 #include <vector>
-#include <list>
 #include <algorithm>
-#include <fstream>
-#include <chrono>
+#include <string>
+#include <stdexcept>
 
 using namespace std::literals;
 
+bool IsWaldoOrCarmen(const std::string& search, const std::string& a, const std::string& b)
+{
+	return search == a || search == b;
+}
+
+struct IsAOrB
+{
+	bool operator()(const std::string& search) const
+	{
+		return search == a || search == b;
+	}
+
+	const std::string& a, b;
+};
+
+
 int main(int argc, char** argv)
 {
-	// load 1M random numbers
-	std::ifstream random_file("/dev/urandom");
-	const std::size_t COUNT = 10000000;
+	if (argc < 3)
+		throw std::runtime_error("Usage: meeting11 SEARCH1 SEARCH2 [args ...]");
 
-	std::vector<unsigned> buffer;
-	buffer.resize(COUNT);
-	random_file.read(reinterpret_cast<char*>(buffer.data()), sizeof(unsigned) * COUNT);
+	std::string s1 = argv[1];
+	std::string s2 = argv[2];
+	const std::vector<std::string> args(argv+3, argv+argc);
 
-	std::list<unsigned> random_ints(buffer.begin(), buffer.end());
+	IsAOrB functor{s1, s2};
 
-	// sort
-	auto start = std::chrono::high_resolution_clock::now();
-	random_ints.sort();
-	auto end = std::chrono::high_resolution_clock::now();
+	functor("Waldo");
 
-	std::cout << COUNT << " numbers sorted in " << 0.001*(end-start)/1us << " ms" << std::endl;
-	auto it = random_ints.begin();
-	for(int i = 0; i < 20; i++, it++)
-		std::cout << "#" << i << " : " << *it << std::endl;
+	auto it = std::find_if(args.begin(), args.end(), functor);
+
+	if (it == args.end())
+	{
+		std::cout << "There is no Waldo!" << std::endl;
+	}
+	else
+	{
+		std::cout << "Waldo found!" << std::endl;
+	}
+
+
 }
  
