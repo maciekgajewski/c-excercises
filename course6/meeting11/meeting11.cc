@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <stdexcept>
+#include <functional>
 
 using namespace std::literals;
 
@@ -13,7 +14,8 @@ bool IsWaldoOrCarmen(const std::string& search, const std::string& a, const std:
 
 struct IsAOrB
 {
-	bool operator()(const std::string& search) const
+	template<typename ArgumentType>
+	int operator()(const ArgumentType& search)
 	{
 		return search == a || search == b;
 	}
@@ -21,6 +23,7 @@ struct IsAOrB
 	const std::string& a, b;
 };
 
+using namespace std::placeholders;
 
 int main(int argc, char** argv)
 {
@@ -31,11 +34,9 @@ int main(int argc, char** argv)
 	std::string s2 = argv[2];
 	const std::vector<std::string> args(argv+3, argv+argc);
 
-	IsAOrB functor{s1, s2};
-
-	functor("Waldo");
-
-	auto it = std::find_if(args.begin(), args.end(), functor);
+	auto it = std::find_if(args.begin(), args.end(), 
+		[&] (const std::string& s) { return s == s1 || s == s2; }
+	);
 
 	if (it == args.end())
 	{
