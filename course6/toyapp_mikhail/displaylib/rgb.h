@@ -4,10 +4,9 @@
 
 namespace Display {
 
-	class RGB
-	{
-	public:
-		uint8_t r, g, b;
-	};
+struct RGB
+{
+	uint8_t r, g, b;
+};
 
 }

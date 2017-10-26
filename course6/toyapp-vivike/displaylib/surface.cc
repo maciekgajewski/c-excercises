@@ -19,6 +19,18 @@ Surface::~Surface()
 		SDL_FreeSurface(mSurface);
 }
 
+int Display::Surface::GetW()
+{
+	assert(mSurface);
+	return mSurface->w;
+}
+
+int Display::Surface::GetH()
+{
+	assert(mSurface);
+		return mSurface->h;
+}
+
 void Surface::Clear(Color backgroundColor)
 {
 	assert(mSurface);
@@ -26,7 +38,7 @@ void Surface::Clear(Color backgroundColor)
 	for(int y = 0; y < mSurface->h; y++)
 		for(int x = 0; x < mSurface->w; x++)
 		{
-			Pixel pixel{x, y};
+			Pixel pixel({x, y});
 			SetPixel(pixel, backgroundColor);
 		}
 }
@@ -37,7 +49,7 @@ void Surface::SetPixel(Pixel pixel, Color currentColor)
 
 	std::uint32_t pixelValue = (std::uint32_t(currentColor.R)<<16) + (std::uint32_t(currentColor.G)<<8) + currentColor.B;
 
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel.vec[1]*mSurface->pitch/4 + pixel.vec[0]);
+	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel[1]*mSurface->pitch/4 + pixel[0]);
 	*pixelAddr = pixelValue;
 }
 
@@ -75,12 +87,12 @@ void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
 	{
 		if(steep)
 		{
-			Pixel pixel{y,x};
+			Pixel pixel({y,x});
 			SetPixel(pixel, color);
 		}
 		else
 		{
-			Pixel pixel{x,y};
+			Pixel pixel({x,y});
 			SetPixel(pixel, color);
 		}
 

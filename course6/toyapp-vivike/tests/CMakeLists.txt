@@ -10,7 +10,10 @@ set(CMAKE_CXX_STANDARD 14)
 add_directory(tests)
 
 add_executable(tests
-	test_objects.cc)
+	test_objects.cc
+	test_vector.cc
+	test_matrix.cc
+	)
 
 target_link_libraries(displaylib 
 	SDL2 
