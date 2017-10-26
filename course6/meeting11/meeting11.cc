@@ -13,17 +13,15 @@ int main(int argc, char** argv)
 	std::ifstream random_file("/dev/urandom");
 	const std::size_t COUNT = 10000000;
 
-	std::vector<unsigned> random_ints;
-	random_ints.resize(COUNT);
-	random_file.read(reinterpret_cast<char*>(random_ints.data()), sizeof(unsigned) * COUNT);
+	std::vector<unsigned> buffer;
+	buffer.resize(COUNT);
+	random_file.read(reinterpret_cast<char*>(buffer.data()), sizeof(unsigned) * COUNT);
+
+	std::list<unsigned> random_ints(buffer.begin(), buffer.end());
 
 	// sort
 	auto start = std::chrono::high_resolution_clock::now();
-	//std::sort(random_ints.begin(), random_ints.end());
-
-	std::nth_element(random_ints.begin(), random_ints.begin() + 20 , random_ints.end());
-	std::sort(random_ints.begin(), random_ints.begin() + 20);
-
+	random_ints.sort();
 	auto end = std::chrono::high_resolution_clock::now();
 
 	std::cout << COUNT << " numbers sorted in " << 0.001*(end-start)/1us << " ms" << std::endl;
