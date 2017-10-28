@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 
 #include <cstdint>
+#include <vector>
 
 namespace Display {
 
@@ -42,7 +43,9 @@ public:
 	void SetPixel(Vector3D p, Color color);
 	void DrawLine(const Vector3D& start, const Vector3D& end, Color color);
 	void DrawTriangle(Triangle triangle, Color color);
-
+	void DrawTriangleVector(std::vector<Triangle> triangleVector, Color color);
+	
 };
+
 
 }

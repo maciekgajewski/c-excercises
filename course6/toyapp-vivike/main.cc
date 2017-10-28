@@ -8,6 +8,7 @@
 #include <SDL2/SDL_main.h>
 
 #include <iostream>
+#include <vector>
 
 using namespace Display;
 
@@ -22,13 +23,21 @@ int main(int, char**)
 
 	surf.Clear(blue); // blue background
 
-	Vector3D corner1({0, 0, 1.0});
-	Vector3D corner2({0, 1, 1.0});
-	Vector3D corner3({1, 0, 1.0});
-	Triangle triangle{corner1, corner2, corner3};
+	Vector3D corner1({-0.5, -0.5, -0.5});
+	Vector3D corner2({0.5, 0.5, -0.5});
+	Vector3D corner3({-0.5, 0.5, 0.5});
+	Vector3D corner4({0.5, -0.5, 0.5});
+	Triangle triangle1{corner1, corner2, corner3};
+	Triangle triangle2{corner1, corner2, corner4};
+	Triangle triangle3{corner1, corner3, corner4};
+	Triangle triangle4{corner2, corner3, corner4};
+
+	std::vector<Triangle> Pyramid{triangle1, triangle2, triangle3, triangle4};
 
 	Vector3D cameraLocation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation);
+
+	Vector3D moveVec({0.0, 0.0, 1.0});
 
 	for(int x = 0; x < 20; x++)
 	{
@@ -36,12 +45,14 @@ int main(int, char**)
 
 		surf.Clear(blue); // blue background
 		
-		cam.DrawTriangle(triangle, red);
+		cam.DrawTriangleVector(Pyramid, red);
 		
 		win.Display(surf);
 
-		Vector3D moveVec({0.0, 0.0, 1.0});
-		triangle.move(moveVec);
+		for (Triangle& tri : Pyramid)
+		{
+			tri.move(moveVec);
+		}
 		
 		Delay(100);
 	}
