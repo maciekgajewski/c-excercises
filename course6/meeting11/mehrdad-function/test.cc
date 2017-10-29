@@ -64,3 +64,18 @@ TEST_CASE("Capturing lambda") {
 	counter = 12;
 	REQUIRE(f(2, 1) == 36);
 }
+
+int cube(int x)
+{
+	return x * x * x;
+}
+TEST_CASE("Function pointer") {
+
+	Mehrdad::Function<int(int)> fRef(cube);
+	REQUIRE(fRef(4) == 64);
+
+	Mehrdad::Function<int(int)> fPtr(&cube);
+	REQUIRE(fPtr(4) == 64);
+	REQUIRE(fPtr(0) == 0);
+	REQUIRE(fPtr(-3) == -27);
+}
