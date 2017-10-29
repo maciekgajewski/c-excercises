@@ -2,47 +2,61 @@
 
 #include <cstddef>
 #include <memory>
+#include <functional>
 
 namespace Mehrdad {
 
-namespace {
-template<typename R, typename... Args>
-class Callable
-{
-public:
-	Callable(R ret, Args... args){}
-	~Callable(){}
-
-	R operator() (Args... args)
-	{
-	}
-};
-}
-
+template<typename>
+class Function; //Intentionally left undefined
 
 template<typename R, typename... Args>
-class Function
+class Function<R(Args...)>
 {
 public:
 	Function() {}
 	Function(std::nullptr_t) {}
 	~Function() {}
-	explicit operator bool() const { return (bool)mCallable; }
+	explicit operator bool() const { return static_cast<bool>(mCallable); }
 
-	Function(const Function& other) = delete;//Copy is not supported for now
-	Function(Function&& other) = delete;//Move is not supported for now
+	Function(const Function& other) = delete;
+	Function(Function&& other) = delete;
 
 	template<typename F>
-	Function(F functor);
+	Function(F functor)
+	{
+		mCallable = std::make_unique<Callable<F>>(functor);
+	}
 
 	R operator() (Args... args)
 	{
 		if (!mCallable)
 			throw std::runtime_error("Calling empty function");
+
+		mCallable->Invoke(args...);
 	}
 
 
 private:
-	std::unique_ptr<Callable<R, Args...>> mCallable;
+	struct BaseCallable
+	{
+		virtual ~BaseCallable() = default;
+		virtual R Invoke(Args...) = 0;
+	};
+
+	template<typename F>
+	struct Callable : BaseCallable
+	{
+		Callable(const F& f) : mF(f) {}
+
+		R Invoke(Args... args) override
+		{
+			return mF(args...);
+		}
+
+	private:
+		F mF;
+	};
+
+	std::unique_ptr<BaseCallable> mCallable;
 };
 }
