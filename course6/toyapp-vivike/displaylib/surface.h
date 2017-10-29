@@ -2,6 +2,7 @@
 
 #include "sdlobject.h"
 #include "objects.h"
+#include "vector.h"
 
 #include <SDL2/SDL.h>
 
@@ -16,7 +17,11 @@ public:
 	~Surface();
 
 	void Clear(Color backgroundColor);
-	void SetPixel(Vector2D pixel, Color currentColor);
+	void SetPixel(Pixel pixel, Color currentColor);
+	void DrawLine(Pixel p1, Pixel p2, Color color);
+
+	int GetH();
+	int GetW();
 
 private:
 

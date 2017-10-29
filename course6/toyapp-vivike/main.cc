@@ -1,46 +1,56 @@
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
+#include <displaylib/surface3D.h>
 #include <displaylib/objects.h>
 
 #include <SDL2/SDL_main.h>
 
 #include <iostream>
 
+using namespace Display;
 
 int main(int, char**)
 {
 	std::cout << "Hello" << std::endl;
 
-	Display::Window win("Hello", 10, 10, 800, 600);
-	Display::Surface surf(200, 150);
+	Window win("Hello", 10, 10, 800, 600);
+	Surface surf(200, 150);
 
-	Display::Color blue;
-	blue.R = 0;
-	blue.G = 0;
-	blue.B = 255;
+	Color blue{0, 0, 255};
 
 	surf.Clear(blue); // blue background
 
-	Display::Vector2D activePixel;
-	activePixel.x = 10;
-	activePixel.y = 10;
+	Vector3D corner1({100.0, 100.0, 1.0});
+	Vector3D corner2({100.0, 150.0, 1.0});
+	Vector3D corner3({150.0, 150.0, 1.0});
+	Vector3D corner4({150.0, 100.0, 1.0});
+	Rectangle rect{corner1, corner2, corner3, corner4};
+
+	Vector3D cameraLocation({0, 0, 0});
+	Surface3D cam(surf, cameraLocation);
 		
 
-	for(int x = 0; x < 20; x++)
+	for(int x = 0; x < 10; x++)
 	{
-		Display::Color red;
-		red.R = 255;
-		red.G = 0;
-		red.B = 0;
+		Color red{255, 0, 0};
 
-		surf.SetPixel(activePixel, red); // red pixel at 10x10
-		activePixel.move(1, 0);
+		surf.Clear(blue); // blue background
+		
+		cam.DrawLine(rect.corner1, rect.corner2, red);
+		cam.DrawLine(rect.corner2, rect.corner3, red);
+		cam.DrawLine(rect.corner3, rect.corner4, red);
+		cam.DrawLine(rect.corner4, rect.corner1, red);
+		
 		win.Display(surf);
-		Display::Delay(200);
+
+		Vector3D moveVec({0.0, 0.0, 1.0});
+		rect = rect.move(moveVec);
+		
+		Delay(200);
 	}
 
-	Display::Delay(5000);
+	Delay(1000);
 
 	return 0;
 }

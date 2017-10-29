@@ -1,19 +1,23 @@
 #pragma once
 
-#include "vector2d.h"
-#include "surface.h"
-#include "shape3d.h"
+#include <array>
+
+#include "surface3d.h"
 #include "color.h"
+#include "transformation3d.h"
+#include "vector.h"
 
 namespace Display {
 
-class Cube: public Shape3D {
+class Cube {
 public:
-    Cube(Vector3D position, Color color, float size);
-    void Draw(Surface& surface);
+	Cube(Color color);
+	void Draw(Surface3D& surface) const;
+	Cube Transform(const Transformation3D& transformation) const;
 
 private:
-    float size;
+	Color mColor;
+	std::array<Vector3D, 8> mVertices;
 };
 
 }

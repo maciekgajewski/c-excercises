@@ -1,7 +1,5 @@
 #include "window.h"
 
-#include "surface.h"
-
 #include <cassert>
 
 namespace Display {
@@ -37,5 +35,9 @@ void Window::Display(const Surface& surface)
 	SDL_DestroyTexture(tex);
 }
 
+void Window::Display(const Surface3D& surface)
+{
+	Display(surface.mSurface);
+}
 
 }

@@ -1,6 +1,11 @@
 #pragma once
 
 #include <cstdint>
+#include <array>
+#include <iostream>
+#include <cmath>
+
+#include "vector.h"
 
 namespace Display {
 
@@ -13,21 +18,19 @@ struct Color
 	void redder(int amount);
 };
 
-struct Vector2D
+struct Camera
 {
-	int x;
-	int y;
-
-	void move(int xmove, int ymove);
+	Pixel project2D(Vector3D original);
 };
 
-struct Vector3D
+struct Rectangle
 {
-	int x;
-	int y;
-	int z;
+	Vector3D corner1;
+	Vector3D corner2;
+	Vector3D corner3;
+	Vector3D corner4;
 
-	Vector2D project2D();
+	Rectangle move(Vector3D);
 };
 
 }
