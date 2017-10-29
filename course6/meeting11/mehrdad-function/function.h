@@ -22,9 +22,9 @@ public:
 	Function(Function&& other) = delete;
 
 	template<typename F>
-	Function(F functor)
+	Function(F f)
 	{
-		mCallable = std::make_unique<Callable<F>>(functor);
+		mCallable = std::make_unique<Callable<F>>(f);
 	}
 
 	R operator() (Args... args)
@@ -35,6 +35,12 @@ public:
 		mCallable->Invoke(args...);
 	}
 
+	template<typename F2>
+	Function& operator=(F2 f)
+	{
+		mCallable = std::make_unique<Callable<F2>>(f);
+		return *this;
+	}
 
 private:
 	struct BaseCallable

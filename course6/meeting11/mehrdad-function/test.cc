@@ -5,7 +5,8 @@
 
 #include <string>
 
-TEST_CASE("Empty functions") {
+TEST_CASE("Empty functions")
+{
 	Mehrdad::Function<int(double)> f1;
 	Mehrdad::Function<double(int)> f2(nullptr);
 
@@ -16,7 +17,8 @@ TEST_CASE("Empty functions") {
 	REQUIRE_THROWS_AS(f2(1), std::runtime_error);
 }
 
-TEST_CASE("Non-capturing Square functor") {
+TEST_CASE("Non-capturing Square functor")
+{
 	struct Square
 	{
 		int operator()(int i) { return i * i; }
@@ -29,13 +31,15 @@ TEST_CASE("Non-capturing Square functor") {
 	REQUIRE(f1(5) == 25);
 }
 
-TEST_CASE("Non-capturing lambda") {
+TEST_CASE("Non-capturing lambda")
+{
 	Mehrdad::Function<double(double)> ff([](double radius){ return radius * radius * 3.14; });
 
 	REQUIRE(ff(10) == 314);
 }
 
-TEST_CASE("Capturing string lookup functor") {
+TEST_CASE("Capturing string lookup functor")
+{
 	struct HasPattern
 	{
 		HasPattern(const std::string& pattern): mPattern(pattern){}
@@ -51,7 +55,8 @@ TEST_CASE("Capturing string lookup functor") {
 	REQUIRE(f1("Here you can find Waldo") == true);
 }
 
-TEST_CASE("Capturing lambda") {
+TEST_CASE("Capturing lambda")
+{
 
 	int counter = 5;
 	Mehrdad::Function<int(int, int)> f(
@@ -62,14 +67,15 @@ TEST_CASE("Capturing lambda") {
 	REQUIRE(f(2, 3) == 25);
 	REQUIRE(f(2, 3) == 30);
 	counter = 12;
-	REQUIRE(f(2, 1) == 36);
+	REQUIRE(f(2, 3) == 60);
 }
 
 int cube(int x)
 {
 	return x * x * x;
 }
-TEST_CASE("Function pointer") {
+TEST_CASE("Function pointer")
+{
 
 	Mehrdad::Function<int(int)> fRef(cube);
 	REQUIRE(fRef(4) == 64);
@@ -78,4 +84,22 @@ TEST_CASE("Function pointer") {
 	REQUIRE(fPtr(4) == 64);
 	REQUIRE(fPtr(0) == 0);
 	REQUIRE(fPtr(-3) == -27);
+}
+
+TEST_CASE("reassign to another function")
+{
+	int multiplier = 5;
+	Mehrdad::Function<int(int)> f(
+				[multiplier](int a){
+		return multiplier * a;
+	});
+
+	REQUIRE(f(4) == 20);
+
+	int adder = 8;
+	f = [multiplier, adder](int x){
+		return (x + adder) * multiplier;
+	};
+
+	REQUIRE(f(4) == 60);
 }
