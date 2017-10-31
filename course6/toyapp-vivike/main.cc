@@ -35,7 +35,8 @@ int main(int, char**)
 	std::vector<Triangle> Pyramid{triangle1, triangle2, triangle3, triangle4};
 
 	Vector3D cameraLocation({0, 0, 0});
-	Surface3D cam(surf, cameraLocation);
+	Vector3D cameraOrientation({0, 0, 0});
+	Surface3D cam(surf, cameraLocation, cameraOrientation);
 
 	Vector3D moveVec({0.0, 0.0, 1.0});
 
