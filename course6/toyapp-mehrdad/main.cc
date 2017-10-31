@@ -3,7 +3,8 @@
 #include <displaylib/window.h>
 #include <displaylib/functions.h>
 #include <displaylib/surface.h>
-#include <displaylib/shapes.h>
+#include <displaylib/shapes2d.h>
+#include <displaylib/shapes3d.h>
 
 int main()
 {

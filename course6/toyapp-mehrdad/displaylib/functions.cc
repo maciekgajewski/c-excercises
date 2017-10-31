@@ -25,7 +25,7 @@ Vector2D Rotate(Vector2D v, Vector2D origin, Degree angle)
 	const double dY = v.mY - origin.mY;
 	double x = (std::cos(r) * dX) - (std::sin(r) * dY) + origin.mX;
 	double y = (std::sin(r) * dX) + (std::cos(r) * dY) + origin.mY;
-	return {static_cast<int>(x), static_cast<int>(y)};
+	return {x, y};
 }
 
 }

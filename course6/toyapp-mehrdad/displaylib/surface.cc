@@ -33,7 +33,7 @@ void Surface::SetPixel(Pixel p, Color color)
 	assert(mSurface);
 
 	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (p.mY*mSurface->pitch/4 + p.mX);
-	*pixelAddr = color.GetPixelValue();
+	*pixelAddr = GetPixelValue(color);
 }
 
 void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
@@ -84,6 +84,11 @@ void Surface::DrawLine(Pixel p1, Pixel p2, Color color)
 Size Surface::GetSize() const
 {
 	return {mSurface->w, mSurface->h};
+}
+
+uint32_t Surface::GetPixelValue(Color c) const
+{
+	return (uint32_t(c.mRed)<<16) + (uint32_t(c.mGreen)<<8) + c.mBlue;
 }
 
 }

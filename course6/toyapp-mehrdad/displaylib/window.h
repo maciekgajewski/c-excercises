@@ -15,7 +15,7 @@ class Window : private SDLObject
 {
 public:
 
-	Window(const std::string& title, Vector2D position, Size size);
+	Window(const std::string& title, Pixel position, Size size);
 	~Window();
 
 	void Display(const Surface& surface);
