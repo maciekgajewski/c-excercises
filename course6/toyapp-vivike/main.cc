@@ -19,7 +19,7 @@ int main(int, char**)
 	Window win("Hello", 10, 10, 800, 600);
 	Surface surf(200, 150);
 
-	Color blue{0, 0, 255};
+	Color blue{0, 0, 102};
 
 	surf.Clear(blue); // blue background
 
@@ -42,11 +42,11 @@ int main(int, char**)
 
 	for(int x = 0; x < 20; x++)
 	{
-		Color red{255, 0, 0};
+		Color pink{255, 0, 127};
 
 		surf.Clear(blue); // blue background
 		
-		cam.DrawTriangleVector(Pyramid, red);
+		cam.DrawTriangleVector(Pyramid, pink);
 		
 		win.Display(surf);
 
