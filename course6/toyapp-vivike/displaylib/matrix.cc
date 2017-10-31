@@ -99,4 +99,17 @@ Vector3D Matrix44::operator*(const Vector3D& rhs) const
 	return result;
 }
 
+std::ostream& operator <<(std::ostream& stream, Matrix44 mat) 
+{ 
+	for(int row=0; row<4; row++)
+	{
+		for(int col=0; col<4; col++)
+		{
+			stream << mat[row][col] << ", ";
+		}
+		stream << std::endl;
+	}
+	return stream;
+}
+
 }

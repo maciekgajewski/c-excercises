@@ -55,14 +55,21 @@ BOOST_AUTO_TEST_CASE (method_tests)
   Vector<int, 1> vec1({1});
   Vector<int, 2> vec2a({3, 4});
   Vector<int, 2> vec2b({0, 1});
-  Vector<int, 3> vec3({1, 2, 2});
+  Vector<float, 3> vec3a({1, 2, 2});
+  Vector<float, 3> vec3b({0, 1, 2});
 
   BOOST_REQUIRE_EQUAL(vec1.length(), 1.0);
   BOOST_REQUIRE_EQUAL(vec2a.length(), 5.0);
   BOOST_REQUIRE_EQUAL(vec2b.length(), 1.0);
-  BOOST_REQUIRE_EQUAL(vec3.length(), 3.0);
+  BOOST_REQUIRE_EQUAL(vec3a.length(), 3.0);
 
   BOOST_REQUIRE_EQUAL(vec2a.dot(vec2b), 4);
+
+  Vector3D crossVec = vec3a.cross(vec3b);
+  BOOST_REQUIRE_EQUAL(crossVec[0], 2);
+  BOOST_REQUIRE_EQUAL(crossVec[1], -2);
+  BOOST_REQUIRE_EQUAL(crossVec[2], 1);
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()

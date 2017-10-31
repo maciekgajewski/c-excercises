@@ -23,14 +23,48 @@ struct Camera
 	Pixel project2D(Vector3D original);
 };
 
-struct Rectangle
+class Triangle
 {
-	Vector3D corner1;
-	Vector3D corner2;
-	Vector3D corner3;
-	Vector3D corner4;
+	std::array<Vector3D, 3> corners;
 
-	Rectangle move(Vector3D);
+public:
+	Triangle(Vector3D point1, Vector3D point2, Vector3D point3)
+	{
+		corners[0] = point1;
+		corners[1] = point2;
+		corners[2] = point3;
+	}
+
+	Vector3D& operator [](int elem) 
+	{ 
+		return this->corners[elem];
+	}
+
+	Vector3D operator [](int elem) const
+	{ 
+		return this->corners[elem];
+	}
+
+	void move(Vector3D);
+	std::array<std::array<Vector3D, 2>, 3> edges();
 };
+
+class Square
+{
+	std::array<Vector3D, 4> base_square;
+	float len;
+	Vector3D loc_center;
+	Vector3D orient;
+
+	Vector3D transformCorner(Vector3D corner);
+
+public:
+	Square(float edge_length, Vector3D center_location, Vector3D orientation);
+
+	void move(Vector3D);
+	std::array<std::array<Vector3D, 2>, 4> edges();
+};
+
+
 
 }
