@@ -4,7 +4,8 @@
 #include <algorithm>
 #include <string>
 #include <locale>
-
+#include <set>
+#include <map>
 #include <boost/tokenizer.hpp>
 
 class Dictionary {
@@ -13,22 +14,19 @@ public:
 	bool InDictionary(const std::string& word) const;
 
 private:
-	std::vector<std::string> mWords;
+	std::set<std::string> mWords;
 };
 
 Dictionary::Dictionary(const std::string& path) {
 	std::ifstream file(path);
 	std::string word;
 	while(std::getline(file, word))
-		mWords.push_back(word);
-	std::sort(mWords.begin(), mWords.end());
+		mWords.insert(word);
 	std::cerr << "Loaded " << mWords.size() << " words into dictionary" << std::endl;
 }
 
 bool Dictionary::InDictionary(const std::string& word) const {
-	//return std::find(mWords.begin(), mWords.end(), word) != mWords.end();
-	auto it = std::lower_bound(mWords.begin(), mWords.end(), word);
-	return it != mWords.end() && *it == word;
+	return mWords.find(word) != mWords.end();
 }
 
 int main(int argc, char** argv)
