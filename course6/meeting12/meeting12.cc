@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 	std::ifstream input(argv[2]);
 	std::string line;
 	int lineNumber = 1;
-	int errors = 0;
+	std::map<std::string, int> errors;
 	while(std::getline(input, line))
 	{
 		for(std::string word : boost::tokenizer<>(line))
@@ -53,12 +53,18 @@ int main(int argc, char** argv)
 				if (!dict.InDictionary(word))
 				{
 					//std::cout << "ERROR line " << lineNumber << " : " << word << std::endl;
-					errors++;
+					errors[word]++;
 				}
 			}
 		}
 		lineNumber++;
 	}
-	std::cout << "Errors found: " << errors << std::endl;
+
+	int numErrors = std::accumulate(errors.begin(), errors.end(), 0,
+		[](int a, const std::pair<std::string, int>& b)
+		{
+			return a + b.second;
+		});
+	std::cout << "Errors found: " << numErrors << ", " << errors.size() << " invalid words" << std::endl;
 }
  
