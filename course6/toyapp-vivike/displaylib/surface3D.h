@@ -8,6 +8,7 @@
 #include <SDL2/SDL.h>
 
 #include <cstdint>
+#include <vector>
 
 namespace Display {
 
@@ -16,6 +17,7 @@ class Surface3D
 {
 	Surface& surface;
 	Vector3D position;
+	Vector3D orientation;
 	Matrix44 cameraTransform;
 	Pixel Transform(Vector3D p)
 	{
@@ -33,16 +35,19 @@ class Surface3D
 		return centerScreenShift + Pixel({int(scaledLocation[0]), int(scaledLocation[1])});
 	}
 public:
-	Surface3D(Surface& s, Vector3D cameraLocation) : surface(s), position(cameraLocation)
+	Surface3D(Surface& s, Vector3D cameraLocation, Vector3D cameraOrientation) : surface(s), position(cameraLocation), orientation(cameraOrientation)
 	{
 		Matrix44 cameraShift = Matrix44::Translate(position * -1);
-		cameraTransform = cameraShift;
+		Matrix44 cameraView = Matrix44::Rotate(orientation);
+		cameraTransform = cameraShift * cameraView;
 	}
 
 	void SetPixel(Vector3D p, Color color);
 	void DrawLine(const Vector3D& start, const Vector3D& end, Color color);
 	void DrawTriangle(Triangle triangle, Color color);
-
+	void DrawTriangleVector(std::vector<Triangle> triangleVector, Color color);
+	
 };
+
 
 }
