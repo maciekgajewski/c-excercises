@@ -36,6 +36,7 @@ public:
 	static Matrix44 Scale(float scaling);
 	static Matrix44 Scale(Vector3D scaling);
 	static Matrix44 Translate(Vector3D translation);
+	static Matrix44 Rotate(Vector3D orientation);
  
 };
 

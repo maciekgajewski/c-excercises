@@ -19,4 +19,13 @@ namespace Display {
 			DrawLine(line[0], line[1], color);
 		}
 	}
+
+	void Surface3D::DrawTriangleVector(std::vector<Triangle> triangleVector, Color color)
+	{
+		for(auto tri : triangleVector)
+		{
+			DrawTriangle(tri, color);
+		}
+		
+	}
 }
