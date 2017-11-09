@@ -12,6 +12,9 @@ struct fixed_vector
 	template <typename... Args> 
 	void emplace_back(Args&&... args)
 	{
+		if (size() == capacity())
+			throw std::length_error("full");
+
 		mElements[mSize].~ValueT();
 		new (mElements.data() + mSize) ValueT(std::forward<Args>(args)...);
 		++mSize;
@@ -28,7 +31,7 @@ private:
 	void _push_back(ArgT&& value)
 	{
 		if (size() == capacity())
-			throw std::runtime_error("full");
+			throw std::length_error("full");
 
 		mElements[mSize] = std::forward<ArgT>(value);
 		++mSize;
