@@ -54,6 +54,18 @@ struct A
 	std::string mText;
 };
 
+template <typename LastArg>
+void foo(LastArg&& last)
+{
+	std::cout << last << std::endl;
+}
+
+template <typename Arg, typename... Args>
+void foo(Arg&&, Args&&... args)
+{
+   foo(std::forward<Args>(args)...);
+}
+
 int main()
 {
 	fixed_vector<A, 3> vi; 
@@ -61,6 +73,8 @@ int main()
 	std::cout << "START" << std::endl;
 	vi.emplace_back("foo", 5);
 	std::cout << "END" << std::endl;
+
+	foo(1,2,3, "foo");
 
 	return 0;
 }
