@@ -7,7 +7,15 @@ template <typename ValueT, std::size_t N>
 struct fixed_vector
 {
 	void push_back(const ValueT& value) { _push_back(value); }
-	void push_back(ValueT&& value) {  _push_back(std::move(value)); }
+	void push_back(ValueT&& value) { _push_back(std::move(value)); }
+
+	template <typename... Args> 
+	void emplace_back(Args&&... args)
+	{
+		mElements[mSize].~ValueT();
+		new (mElements.data() + mSize) ValueT(std::forward<Args>(args)...);
+		++mSize;
+	}
 
 	std::size_t size() const { return mSize; }
 	std::size_t capacity() const { return mElements.size(); }
@@ -32,7 +40,10 @@ private:
 
 struct A
 {
-	A() =default;
+	A() { std::cout << "A ctor" << std::endl; }
+
+	explicit A(const std::string& text, int) : mText(text) { std::cout << "A ctor(string)" << std::endl; }
+	~A() { std::cout << "A dtor" << std::endl; }
 
 	A(const A& a) : mText(a.mText) { std::cout << "A copied" << std::endl; }
 	A& operator=(const A& a) { mText = a.mText; std::cout << "A copy assign" << std::endl; return *this;}
@@ -45,17 +56,20 @@ struct A
 
 int main()
 {
-	fixed_vector<A, 5> vi; 
-
-	fixed_vector<A, 5> vv; 
+	fixed_vector<A, 3> vi; 
 
 	std::cout << "START" << std::endl;
-	vv = std::move(vi);
+	vi.emplace_back("foo", 5);
 	std::cout << "END" << std::endl;
-
-	A a;
-	vi.push_back(std::move(a));
-	vi.push_back(a);
 
 	return 0;
 }
+
+
+
+
+
+
+
+
+
