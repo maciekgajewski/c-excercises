@@ -58,15 +58,15 @@ struct A
 };
 
 template <typename LastArg>
-void foo(LastArg&& last)
+void printLast(LastArg&& last)
 {
 	std::cout << last << std::endl;
 }
 
 template <typename Arg, typename... Args>
-void foo(Arg&&, Args&&... args)
+void printLast(Arg&&, Args&&... args)
 {
-   foo(std::forward<Args>(args)...);
+   printLast(std::forward<Args>(args)...);
 }
 
 int main()
@@ -77,8 +77,7 @@ int main()
 	vi.emplace_back("foo", 5);
 	std::cout << "END" << std::endl;
 
-	foo(1,2,3, "foo");
-
+	printLast(1, 2, 3, "foo");
 	return 0;
 }
 
