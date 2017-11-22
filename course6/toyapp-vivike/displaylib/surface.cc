@@ -8,9 +8,9 @@
 
 namespace Display {
 
-Surface::Surface(int w, int h)
+Surface::Surface(Pixel dimensions)
 {
-	mSurface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+	mSurface = SDL_CreateRGBSurface(0, dimensions[0], dimensions[1], 32, 0, 0, 0, 0);
 }
 
 Surface::~Surface()
@@ -46,11 +46,13 @@ void Surface::Clear(Color backgroundColor)
 void Surface::SetPixel(Pixel pixel, Color currentColor)
 {
 	assert(mSurface);
+	if (pixel[0] > 0 && pixel[0] < mSurface->w && pixel[1] > 0 && pixel[1] < mSurface->h)
+	{
+		std::uint32_t pixelValue = (std::uint32_t(currentColor.R)<<16) + (std::uint32_t(currentColor.G)<<8) + currentColor.B;
 
-	std::uint32_t pixelValue = (std::uint32_t(currentColor.R)<<16) + (std::uint32_t(currentColor.G)<<8) + currentColor.B;
-
-	std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel[1]*mSurface->pitch/4 + pixel[0]);
-	*pixelAddr = pixelValue;
+		std::uint32_t* pixelAddr = static_cast<std::uint32_t*>(mSurface->pixels) + (pixel[1]*mSurface->pitch/4 + pixel[0]);
+		*pixelAddr = pixelValue;
+	}
 }
 
 void Surface::DrawLine(Pixel p1, Pixel p2, Color color)

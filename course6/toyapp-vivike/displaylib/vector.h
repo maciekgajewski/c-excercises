@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cassert>
+#include <type_traits>
 #include <cstdint>
 #include <array>
 #include <iostream>
@@ -17,6 +19,16 @@ public:
 	Vector(std::array<T, size> newvec): vec(newvec) {};
 
 	Vector operator +(Vector b) 
+	{ 
+		Vector newVec;
+		for(int i=0; i<size; i++)
+		{
+			newVec.vec[i] = this->vec[i] + b.vec[i];
+		}
+		return newVec;
+	}
+
+	Vector operator +=(Vector b) 
 	{ 
 		Vector newVec;
 		for(int i=0; i<size; i++)
@@ -46,6 +58,14 @@ public:
 		return newVec;
 	}
 
+	Vector operator-() const
+	{
+		Vector newVec;
+		for (int i=0; i<size; i++)
+			newVec.vec[i] = -this->vec[i];
+		return newVec;
+	}
+
 	Vector operator /(int r) 
 	{ 
 		Vector newVec;
@@ -56,7 +76,7 @@ public:
 		return newVec;
 	}	
 
-	T operator [](int elem) 
+	T& operator [](int elem) 
 	{ 
 		return this->vec[elem];
 	}

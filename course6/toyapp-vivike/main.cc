@@ -4,6 +4,7 @@
 #include <displaylib/surface3D.h>
 #include <displaylib/objects.h>
 #include <displaylib/matrix.h>
+#include <scene.h>
 
 #include <SDL2/SDL_main.h>
 
@@ -12,21 +13,30 @@
 
 using namespace Display;
 
-int main(int, char**)
+int main(int argc, char* argv[])
 {
-	std::cout << "Hello" << std::endl;
+	if (argc < 2)
+	{
+		std::cerr << "Usage: " << argv[0] << " <OBJ_FILE>" << std::endl;
+		return 1;
+	}
+	std::cout << "Displaying object loaded from " << argv[1] << "." << std::endl;
 
-	Window win("Hello", 10, 10, 800, 600);
-	Surface surf(200, 150);
+	Pixel screenDimensions({1280, 720});
+
+	Window win("Hello", 10, 10, screenDimensions[0], screenDimensions[1]);
+	Surface surf(screenDimensions);
+
+	
 
 	Color blue{0, 0, 102};
 
 	surf.Clear(blue); // blue background
 
-	Vector3D corner1({-0.5, -0.5, -0.5});
-	Vector3D corner2({0.5, 0.5, -0.5});
-	Vector3D corner3({-0.5, 0.5, 0.5});
-	Vector3D corner4({0.5, -0.5, 0.5});
+	Vector3D corner1({-10.5, -10.5, 0});
+	Vector3D corner2({10.5, 10.5, 0});
+	Vector3D corner3({-10.5, 10.5, 21});
+	Vector3D corner4({10.5, -10.5, 21});
 	Triangle triangle1{corner1, corner2, corner3};
 	Triangle triangle2{corner1, corner2, corner4};
 	Triangle triangle3{corner1, corner3, corner4};
@@ -37,6 +47,9 @@ int main(int, char**)
 	Vector3D cameraLocation({0, 0, 0});
 	Vector3D cameraOrientation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation, cameraOrientation);
+
+	Scene scene(cam);
+	scene.LoadMesh(argv[1]);
 
 	Vector3D moveVec({0.0, 0.0, 1.0});
 

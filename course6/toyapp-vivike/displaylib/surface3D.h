@@ -4,6 +4,7 @@
 #include "objects.h"
 #include "vector.h"
 #include "matrix.h"
+#include "mesh.h"
 
 #include <SDL2/SDL.h>
 
@@ -13,7 +14,6 @@
 namespace Display {
 
 class Surface3D
-// Thank you Mikhail
 {
 	Surface& surface;
 	Vector3D position;
@@ -42,10 +42,14 @@ public:
 		cameraTransform = cameraShift * cameraView;
 	}
 
+	void Rotate(Vector3D rotation);
+	Matrix44 createInverseMatrix();
+
 	void SetPixel(Vector3D p, Color color);
 	void DrawLine(const Vector3D& start, const Vector3D& end, Color color);
 	void DrawTriangle(Triangle triangle, Color color);
 	void DrawTriangleVector(std::vector<Triangle> triangleVector, Color color);
+	void DrawMesh(const Mesh& mesh, const Matrix44& view);
 	
 };
 

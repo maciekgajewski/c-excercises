@@ -1,6 +1,5 @@
 #include "../displaylib/vector.h"
 
-
 #include <cassert>
 #define BOOST_TEST_MODULE test_vectors
 #include <boost/test/included/unit_test.hpp>

@@ -6,6 +6,9 @@
 
 namespace Display {
 
+namespace {
+	constexpr auto PI = std::atan(1.0) * 4.0;
+}
 
 Matrix44 Matrix44::Zero()
 {
@@ -30,6 +33,18 @@ Matrix44 Matrix44::Eye()
 	{
 		m[i][i] = 1.0f;
 	}
+
+	return m;
+}
+
+Matrix44 Matrix44::Perspective(float fieldOfViewDegrees, float aspectRatio)
+{
+	Matrix44 m = Matrix44::Zero();
+
+	m[1][1] = 1.0f / std::tan((PI / 180.0f) * fieldOfViewDegrees * 0.5f);
+	m[0][0] = m[1][1] / aspectRatio;
+	m[2][3] = +1.0f;
+	m[3][2] = -1.0f;
 
 	return m;
 }
@@ -118,6 +133,21 @@ Vector3D Matrix44::operator*(const Vector3D& rhs) const
 	for(int row = 0; row < 3; ++row) {
 		result[row] = 0;
 		for(int col = 0; col < 3; ++col) {
+			result[row] += matrix[row][col] * rhs[col];
+		}
+		result[row] += matrix[row][3];
+	}
+
+	return result;
+}
+
+Vector<float, 4> Matrix44::operator*(const Vector<float, 4>& rhs) const
+{
+	std::array<float, 4> result;
+
+	for(int row = 0; row < 4; ++row) {
+		result[row] = 0;
+		for(int col = 0; col < 4; ++col) {
 			result[row] += matrix[row][col] * rhs[col];
 		}
 		result[row] += matrix[row][3];
