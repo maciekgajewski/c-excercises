@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 class IPrintable
 {
@@ -7,7 +8,7 @@ public:
 	virtual void Print(std::ostream& o) const = 0;
 };
 
-class Person
+class Person : public IPrintable
 {
 protected:
 	std::string name;
@@ -32,16 +33,18 @@ public:
 	{ o << name << " the " << role << " (aged " << age << ")"; }
 };
 
-std::ostream& operator<<(std::ostream& o, const Person& p)
+struct Triangle : public IPrintable
+{
+	Triangle(int xx, int yy, int zz) : x(xx), y(yy), z(zz) {}
+	int x, y, z;
+	void Print(std::ostream& o) const { o << "(" << x <<", " << y << ", " << z << " )"; }
+};
+
+std::ostream& operator<<(std::ostream& o, const IPrintable& p)
 {
 	p.Print(o);
 	return o;
 }
-
-// std::ostream& operator<<(std::ostream& o, const Employee& p)
-// {
-// 	return o << p.name << " the " << p.role << " (aged " << p.age << ")";
-// }
 
 int main(int argc, char** argv)
 {
@@ -49,7 +52,15 @@ int main(int argc, char** argv)
 	std::cout << "size of Person: " << sizeof(Person) << std::endl;
 	
 	Employee maciek("Maciek", 37, "Teacher");
+	Person misha("Misha", 31);
+	Triangle t{1, 3, 6};
 
-	std::cout << maciek << std::endl;
+	std::vector<IPrintable*> printables;
+	printables.push_back(&maciek);
+	printables.push_back(&misha);
+	printables.push_back(&t);
+	
+	for(IPrintable* p : printables)
+		std::cout << "* " << *p << std::endl;
 }
  
