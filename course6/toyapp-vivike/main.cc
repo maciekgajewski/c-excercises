@@ -6,6 +6,8 @@
 #include <displaylib/matrix.h>
 #include <scene.h>
 
+#include <util/clock.h>
+
 #include <SDL2/SDL_main.h>
 
 #include <iostream>
@@ -24,49 +26,36 @@ int main(int argc, char* argv[])
 
 	Pixel screenDimensions({1280, 720});
 
-	Window win("Hello", 10, 10, screenDimensions[0], screenDimensions[1]);
+	Util::Clock clock;
+
+	Window win("Hello", 100, 100, screenDimensions[0], screenDimensions[1]);
 	Surface surf(screenDimensions);
-
-	
-
-	Color blue{0, 0, 102};
-
-	surf.Clear(blue); // blue background
-
-	Vector3D corner1({-10.5, -10.5, 0});
-	Vector3D corner2({10.5, 10.5, 0});
-	Vector3D corner3({-10.5, 10.5, 21});
-	Vector3D corner4({10.5, -10.5, 21});
-	Triangle triangle1{corner1, corner2, corner3};
-	Triangle triangle2{corner1, corner2, corner4};
-	Triangle triangle3{corner1, corner3, corner4};
-	Triangle triangle4{corner2, corner3, corner4};
-
-	std::vector<Triangle> Pyramid{triangle1, triangle2, triangle3, triangle4};
 
 	Vector3D cameraLocation({0, 0, 0});
 	Vector3D cameraOrientation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation, cameraOrientation);
+
+	Color blue{0, 0, 102};
+	surf.Clear(blue); // blue background
 
 	Scene scene(cam);
 	scene.LoadMesh(argv[1]);
 
 	Vector3D moveVec({0.0, 0.0, 1.0});
 
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	for(int x = 0; x < 20; x++)
 	{
-		Color pink{255, 0, 127};
+		// Color pink{255, 0, 127};
+
+		scene.Update(clock.GetTotalElapsedSeconds());
 
 		surf.Clear(blue); // blue background
-		
-		cam.DrawTriangleVector(Pyramid, pink);
-		
+		scene.Draw();
 		win.Display(surf);
-
-		for (Triangle& tri : Pyramid)
-		{
-			tri.move(moveVec);
-		}
+		
+		cam.Rotate(moveVec);
 		
 		Delay(100);
 	}
