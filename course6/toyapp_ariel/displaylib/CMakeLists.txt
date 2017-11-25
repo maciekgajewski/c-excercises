@@ -14,6 +14,7 @@ add_library(displaylib
         scene.cc scene.h
         mat4.h
         triangle.h
+        vector.h
 )
 
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
