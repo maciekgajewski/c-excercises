@@ -9,16 +9,19 @@ int divide(int a, int b)
 	return a/b;
 }
 
+int sum(int a, int b) { return a+b; }
+
 int main(int argc, char** argv)
 {
-	if (argc < 3)
-		throw std::runtime_error("At least 2 arguments required");
+	if (argc < 4)
+		throw std::runtime_error("At least 3 arguments required");
 
 	int a = std::stoi(argv[1]);
 	int b = std::stoi(argv[2]);
+	int c = std::stoi(argv[3]);
+	
+	int result = sum(divide(a, b), c);;
 
-	int result = divide(a, b);
-
-	std::cout << a << " / " << b << " = " << result << std::endl;
+	std::cout << a << " / " << b << " + " << c << " = " << result << std::endl;
 }
  
