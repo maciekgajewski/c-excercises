@@ -16,12 +16,28 @@ int main(int argc, char** argv)
 	if (argc < 4)
 		throw std::runtime_error("At least 3 arguments required");
 
-	int a = std::stoi(argv[1]);
-	int b = std::stoi(argv[2]);
-	int c = std::stoi(argv[3]);
-	
-	int result = sum(divide(a, b), c);;
+	try
+	{
+		int a, b, c;
+		try
+		{
+			a = std::stoi(argv[1]);
+			b = std::stoi(argv[2]);
+			c = std::stoi(argv[3]);
+		}
+		catch(...)
+		{
+			std::cout << "Error reading arguments" << std::endl;
+			throw;
+		}
+			
+		int result = sum(divide(a, b), c);;
 
-	std::cout << a << " / " << b << " + " << c << " = " << result << std::endl;
+		std::cout << a << " / " << b << " + " << c << " = " << result << std::endl;
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << "Error: " << e.what() << std::endl;
+	}
 }
  
