@@ -24,11 +24,19 @@ int main(int argc, char* argv[])
 	}
 	std::cout << "Displaying object loaded from " << argv[1] << "." << std::endl;
 
-	Pixel screenDimensions({1280, 720});
+	SDL_Init( SDL_INIT_EVERYTHING );
+
+	SDL_DisplayMode DM;
+	SDL_GetDesktopDisplayMode(0, &DM);
+	auto width = DM.w;
+	auto height = DM.h;
+	Pixel screenDimensions({width, height});
 
 	Util::Clock clock;
 
 	Window win("Hello", 100, 100, screenDimensions[0], screenDimensions[1]);
+	SDL_SetWindowFullscreen(win.getWindow(), SDL_WINDOW_FULLSCREEN_DESKTOP);
+
 	Surface surf(screenDimensions);
 
 	Vector3D cameraLocation({0, 0, 0});
