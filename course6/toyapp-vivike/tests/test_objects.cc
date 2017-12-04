@@ -9,7 +9,7 @@ using namespace Display;
 
 BOOST_AUTO_TEST_SUITE (camera_tests)
 
-BOOST_AUTO_TEST_CASE (propjection_tests)
+BOOST_AUTO_TEST_CASE (projection_tests)
 {
   Vector3D input3d({3, 2, 1});
   Display::Camera cam;

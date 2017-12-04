@@ -29,10 +29,12 @@ public:
 
 	Matrix44 operator*(const Matrix44& rhs) const;
 	Vector3D operator*(const Vector3D& rhs) const;
+	Vector<float, 4> operator*(const Vector<float, 4>& rhs) const;
 
 	static Matrix44 Zero();
 	static Matrix44 Eye();
 
+	static Matrix44 Perspective(float fieldOfViewDegrees, float aspectRatio);
 	static Matrix44 Scale(float scaling);
 	static Matrix44 Scale(Vector3D scaling);
 	static Matrix44 Translate(Vector3D translation);

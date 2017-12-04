@@ -7,6 +7,9 @@ add_library(displaylib
 	objects.cc objects.h
 	vector.cc vector.h
 	matrix.cc matrix.h
+	keyboard.cc keyboard.h
+	mesh.cc mesh.h
+	mesh_util.cc mesh_util.h
 )
 set_property(TARGET displaylib PROPERTY CXX_STANDARD 14)
 target_link_libraries(displaylib SDL2)

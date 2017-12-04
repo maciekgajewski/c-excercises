@@ -4,6 +4,9 @@
 #include <displaylib/surface3D.h>
 #include <displaylib/objects.h>
 #include <displaylib/matrix.h>
+#include <scene.h>
+
+#include <util/clock.h>
 
 #include <SDL2/SDL_main.h>
 
@@ -12,48 +15,55 @@
 
 using namespace Display;
 
-int main(int, char**)
+int main(int argc, char* argv[])
 {
-	std::cout << "Hello" << std::endl;
+	if (argc < 2)
+	{
+		std::cerr << "Usage: " << argv[0] << " <OBJ_FILE>" << std::endl;
+		return 1;
+	}
+	std::cout << "Displaying object loaded from " << argv[1] << "." << std::endl;
 
-	Window win("Hello", 10, 10, 800, 600);
-	Surface surf(200, 150);
+	SDL_Init( SDL_INIT_EVERYTHING );
 
-	Color blue{0, 0, 102};
+	SDL_DisplayMode DM;
+	SDL_GetDesktopDisplayMode(0, &DM);
+	auto width = DM.w;
+	auto height = DM.h;
+	Pixel screenDimensions({width, height});
 
-	surf.Clear(blue); // blue background
+	Util::Clock clock;
 
-	Vector3D corner1({-0.5, -0.5, -0.5});
-	Vector3D corner2({0.5, 0.5, -0.5});
-	Vector3D corner3({-0.5, 0.5, 0.5});
-	Vector3D corner4({0.5, -0.5, 0.5});
-	Triangle triangle1{corner1, corner2, corner3};
-	Triangle triangle2{corner1, corner2, corner4};
-	Triangle triangle3{corner1, corner3, corner4};
-	Triangle triangle4{corner2, corner3, corner4};
+	Window win("Hello", 100, 100, screenDimensions[0], screenDimensions[1]);
+	SDL_SetWindowFullscreen(win.getWindow(), SDL_WINDOW_FULLSCREEN_DESKTOP);
 
-	std::vector<Triangle> Pyramid{triangle1, triangle2, triangle3, triangle4};
+	Surface surf(screenDimensions);
 
 	Vector3D cameraLocation({0, 0, 0});
 	Vector3D cameraOrientation({0, 0, 0});
 	Surface3D cam(surf, cameraLocation, cameraOrientation);
 
+	Color blue{0, 0, 102};
+	surf.Clear(blue); // blue background
+
+	Scene scene(cam);
+	scene.LoadMesh(argv[1]);
+
 	Vector3D moveVec({0.0, 0.0, 1.0});
+
+	SDL_SetRelativeMouseMode(SDL_TRUE);
 
 	for(int x = 0; x < 20; x++)
 	{
-		Color pink{255, 0, 127};
+		// Color pink{255, 0, 127};
+
+		scene.Update(clock.GetTotalElapsedSeconds());
 
 		surf.Clear(blue); // blue background
-		
-		cam.DrawTriangleVector(Pyramid, pink);
-		
+		scene.Draw();
 		win.Display(surf);
-
-		for (Triangle& tri : Pyramid)
-		{
-			tri.move(moveVec);
-		}
+		
+		cam.Rotate(moveVec);
 		
 		Delay(100);
 	}
