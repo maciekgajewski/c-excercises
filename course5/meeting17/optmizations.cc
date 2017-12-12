@@ -42,7 +42,6 @@ void reading_thread(Buffer& buf)
             std::this_thread::sleep_for(1ms);
         }
     }
-
 }
 
 
@@ -64,24 +63,24 @@ int calculate(int a, int b)
 
 // 0-cost abstractions - unique_ptr //////////////////////////
 
-#include <memory>
+  #include <memory>
 
 
-int use_data(int* dest, int size);
+  int use_data(int* dest, int size);
 
-int fun1(int size)
-{
-  int* data = new int[size];
-  int result = use_data(data, size);
-  delete data;
-  return result;
-}
+  int fun1(int size)
+  {
+    int* data = new int[size];
+    int result = use_data(data, size);
+    delete data;
+    return result;
+  }
 
-int fun2(int size)
-{
-  auto data = std::make_unique<int[]>(size);
-  return use_data(data.get(), size);
-}
+  int fun2(int size)
+  {
+    auto data = std::make_unique<int[]>(size);
+    return use_data(data.get(), size);
+  }
 
 // 0-cost abstractions - algos /////////////////////////////////
 #include <numeric>

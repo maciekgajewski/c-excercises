@@ -65,7 +65,6 @@ int main(int argc, char** argv)
 }
 
 
-
 int init_network()
 {
 	int r;
