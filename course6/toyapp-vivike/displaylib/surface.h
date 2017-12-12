@@ -13,7 +13,7 @@ namespace Display {
 class Surface : private SDLObject
 {
 public:
-	Surface(int w, int h);
+	Surface(Pixel dimensions);
 	~Surface();
 
 	void Clear(Color backgroundColor);

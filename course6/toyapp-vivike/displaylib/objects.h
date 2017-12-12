@@ -16,7 +16,30 @@ struct Color
 	uint8_t B;
 
 	void redder(int amount);
+	Color operator*(float intensity)
+	{
+		return {
+			static_cast<uint8_t>(R*intensity),
+			static_cast<uint8_t>(G*intensity), 
+			static_cast<uint8_t>(B*intensity)
+		};
+	}
+
+	Color operator+(Color rhs)
+	{
+		return {
+			static_cast<uint8_t>(R + rhs.R),
+			static_cast<uint8_t>(G + rhs.G), 
+			static_cast<uint8_t>(B + rhs.B)
+		};
+	}
 };
+
+const Color BLACK{0, 0, 0};
+const Color RED{255, 0, 0};
+const Color GREEN{0, 255, 0};
+const Color BLUE{0, 0, 255};
+const Color YELLOW{255, 255, 0};
 
 struct Camera
 {

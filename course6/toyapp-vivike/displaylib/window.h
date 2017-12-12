@@ -19,6 +19,8 @@ public:
 
 	void Display(const Surface& surface);
 
+	SDL_Window* getWindow();
+
 private:
 
 	SDL_Window* mWindow = nullptr;

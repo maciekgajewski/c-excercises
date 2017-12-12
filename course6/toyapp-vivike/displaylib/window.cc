@@ -21,6 +21,11 @@ Window::~Window()
 		SDL_DestroyWindow(mWindow);
 }
 
+SDL_Window* Window::getWindow()
+{
+	return this->mWindow;
+}
+
 void Window::Display(const Surface& surface)
 {
 	assert(mRenderer);
