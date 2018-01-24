@@ -39,7 +39,8 @@ std::string stringify_summary(const file_summary& summary, bool detailed)
 file_summary summarize_directory(const fs::path& path, bool detailed, bool tree, int indent)
 {
     std::string fileName = "";
-    for (auto i = 0; i < indent; i++){
+    for (auto i = 0; i < indent; i++)
+    {
         fileName += "-";
     }
 
