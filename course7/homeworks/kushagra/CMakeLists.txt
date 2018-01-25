@@ -1,11 +1,14 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0)
 
 project(my_ls)
 
-find_package(Boost COMPONENTS filesystem REQUIRED)
+find_package(Boost 1.55 REQUIRED COMPONENTS filesystem system)
+
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -fexceptions -Wextra -std=c++14")
-add_executable(my_ls my_ls.cpp)
+if(Boost_FOUND)
+	include_directories(${Boost_INCLUDE_DIRS})
+	add_executable(my_ls my_ls.cpp)
+	target_link_libraries(my_ls ${Boost_LIBRARIES})
+endif()
 
-target_link_libraries(my_ls PRIVATE Boost::filesystem)                                                           
-target_include_directories(my_ls PRIVATE Boost::boost)             
