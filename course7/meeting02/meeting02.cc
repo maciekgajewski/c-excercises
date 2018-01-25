@@ -12,17 +12,28 @@ void print(float i)
 	std::cout << "float: " << i << std::endl;
 }
 
+void dbl(int& i)
+{
+	i *= 2;
+}
+
+void print(std::string& s)
+{
+	std::cout << "string: " << s << std::endl;
+}
+
 int main(int argc, char** argv)
 {
-	int i = 55;
-	auto pi = &i;
+	int* p = nullptr;
+	int i = 77;
+	int& r = i;
+	p = &i;
 
-	float f = 44;
-	auto pf = &f;
+	r = 66;
+	dbl(i);
+	dbl(r);
+	print(i);
 
-	std::cout << "*pi = " << *pi << std::endl;
-	pi = reinterpret_cast<int*>(pf);
-	*pi = *pf;
+	print("abc");
 
-	print(*pi);
 }
