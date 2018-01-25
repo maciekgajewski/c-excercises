@@ -1,13 +1,13 @@
-#include <iostream>
 #include <boost/filesystem.hpp>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
 	boost::filesystem::path current_directory(argc >= 2 ? argv[1] : ".");
 
-	boost::filesystem::directory_iterator end;
-	for (boost::filesystem::directory_iterator itr(current_directory); itr != end; ++itr) 
+	boost::filesystem::directory_iterator dir_iterator(current_directory);
+	for (const auto it : dir_iterator)
 	{
-		std::cout << itr->path().filename().string() << std::endl;
+		std::cout << it.path().filename().string() << std::endl;
 	}
 }
