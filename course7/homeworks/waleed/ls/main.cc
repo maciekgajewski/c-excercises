@@ -105,7 +105,7 @@ int main(int argc, char** argv)
 	if (vm.count("help"))
 	{
 		std::cout << desc << std::endl;
-		return 1;
+		return 0;
 	}
 
 	bfs::path currPath;
