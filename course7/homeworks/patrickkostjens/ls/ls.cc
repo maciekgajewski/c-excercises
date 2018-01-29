@@ -5,35 +5,30 @@
 namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
-std::map<const std::string, size_t> cache;
-size_t get_size(const fs::path& path)
+struct node_result
 {
-	const std::string path_string = path.string();
-	if (cache.count(path_string)) return cache.at(path_string);
+	std::string output;
+	size_t size;
+};
 
-	size_t size = 0;
-	if (fs::is_directory(path))
-		for (const auto& it : fs::directory_iterator(path)) 
-			size += get_size(it);
-	else
-		size = fs::file_size(path);
-
-	cache.insert(std::pair<const std::string, size_t>(path_string, size));
-	return size;
-}
-
-void print_contents(const fs::path& path, bool extensive, bool tree, int level = 0)
+node_result* print_contents(const fs::path& path, bool extensive, bool tree, int level = 0)
 {
-	bool is_directory = fs::is_directory(path);
-
-	std::cout << std::string(level * 2, ' ') << path.filename().string();
-	if (is_directory) std::cout << "/";
-	if (extensive) std::cout << ": " << get_size(path);
-	std::cout << std::endl;
-
-	if (is_directory && tree)
+	node_result* result = new node_result();
+	std::string name = path.filename().string();
+	if (fs::is_directory(path)) 
+	{
+		name += "/";
 		for (const auto& it : fs::directory_iterator(path))
-			print_contents(it, extensive, tree, level + 1);
+		{
+			auto child_result = print_contents(it, extensive, tree, level + 1);
+			if (extensive) result->size += child_result->size;
+			if (tree) result->output += child_result->output;
+		}
+	}
+	else if (extensive) result->size = fs::file_size(path);
+
+	result->output = std::string(level * 2, ' ') + name + (extensive ? ": " + std::to_string(result->size) : "") + "\n" + result->output;
+	return result;
 }
 
 int main(int argc, char** argv)
@@ -63,5 +58,5 @@ int main(int argc, char** argv)
 
 	const fs::path path(directory);
 	for (const auto& it : fs::directory_iterator(path))
-		print_contents(it, extensive, tree);
+		std::cout << print_contents(it, extensive, tree)->output;
 }
