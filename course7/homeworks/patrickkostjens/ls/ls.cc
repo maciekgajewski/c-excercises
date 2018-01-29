@@ -5,19 +5,26 @@
 namespace fs = boost::filesystem;
 namespace po = boost::program_options;
 
-size_t get_size(fs::path path)
+std::map<const std::string, size_t> cache;
+size_t get_size(const fs::path& path)
 {
-	if (!fs::is_directory(path)) return fs::file_size(path);
+	const std::string path_string = path.string();
+	if (cache.count(path_string)) return cache.at(path_string);
 
 	size_t size = 0;
-	for (const auto& it : fs::directory_iterator(path)) 
-		size += get_size(it);
+	if (fs::is_directory(path))
+		for (const auto& it : fs::directory_iterator(path)) 
+			size += get_size(it);
+	else
+		size = fs::file_size(path);
+
+	cache.insert(std::pair<const std::string, size_t>(path_string, size));
 	return size;
 }
 
-void print_contents(fs::path path, bool extensive, bool tree, int level = 0)
+void print_contents(const fs::path& path, bool extensive, bool tree, int level = 0)
 {
-	const auto& is_directory = fs::is_directory(path);
+	bool is_directory = fs::is_directory(path);
 
 	std::cout << std::string(level * 2, ' ') << path.filename().string();
 	if (is_directory) std::cout << "/";
