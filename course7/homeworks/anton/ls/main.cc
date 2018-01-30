@@ -83,12 +83,7 @@ void print_file_info(const fs::path& file, const configuration& config, const st
     std::cout << filler;
 
     if (config.show_long)
-    {
-        if (config.show_tree)
-            std::cout << std::setfill('.');
-
         std::cout << std::left << std::setw(12) << get_file_size(file);
-    }
 
     std::cout << file.filename().string();
 
