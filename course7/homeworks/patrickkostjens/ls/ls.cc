@@ -15,17 +15,20 @@ node_result* print_contents(const fs::path& path, bool extensive, bool tree, int
 {
 	node_result* result = new node_result();
 	std::string name = path.filename().string();
-	if (fs::is_directory(path)) 
+	if (!fs::is_symlink(path))
 	{
-		name += "/";
-		for (const auto& it : fs::directory_iterator(path))
+		if (fs::is_directory(path))
 		{
-			auto child_result = print_contents(it, extensive, tree, level + 1);
-			if (extensive) result->size += child_result->size;
-			if (tree) result->output += child_result->output;
+			name += "/";
+				for (const auto& it : fs::directory_iterator(path))
+				{
+					auto child_result = print_contents(it, extensive, tree, level + 1);
+					if (extensive) result->size += child_result->size;
+					if (tree) result->output += child_result->output;
+			}
 		}
+		else if (extensive) result->size = fs::file_size(path);
 	}
-	else if (extensive) result->size = fs::file_size(path);
 
 	result->output = std::string(level * 2, ' ') + name + (extensive ? ": " + std::to_string(result->size) : "") + "\n" + result->output;
 	return result;
