@@ -1,8 +1,13 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 
-struct Complex
+class Complex
 {
+public:
+
+	using component = double;
+
 	// The big 6
 	Complex() { std::cout << "Complex this=" << this << " default-created" << std::endl; }
 	~Complex() { std::cout << "Complex this=" << this << " destroyed" << std::endl; }
@@ -29,18 +34,62 @@ struct Complex
 		return *this;
 	}
 
-	// Option, user defined
-	Complex(double i, double r) 
+	// Optional, user defined
+	Complex(double r, double i) 
 	{
 		std::cout << "Complex this=" << this << " created from r,i" << std::endl;
 		this->i = i; this->r = r;
 	}
 
+	Complex(double r) 
+	{
+		std::cout << "Complex this=" << this << " created from r" << std::endl;
+		this->i = 0; this->r = r;
+	}
 	void print();
 
-	double i = 0.0;
-	double r = 0.0;
+	Complex operator+(const Complex& rhs) const
+	{
+		return Complex(r+rhs.r, i+rhs.i);
+	}
+
+	Complex operator+(double r) const
+	{
+		return Complex(r+this->r, this->i);
+	}
+
+	double get_r() const { return r; }
+	double get_i() const { return i; }
+
+	static double len(const Complex& c) { return c.r + c.i; }
+
+private:
+	component i = 0.0;
+	component r = 0.0;
 };
+
+
+Complex operator+(double r, const Complex& rhs)
+{
+	return Complex(r+rhs.get_r(), rhs.get_i());
+}
+
+
+bool operator ==(Complex lhs, Complex rhs)
+{
+	return lhs.get_i()==rhs.get_i() && lhs.get_r()==rhs.get_r();
+}
+
+std::ostream& operator<<(std::ostream& s, const Complex& c)
+{
+	s << c.get_r() << "+i" << c.get_i();
+	return s;
+}
+
+Complex operator "" _i(long double d)
+{
+	return Complex(0.0, d);
+}
 
 struct PairOfComplex
 {
@@ -48,25 +97,23 @@ struct PairOfComplex
 	Complex second;
 };
 
-Complex make_complex(double r)
+void fun(const Complex& c)
 {
-	return Complex(r, 0.0);
+	std::cout << "fun(" << c << ")" << std::endl;
 }
 
 int main(int argc, char** argv)
 {
-	Complex a(3.3, 4.4);
-	Complex b = a;
-	Complex c(b);
-	Complex d = make_complex(7);
+	Complex c = 2.2 + 6.6_i;
+	Complex a = 7.7;
+	Complex d = {1.1, 4.4};
+	Complex b(7.7);
+	std::cout << c << std::endl;
+	fun(Complex(1.234));
 
-	c = a; // assignment
-	d = make_complex(88);
+	Complex::component x = 5.5;
 
-	a.print();
-	b.print();
-	c.print();
-	d.print();
+	std::cout << "l=" << Complex::len(c) << std::endl;
 }
 
 void Complex::print()
