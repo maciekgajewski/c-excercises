@@ -7,7 +7,7 @@ namespace fs = boost::filesystem;
 
 int main(int argc, char** argv)
 {
-    std::string path_name = "";
+    std::string path_name = ".";
     if (argc > 1) {
         path_name = argv[1];
     }
