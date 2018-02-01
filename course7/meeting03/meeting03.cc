@@ -17,19 +17,33 @@ struct PairOfComplex
 	Complex second;
 };
 
-int main(int argc, char** argv)
+void fun1(int x)
+{
+	if (x > 2)
+		throw std::runtime_error("Boo!");
+}
+
+void fun2(int x)
 {
 	Complex c;
-	
-	PairOfComplex pc;
-	c.i = 5;
-	c.r = 88;
+	c.i = x;
 
-	auto ptr = &c;
-	ptr->r = 3;
+	fun1(x);
 
-	std::cout << "Size of Complex is: " << sizeof(Complex) << std::endl;
 	c.print();
+}
+
+
+int main(int argc, char** argv)
+{
+	try
+	{
+		fun2(argc);
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
 }
 
 void Complex::print()
