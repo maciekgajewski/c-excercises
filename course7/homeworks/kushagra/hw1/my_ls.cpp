@@ -1,21 +1,25 @@
-#include <iostream>
 #include <boost/filesystem.hpp>
+#include <string>
+#include <iostream>
+
+namespace fs = boost::filesystem;
+
 
 int main(int argc, char** argv)
 {
-	boost::filesystem::path full_path(boost::filesystem::current_path());
+    std::string path_name = "";
     if (argc > 1) {
-        boost::filesystem::path new_path(argv[1]);
-		full_path.swap(new_path) ;
+        path_name = argv[1];
     }
+	fs::path full_path(path_name);
 	
-    if (boost::filesystem::exists(full_path)) {
-        if (boost::filesystem::is_regular_file(full_path)) {
+    if (fs::exists(full_path)) {
+        if (fs::is_regular_file(full_path)) {
             std::cout << full_path << std::endl;
         }
         else {
-            for (boost::filesystem::directory_entry& x : boost::filesystem::directory_iterator(full_path)) {
-                std::cout << "\t" << x.path() << std::endl;
+            for (fs::directory_entry& x : fs::recursive_directory_iterator(full_path)) {
+                std::cout << "\t" << x.path().generic_string() << std::endl;
             } 
         } 
     }
