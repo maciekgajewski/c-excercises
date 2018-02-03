@@ -5,15 +5,32 @@
 namespace bf = boost::filesystem;
 namespace bpo = boost::program_options;
 
+uintmax_t fileSize(const bf::path& path)
+{
+	if (!bf::is_directory(path))
+		return bf::file_size(path);
+
+	uintmax_t size = 0;
+	for (auto& entry : bf::recursive_directory_iterator(path))
+	{
+		if (!bf::is_directory(entry.path()))
+			size += bf::file_size(entry.path());
+	}
+	return size;
+}
+
 void listDirectory(const std::string& directory, bool extraInfo, bool recursive)
 {
 	for (auto& entry : bf::directory_iterator(directory))
 	{
-		auto filename = entry.path().filename();
-		std::cout << filename.string();
+		auto filename = entry.path().filename().string();
 		if (bf::is_directory(entry.path()))
-			std::cout << "/";
-		std::cout << std::endl;
+			filename += "/";
+
+		if (extraInfo)
+			std::printf("%-30s %8ju\n", filename.c_str(), fileSize(entry.path()));
+		else
+			std::cout << filename << std::endl;
 	}
 }
 
