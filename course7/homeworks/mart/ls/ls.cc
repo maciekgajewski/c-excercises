@@ -55,10 +55,16 @@ int main(int argc, char** argv)
 	bpo::store(bpo::command_line_parser(argc, argv).options(options).positional(positionalOptions).run(), variablesMap);
 	bpo::notify(variablesMap);
 
-	if (help) {
+	if (help)
+	{
 		std::cout << options << std::endl;
 		return 1;
 	}
 
+	if (!bf::exists(directory) || !bf::is_directory(directory))
+	{
+		std::cerr << "Given path is not valid directory" << std::endl;
+		return 1;
+	}
 	listDirectory(directory, extraInfo, recursive);
 }
