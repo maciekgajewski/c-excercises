@@ -7,16 +7,18 @@ namespace bpo = boost::program_options;
 
 int main(int argc, char** argv)
 {
-	bpo::options_description description{"Options"};
-	description.add_options()
-		("help,h", "Show help screen");
+	bool help = false;
+
+	bpo::options_description options{"Options"};
+	options.add_options()
+		("help,h", bpo::bool_switch(&help), "Show help screen");
 
 	bpo::variables_map variablesMap;
-	bpo::store(bpo::parse_command_line(argc, argv, description), variablesMap);
+	bpo::store(bpo::command_line_parser(argc, argv).options(options).run(), variablesMap);
 	bpo::notify(variablesMap);
 
-	if (variablesMap.count("help")) {
-		std::cout << description << std::endl;
+	if (help) {
+		std::cout << options << std::endl;
 		return 1;
 	}
 
