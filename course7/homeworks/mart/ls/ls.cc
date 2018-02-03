@@ -13,31 +13,40 @@ uintmax_t fileSize(const bf::path& path)
 	uintmax_t size = 0;
 	for (auto& entry : bf::recursive_directory_iterator(path))
 	{
-		try
-		{
-			if (!bf::is_directory(entry.path()))
-				size += bf::file_size(entry.path());
-		}
-		catch (const std::exception& e)
-		{
-			std::cerr << e.what() << std::endl;
-		}
+		if (!bf::is_directory(entry.path()))
+			size += bf::file_size(entry.path());
 	}
 	return size;
 }
 
-void listDirectory(const std::string& directory, bool extraInfo, bool recursive)
+void listDirectory(const bf::path& directory, bool extraInfo, bool recursive, uint32_t level = 0)
 {
 	for (auto& entry : bf::directory_iterator(directory))
 	{
-		auto filename = entry.path().filename().string();
+		std::stringstream filename;
+		for (uint32_t i = 0; i < level; i++)
+			filename << "  ";
+
+		filename << entry.path().filename().string();
 		if (bf::is_directory(entry.path()))
-			filename += "/";
+			filename << "/";
 
 		if (extraInfo)
-			std::printf("%-30s %8ju\n", filename.c_str(), fileSize(entry.path()));
-		else
-			std::cout << filename << std::endl;
+		{
+			try
+			{
+				filename << " [" << fileSize(entry.path()) << "]";
+			}
+			catch (const std::exception& e)
+			{
+				std::cerr << e.what() << std::endl;
+			}
+		}
+
+		std::cout << filename.str().c_str() << std::endl;
+
+		if (bf::is_directory(entry.path()))
+			listDirectory(entry.path(), extraInfo, recursive, level + 1);
 	}
 }
 
