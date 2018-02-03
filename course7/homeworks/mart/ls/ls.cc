@@ -13,8 +13,15 @@ uintmax_t fileSize(const bf::path& path)
 	uintmax_t size = 0;
 	for (auto& entry : bf::recursive_directory_iterator(path))
 	{
-		if (!bf::is_directory(entry.path()))
-			size += bf::file_size(entry.path());
+		try
+		{
+			if (!bf::is_directory(entry.path()))
+				size += bf::file_size(entry.path());
+		}
+		catch (const std::exception& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
 	}
 	return size;
 }
