@@ -21,9 +21,25 @@ struct Complex
 		return { real + rhs.real, imaginary + rhs.imaginary };
 	}
 
-	Complex operator+(double rhs) const
+	Complex operator-(const Complex& rhs) const
 	{
-		return { real + rhs, imaginary };
+		return { real - rhs.real, imaginary - rhs.imaginary };
+	}
+
+	Complex operator*(const Complex& rhs) const
+	{
+		return {
+			(real * rhs.real) - (imaginary * rhs.imaginary),
+			(real * rhs.imaginary) + (imaginary * rhs.real)
+		  };
+	}
+
+	Complex operator/(const Complex& rhs) const
+	{
+		return {
+			((real * rhs.real) + (imaginary * rhs.imaginary)) / ((rhs.real * rhs.real) + (rhs.imaginary * rhs.imaginary)),
+			((imaginary * rhs.real) - (real * rhs.imaginary)) / ((rhs.real * rhs.real) + (rhs.imaginary * rhs.imaginary))
+		  };
 	}
 
 	double real = 0.0;
