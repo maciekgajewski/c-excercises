@@ -73,20 +73,26 @@ public:
 			{
 			case '+':
 				add();
+				i++;
 				break;
 			case '-':
 				subtract();
+				i++;
 				break;
 			case '*':
 				multiply();
+				i++;
 				break;
 			case '/':
 				divide();
+				i++;
 				break;
 			default:
 				i = parseComplex(i);
 			}
-			i++;
+
+			while (i < line.length() && line[i] == ' ')
+				i++;
 		}
 	}
 
