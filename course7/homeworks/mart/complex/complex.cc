@@ -49,7 +49,6 @@ struct Complex
 	double imaginary = 0.0;
 };
 
-
 bool operator==(Complex lhs, Complex rhs)
 {
 	return lhs.real == rhs.real && lhs.imaginary == rhs.imaginary;
@@ -57,7 +56,7 @@ bool operator==(Complex lhs, Complex rhs)
 
 std::ostream& operator<<(std::ostream& stream, const Complex& complex)
 {
-	stream << complex.real << "i" << complex.imaginary;
+	stream << complex.real << "+i" << complex.imaginary;
 	return stream;
 }
 
@@ -106,7 +105,7 @@ public:
 private:
 	std::size_t parseAndPushComplex(std::size_t startIndex)
 	{
-		static const std::regex regex("^([0-9]+.[0-9]+)(?:i([0-9]+.[0-9]+))?");
+		static const std::regex regex("^([0-9]+.[0-9]+)(?:\\+i([0-9]+.[0-9]+))?");
 
 		std::smatch match;
 		std::string::const_iterator begin = line.begin() + startIndex;
@@ -171,23 +170,29 @@ private:
 
 int main(/*int argc, char** argv*/)
 {
-	Calculator ca("12.34i12.34 12.34i12.34 +");
+	Calculator ca("12.34+i12.34 12.34+i12.34 +");
 	ca.execute();
 
-	ca = Calculator("12.34 12.34i12.34 +");
+	ca = Calculator("12.34 12.34+i12.34 +");
 	ca.execute();
 
-	ca = Calculator("12.34i12.34 12.34i12.34 -");
+	ca = Calculator("12.34+i12.34 12.34+i12.34 -");
 	ca.execute();
 
-	ca = Calculator("12.34i12.34 12.34i12.34 *");
+	ca = Calculator("12.34+i12.34 12.34+i12.34 *");
+	ca.execute();
+
+	ca = Calculator("2.0 1.0 * 2.0 4.0 * + 5.0 - +");
 	ca.execute();
 
 	ca = Calculator("2.0 1.0 * 2.0 4.0 * + 5.0 -");
 	ca.execute();
 
-	/*for (std::string line; std::getline(std::cin, line); ) {
+	ca = Calculator("2.0ae arar1.0 * 2.0 4.0 * + 5.0 - +");
+	ca.execute();
+
+	for (std::string line; std::getline(std::cin, line); ) {
 		Calculator c(line);
 		c.execute();
-	}*/
+	}
 }
