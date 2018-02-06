@@ -112,10 +112,10 @@ private:
 		std::string::const_iterator end = line.end();
 		bool found = std::regex_search(begin, end, match, regex);
 
-		if (!found || match.size() > 3)
+		if (!found || match.size() != 3)
 		{
 			std::stringstream s;
-			s << "Could not parse complex number at pos " << startIndex << " in line: \"" << line << "\"";
+			s << "Parse error at pos " << startIndex << " in line: \"" << line << "\"";
 			throw std::runtime_error(s.str());
 		}
 
