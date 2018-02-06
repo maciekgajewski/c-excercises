@@ -67,39 +67,44 @@ public:
 
 	void execute()
 	{
-		std::size_t i = 0;
-		while (i < line.length())
+		try
 		{
-			switch (line[i])
+			std::size_t i = 0;
+			while (i < line.length())
 			{
-			case '+':
-				add();
-				i++;
-				break;
-			case '-':
-				subtract();
-				i++;
-				break;
-			case '*':
-				multiply();
-				i++;
-				break;
-			case '/':
-				divide();
-				i++;
-				break;
-			default:
-				i = parseAndPushComplex(i);
+				switch (line[i])
+				{
+				case '+':
+					add();
+					i++;
+					break;
+				case '-':
+					subtract();
+					i++;
+					break;
+				case '*':
+					multiply();
+					i++;
+					break;
+				case '/':
+					divide();
+					i++;
+					break;
+				default:
+					i = parseAndPushComplex(i);
+				}
+
+				while (i < line.length() && line[i] == ' ')
+					i++;
 			}
 
-			while (i < line.length() && line[i] == ' ')
-				i++;
-		}
-
-		if (stack.empty())
-			std::cout << "empty" << std::endl;
-		else
 			std::cout << stack.top() << std::endl;
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << "Error executing line: " << e.what() << std::endl;
+			std::cout << "empty" << std::endl;
+		}
 	}
 
 private:
