@@ -96,6 +96,11 @@ public:
 			while (i < line.length() && line[i] == ' ')
 				i++;
 		}
+
+		if (stack.empty())
+			std::cout << "empty" << std::endl;
+		else
+			std::cout << stack.top() << std::endl;
 	}
 
 private:
