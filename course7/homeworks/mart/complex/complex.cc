@@ -125,7 +125,7 @@ private:
 
 	std::pair<Complex, Complex> popPair()
 	{
-		if (stack.size() <= 2)
+		if (stack.size() < 2)
 			throw std::runtime_error("Stack does not contain 2 items");
 		std::pair<Complex, Complex> pair;
 		pair.first = stack.top();
@@ -138,25 +138,25 @@ private:
 	void add()
 	{
 		auto pair = popPair();
-		stack.push(pair.first + pair.second);
+		stack.push(pair.second + pair.first);
 	}
 
 	void subtract()
 	{
 		auto pair = popPair();
-		stack.push(pair.first - pair.second);
+		stack.push(pair.second - pair.first);
 	}
 
 	void multiply()
 	{
 		auto pair = popPair();
-		stack.push(pair.first * pair.second);
+		stack.push(pair.second * pair.first);
 	}
 
 	void divide()
 	{
 		auto pair = popPair();
-		stack.push(pair.first / pair.second);
+		stack.push(pair.second / pair.first);
 	}
 
 private:
