@@ -55,7 +55,7 @@ bool operator==(Complex lhs, Complex rhs)
 
 std::ostream& operator<<(std::ostream& stream, const Complex& complex)
 {
-	stream << complex.real << "+i" << complex.imaginary;
+	stream << complex.real << "i" << complex.imaginary;
 	return stream;
 }
 
