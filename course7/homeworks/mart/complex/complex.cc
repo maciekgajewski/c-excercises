@@ -175,27 +175,6 @@ private:
 
 int main(/*int argc, char** argv*/)
 {
-	Calculator ca("12.34+i12.34 12.34+i12.34 +");
-	ca.execute();
-
-	ca = Calculator("12.34 12.34+i12.34 +");
-	ca.execute();
-
-	ca = Calculator("12.34+i12.34 12.34+i12.34 -");
-	ca.execute();
-
-	ca = Calculator("12.34+i12.34 12.34+i12.34 *");
-	ca.execute();
-
-	ca = Calculator("2.0 1.0 * 2.0 4.0 * + 5.0 - +");
-	ca.execute();
-
-	ca = Calculator("2.0 1.0 * 2.0 4.0 * + 5.0 -");
-	ca.execute();
-
-	ca = Calculator("2.0ae arar1.0 * 2.0 4.0 * + 5.0 - +");
-	ca.execute();
-
 	for (std::string line; std::getline(std::cin, line); ) {
 		Calculator c(line);
 		c.execute();
