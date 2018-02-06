@@ -1,6 +1,8 @@
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <stack>
+#include <regex>
 
 struct Complex
 {
@@ -88,7 +90,7 @@ public:
 				i++;
 				break;
 			default:
-				i = parseComplex(i);
+				i = parseAndPushComplex(i);
 			}
 
 			while (i < line.length() && line[i] == ' ')
@@ -97,9 +99,28 @@ public:
 	}
 
 private:
-	std::size_t parseComplex(std::size_t& startIndex)
+	std::size_t parseAndPushComplex(std::size_t startIndex)
 	{
-		return startIndex;
+		static const std::regex regex("^([0-9]+.[0-9]+)(?:i([0-9]+.[0-9]+))?");
+
+		std::smatch match;
+		std::string::const_iterator begin = line.begin() + startIndex;
+		std::string::const_iterator end = line.end();
+		bool found = std::regex_search(begin, end, match, regex);
+
+		if (!found || match.size() > 3)
+		{
+			std::stringstream s;
+			s << "Could not parse complex number at pos " << startIndex << " in line: \"" << line << "\"";
+			throw std::runtime_error(s.str());
+		}
+
+		Complex c(std::stod(match[1].str()));
+		if (match[3].matched)
+			c.imaginary = std::stod(match[2].str());
+
+		stack.push(c);
+		return startIndex + match.length();
 	}
 
 	std::pair<Complex, Complex> popPair()
