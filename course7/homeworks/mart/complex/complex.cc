@@ -145,12 +145,23 @@ private:
 
 int main(/*int argc, char** argv*/)
 {
-	Complex d = {1.1, 4.4};
-	Complex b(7.7);
-	std::cout << b << std::endl;
+	Calculator ca("12.34i12.34 12.34i12.34 +");
+	ca.execute();
 
-	for (std::string line; std::getline(std::cin, line); ) {
+	ca = Calculator("12.34 12.34i12.34 +");
+	ca.execute();
+
+	ca = Calculator("12.34i12.34 12.34i12.34 -");
+	ca.execute();
+
+	ca = Calculator("12.34i12.34 12.34i12.34 *");
+	ca.execute();
+
+	ca = Calculator("2.0 1.0 * 2.0 4.0 * + 5.0 -");
+	ca.execute();
+
+	/*for (std::string line; std::getline(std::cin, line); ) {
 		Calculator c(line);
 		c.execute();
-	}
+	}*/
 }
