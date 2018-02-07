@@ -2,8 +2,6 @@
 
 #include "complex.h"
 
-#include <exception>
-#include <iostream>
 #include <stack>
 
 class RpnCalculator

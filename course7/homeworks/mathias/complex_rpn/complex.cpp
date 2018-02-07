@@ -1,5 +1,7 @@
 #include "complex.h"
 
+#include <cmath>
+
 Complex::Complex(double real, double imaginary)
 	: mReal(real)
 	, mImaginary(imaginary)
