@@ -8,6 +8,21 @@ namespace po = boost::program_options;
 namespace fs = boost::filesystem;
 
 
+//For directory display without details
+void print_dir_contents(fs::path full_path) {
+    std::cout << full_path.generic_string() << fs::path::preferred_separator << std::endl;
+    for (fs::directory_entry& x : fs::directory_iterator(full_path)) {
+        if (fs::is_regular_file(x.path())) {
+            std::cout << "\t" << x.path().filename().string() << std::endl;
+        } else {
+            std::cout << "\t" << x.path().filename().generic_string() << fs::path::preferred_separator
+                << std::endl;
+        }
+    } 
+}
+
+
+//Function overloading. For recursive directory display without details
 void print_dir_contents(fs::path display_path, std::string spaces) {
     if (fs::is_regular_file(display_path)) {
         std::cout << spaces << display_path.filename().generic_string() << std::endl;
@@ -23,57 +38,70 @@ void print_dir_contents(fs::path display_path, std::string spaces) {
 }
 
 
-// std::cout << spaces << boost::file_size(full_path) << "\t" << full_path.generic_string() << std::endl;
-
-
-void print_dir_contents(fs::path full_path) {
-    std::cout << full_path.generic_string() << fs::path::preferred_separator << std::endl;
-    for (fs::directory_entry& x : fs::directory_iterator(full_path)) {
-        if (fs::is_regular_file(x.path())) {
-            std::cout << "\t" << x.path().filename().string() << std::endl;
-        } else {
-            std::cout << "\t" << x.path().filename().generic_string() << fs::path::preferred_separator
-                << std::endl;
-        }
-    } 
-}
-
-
-void print_detailed_dir_contents(fs::path full_path) {
+/*
+Calculate the size of the files in the directory. If recursive is set to true, the total size of all files in the
+directory and its subdirectories. If set to false, only the size of the files in the directory is calculated and
+returned.
+*/
+int get_dir_size(fs::path dir_path, bool recursive=false) {
     int dir_size = 0;
-    std::vector<std::string> file_vector;
-    for (fs::directory_entry& x : fs::directory_iterator(full_path)) {
-        if (fs::is_regular_file(x.path())) {
-            int file_size = fs::file_size(x.path());
-            dir_size += file_size;
-            file_vector.push_back("\t" + std::to_string(file_size) + "\t" + x.path().filename().string());
-        } else {
-            file_vector.push_back("\t0\t" + x.path().filename().generic_string() + fs::path::preferred_separator);
-        }
-    }
-    std::cout << std::to_string(dir_size) << "\t" << full_path.generic_string() <<
-        fs::path::preferred_separator << std::endl;
-    for (std::string& s : file_vector) {
-        std::cout << s << std::endl;
+	if(recursive) {
+		for (fs::directory_entry& x : fs::recursive_directory_iterator(dir_path)) {
+			if (fs::is_regular_file(x)) {
+				dir_size += fs::file_size(x);
+			}
+		}
+	} else {
+		for (fs::directory_entry& x : fs::directory_iterator(dir_path)) {
+			if (fs::is_regular_file(x)) {
+				dir_size += fs::file_size(x);
+			}
+		}
+	}
+	return dir_size;
+}
+
+
+/*Display the directory contents, along with the sizes. The size of the directory is calculated by the sum of all
+the sizes of immediate descendant files in the directory
+*/
+void print_detailed_dir_contents(fs::path display_path) {
+	int file_size = 0;
+	int dir_size = get_dir_size(display_path);
+	std::cout << std::to_string(dir_size) << "\t" << display_path.filename().generic_string()
+			  << fs::path::preferred_separator << std::endl;
+	for (fs::directory_entry& x : fs::directory_iterator(display_path)) {
+		if (fs::is_regular_file(x.path())) {
+			file_size = fs::file_size(x.path());
+			std::cout << "\t" << std::to_string(file_size) << "\t" << x.path().filename().string() << std::endl;
+		}
+		else {
+			dir_size = get_dir_size(x.path());
+			std::cout << "\t" << std::to_string(dir_size) << "\t" << x.path().filename().generic_string()
+					  << fs::path::preferred_separator << std::endl;
+		}
     }
 }
 
 
+/*Display the directory contents, along with the sizes. The size of the directory is calculated by the sum of all
+the sizes of immediate descendant files in the directory, as well as its subdirectories.
+*/
 void print_detailed_dir_contents(fs::path display_path, std::string spaces) {
-    int* file_sizes = 0;
-    std::vector<std::string> v;
-    if (fs::is_regular_file(display_path)) {
-        int file_size = fs::file_size(display_path);
-        v.push_back(spaces + std::to_string(file_size) + "\t" + display_path.filename().generic_string());
-        *file_sizes += file_size;
-    }
+	int dir_size = 0;
+	int file_size = 0;
+	if (fs::is_regular_file(display_path)) {
+		file_size = fs::file_size(display_path);
+		std::cout << spaces << std::to_string(file_size) << "\t" << display_path.filename().string() << std::endl;
+	}
     else {
+		dir_size = get_dir_size(display_path, true);
+        std::cout << spaces << std::to_string(dir_size) << "\t" << display_path.filename().generic_string()
+				  << fs::path::preferred_separator << std::endl;
         spaces += "\t";
         for (fs::directory_entry& x : fs::directory_iterator(display_path)) {
-            print_dir_contents(x.path(), spaces);
+            print_detailed_dir_contents(x.path(), spaces);
         }
-        v.push_back(spaces + std::to_string(*file_sizes) +  "\t" + display_path.filename().generic_string() +
-                        fs::path::preferred_separator);
     }
 }
 
