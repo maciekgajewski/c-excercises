@@ -62,73 +62,50 @@ std::ostream& operator<<(std::ostream& stream, const Complex& complex)
 class Calculator
 {
 public:
-	Calculator(const std::string& l) : line(l) {}
-
-	void execute()
+	void run()
 	{
-		try
+		for (std::string line; std::getline(std::cin, line); )
 		{
-			std::size_t i = 0;
-			while (i < line.length())
+			try
 			{
-				switch (line[i])
-				{
-				case '+':
+				if (line == "+")
 					add();
-					i++;
-					break;
-				case '-':
+				else if (line == "-")
 					subtract();
-					i++;
-					break;
-				case '*':
+				else if (line == "*")
 					multiply();
-					i++;
-					break;
-				case '/':
+				else if (line == "/")
 					divide();
-					i++;
-					break;
-				default:
-					i = parseAndPushComplex(i);
-				}
-
-				while (i < line.length() && line[i] == ' ')
-					i++;
+				else
+					parseAndPushComplex(line);
 			}
-
-			std::cout << stack.top() << std::endl;
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << "Error executing line: " << e.what() << std::endl;
-			std::cout << "empty" << std::endl;
+			catch(const std::exception& e)
+			{
+				std::cerr << "Error executing line: " << e.what() << std::endl;
+			}
+			if (stack.empty())
+				std::cout << "empty" << std::endl;
+			else
+				std::cout << stack.top() << std::endl;
 		}
 	}
 
 private:
-	std::size_t parseAndPushComplex(std::size_t startIndex)
+	void parseAndPushComplex(const std::string& line)
 	{
-		static const std::regex regex("^([0-9]+.[0-9]+)(?:\\+i([0-9]+.[0-9]+))?");
+		static const std::regex regex("^([0-9]+.[0-9]+)(?:\\+i([0-9]+.[0-9]+))?$");
 
 		std::smatch match;
-		std::string::const_iterator begin = line.begin() + startIndex;
-		std::string::const_iterator end = line.end();
-		bool found = std::regex_search(begin, end, match, regex);
+		bool found = std::regex_match(line, match, regex);
 
 		if (!found || match.size() != 3)
-		{
-			std::stringstream s;
-			s << "Parse error at pos " << startIndex << " in line: \"" << line << "\"";
-			throw std::runtime_error(s.str());
-		}
+			throw std::runtime_error("Cannot parse complex number");
 
 		Complex c(std::stod(match[1].str()));
-		if (match[3].matched)
+		if (match[2].matched)
 			c.imaginary = std::stod(match[2].str());
 
 		stack.push(c);
-		return startIndex + match.length();
 	}
 
 	std::pair<Complex, Complex> popPair()
@@ -168,14 +145,11 @@ private:
 	}
 
 private:
-	std::string line;
 	std::stack<Complex> stack;
 };
 
 int main(/*int argc, char** argv*/)
 {
-	for (std::string line; std::getline(std::cin, line); ) {
-		Calculator c(line);
-		c.execute();
-	}
+	Calculator c;
+	c.run();
 }
