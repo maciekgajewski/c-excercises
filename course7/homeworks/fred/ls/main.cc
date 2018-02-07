@@ -40,12 +40,14 @@ size_t getDirectorySize(const boost::filesystem::path& path)
         });
 }
 
-void print(const boost::filesystem::path& path, int level)
+void print(const boost::filesystem::path& path, int level, bool showDetails)
 {
   using namespace boost::filesystem;
 
   // details
-  std::cout << humanReadableByteCount(is_regular_file(path) ? file_size(path) : getDirectorySize(path)) << "\t";
+  if (showDetails) {
+    std::cout << humanReadableByteCount(is_regular_file(path) ? file_size(path) : getDirectorySize(path)) << "\t";
+  }
 
   // identation
   std::cout << std::string(level * 3, ' ');
@@ -58,27 +60,27 @@ void print(const boost::filesystem::path& path, int level)
   std::cout << std::endl;
 }
 
-void printDirectoryContents(const boost::filesystem::recursive_directory_iterator& dir_iterator)
+void printDirectoryContents(const boost::filesystem::recursive_directory_iterator& dir_iterator, bool showDetails)
 {
   for (auto it = begin(dir_iterator); it != end(dir_iterator); ++it) {
-    print(it->path(), it.level());
+    print(it->path(), it.level(), showDetails);
   }
 }
 
-void printDirectoryContents(const boost::filesystem::directory_iterator& dir_iterator)
+void printDirectoryContents(const boost::filesystem::directory_iterator& dir_iterator, bool showDetails)
 {
   for (auto& entry : dir_iterator) {
-    print(entry.path(), 0);
+    print(entry.path(), 0, showDetails);
   }
 }
 
-auto printDirectoryContents(const std::string& directory, bool recursive)
+auto printDirectoryContents(const std::string& directory, bool recursive, bool showDetails)
 {
   auto path = boost::filesystem::path(directory);
 
   recursive
-      ? printDirectoryContents(boost::filesystem::recursive_directory_iterator(path))
-      : printDirectoryContents(boost::filesystem::directory_iterator(path));
+      ? printDirectoryContents(boost::filesystem::recursive_directory_iterator(path), showDetails)
+      : printDirectoryContents(boost::filesystem::directory_iterator(path), showDetails);
 }
 
 auto parseArguments(int argc, char** argv)
@@ -111,28 +113,22 @@ auto parseArguments(int argc, char** argv)
 
 int main(int argc, char** argv)
 {
-  try {
-    auto arguments = parseArguments(argc, argv);
-  
-    //bool showDetails = arguments.count("long");
-    bool showTree = arguments.count("tree");
-    
-    std::string directory;
-    if (arguments.count("directory") == 1) {
-      directory = arguments["directory"].as<std::string>();
-    }
-    else if (arguments.count("directory") == 0) {
-      directory = ".";
-    }
-    else {
-      std::cout << "More than one directory specified\n";
-      return 1;
-    }
-  
-    printDirectoryContents(directory, showTree);
+  auto arguments = parseArguments(argc, argv);
 
-  } catch (const std::exception& ex) {
-    std::cout << ex.what() << std::endl;
+  bool showDetails = arguments.count("long");
+  bool showTree = arguments.count("tree");
+  
+  std::string directory;
+  if (arguments.count("directory") == 1) {
+    directory = arguments["directory"].as<std::string>();
+  }
+  else if (arguments.count("directory") == 0) {
+    directory = ".";
+  }
+  else {
+    std::cout << "More than one directory specified\n";
     return 1;
   }
+
+  printDirectoryContents(directory, showTree, showDetails);
 }
