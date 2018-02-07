@@ -44,14 +44,14 @@ struct Complex
 		  };
 	}
 
+	bool operator==(const Complex& rhs)
+	{
+		return real == rhs.real && imaginary == rhs.imaginary;
+	}
+
 	double real = 0.0;
 	double imaginary = 0.0;
 };
-
-bool operator==(Complex lhs, Complex rhs)
-{
-	return lhs.real == rhs.real && lhs.imaginary == rhs.imaginary;
-}
 
 std::ostream& operator<<(std::ostream& stream, const Complex& complex)
 {
