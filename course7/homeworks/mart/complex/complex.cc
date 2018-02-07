@@ -9,7 +9,6 @@ struct Complex
 	Complex() = default;
 	Complex(double r) : real(r) {}
 	Complex(double r, double i) : real(r) , imaginary(i) {}
-	~Complex() = default;
 	Complex(const Complex& src) : real(src.real) , imaginary(src.imaginary) {}
 
 	Complex& operator=(const Complex& src)
