@@ -31,7 +31,17 @@ public:
 	}
 
 	// TODO read
-	// TODO getSize
+	
+	size_t getSize() const
+	{
+		struct stat out;
+		int res = ::fstat(mFd, &out);
+
+		if (res != 0)
+			throw std::runtime_error("Error reading the file stats");
+		
+		return out.st_size;
+	}
 
 	~File()
 	{
@@ -54,5 +64,6 @@ int main(int argc, char** argv)
 		throw std::runtime_error("Arg required");
 	
 	File f(argv[1]);
+	std::cout << "The size of " << argv[1] << " is " << f.getSize() << std::endl;
 	f.write("Hello!");
 }
