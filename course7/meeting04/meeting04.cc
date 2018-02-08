@@ -22,6 +22,15 @@ public:
 			throw std::runtime_error("Failed opening the file");
 	}
 
+	File(const File&) = delete;
+
+	File(File&& other)
+	{
+		std::cout << "Stealing file" << std::endl;
+		mFd = other.mFd;
+		other.mFd = -1;
+	}
+
 	void write(const std::string& s) /* no const */
 	{
 		std::cout << "Writing string: " << s << std::endl;
@@ -45,12 +54,29 @@ public:
 
 	~File()
 	{
-		std::cout << "Closing file" << std::endl;
-		int res = ::close(mFd);
-		if (res != 0)
+		if (mFd != -1)
 		{
-			std::cerr << "Error closing a file" << std::endl;
+			std::cout << "Closing file" << std::endl;
+			int res = ::close(mFd);
+			if (res != 0)
+			{
+				std::cerr << "Error closing a file" << std::endl;
+			}
 		}
+		else
+		{
+			std::cout << "Zombie, not closing" << std::endl;
+		}
+	}
+
+	File& operator=(File&& other)
+	{
+		std::cout << "Assiging from another" << std::endl;
+		if (mFd != -1)
+			::close(mFd);
+		mFd = other.mFd;
+		other.mFd = -1;
+		return *this;
 	}
 
 private:
@@ -86,15 +112,25 @@ private:
 };
 
 
+File getBigger(const std::string& path1, const std::string& path2)
+{
+	File f1(path1), f2(path2);
+
+	if (f1.getSize() > f2.getSize())
+		return f1;
+	else
+		return f2;
+}
 
 int main(int argc, char** argv)
 {
 	if (argc < 2)
 		throw std::runtime_error("Arg required");
 	
-	Logger logger(argv[1]);
+	File g = getBigger("a", "b");
+	g.write("This is the bigger file");
 
-	logger.info("Program started");
-	logger.debug("boo!");
+	g = getBigger("x", "y");
+	g.write("This is another bigger file");
 
 }
