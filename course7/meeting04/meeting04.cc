@@ -1,6 +1,11 @@
 #include <string>
 #include <iostream>
 #include <stdexcept>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 // - read string
 // - write string
 // - check size
@@ -11,7 +16,9 @@ public:
 	explicit File(const std::string& path /*, mode*/)
 	{
 		std::cout << "Opening file at: " << path << std::endl;
-		// TODO implement, open the file
+		mFd = ::open(path.c_str(), O_APPEND|O_CREAT|O_RDWR, 0666);
+		if (mFd < 0)
+			throw std::runtime_error("Failed opening the file");
 	}
 
 	void write(const std::string& s) /* no const */
