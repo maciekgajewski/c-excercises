@@ -58,12 +58,43 @@ private:
 	int mFd;
 };
 
+class Logger
+{
+public:
+
+	Logger(const std::string& path)
+		: mFile(path)
+	{
+		debug("Log open");
+	}
+
+	~Logger() { debug("Log closed"); }
+
+	void info(const std::string& message)
+	{
+		mFile.write("[INFO ] " + message + "\n");
+	}
+
+	void debug(const std::string& message)
+	{
+		mFile.write("[DEBUG] " + message + "\n");
+	}
+
+private:
+
+	File mFile;
+};
+
+
+
 int main(int argc, char** argv)
 {
 	if (argc < 2)
 		throw std::runtime_error("Arg required");
 	
-	File f(argv[1]);
-	std::cout << "The size of " << argv[1] << " is " << f.getSize() << std::endl;
-	f.write("Hello!");
+	Logger logger(argv[1]);
+
+	logger.info("Program started");
+	logger.debug("boo!");
+
 }
