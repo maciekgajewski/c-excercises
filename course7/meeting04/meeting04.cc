@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 // - read string
 // - write string
@@ -24,7 +25,9 @@ public:
 	void write(const std::string& s) /* no const */
 	{
 		std::cout << "Writing string: " << s << std::endl;
-		// TODO implement
+		ssize_t res = ::write(mFd, s.c_str(), s.length());
+		if (res < 0)
+			throw std::runtime_error("Error writing to file");
 	}
 
 	// TODO read
@@ -32,8 +35,12 @@ public:
 
 	~File()
 	{
-		// TODO
 		std::cout << "Closing file" << std::endl;
+		int res = ::close(mFd);
+		if (res != 0)
+		{
+			std::cerr << "Error closing a file" << std::endl;
+		}
 	}
 
 private:
