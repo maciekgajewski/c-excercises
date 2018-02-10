@@ -1,16 +1,17 @@
 #include <stdexcept>
+#include <iostream>
 #include "calculator.h"
 
 void Calculator::parse(const std::string& input)
 {
     if (input == "+")
-        return add();
-    else if (input == "+")
-        return add();
+        add();
+    else if (input == "-")
+        subtract();
     else if (input == "*")
-        return add();
+        multiply();
     else if (input == "/")
-        return add();
+        divide();
     else
         mStack.emplace(input);
 }
@@ -57,4 +58,16 @@ void Calculator::divide()
     Complex c2 = mStack.top();
     mStack.pop();
     mStack.emplace(c1 / c2);
+}
+
+void Calculator::printValue()
+{
+    if(mStack.size() > 0)
+    {
+        std::cout << "=" << mStack.top() << std::endl;
+    }
+    else
+    {
+        std::cout << "Empty" << std::endl;
+    }
 }

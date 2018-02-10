@@ -1,1 +1,0 @@
-/usr/bin/c++  -g  -rdynamic CMakeFiles/calculator.dir/complex.cpp.o CMakeFiles/calculator.dir/calculator.cpp.o  -o calculator -lboost_filesystem -lboost_program_options -lboost_system 

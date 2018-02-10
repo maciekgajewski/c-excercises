@@ -10,6 +10,7 @@ public:
     void subtract();
     void multiply();
     void divide();
+    void printValue();
 private:
     std::stack<Complex> mStack;
 };
