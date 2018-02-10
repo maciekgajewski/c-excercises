@@ -1,0 +1,1 @@
+/usr/bin/c++  -g  -rdynamic CMakeFiles/ls.dir/ls.cc.o  -o ls -lboost_filesystem -lboost_program_options -lboost_system 
