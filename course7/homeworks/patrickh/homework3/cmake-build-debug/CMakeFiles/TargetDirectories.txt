@@ -1,0 +1,3 @@
+/home/patrick/c-excercises/course7/homeworks/patrickh/homework3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/patrick/c-excercises/course7/homeworks/patrickh/homework3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/patrick/c-excercises/course7/homeworks/patrickh/homework3/cmake-build-debug/CMakeFiles/calculator.dir
