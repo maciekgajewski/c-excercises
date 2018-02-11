@@ -27,6 +27,6 @@ private:
 
 inline std::ostream& operator<<(std::ostream& os, const Complex& arg)
 {
-    os << arg.GetR() << " +i" << arg.GetI();
+    os << arg.GetR() << " + i" << arg.GetI();
     return os;
 }
