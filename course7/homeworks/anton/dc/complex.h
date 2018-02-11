@@ -1,4 +1,8 @@
+#pragma once
+
 #include <iostream>
+
+namespace complex {
 
 struct Complex
 {
@@ -43,6 +47,17 @@ struct Complex
     double mI = 0.0;
 };
 
-std::ostream& operator<<(std::ostream& s, const Complex& rhs);
+typedef Complex (*operation)(Complex&, Complex&);
 
-std::istream& operator>>(std::istream& s, Complex& rhs);
+Complex add(Complex& n1, Complex& n2);
+
+Complex substruct(Complex& n1, Complex& n2);
+
+Complex multiply(Complex& n1, Complex& n2);
+
+Complex divide(Complex& n1, Complex& n2);
+}
+
+std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs);
+
+std::istream& operator>>(std::istream& s, complex::Complex& rhs);

@@ -4,7 +4,7 @@
 
 bool digit_is_comming(std::istream& s);
 
-std::ostream& operator<<(std::ostream& s, const Complex& rhs)
+std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs)
 {
     if (rhs.mR == 0.0)
     {
@@ -27,7 +27,7 @@ std::ostream& operator<<(std::ostream& s, const Complex& rhs)
     return s;
 }
 
-std::istream& operator>>(std::istream& s, Complex& rhs)
+std::istream& operator>>(std::istream& s, complex::Complex& rhs)
 {
     bool isPositive = true;
     bool isImaginary = false;
@@ -55,4 +55,26 @@ std::istream& operator>>(std::istream& s, Complex& rhs)
         rhs.mR = isPositive ? modulus : -modulus;
 
     return s;
+}
+
+namespace complex {
+Complex add(Complex& n1, Complex& n2)
+{
+    return n1 + n2;
+}
+
+Complex substruct(Complex& n1, Complex& n2)
+{
+    return n1 - n2;
+}
+
+Complex multiply(Complex& n1, Complex& n2)
+{
+    return n1 * n2;
+}
+
+Complex divide(Complex& n1, Complex& n2)
+{
+    return n1 / n2;
+}
 }
