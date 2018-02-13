@@ -10,22 +10,22 @@ void Calculator::PushLine(const std::string& str)
         {
             throw std::runtime_error("Not enough operands to perform operation");
         }
-        Complex tmp1 = st.top(); st.pop();
-        Complex tmp2 = st.top(); st.pop();
+        Complex operand2 = st.top(); st.pop();
+        Complex operand1 = st.top(); st.pop();
         Complex newTop;
         switch (str[0])
         {
         case('+') :
-            newTop = tmp1 + tmp2;
+            newTop = operand1 + operand2;
             break;
         case('*') :
-            newTop = tmp1 * tmp2;
+            newTop = operand1 * operand2;
             break;
         case('-') :
-            newTop = tmp1 - tmp2;
+            newTop = operand1 - operand2;
             break;
         case('/') :
-            newTop = tmp1 / tmp2;
+            newTop = operand1 / operand2;
             break;
         }
         st.push(newTop);
