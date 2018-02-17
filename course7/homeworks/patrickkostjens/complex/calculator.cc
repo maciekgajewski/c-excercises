@@ -10,7 +10,13 @@ void Calculator::print_status(std::ostream& stream) const
 
 void Calculator::process_line(const std::string& line)
 {
-    if (line.length() == 1)
+    auto plugin_it = plugins.find(line);
+    if (plugin_it != plugins.end())
+    {
+        auto plugin_func = *plugin_it->second;
+        plugin_func(&stack);
+    }
+    else if (line.length() == 1)
     {
         if (line == "q") exit(EXIT_SUCCESS);
         if (line == "c")
@@ -46,4 +52,9 @@ Complex Calculator::parse_complex_input(const std::string& line) const
     if (match[4].matched) c.imaginary = std::stod(match[3].str() + match[4].str());
 
     return c;
+}
+
+void Calculator::add_plugin(const std::string& name, plugin *handler)
+{
+    plugins[name] = handler;
 }
