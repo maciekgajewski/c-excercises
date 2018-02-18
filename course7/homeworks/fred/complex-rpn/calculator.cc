@@ -18,17 +18,9 @@ namespace {
 
       case Operator::DIVISION:
         return operand1 / operand2;
-
-      default:
-        assert(false);
-        return {0, 0};
     }
   }
 
-}
-
-void RpnCalculator::insert(Complex complex) {
-  stack.push(complex);
 }
 
 Complex RpnCalculator::insert(Operator op) {
@@ -53,12 +45,4 @@ Complex RpnCalculator::insert(Operator op) {
     stack.push(operand2);
     throw;
   }
-}
-
-const Complex& RpnCalculator::getTop() const {
-  return stack.top();
-}
-
-bool RpnCalculator::isEmpty() const {
-  return stack.empty();
 }

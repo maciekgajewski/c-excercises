@@ -1,6 +1,6 @@
 #include "complex.h"
+#include "operator.h"
 #include "calculator.h"
-#include "utils.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -14,51 +14,42 @@ void insert(RpnCalculator& calculator, Operator op) {
   std::cout << "Result so far: " << result << std::endl;
 }
 
+void printTopOfStack(const RpnCalculator& calculator) {
+  std::cout << "Top of stack: ";
+
+  if (calculator.isEmpty())
+    std::cout << "empty";
+  else
+    std::cout << calculator.getTop();
+
+  std::cout << std::endl;
+}
+
 int main(int argc, char** args) {
   std::cout << "Welcome!" << std::endl;
   std::cout << "Type 'q' to quit" << std::endl << std::endl;
 
   RpnCalculator calculator;
 
-  std::string input = "";
+  std::string input;
   while (true) {
     std::getline(std::cin, input);
     if (input == "q")
       break;
 
-    bool parseFailed = false;
-
     try {
-      // try to parse a number first
-      auto parseComplexResult = tryParseComplexFromString(input);
-      if (parseComplexResult.first) {
-        insert(calculator, parseComplexResult.second);
+      if (isOperator(input)) {
+        insert(calculator, parseOperatorFromString(input));
       }
       else {
-        // if failed, try to parse it as an operator
-        auto parseOperatorResult = tryParseOperatorFromString(input);
-        if (parseOperatorResult.first) {
-          insert(calculator, parseOperatorResult.second);
-        }
-        else {
-          parseFailed = true;
-        }
+        insert(calculator, Complex(input));
       }
     }
-    catch (const std::runtime_error& e) {
+    catch (const std::exception& e) {
       std::cout << e.what() << std::endl;
     }
 
-    if (parseFailed) {
-        std::cout << "Failed to parse input both as a complex number or operator" << std::endl;
-    }
-
-    std::cout << "Top of stack: ";
-    if (calculator.isEmpty())
-      std::cout << "empty";
-    else
-      std::cout << calculator.getTop();
-    std::cout << std::endl;
+    printTopOfStack(calculator);
   }
 
   return 0;

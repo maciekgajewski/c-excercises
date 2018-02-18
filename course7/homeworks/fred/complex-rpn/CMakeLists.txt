@@ -6,8 +6,8 @@ add_compile_options("-std=c++14" "-Wall" "-Wextra")
 
 add_executable(calculator
   main.cc
+  operator.h
   complex.h
   complex.cc
   calculator.h
-  calculator.cc
-  utils.h)
+  calculator.cc)
