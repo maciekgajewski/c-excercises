@@ -4,6 +4,6 @@
 #include <stack>
 
 namespace complex {
-extern "C" char get_operation_symbol();
-extern "C" void operation(std::stack<Complex>&);
+extern "C" char get_command_name();
+extern "C" void invoke_command(std::stack<Complex>&);
 }

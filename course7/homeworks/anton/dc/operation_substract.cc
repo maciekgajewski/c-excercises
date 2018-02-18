@@ -1,11 +1,11 @@
 #include "operation.h"
 
-extern "C" char get_operation_symbol()
+extern "C" char get_command_name()
 {
     return '-';
 }
 
-extern "C" void operation(std::stack<Complex>& stack)
+extern "C" void invoke_command(std::stack<Complex>& stack)
 {
      if (stack.size() < 2)
          std::cerr << "stack is empty" << std::endl;

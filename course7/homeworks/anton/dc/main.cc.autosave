@@ -58,9 +58,9 @@ std::map<char, invoke_command> load_commands_implementations()
     return command_to_implementation;
 }
 
-bool try_handle_with_plugin(std::stack<Complex>& stack, const std::map<char, invoke_command>& command_to_implementation, const char c)
+bool try_handle_with_plugin(std::stack<Complex>& stack, const std::map<char, invoke_command>& command_to_implementation, const char command)
 {
-    auto it = command_to_implementation.find(c);
+    auto it = command_to_implementation.find(command);
     if (it == command_to_implementation.end())
         return false;
 

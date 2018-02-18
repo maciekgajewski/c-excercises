@@ -8,14 +8,6 @@ public:
 
     }
 
-    void skip_whitespace()
-    {
-        if (std::isspace(mStream.peek())) {
-            mStream >> std::ws;
-            infix_extempt = false;
-        }
-    }
-
     bool eof()
     {
         skip_whitespace();
@@ -27,28 +19,22 @@ public:
         return '_' == mStream.peek() || 'i' == mStream.peek() || ('0' <= mStream.peek() && mStream.peek() <= '9');
     }
 
-    char get_command()
+    char read_command()
     {
-        char command = std::cin.get();
-        infix_extempt = infix_extempt && ('+' == command || '-' == command) && 'i' == std::cin.peek();
-        return command;
-    }
-
-    bool extempt_is_applicable()
-    {
-        return infix_extempt;
+        return static_cast<char>(std::cin.get());
     }
 
     Complex read_number()
     {
         Complex number;
         mStream >> number;
-        if (number.is_real())
-            infix_extempt = true;
         return number;
     }
 
+    void skip_whitespace()
+    {
+        mStream >> std::ws;
+    }
 private:
     std::istream& mStream;
-    bool infix_extempt = false;
 };
