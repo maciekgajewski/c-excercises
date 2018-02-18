@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-namespace complex {
-
 struct Complex
 {
     Complex()
@@ -34,7 +32,7 @@ struct Complex
 
     Complex operator/(const Complex& rhs)
     {
-        double denomenator = rhs.mI*rhs.mR + rhs.mI*rhs.mI;
+        double denomenator = rhs.mR*rhs.mR + rhs.mI*rhs.mI;
         return Complex((mR*rhs.mR - mI*rhs.mI)/denomenator, (mI*rhs.mR - mR*rhs.mI)/denomenator);
     }
 
@@ -47,17 +45,6 @@ struct Complex
     double mI = 0.0;
 };
 
-typedef Complex (*operation)(Complex&, Complex&);
+std::ostream& operator<<(std::ostream& s, const Complex& rhs);
 
-Complex add(Complex& n1, Complex& n2);
-
-Complex substruct(Complex& n1, Complex& n2);
-
-Complex multiply(Complex& n1, Complex& n2);
-
-Complex divide(Complex& n1, Complex& n2);
-}
-
-std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs);
-
-std::istream& operator>>(std::istream& s, complex::Complex& rhs);
+std::istream& operator>>(std::istream& s, Complex& rhs);
