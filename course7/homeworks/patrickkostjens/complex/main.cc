@@ -14,10 +14,20 @@ int main(int argc, char** argv)
 	{
 		if (it.path().extension() == ".so" || it.path().extension() == ".dylib")
 		{
-			void* module = dlopen(it.path().filename().c_str(), RTLD_NOW);
-			plugin p = reinterpret_cast<plugin>(dlsym(module, "execute"));
-			std::shared_ptr<plugin> plugin_ptr = std::make_unique<plugin>(p);
-			c.add_plugin(it.path().stem().string(), plugin_ptr);
+			std::string name = "./" + it.path().filename().string();
+			void* module = ::dlopen(name.c_str(), RTLD_NOW);
+			if (!module)
+			{
+				std::cerr << "Error loading module " << name << " : " << ::dlerror() << std::endl;
+				return;
+			}
+			plugin p = reinterpret_cast<plugin>(::dlsym(module, "execute"));
+			if (!p)
+			{
+				std::cerr << "Symbol not found from file " << name << ", : " << ::dlerror() << std::endl;
+				return;
+			}
+			c.add_plugin(it.path().stem().string(), p);
 		}
 	}
 

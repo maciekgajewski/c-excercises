@@ -1,6 +1,7 @@
 #include "calculator.hh"
 
 #include <regex>
+#include <iostream>
 
 void Calculator::print_status(std::ostream& stream) const
 {
@@ -13,7 +14,7 @@ void Calculator::process_line(const std::string& line)
     auto plugin_it = plugins.find(line);
     if (plugin_it != plugins.end())
     {
-        auto plugin_func = *plugin_it->second;
+        auto plugin_func = plugin_it->second;
         plugin_func(stack);
     }
     else if (line.length() == 1)
@@ -54,7 +55,7 @@ Complex Calculator::parse_complex_input(const std::string& line) const
     return c;
 }
 
-void Calculator::add_plugin(const std::string& name, const std::shared_ptr<plugin>& handler)
+void Calculator::add_plugin(const std::string& name, plugin handler)
 {
     plugins[name] = handler;
 }

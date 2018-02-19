@@ -11,4 +11,4 @@ SET_TARGET_PROPERTIES(print PROPERTIES PREFIX "")
 
 add_executable(complex main.cc calculator.hh calculator.cc complex.hh complex.cc)
 
-TARGET_LINK_LIBRARIES(complex LINK_PUBLIC ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES(complex LINK_PUBLIC ${Boost_LIBRARIES} dl)
