@@ -19,13 +19,3 @@ Complex Complex::operator/(const Complex& arg)
 {
     return Complex(mR / arg.mR, 0.0);
 }
-
-double Complex::GetR() const
-{
-    return mR;
-}
-
-double Complex::GetI() const
-{
-    return mI;
-}
