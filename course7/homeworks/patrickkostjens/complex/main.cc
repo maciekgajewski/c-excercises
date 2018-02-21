@@ -19,13 +19,13 @@ int main(int argc, char** argv)
 			if (!module)
 			{
 				std::cerr << "Error loading module " << name << " : " << ::dlerror() << std::endl;
-				return;
+				return 1;
 			}
 			plugin p = reinterpret_cast<plugin>(::dlsym(module, "execute"));
 			if (!p)
 			{
 				std::cerr << "Symbol not found from file " << name << ", : " << ::dlerror() << std::endl;
-				return;
+				return 1;
 			}
 			c.add_plugin(it.path().stem().string(), p);
 		}
