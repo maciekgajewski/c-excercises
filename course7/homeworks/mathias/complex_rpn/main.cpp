@@ -6,10 +6,9 @@
 
 int main(int , char** )
 {
-	RpnCalculator calc;
+	RpnCalculator calc(std::cout);
 	std::string line;
 
-	std::cout << "> ";
 	while (std::getline(std::cin, line))
 	{
 		try
@@ -18,13 +17,8 @@ int main(int , char** )
 		}
 		catch (const std::runtime_error& e)
 		{
-			std::cout << "Error: " << e.what() << std::endl;
+			std::cerr << "Error: " << e.what() << std::endl;
 		}
-
-		if (calc.hasTopValue())
-			std::cout << "= " << calc.topValue() << std::endl;
-
-		std::cout << "> ";
 	}
 	return 0;
 }

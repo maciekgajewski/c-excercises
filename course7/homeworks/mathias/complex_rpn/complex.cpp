@@ -30,30 +30,6 @@ Complex::Complex(const std::string & str)
 	}
 }
 
-Complex Complex::operator+(const Complex& rhs)
-{
-	return Complex { mReal + rhs.mReal, mImaginary + rhs.mImaginary };
-}
-
-Complex Complex::operator-(const Complex& rhs)
-{
-	return Complex { mReal - rhs.mReal, mImaginary - rhs.mImaginary };
-}
-
-Complex Complex::operator*(const Complex& rhs)
-{
-	return Complex { mReal * rhs.mReal - mImaginary * rhs.mImaginary, mImaginary * rhs.mReal + mReal * rhs.mImaginary };
-}
-
-Complex Complex::operator/(const Complex& rhs)
-{
-	double divisor = std::pow(rhs.mReal, 2) + std::pow(rhs.mImaginary, 2);
-	return Complex {
-		(mReal * rhs.mReal + mImaginary * rhs.mImaginary) / divisor,
-		(mImaginary * rhs.mReal - mReal * rhs.mImaginary) / divisor
-	};
-}
-
 std::ostream& operator<<(std::ostream& stream, const Complex& c)
 {
 	stream << c.real() << "+i" << c.imaginary();

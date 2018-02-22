@@ -9,4 +9,3 @@ else()
 endif()
 
 add_executable(complex_rpn main.cpp complex.h complex.cpp rpn_calculator.h rpn_calculator.cpp)
-target_include_directories(complex_rpn PRIVATE ${Boost_INCLUDE_DIR})
