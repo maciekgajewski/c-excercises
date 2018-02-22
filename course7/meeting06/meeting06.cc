@@ -37,15 +37,14 @@ std::unique_ptr<FredsHouse> houseFactory(const std::string& f)
 
 int main(int argc, char** argv)
 {
-	FredsHouse* p = nullptr;
-	for (int i = 0; i < 4; i++)
-	{
-	 	p = new FredsHouse("wine" + std::to_string(i));
-		//
-		delete p;
-	}
+	FredsHouse fh("kiełbasa");
+	fh.state();
 
-		// x
-	std::cout << "hello, world!, in the fridge=" << p->fridge << std::endl;
-	delete p;
+	auto f = std::make_unique<Fred>();
+	Fred* rawFred = f.get();
+
+	fh.visitor = f;
+	fh.state();
+
+	std::cout << "rawFred= " << rawFred << std::endl;
 }
