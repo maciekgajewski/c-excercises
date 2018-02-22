@@ -27,6 +27,8 @@ void Calculator::PushLine(const std::string& str)
         case('/') :
             newTop = operand1 / operand2;
             break;
+        default:
+            throw std::runtime_error("Operator not supported");
         }
         st.push(newTop);
     }
