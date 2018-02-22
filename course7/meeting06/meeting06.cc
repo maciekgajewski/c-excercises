@@ -6,6 +6,8 @@ struct Fred
 {
 	Fred() { std::cout << "Fred created, this=" << this << std::endl; }
 	~Fred() { std::cout << "Fred destroyed, this=" << this << std::endl; }
+
+	std::string name = "Fred";
 };
 
 struct FredsHouse
@@ -37,14 +39,15 @@ std::unique_ptr<FredsHouse> houseFactory(const std::string& f)
 
 int main(int argc, char** argv)
 {
-	FredsHouse fh("kiełbasa");
-	fh.state();
+	std::unique_ptr<Fred[]> freds = std::make_unique<Fred[]>(3);
 
-	auto f = std::make_unique<Fred>();
-	Fred* rawFred = f.get();
+	freds[0].name = "The first Fred";
 
-	fh.visitor = f;
-	fh.state();
+	for(int i = 0; i < 3; i++){
+		std::cout << freds[i].name << std::endl;
 
-	std::cout << "rawFred= " << rawFred << std::endl;
+	}
+
 }
+
+
