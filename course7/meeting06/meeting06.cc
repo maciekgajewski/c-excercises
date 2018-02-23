@@ -39,14 +39,13 @@ std::unique_ptr<FredsHouse> houseFactory(const std::string& f)
 
 int main(int argc, char** argv)
 {
-	std::unique_ptr<Fred[]> freds = std::make_unique<Fred[]>(3);
+	char buffer[sizeof(Fred)];
 
-	freds[0].name = "The first Fred";
+	Fred* myFred = new(buffer) Fred;
 
-	for(int i = 0; i < 3; i++){
-		std::cout << freds[i].name << std::endl;
+	std::cout << myFred->name << std::endl;
 
-	}
+	myFred->~Fred();
 
 }
 
