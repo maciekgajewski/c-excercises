@@ -4,10 +4,9 @@
 
 bool digit_is_comming(std::istream& s);
 
-std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs)
+std::ostream& operator<<(std::ostream& s, const Complex& rhs)
 {
-    if (rhs.mR == 0.0)
-    {
+    if (rhs.mR == 0.0) {
         if (rhs.mI > 0.0)
             s << "i" << std::fabs(rhs.mI);
         else if (rhs.mI < 0.0)
@@ -15,8 +14,7 @@ std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs)
         else
             s << rhs.mR;
     }
-    else
-    {
+    else {
         s << rhs.mR;
         if (rhs.mI > 0.0)
             s << "+i" << std::fabs(rhs.mI);
@@ -27,26 +25,24 @@ std::ostream& operator<<(std::ostream& s, const complex::Complex& rhs)
     return s;
 }
 
-std::istream& operator>>(std::istream& s, complex::Complex& rhs)
+std::istream& operator>>(std::istream& s, Complex& rhs)
 {
     bool isPositive = true;
     bool isImaginary = false;
     double modulus = 0.0;
 
-    if ('_' == s.peek())
-    {
+    if ('_' == s.peek()) {
         s.ignore(1);
         isPositive = false;
     }
 
-    if ('i' == s.peek())
-    {
+    if ('i' == s.peek()) {
         s.ignore(1);
         isImaginary = true;
         modulus = 1.0;
     }
 
-    if (digit_is_comming(s))
+    if ('0' <= s.peek() && s.peek() <= '9')
         s >> modulus;
 
     if (isImaginary)
@@ -55,26 +51,4 @@ std::istream& operator>>(std::istream& s, complex::Complex& rhs)
         rhs.mR = isPositive ? modulus : -modulus;
 
     return s;
-}
-
-namespace complex {
-Complex add(Complex& n1, Complex& n2)
-{
-    return n1 + n2;
-}
-
-Complex substruct(Complex& n1, Complex& n2)
-{
-    return n1 - n2;
-}
-
-Complex multiply(Complex& n1, Complex& n2)
-{
-    return n1 * n2;
-}
-
-Complex divide(Complex& n1, Complex& n2)
-{
-    return n1 / n2;
-}
 }

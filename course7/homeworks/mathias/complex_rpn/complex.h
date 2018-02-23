@@ -9,10 +9,29 @@ public:
 	Complex(double real, double imaginary);
 	explicit Complex(const std::string& str);
 
-	Complex operator+(const Complex& rhs);
-	Complex operator-(const Complex& rhs);
-	Complex operator*(const Complex& rhs);
-	Complex operator/(const Complex& rhs);
+	Complex operator+(const Complex& rhs) const
+	{
+		return Complex{ mReal + rhs.mReal, mImaginary + rhs.mImaginary };
+	}
+
+	Complex operator-(const Complex& rhs) const
+	{
+		return Complex{ mReal - rhs.mReal, mImaginary - rhs.mImaginary };
+	}
+
+	Complex operator*(const Complex& rhs) const
+	{
+		return Complex{ mReal * rhs.mReal - mImaginary * rhs.mImaginary, mImaginary * rhs.mReal + mReal * rhs.mImaginary };
+	}
+
+	Complex operator/(const Complex& rhs) const
+	{
+		double divisor = std::pow(rhs.mReal, 2) + std::pow(rhs.mImaginary, 2);
+		return Complex{
+			(mReal * rhs.mReal + mImaginary * rhs.mImaginary) / divisor,
+			(mImaginary * rhs.mReal - mReal * rhs.mImaginary) / divisor
+		};
+	}
 
 	double real() const { return mReal; }
 	double imaginary() const { return mImaginary; }

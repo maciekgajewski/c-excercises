@@ -16,9 +16,9 @@ public:
     Complex operator/(const Complex& arg);
     Complex operator*(const Complex& arg);
 
-    double GetR() const;
+    double GetR() const { return mR; }
 
-    double GetI() const;
+    double GetI() const { return mI; }
 
 private:
     double mR;
