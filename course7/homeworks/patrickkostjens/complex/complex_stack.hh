@@ -4,18 +4,6 @@
 
 #include <memory>
 
-struct ComplexStackNode
-{
-    ComplexStackNode(Complex value) : value(value) {}
-    ComplexStackNode(const ComplexStackNode& original) : value(original.value)
-    {
-        if (original.next)
-            this->next = std::make_unique<ComplexStackNode>(*original.next);
-    }
-
-    Complex value;
-    std::unique_ptr<ComplexStackNode> next;
-};
 
 class ComplexStack
 {
@@ -30,8 +18,24 @@ public:
     Complex pop();
     Complex top() const;
     void push(Complex c);
-    bool empty() const;
+    bool empty() const
+    {
+        return !head;
+    };
 
 private:
+    struct ComplexStackNode
+    {
+        ComplexStackNode(Complex value) : value(value) {}
+        ComplexStackNode(const ComplexStackNode& original) : value(original.value)
+        {
+            if (original.next)
+                this->next = std::make_unique<ComplexStackNode>(*original.next);
+        }
+
+        Complex value;
+        std::unique_ptr<ComplexStackNode> next;
+    };
+
     std::unique_ptr<ComplexStackNode> head;
 };

@@ -1,10 +1,5 @@
 #include "complex_stack.hh"
 
-bool ComplexStack::empty() const
-{
-    return !head;
-}
-
 void ComplexStack::push(Complex value)
 {
     std::unique_ptr<ComplexStackNode> new_head = std::make_unique<ComplexStackNode>(value);
