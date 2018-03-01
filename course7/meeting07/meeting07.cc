@@ -19,7 +19,7 @@ struct Fred
 int main(int argc, char** argv)
 {
 	std::vector<Fred> freds;
-
+	freds.reserve(argc-1);
 	for (int i = 1; i < argc; i++)
 	{
 		Fred anton(argv[i]);
@@ -27,9 +27,22 @@ int main(int argc, char** argv)
 	}
 	
 	std::cout << "Container contains " << freds.size() << " elements" << std::endl;
+	std::cout << "Container's capacity is " << freds.capacity() << std::endl;
 
 	for(const Fred& f : freds)
 		std::cout << f.name << std::endl;
+
+	while(freds.size() > 1)
+		freds.pop_back();
+
+	std::cout << "Container contains " << freds.size() << " elements" << std::endl;
+	std::cout << "Container's capacity is " << freds.capacity() << std::endl;
+
+	freds.shrink_to_fit();
+
+	std::cout << "Container contains " << freds.size() << " elements" << std::endl;
+	std::cout << "Container's capacity is " << freds.capacity() << std::endl;
+
 }
 
 
