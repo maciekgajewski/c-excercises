@@ -8,7 +8,7 @@ struct Fred
 	explicit Fred(const std::string& n) : name(n) { std::cout << "Fred created, this=" << this << " : " << name << std::endl; }
 
 	Fred(const Fred& other) : name(other.name) { std::cout << "Fred copied, this=" << this << ", other=" << &other << " : " << other.name << std::endl; }
-	Fred(Fred&& other) noexcept : name(other.name) { std::cout << "Fred moved, this=" << this << ", other=" << &other << " : " << other.name << std::endl; }
+	Fred(Fred&& other) noexcept : name(std::move(other.name)) { std::cout << "Fred moved, this=" << this << ", other=" << &other << " : " << name << std::endl; }
 
 	~Fred() { std::cout << "Fred destroyed, this=" << this << " : " << name << std::endl; }
 
@@ -19,8 +19,12 @@ struct Fred
 int main(int argc, char** argv)
 {
 	std::vector<Fred> freds;
+
 	for (int i = 1; i < argc; i++)
-		freds.push_back(Fred(argv[i]));
+	{
+		Fred anton(argv[i]);
+		freds.push_back(anton);
+	}
 	
 	std::cout << "Container contains " << freds.size() << " elements" << std::endl;
 
