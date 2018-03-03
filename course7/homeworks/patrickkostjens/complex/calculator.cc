@@ -26,14 +26,11 @@ void Calculator::process_line(const std::string& line)
             return;
         }
 
-        if (stack.empty()) throw std::runtime_error("Not enough elements on stack");
-        auto second = stack.pop();
-        if (stack.empty())
-        {
-            stack.push(second);
-            throw std::runtime_error("Not enough elements on stack");
-        }
-        auto first = stack.pop();
+        if (stack.size() < 2) throw std::runtime_error("Not enough elements on stack");
+        auto second = stack.top();
+        stack.pop();
+        auto first = stack.top();
+        stack.pop();
 
         if (line == "+") stack.push(first + second);
         else if (line == "-") stack.push(first - second);
