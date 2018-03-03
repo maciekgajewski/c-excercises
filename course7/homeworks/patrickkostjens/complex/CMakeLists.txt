@@ -15,3 +15,7 @@ TARGET_LINK_LIBRARIES(print LINK_PUBLIC plugin_interface)
 add_executable(complex main.cc calculator.hh calculator.cc)
 
 TARGET_LINK_LIBRARIES(complex LINK_PUBLIC ${Boost_LIBRARIES} dl plugin_interface)
+
+
+add_executable(tests tests.cc)
+TARGET_LINK_LIBRARIES(tests LINK_PUBLIC plugin_interface)
