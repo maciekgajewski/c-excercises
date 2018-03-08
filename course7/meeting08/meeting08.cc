@@ -5,22 +5,40 @@
 #include <cstring>
 
 template<typename T>
-const char* GetTypeName() { return "Unknown type"; }
+struct GetType {
+	static const char* Name() { return "Unknown type"; }
+};
 
 template<>
-const char* GetTypeName<int>() { return "int"; }
+struct GetType<int> {
+	static const char* Name() { return "int"; }
+};
+
 template<>
-const char* GetTypeName<float>() { return "float"; }
+struct GetType<float> {
+	static const char* Name() { return "float"; }
+};
+
 template<>
-const char* GetTypeName<double>() { return "double"; }
+struct GetType<double> {
+	static const char* Name() { return "double"; }
+};
+
 template<>
-const char* GetTypeName<const char*>() { return "cstr"; }
+struct GetType<const char*> {
+	static const char* Name() { return "const char*"; }
+};
+
+template<typename X>
+struct GetType<X*> {
+	static std::string Name() { return std::string("Pointer to ") + GetType<X**>::Name() ; }
+};
 
 
 template<typename T>
 T Max(T a, T b)
 {
-	std::cout << "DEBUG: called Max with T=" << GetTypeName<T>() << std::endl;
+	std::cout << "DEBUG: called Max with T=" << GetType<T>::Name() << std::endl;
 
 	if (b < a) return a;
 	else return b;
@@ -37,19 +55,22 @@ const char* Max<const char*>(const char* a, const char* b)
 template<typename T>
 Complex<T> add(Complex<T> a, Complex<T> b)
 {
-	std::cout << "DEBUG: adding Complex<T> T=" << GetTypeName<T>() << std::endl;
+	std::cout << "DEBUG: adding Complex<T> T=" << GetType<T>::Name() << std::endl;
 	return Complex<T>(a.mR + b.mR, a.mI + b.mI);
 }
 
 template<typename CT>
 CT sub(CT a, CT b)
 {
-	std::cout << "DEBUG: substracting Complex<T> T=" << GetTypeName<typename CT::storage_type>() << std::endl;
+	std::cout << "DEBUG: substracting Complex<T> T=" << GetType<typename CT::storage_type>::Name() << std::endl;
 	return CT(a.mR - b.mR, a.mI - b.mI);
 }
 
 int main(int argc, char** argv)
 {
+	std::cout << GetType<double>::Name() << std::endl;
+	std::cout << GetType<double*>::Name() << std::endl;
+
 	Complex<float> c1(3, 6.7);
 	Complex<float> c2(3.7, 6);
 
