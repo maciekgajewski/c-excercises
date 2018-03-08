@@ -2,14 +2,16 @@
 
 #include <cmath>
 #include <iostream>
-
-std::ostream& operator<<(std::ostream& s, const Complex& rhs)
+/*
+template<typename T>
+std::ostream& operator<<(std::ostream& s, const Complex<T>& rhs)
 {
 	s << rhs.mR;
-	if (rhs.mI > 0.0)
-		s << "+i" << std::fabs(rhs.mI);
-	else if (rhs.mI < 0.0)
-		s << "-i" << std::fabs(rhs.mI);
+	if (rhs.mI > T())
+		s << "+i" << std::abs(rhs.mI);
+	else if (rhs.mI < T())
+		s << "-i" << std::abs(rhs.mI);
 
 	return s;
 }
+*/
