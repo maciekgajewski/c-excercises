@@ -1,23 +1,21 @@
 #include "complex.hh"
+#include "complex_stack.hh"
 
 #include <iostream>
 #include <stack>
 
-extern "C" void execute(std::stack<Complex>& stack)
+extern "C" void execute(ComplexStack& stack)
 {
-	std::stack<Complex> copy = stack;
-	std::stack<Complex> reversed;
+	ComplexStack copy = stack;
+	ComplexStack reversed;
 
-	while (copy.size() > 0)
+	while (!copy.empty())
 	{
-		reversed.push(copy.top());
-		copy.pop();
+		reversed.push(copy.pop());
 	}
 
-	while (reversed.size() > 0)
+	while (!reversed.empty())
 	{
-		Complex next = reversed.top();
-		reversed.pop();
-		std::cout << next << std::endl;
+		std::cout << reversed.pop() << std::endl;
 	}
 }
