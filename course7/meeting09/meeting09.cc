@@ -1,33 +1,37 @@
 #include <iostream>
 #include <string>
-#include <set>
-#include <unordered_set>
+#include <map>
+#include <unordered_map>
 
 int main(int argc, char** argv)
 {
-	std::string greeting = "Hello, world!";
-	std::unordered_set<char> chars(greeting.begin(), greeting.end());
+	std::multimap<std::string, int> map;
 
-	for(char c : chars)
-		std::cout << c;
-	std::cout << std::endl;
+	//std::pair<int, std::string> 
 
-	// searching!
+	for (int i = 0; i < 10; i++)
+	{
+		//std::cout << "size: " << map.size() << ", buckets: " << map.bucket_count() << std::endl;
+		map.insert(std::make_pair(std::to_string(i), i));
+		//map[std::to_string(i)] =  i;
+	}
+
 	if (argc > 1)
 	{
-		char search = argv[1][0];
-		auto it = chars.find(search);
-		if (it == chars.end())
-			std::cout << search << " not found" << std::endl;
-		else
-		{
-			std::cout << search << " found" << std::endl;
-			chars.erase(search);
-		}
+		std::string key = argv[1];
+		int value = 666;
 
-		for(char c : chars)
-			std::cout << c;
-		std::cout << std::endl;
+		auto result = map.insert({key, value});
+		// if (result.second)
+		// 	std::cout << "Inserted!" << std::endl;
+		// else
+		// 	std::cout << "Failed to insert, blocked by " << result.first->first << "->" << result.first->second << std::endl;
+
+	}
+
+	for(const auto& kv : map)
+	{
+		std::cout << kv.first << " -> " << kv.second << std::endl;
 	}
 
 }
