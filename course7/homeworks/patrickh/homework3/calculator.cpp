@@ -13,58 +13,50 @@ void Calculator::parse(const std::string& input)
     else if (input == "/")
         divide();
     else
-        mStack.emplace(input);
+        mStack.push_back(input);
 }
 
 void Calculator::add()
 {
-    if(mStack.size() < 2)
-        throw std::runtime_error("Not enough values to be added");
-    Complex c1 = mStack.top();
-    mStack.pop();
-    Complex c2 = mStack.top();
-    mStack.pop();
-    mStack.emplace(c1 + c2);
+    Complex c1 = mStack.back();
+    mStack.pop_back();
+    Complex c2 = mStack.back();
+    mStack.pop_back();
+    mStack.push_back(c1 + c2);
 }
 
 void Calculator::subtract()
 {
-    if(mStack.size() < 2)
-        throw std::runtime_error("Not enough values to be subtracted");
-    Complex c1 = mStack.top();
-    mStack.pop();
-    Complex c2 = mStack.top();
-    mStack.pop();
-    mStack.emplace(c1 - c2);
+    Complex c1 = mStack.back();
+    mStack.pop_back();
+    Complex c2 = mStack.back();
+    mStack.pop_back();
+    mStack.push_back(c1 - c2);
 }
 
 void Calculator::multiply()
 {
-    if(mStack.size() < 2)
-        throw std::runtime_error("Not enough values to be multiplied");
-    Complex c1 = mStack.top();
-    mStack.pop();
-    Complex c2 = mStack.top();
-    mStack.pop();
-    mStack.emplace(c1 * c2);
+    Complex c1 = mStack.back();
+    mStack.pop_back();
+    Complex c2 = mStack.back();
+    mStack.pop_back();
+    mStack.push_back(c1 * c2);
 }
 
 void Calculator::divide()
 {
-    if(mStack.size() < 2)
-        throw std::runtime_error("Not enough values to be divided");
-    Complex c1 = mStack.top();
-    mStack.pop();
-    Complex c2 = mStack.top();
-    mStack.pop();
-    mStack.emplace(c1 / c2);
+    Complex c1 = mStack.back();
+    mStack.pop_back();
+    Complex c2 = mStack.back();
+    mStack.pop_back();
+    mStack.push_back(c1 / c2);
 }
 
 void Calculator::printValue()
 {
-    if(mStack.size() > 0)
+    if(!mStack.empty())
     {
-        std::cout << "=" << mStack.top() << std::endl;
+        std::cout << "=" << mStack.back() << std::endl;
     }
     else
     {

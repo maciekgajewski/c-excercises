@@ -1,6 +1,6 @@
 #include <stack>
 #include <string>
-#include "complex.h"
+#include "complex_linked_list.h"
 
 class Calculator
 {
@@ -12,5 +12,5 @@ public:
     void divide();
     void printValue();
 private:
-    std::stack<Complex> mStack;
+    ComplexLinkedList mStack;
 };
