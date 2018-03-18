@@ -1,3 +1,4 @@
+#pragma once
 #include<string>
 class Complex
 {
@@ -8,6 +9,11 @@ public:
     Complex operator-(const Complex &other);
     Complex operator*(const Complex &other);
     Complex operator/(const Complex &rhs);
+
+    bool operator== (const Complex& rhs) const
+    {
+        return mReal == rhs.mReal && mImaginary == rhs.mImaginary;
+    }
 
     double getReal() const;
     double getImaginary() const;

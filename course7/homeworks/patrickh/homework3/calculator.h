@@ -1,3 +1,4 @@
+#pragma once
 #include <stack>
 #include <string>
 #include "complex_linked_list.h"
@@ -12,5 +13,5 @@ public:
     void divide();
     void printValue();
 private:
-    ComplexLinkedList mStack;
+    std::stack<Complex, ComplexLinkedList> mStack;
 };

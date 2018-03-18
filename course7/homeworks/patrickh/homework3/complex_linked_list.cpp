@@ -5,28 +5,20 @@ void ComplexLinkedList::pop_back()
     if (this->empty())
         throw std::runtime_error("List is empty");
 
-    std::unique_ptr<ComplexLinkedListNode> current_head = std::move(this->head);
-    this->head = std::move(current_head->next);
+    std::unique_ptr<ComplexLinkedListNode> current = std::move(this->head);
+    this->head = std::move(current->next);
     this->nr_elements--;
 }
 
 void ComplexLinkedList::push_back(const Complex& complex)
 {
-    std::unique_ptr<ComplexLinkedListNode> new_head = std::make_unique<ComplexLinkedListNode>(complex);
-    new_head->next = std::move(this->head);
-    this->head = std::move(new_head);
+    std::unique_ptr<ComplexLinkedListNode> current = std::make_unique<ComplexLinkedListNode>(complex);
+    current->next = std::move(this->head);
+    this->head = std::move(current);
     this->nr_elements++;
 }
 
-void ComplexLinkedList::clear()
-{
-    if (this->empty())
-        throw std::runtime_error("List is empty");
-    this->head = std::move(nullptr);
-    this->nr_elements = 0;
-}
-
-Complex ComplexLinkedList::back()
+Complex& ComplexLinkedList::back() const
 {
     if (this->empty())
         throw std::runtime_error("List is empty");

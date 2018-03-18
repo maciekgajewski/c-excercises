@@ -13,50 +13,58 @@ void Calculator::parse(const std::string& input)
     else if (input == "/")
         divide();
     else
-        mStack.push_back(input);
+        mStack.push(input);
 }
 
 void Calculator::add()
 {
-    Complex c1 = mStack.back();
-    mStack.pop_back();
-    Complex c2 = mStack.back();
-    mStack.pop_back();
-    mStack.push_back(c1 + c2);
+    if(mStack.size() < 2)
+        throw new std::runtime_error("Not enough elements on the stack");
+    Complex c1 = mStack.top();
+    mStack.pop();
+    Complex c2 = mStack.top();
+    mStack.pop();
+    mStack.push(c1 + c2);
 }
 
 void Calculator::subtract()
 {
-    Complex c1 = mStack.back();
-    mStack.pop_back();
-    Complex c2 = mStack.back();
-    mStack.pop_back();
-    mStack.push_back(c1 - c2);
+    if(mStack.size() < 2)
+        throw new std::runtime_error("Not enough elements on the stack");
+    Complex c1 = mStack.top();
+    mStack.pop();
+    Complex c2 = mStack.top();
+    mStack.pop();
+    mStack.push(c1 - c2);
 }
 
 void Calculator::multiply()
 {
-    Complex c1 = mStack.back();
-    mStack.pop_back();
-    Complex c2 = mStack.back();
-    mStack.pop_back();
-    mStack.push_back(c1 * c2);
+    if(mStack.size() < 2)
+        throw new std::runtime_error("Not enough elements on the stack");
+    Complex c1 = mStack.top();
+    mStack.pop();
+    Complex c2 = mStack.top();
+    mStack.pop();
+    mStack.push(c1 * c2);
 }
 
 void Calculator::divide()
 {
-    Complex c1 = mStack.back();
-    mStack.pop_back();
-    Complex c2 = mStack.back();
-    mStack.pop_back();
-    mStack.push_back(c1 / c2);
+    if(mStack.size() < 2)
+        throw new std::runtime_error("Not enough elements on the stack");
+    Complex c1 = mStack.top();
+    mStack.pop();
+    Complex c2 = mStack.top();
+    mStack.pop();
+    mStack.push(c1 / c2);
 }
 
 void Calculator::printValue()
 {
     if(!mStack.empty())
     {
-        std::cout << "=" << mStack.back() << std::endl;
+        std::cout << "=" << mStack.top() << std::endl;
     }
     else
     {
