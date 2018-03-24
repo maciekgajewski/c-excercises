@@ -8,6 +8,6 @@ INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
 
 include_directories("../../../../include")
 
-add_executable(client client.cc client_socket_connection.cc)
+add_executable(chat chat.cc chat_client.cc)
 
-TARGET_LINK_LIBRARIES(client LINK_PUBLIC ${Boost_LIBRARIES})
+TARGET_LINK_LIBRARIES(chat LINK_PUBLIC ${Boost_LIBRARIES})
