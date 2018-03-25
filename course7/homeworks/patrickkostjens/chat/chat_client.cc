@@ -1,12 +1,8 @@
 #include "chat_client.h"
 #include "connection_exception.h"
 
-#include "njson/json.hpp"
-
 #include <iostream>
 #include <sstream>
-
-using json = nlohmann::json;
 
 void on_fail(client * c, websocketpp::connection_hdl hdl) {
     client::connection_ptr con = c->get_con_from_hdl(hdl);
@@ -68,14 +64,12 @@ ChatClient::~ChatClient()
     m_thread->join();
 }
 
-void ChatClient::send(const std::string& message)
+void ChatClient::send_message(const std::string& message)
 {
-    websocketpp::lib::error_code ec;
-    
-    m_endpoint.send(m_hdl, message, websocketpp::frame::opcode::text, ec);
-    if (ec) {
-        std::cout << "> Error sending message: " << ec.message() << std::endl;
-    }
+    json j;
+    j["type"] = "send_message";
+    j["message"] = message;
+    send_json(j);
 }
 
 void ChatClient::on_open(websocketpp::connection_hdl hdl)
@@ -93,7 +87,13 @@ void ChatClient::on_message(websocketpp::connection_hdl, client::message_ptr msg
         {
             is_registered = true;
             std::cout << "< Welcome" << std::endl;
-            std::cout << "< Present users: " << message["user_list"].dump() << std::endl;
+            std::cout << "< Present users: ";
+            for (int i = 0; i < message["user_list"].size(); ++i)
+            {
+                if (i != 0) std::cout << ", ";
+                std::cout << message["user_list"][i]["name"].get<std::string>();
+            }
+            std::cout << std::endl;
         }
         else
         {
@@ -106,7 +106,7 @@ void ChatClient::on_message(websocketpp::connection_hdl, client::message_ptr msg
     }
     else if (message["type"] == "user_left")
     {
-        std::cout << "<" << message["name"].get<std::string>() << " left" << std::endl;
+        std::cout << "< " << message["name"].get<std::string>() << " left" << std::endl;
     }
     else if (message["type"] == "on_message")
     {
@@ -120,5 +120,18 @@ void ChatClient::on_message(websocketpp::connection_hdl, client::message_ptr msg
 
 void ChatClient::set_name(const std::string& name)
 {
-    send("{\"type\": \"handshake\", \"name\": \"" + name + "\"}");
+    json j;
+    j["type"] = "handshake";
+    j["name"] = name;
+    send_json(j);
+}
+
+void ChatClient::send_json(const json& obj)
+{
+    websocketpp::lib::error_code ec;
+    
+    m_endpoint.send(m_hdl, obj.dump(), websocketpp::frame::opcode::text, ec);
+    if (ec) {
+        std::cout << "> Error sending message: " << ec.message() << std::endl;
+    }
 }

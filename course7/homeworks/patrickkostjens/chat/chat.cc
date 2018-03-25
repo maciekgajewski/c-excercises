@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
             client.set_name(input);
         }
         else
-            client.send(input);
+            client.send_message(input);
     }
 
     return 0;
