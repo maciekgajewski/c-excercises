@@ -1,8 +1,5 @@
 #include "server.h"
 
-using tcp = boost::asio::ip::tcp;
-namespace websocket = boost::beast::websocket;
-
 void fail(boost::system::error_code ec, char const* what)
 {
 	std::cerr << what << ": " << ec.message() << "\n";
@@ -36,6 +33,8 @@ void UserSession::OnAccept(boost::system::error_code ec)
 {
 	if (ec)
 		return fail(ec, "accept");
+	
+	mState = State::Connected;
 
 	DoRead();
 }
@@ -60,6 +59,7 @@ void UserSession::OnRead(boost::system::error_code ec, std::size_t bytes_transfe
 	// This indicates that the session was closed
 	if (ec == websocket::error::closed)
 	{
+		mState = State::Disconnected;
 		mChatRoom.OnDisconnected(this);
 		return;
 	}
@@ -68,8 +68,10 @@ void UserSession::OnRead(boost::system::error_code ec, std::size_t bytes_transfe
 		return fail(ec, "read");
 
 	mWebSocket.text(mWebSocket.got_text());
+	auto msg = boost::beast::buffers_to_string(mBuffer.data());
 
-	mChatRoom.OnChatMessage(this, boost::beast::buffers_to_string(mBuffer.data()));
+	ParseMessage(msg);
+
 	mBuffer.consume(mBuffer.size());
 
 	DoRead();
@@ -83,7 +85,57 @@ void UserSession::OnWrite(std::shared_ptr<std::string>, boost::system::error_cod
 		return fail(ec, "write");
 }
 
+void UserSession::ParseMessage(const std::string& message)
+{
+	auto obj = json::parse(message);
+	const auto& firstObj = obj.begin();
+	const std::string& type = firstObj.key();
+
+	std::cerr << type << std::endl;
+
+	if (type == "handshake")
+	{
+		HandleHandshake(firstObj.value());
+	}
+	else if (type == "message")
+	{
+		HandleMessage(firstObj.value());
+	}
+	else
+	{
+		SendError("Message Type not know");
+	}
+}
+
+void UserSession::HandleHandshake(const json& obj)
+{
+	if (mState != State::Connected)
+		return SendError("Already authenticated");
+
+	mState = State::Authenticated;
+	mUserName = obj["nick"];
+	SendMessage("Connected");
+}
+
+void UserSession::HandleMessage(const json& obj)
+{
+	if (mState != State::Authenticated)
+		return SendError("Not authenticated");
+	
+	mChatRoom.OnChatMessage(this, obj["text"]);
+}
+
+void UserSession::SendError(const std::string& error)
+{
+	SendMessage(error);
+}
+
 void UserSession::SendChatMessage(const std::string& message)
+{
+	SendMessage(message);
+}
+
+void UserSession::SendMessage(const std::string& message)
 {
 	auto msg = std::make_shared<std::string>(message);
 	mWebSocket.async_write(

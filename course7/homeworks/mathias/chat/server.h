@@ -1,8 +1,11 @@
+#include "json.hpp"
+
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
+
 #include <algorithm>
 #include <cstdlib>
 #include <functional>
@@ -14,6 +17,7 @@
 
 using tcp = boost::asio::ip::tcp;
 namespace websocket = boost::beast::websocket;
+using json = nlohmann::json;
 
 class ChatRoom;
 
@@ -39,7 +43,15 @@ public:
 	void OnRead(boost::system::error_code ec, std::size_t bytes_transferred);
 	void OnWrite(std::shared_ptr<std::string> msg, boost::system::error_code ec, std::size_t bytes_transferred);
 
+	void ParseMessage(const std::string& message);
+
+	void HandleHandshake(const json& obj);
+	void HandleMessage(const json& obj);
+
+	void SendError(const std::string& error);
 	void SendChatMessage(const std::string& message);
+
+	void SendMessage(const std::string& message);
 
 	State GetState() const { return mState; }
 	const std::string& GetName() const { return mUserName; }
