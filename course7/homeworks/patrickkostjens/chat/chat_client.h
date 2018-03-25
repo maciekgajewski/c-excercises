@@ -24,6 +24,7 @@ private:
     void on_open(websocketpp::connection_hdl hdl);
     void on_message(websocketpp::connection_hdl, client::message_ptr msg);
     void send_json(const json& obj);
+    void handle_handshake_reply(const json& obj);
 
     client m_endpoint;
     websocketpp::lib::shared_ptr<websocketpp::lib::thread> m_thread;
