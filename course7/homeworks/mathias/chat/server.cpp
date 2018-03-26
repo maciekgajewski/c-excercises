@@ -1,4 +1,5 @@
 #include "server.h"
+#include "protocol.h"
 
 void fail(boost::system::error_code ec, char const* what)
 {
@@ -87,52 +88,55 @@ void UserSession::OnWrite(std::shared_ptr<std::string>, boost::system::error_cod
 
 void UserSession::ParseMessage(const std::string& message)
 {
-	auto obj = json::parse(message);
-	const auto& firstObj = obj.begin();
-	const std::string& type = firstObj.key();
+	ChatProtocol::ProtocolMessage msg = json::parse(message);
 
-	std::cerr << type << std::endl;
+	if (!msg.Valid)
+		return Send(ChatProtocol::Error { "Message Type not know" } );
 
-	if (type == "handshake")
-	{
-		HandleHandshake(firstObj.value());
-	}
-	else if (type == "message")
-	{
-		HandleMessage(firstObj.value());
-	}
-	else
-	{
-		SendError("Message Type not know");
-	}
+	boost::apply_visitor(ChatProtocol::IProtocolHandler::ProtocolVisitor(*this), msg.Message);
 }
 
-void UserSession::HandleHandshake(const json& obj)
+void UserSession::Handle(const ChatProtocol::Handshake& handshake)
 {
 	if (mState != State::Connected)
-		return SendError("Already authenticated");
+		return Send(ChatProtocol::Error { "Already authenticated" } );
 
 	mState = State::Authenticated;
-	mUserName = obj["nick"];
-	SendMessage("Connected");
+	mUserName = handshake.Username;
+	Send(ChatProtocol::HandshakeReply());
 }
 
-void UserSession::HandleMessage(const json& obj)
+void UserSession::Handle(const ChatProtocol::HandshakeReply&)
+{
+	Send(ChatProtocol::Error{"Message not supported"});
+}
+
+void UserSession::Handle(const ChatProtocol::Message& message)
 {
 	if (mState != State::Authenticated)
-		return SendError("Not authenticated");
+		return Send(ChatProtocol::Error { "Not authenticated" } );
 	
-	mChatRoom.OnChatMessage(this, obj["text"]);
+	mChatRoom.OnChatMessage(this, message.Text);
 }
 
-void UserSession::SendError(const std::string& error)
+void UserSession::Handle(const ChatProtocol::OnMessage&)
 {
-	SendMessage(error);
+	Send(ChatProtocol::Error{"Message not supported"});
 }
 
-void UserSession::SendChatMessage(const std::string& message)
+void UserSession::Handle(const ChatProtocol::Error&)
 {
-	SendMessage(message);
+	Send(ChatProtocol::Error{"Message not supported"});
+}
+
+void UserSession::Handle(const ChatProtocol::UserJoined&)
+{
+	Send(ChatProtocol::Error{"Message not supported"});
+}
+
+void UserSession::Handle(const ChatProtocol::UserLeft&)
+{
+	Send(ChatProtocol::Error{"Message not supported"});
 }
 
 void UserSession::SendMessage(const std::string& message)
@@ -211,18 +215,31 @@ void ChatRoom::OnAccept(boost::system::error_code ec)
 	DoAccept();
 }
 
+void ChatRoom::OnAuthenticated(UserSession* session)
+{
+	std::string username = session->GetName();
+	for (auto& userSession : mUserSessions)
+	{
+		if (userSession.get() == session)
+			return;
+
+		userSession->Send(ChatProtocol::UserJoined { username });
+	}
+}
+
 void ChatRoom::OnChatMessage(UserSession* session, std::string message)
 {
 	std::cout << "Relaying message from " << session->GetName() << " (" << session << "): " << message << std::endl;
 	for (auto& userSession : mUserSessions)
 	{
-		userSession->SendChatMessage(message);
+		userSession->Send(ChatProtocol::OnMessage { session->GetName(), message });
 	}
 }
 
 void ChatRoom::OnDisconnected(UserSession* session)
 {
 	std::cout << "Disconnecting " << session->GetName() << " (" << session << ")" << std::endl;
+	std::string username = session->GetName();
 	mUserSessions.erase(
 		std::remove_if(std::begin(mUserSessions), std::end(mUserSessions), 
 			[&session](const auto& userSession) 
@@ -230,6 +247,11 @@ void ChatRoom::OnDisconnected(UserSession* session)
 				return userSession.get() == session; 
 			}),
 		std::end(mUserSessions));
+	
+	for (auto& userSession : mUserSessions)
+	{
+		userSession->Send(ChatProtocol::UserLeft { username });
+	}
 }
 
 int main(int, char*) //int argc, char* argv[])

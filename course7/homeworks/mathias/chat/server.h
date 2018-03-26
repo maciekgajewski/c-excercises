@@ -1,10 +1,12 @@
 #include "json.hpp"
+#include "protocol.h"
 
-#include <boost/beast/core.hpp>
-#include <boost/beast/websocket.hpp>
 #include <boost/asio/bind_executor.hpp>
 #include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
+#include <boost/beast/core.hpp>
+#include <boost/beast/websocket.hpp>
+#include <boost/variant/static_visitor.hpp>
 
 #include <algorithm>
 #include <cstdlib>
@@ -22,7 +24,7 @@ using json = nlohmann::json;
 class ChatRoom;
 
 // Echoes back all received WebSocket messages
-class UserSession : public std::enable_shared_from_this<UserSession>
+class UserSession : public ChatProtocol::IProtocolHandler, public std::enable_shared_from_this<UserSession>
 {
 public:
 
@@ -43,21 +45,31 @@ public:
 	void OnRead(boost::system::error_code ec, std::size_t bytes_transferred);
 	void OnWrite(std::shared_ptr<std::string> msg, boost::system::error_code ec, std::size_t bytes_transferred);
 
-	void ParseMessage(const std::string& message);
 
-	void HandleHandshake(const json& obj);
-	void HandleMessage(const json& obj);
-
-	void SendError(const std::string& error);
-	void SendChatMessage(const std::string& message);
-
-	void SendMessage(const std::string& message);
+	template<typename ProtocolMessage>
+	void Send(const ProtocolMessage& protocolMessage)
+	{
+		json obj = protocolMessage;
+		SendMessage(obj.dump());
+	}
 
 	State GetState() const { return mState; }
 	const std::string& GetName() const { return mUserName; }
 
 private:
 	void fail(boost::system::error_code ec, char const* what);
+
+	void SendMessage(const std::string& message);
+
+	void ParseMessage(const std::string& message);
+
+	void Handle(const ChatProtocol::Handshake&) override;
+	void Handle(const ChatProtocol::HandshakeReply&) override;
+	void Handle(const ChatProtocol::Message&) override;
+	void Handle(const ChatProtocol::OnMessage&) override;
+	void Handle(const ChatProtocol::Error&) override;
+    void Handle(const ChatProtocol::UserJoined&) override;
+    void Handle(const ChatProtocol::UserLeft&) override;
 
 	ChatRoom& mChatRoom;
 	websocket::stream<tcp::socket> mWebSocket;
@@ -78,6 +90,7 @@ public:
 	void DoAccept();
 	void OnAccept(boost::system::error_code ec);
 
+	void OnAuthenticated(UserSession* session);
 	void OnChatMessage(UserSession* session, std::string message);
 	void OnDisconnected(UserSession* session);
 
