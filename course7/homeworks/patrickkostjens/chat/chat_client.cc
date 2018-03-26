@@ -29,7 +29,7 @@ ChatClient::ChatClient(const std::string& uri)
     m_endpoint.init_asio();
     m_endpoint.start_perpetual();
 
-    m_thread = websocketpp::lib::make_shared<websocketpp::lib::thread>(&client::run, &m_endpoint);
+    m_thread = websocketpp::lib::thread(&client::run, &m_endpoint);
 
     websocketpp::lib::error_code ec;
     client::connection_ptr con = m_endpoint.get_connection(uri, ec);
@@ -56,21 +56,14 @@ ChatClient::~ChatClient()
     
         websocketpp::lib::error_code ec;
         m_endpoint.close(m_hdl, websocketpp::close::status::normal, "", ec);
-        if (ec)
-            std::cerr << "> Error closing connection: " << ec.message() << std::endl;
+        if (ec) std::cerr << "> Error closing connection: " << ec.message() << std::endl;
     }
-    m_thread->join();
-}
-
-void ChatClient::send_message(const std::string& message)
-{
-    send_json({{"type", "send_message"}, {"message", message}});
+    m_thread.join();
 }
 
 void ChatClient::on_open(websocketpp::connection_hdl hdl)
 {
     m_open = true;
-    std::cout << "< Connected" << std::endl;
 }
 
 void ChatClient::on_message(websocketpp::connection_hdl, client::message_ptr msg)
@@ -90,24 +83,18 @@ void ChatClient::on_message(websocketpp::connection_hdl, client::message_ptr msg
         std::cout << "< unknown message: " << msg->get_payload() << std::endl;
 }
 
-void ChatClient::set_name(const std::string& name)
-{
-    send_json({{"type", "handshake"}, {"name", name}});
-}
-
 void ChatClient::send_json(const json& obj)
 {
     websocketpp::lib::error_code ec;
     m_endpoint.send(m_hdl, obj.dump(), websocketpp::frame::opcode::text, ec);
-    if (ec)
-        std::cerr << "> Error sending message: " << ec.message() << std::endl;
+    if (ec) std::cerr << "> Error sending message: " << ec.message() << std::endl;
 }
 
 void ChatClient::handle_handshake_reply(const json& message)
 {
     if (message.find("user_list") != message.end())
     {
-        is_registered = true;
+        m_is_registered = true;
         std::cout << "< Present users: ";
         for (int i = 0; i < message["user_list"].size(); ++i)
         {
@@ -117,5 +104,19 @@ void ChatClient::handle_handshake_reply(const json& message)
         std::cout << std::endl;
     }
     else
+    {
         std::cerr << "< Error during registration: " << message["error"].get<std::string>() << std::endl;
+        std::cout << "< Please enter your name again: " << std::endl;
+    }
+}
+
+void ChatClient::run()
+{
+    std::cout << "< Enter your name: " << std::endl;
+    std::string input;
+    while (std::getline(std::cin, input))
+    {
+        if (m_is_registered) send_json({{"type", "send_message"}, {"message", input}});
+        else send_json({{"type", "handshake"}, {"name", input}});
+    }
 }

@@ -66,6 +66,9 @@ async def handler(websocket, path):
                     if not obj["name"]:
                         await send(user, {"type": "handshake_reply", "error": "Empty name not allowed"})
                         continue
+                    if any(x.get_name() == obj["name"] for x in connected):
+                        await send(user, {"type": "handshake_reply", "error": "Name already in use"})
+                        continue
                     await broadcast({"type": "user_joined", "name": obj["name"]})
                     user.register(obj["name"])
                     user_list = [{"name": x.get_name(), "data": x.get_user_data()} for x in connected if x.is_registered()]
