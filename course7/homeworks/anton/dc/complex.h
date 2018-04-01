@@ -36,6 +36,11 @@ struct Complex
         return Complex((mR*rhs.mR - mI*rhs.mI)/denomenator, (mI*rhs.mR - mR*rhs.mI)/denomenator);
     }
 
+    bool operator==(const Complex& rhs)
+    {
+        return mR == rhs.mR && mI == rhs.mI;
+    }
+
     bool is_real()
     {
         return mI == 0.0;

@@ -5,9 +5,11 @@
 #include <boost/filesystem.hpp>
 #include <dlfcn.h>
 #include <map>
+#include <stack>
 
 namespace fs = boost::filesystem;
 
+using Stack = std::stack<Complex, MyComplexLinkedList>;
 using invoke_command = void (*)(Stack&);
 using get_char = char (*)();
 

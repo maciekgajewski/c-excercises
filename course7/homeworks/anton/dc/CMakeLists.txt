@@ -18,3 +18,5 @@ PROJECT(dc)
 
   add_library(divide SHARED operation_divide.cc)
   set_target_properties(divide PROPERTIES PREFIX "")
+
+  add_executable(tests tests.cc)
