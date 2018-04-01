@@ -5,7 +5,7 @@ extern "C" char get_command_name()
     return '*';
 }
 
-extern "C" void invoke_command(std::stack<Complex>& stack)
+extern "C" void invoke_command(Stack& stack)
 {
      if (stack.size() < 2)
          std::cerr << "stack is empty" << std::endl;
