@@ -1,6 +1,7 @@
 #pragma once
 
 #include "complex.hh"
+#include "complex_linked_list.hh"
 
 #include <stack>
 #include <string>
@@ -21,5 +22,5 @@ private:
 	void divide();
 
 private:
-	std::stack<Complex> stack;
+	std::stack<Complex, ComplexLinkedList> stack;
 };
