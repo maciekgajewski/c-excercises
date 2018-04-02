@@ -15,13 +15,23 @@ public:
             this->head = std::make_unique<ComplexStackNode>(*original.head);
     }
 
-    Complex pop();
-    Complex top() const;
-    void push(Complex c);
+    void pop_back();
+    Complex& back() const;
+    void push_back(Complex c);
+
     bool empty() const
     {
         return !head;
     };
+    size_t size() const
+    {
+        return element_count;
+    }
+
+    using value_type = Complex;
+    using size_type = size_t;
+    using reference = Complex&;
+    using const_reference = const Complex&;
 
 private:
     struct ComplexStackNode
@@ -38,4 +48,5 @@ private:
     };
 
     std::unique_ptr<ComplexStackNode> head;
+    size_t element_count;
 };
