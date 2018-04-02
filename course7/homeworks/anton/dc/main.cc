@@ -1,7 +1,7 @@
 #include "complex.h"
 #include "operation.h"
 #include "parser.h"
-#include "stack.h"
+#include "my_linked_list.h"
 #include <boost/filesystem.hpp>
 #include <dlfcn.h>
 #include <map>

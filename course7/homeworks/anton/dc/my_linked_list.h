@@ -22,6 +22,38 @@ public:
     typedef const Complex& const_reference;
     typedef std::size_t size_type;
 
+    class iterator {
+        const Node* mCurr;
+    public:
+        iterator(const Node* node) : mCurr(node) {
+        }
+
+        iterator& operator++() {
+            mCurr = mCurr->mNext.get();
+            return *this;
+        }
+
+        const Complex& operator*() const {
+            return mCurr->mPayload;
+        }
+
+        bool operator==(const iterator& rhs) const {
+            return mCurr == rhs.mCurr;
+        }
+
+        bool operator!=(const iterator& rhs) const {
+            return mCurr != rhs.mCurr;
+        }
+    };
+
+    const iterator begin() {
+        return iterator(mHead.get());
+    }
+
+    const iterator end() {
+        return iterator(nullptr);
+    }
+
     void push_back(const_reference item) {
         mHead = std::make_unique<Node>(item, std::move(mHead));
         ++mSize;

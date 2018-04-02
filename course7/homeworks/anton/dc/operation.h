@@ -1,7 +1,7 @@
 #pragma once
 
 #include "complex.h"
-#include "stack.h"
+#include "my_linked_list.h"
 #include <stack>
 
 

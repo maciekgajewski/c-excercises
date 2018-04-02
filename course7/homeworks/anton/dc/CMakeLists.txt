@@ -4,7 +4,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14")
 PROJECT(dc)
   find_package(Boost REQUIRED COMPONENTS filesystem)
 
-  add_executable(dc operation.h stack.h main.cc complex.cc)
+  add_executable(dc operation.h my_linked_list.h main.cc complex.cc)
   target_link_libraries(dc ${CMAKE_DL_LIBS} ${Boost_LIBRARIES})
 
   add_library(add SHARED operation_add.cc)

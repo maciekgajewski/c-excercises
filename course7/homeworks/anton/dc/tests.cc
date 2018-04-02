@@ -1,4 +1,4 @@
-#include "stack.h"
+#include "my_linked_list.h"
 #include <assert.h>
 #include <deque>
 #include <list>
@@ -50,9 +50,29 @@ void test() {
     std::cout << "OK for " << typeid(T).name() << std::endl;
 }
 
+void iteration_test() {
+    MyComplexLinkedList list;
+
+    for (auto&& dummy : list)
+        assert(false);
+
+    list.push_back(Complex(1, 1));
+    list.push_back(Complex(2, 2));
+    list.push_back(Complex(3, 3));
+
+    double summ = double();
+    for (const auto& c : list)
+        summ += c.mR;
+    assert(6 == summ);
+
+    std::cout << "OK iterator" << std::endl;
+}
+
 int main() {
     test<MyComplexLinkedList>();
     test<std::deque<Complex>>();
     test<std::list<Complex>>();
     test<std::vector<Complex>>();
+
+    iteration_test();
 }
