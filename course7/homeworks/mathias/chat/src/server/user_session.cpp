@@ -54,7 +54,6 @@ void UserSession::OnRead(boost::system::error_code ec, std::size_t bytes_transfe
 {
 	boost::ignore_unused(bytes_transferred);
 
-	// This indicates that the session was closed
 	if (ec == boost::beast::websocket::error::closed)
 	{
 		mState = State::Disconnected;
@@ -68,7 +67,14 @@ void UserSession::OnRead(boost::system::error_code ec, std::size_t bytes_transfe
 	mWebSocket.text(mWebSocket.got_text());
 	auto msg = boost::beast::buffers_to_string(mBuffer.data());
 
-	ParseMessage(msg);
+	try
+	{
+		ParseProtocolMessage(msg);
+	}
+	catch (const IProtocolHandler::MessageTypeUnknownError)
+	{
+		return Send(ChatProtocol::Error{ "Message Type not know" });
+	}
 
 	mBuffer.consume(mBuffer.size());
 
@@ -83,16 +89,6 @@ void UserSession::OnWrite(std::shared_ptr<std::string>, boost::system::error_cod
 		return fail(ec, "write");
 }
 
-void UserSession::ParseMessage(const std::string& message)
-{
-	ChatProtocol::ProtocolMessage msg = json::parse(message);
-
-	if (!msg.Valid)
-		return Send(ChatProtocol::Error{ "Message Type not know" });
-
-	boost::apply_visitor(ChatProtocol::IProtocolHandler::ProtocolVisitor(*this), msg.Message);
-}
-
 void UserSession::Handle(const ChatProtocol::Handshake& handshake)
 {
 	if (mState != State::Connected)
@@ -100,8 +96,9 @@ void UserSession::Handle(const ChatProtocol::Handshake& handshake)
 
 	mState = State::Authenticated;
 	mUserName = handshake.Username;
-	Send(ChatProtocol::HandshakeReply());
 	mChatRoom.OnAuthenticated(this);
+
+	Send(ChatProtocol::HandshakeReply{ mChatRoom.GetUserList() });
 }
 
 void UserSession::Handle(const ChatProtocol::HandshakeReply&)

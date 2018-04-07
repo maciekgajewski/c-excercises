@@ -18,6 +18,8 @@ public:
 	void OnChatMessage(UserSession* session, std::string message);
 	void OnDisconnected(UserSession* session);
 
+	std::vector<std::string> GetUserList() const;
+
 private:
 	boost::asio::ip::tcp::acceptor mAcceptor;
 	boost::asio::ip::tcp::socket mSocket;

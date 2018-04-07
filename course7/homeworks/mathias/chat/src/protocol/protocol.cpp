@@ -1,5 +1,7 @@
 #include "protocol.h"
 
+using json = nlohmann::json;
+
 namespace ChatProtocol
 {
 void to_json(json& obj, const Error& error)
@@ -37,16 +39,28 @@ void from_json(const json& obj, Handshake& handshake)
 		handshake.UserData = userDataIt->get<json>();
 }
 
-void to_json(json& obj, const HandshakeReply&)
+void to_json(json& obj, const HandshakeReply& handshakeReply)
 {
 	obj = json{
-		{ "type", "handshake_reply" },
+		{ "type", "handshake_reply" }
 	};
+
+	auto userList = json::array();
+
+	for (const auto& user : handshakeReply.Users)
+	{
+		userList.push_back(user);
+	}
+
+	obj["user_list"] = userList;
 }
 
-void from_json(const json&, HandshakeReply&)
+void from_json(const json& obj, HandshakeReply& handshakeReply)
 {
-
+	for (const auto& user : obj["user_list"])
+	{
+		handshakeReply.Users.push_back(user.get<std::string>());
+	}
 }
 
 void to_json(json& obj, const Message& message)
@@ -105,7 +119,7 @@ void from_json(const json& obj, UserLeft& userLeft)
 
 void from_json(const json& obj, ProtocolMessage& protocolMessage)
 {
-	const auto& type = obj["type"];
+	const auto& type = obj.at("type");
 	protocolMessage.Valid = true;
 
 	if (type == "handshake")

@@ -1,4 +1,3 @@
-//#include "server.h"
 #include "protocol.h"
 
 #include "chat_room.h"

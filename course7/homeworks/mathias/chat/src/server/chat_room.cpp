@@ -97,13 +97,25 @@ void ChatRoom::OnDisconnected(UserSession* session)
 	mUserSessions.erase(
 		std::remove_if(std::begin(mUserSessions), std::end(mUserSessions),
 			[&session](const auto& userSession)
-	{
-		return userSession.get() == session;
-	}),
+			{
+				return userSession.get() == session;
+			}),
 		std::end(mUserSessions));
 
 	for (auto& userSession : mUserSessions)
 	{
 		userSession->Send(ChatProtocol::UserLeft{ username });
 	}
+}
+
+std::vector<std::string> ChatRoom::GetUserList() const
+{
+	std::vector<std::string> userList;
+
+	for (auto& userSession : mUserSessions)
+	{
+		userList.push_back(userSession->GetName());
+	}
+
+	return userList;
 }

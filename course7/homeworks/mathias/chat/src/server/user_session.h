@@ -30,11 +30,10 @@ public:
 	void OnRead(boost::system::error_code ec, std::size_t bytes_transferred);
 	void OnWrite(std::shared_ptr<std::string> msg, boost::system::error_code ec, std::size_t bytes_transferred);
 
-
 	template<typename ProtocolMessage>
 	void Send(const ProtocolMessage& protocolMessage)
 	{
-		json obj = protocolMessage;
+		nlohmann::json obj = protocolMessage;
 		SendMessage(obj.dump());
 	}
 
@@ -45,8 +44,6 @@ private:
 	void fail(boost::system::error_code ec, char const* what);
 
 	void SendMessage(const std::string& message);
-
-	void ParseMessage(const std::string& message);
 
 	void Handle(const ChatProtocol::Handshake&) override;
 	void Handle(const ChatProtocol::HandshakeReply&) override;
