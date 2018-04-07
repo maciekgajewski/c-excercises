@@ -104,6 +104,7 @@ void UserSession::Handle(const ChatProtocol::Handshake& handshake)
 	mState = State::Authenticated;
 	mUserName = handshake.Username;
 	Send(ChatProtocol::HandshakeReply());
+	mChatRoom.OnAuthenticated(this);
 }
 
 void UserSession::Handle(const ChatProtocol::HandshakeReply&)
@@ -221,7 +222,7 @@ void ChatRoom::OnAuthenticated(UserSession* session)
 	for (auto& userSession : mUserSessions)
 	{
 		if (userSession.get() == session)
-			return;
+			continue;
 
 		userSession->Send(ChatProtocol::UserJoined { username });
 	}

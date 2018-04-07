@@ -68,8 +68,8 @@ private:
 	void Handle(const ChatProtocol::Message&) override;
 	void Handle(const ChatProtocol::OnMessage&) override;
 	void Handle(const ChatProtocol::Error&) override;
-    void Handle(const ChatProtocol::UserJoined&) override;
-    void Handle(const ChatProtocol::UserLeft&) override;
+	void Handle(const ChatProtocol::UserJoined&) override;
+	void Handle(const ChatProtocol::UserLeft&) override;
 
 	ChatRoom& mChatRoom;
 	websocket::stream<tcp::socket> mWebSocket;
