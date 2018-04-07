@@ -1,33 +1,19 @@
-#include "json.hpp"
+#pragma once
+
 #include "protocol.h"
 
-#include <boost/asio/bind_executor.hpp>
 #include <boost/asio/strand.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <boost/beast/core.hpp>
 #include <boost/beast/websocket.hpp>
-#include <boost/variant/static_visitor.hpp>
 
-#include <algorithm>
-#include <cstdlib>
-#include <functional>
-#include <iostream>
 #include <memory>
-#include <string>
-#include <thread>
-#include <vector>
-
-using tcp = boost::asio::ip::tcp;
-namespace websocket = boost::beast::websocket;
-using json = nlohmann::json;
 
 class ChatRoom;
 
-// Echoes back all received WebSocket messages
 class UserSession : public ChatProtocol::IProtocolHandler, public std::enable_shared_from_this<UserSession>
 {
 public:
-
 	enum class State
 	{
 		Disconnected = 0,
@@ -35,8 +21,7 @@ public:
 		Authenticated,
 	};
 
-	// Take ownership of the socket
-	explicit UserSession(ChatRoom& chatRoom, tcp::socket socket);
+	explicit UserSession(ChatRoom& chatRoom, boost::asio::ip::tcp::socket socket);
 
 	void Run();
 	void OnAccept(boost::system::error_code ec);
@@ -72,32 +57,10 @@ private:
 	void Handle(const ChatProtocol::UserLeft&) override;
 
 	ChatRoom& mChatRoom;
-	websocket::stream<tcp::socket> mWebSocket;
+	boost::beast::websocket::stream<boost::asio::ip::tcp::socket> mWebSocket;
 	boost::asio::strand<boost::asio::io_context::executor_type> mStrand;
 	boost::beast::multi_buffer mBuffer;
 
 	State mState = State::Disconnected;
 	std::string mUserName;
-};
-
-class ChatRoom : public std::enable_shared_from_this<ChatRoom>
-{
-public:
-	ChatRoom(boost::asio::io_context& ioc, tcp::endpoint endpoint);
-
-	void Run();
-
-	void DoAccept();
-	void OnAccept(boost::system::error_code ec);
-
-	void OnAuthenticated(UserSession* session);
-	void OnChatMessage(UserSession* session, std::string message);
-	void OnDisconnected(UserSession* session);
-
-private:
-	tcp::acceptor mAcceptor;
-	tcp::socket mSocket;
-
-	std::vector<std::shared_ptr<UserSession>> mUserSessions;
-
 };
