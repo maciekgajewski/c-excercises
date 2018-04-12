@@ -24,20 +24,20 @@ int main(int argc, char** argv)
 	const char* the_search = argv[1];
 	int calls = 0;
 
-	int num_waldos = std::count_if(
-		argv+2, argv+argc,
-		[&, cc=0](const char* cstr) mutable {
-			cc++;
-			calls++;
-			if (cc < 3)
-				return std::strcmp(cstr, the_search) == 0;
-			else
-				return false;
-	});
+	auto predicate = [&](const char* cstr) mutable {
+			//calls++;
+			return std::strcmp(cstr, the_search) == 0;
+	};
+
+	int num_waldos = std::count_if(argv+2, argv+argc, predicate);
 	
-	
+	std::cout << "Size of predicate: " << sizeof(predicate) << std::endl;
 	std::cout << "Waldos found: " << num_waldos << std::endl;
 	std::cout << "Calls: " << calls << std::endl;
+
+
+	[](const std::string& who)
+	{ std::cout << "Hello, " << who << std::endl; }("World");
 }
 
 
