@@ -1,4 +1,5 @@
 #include "my_linked_list.h"
+#include <boost/type_index.hpp>
 #include <assert.h>
 #include <deque>
 #include <list>
@@ -47,7 +48,7 @@ void test() {
     c.pop_back();
     assert_size(c, 0);
 
-    std::cout << "OK for " << typeid(T).name() << std::endl;
+    std::cout << "OK for " << boost::typeindex::type_id<T>().pretty_name() << std::endl;
 }
 
 void iteration_test() {
@@ -60,7 +61,7 @@ void iteration_test() {
     list.push_back(Complex(2, 2));
     list.push_back(Complex(3, 3));
 
-    double summ = double();
+    double summ = 0.0;
     for (const auto& c : list)
         summ += c.mR;
     assert(6 == summ);

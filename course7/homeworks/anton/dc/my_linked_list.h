@@ -17,10 +17,10 @@ private:
     std::size_t mSize = 0;
 
 public:
-    typedef Complex value_type;
-    typedef Complex& reference;
-    typedef const Complex& const_reference;
-    typedef std::size_t size_type;
+    using value_type = Complex;
+    using reference = Complex&;
+    using const_reference = const Complex&;
+    using size_type = std::size_t ;
 
     class iterator {
         const Node* mCurr;
@@ -60,21 +60,15 @@ public:
     }
 
     void pop_back() {
-        if (!mHead)
-            throw std::range_error("Stack is empty");
         mHead = std::move(mHead->mNext);
         --mSize;
     }
 
     reference back() {
-        if (!mHead)
-            throw std::range_error("Stack is empty");
         return mHead->mPayload;
     }
 
     const_reference back() const {
-        if (!mHead)
-            throw std::range_error("Stack is empty");
         return mHead->mPayload;
     }
 
