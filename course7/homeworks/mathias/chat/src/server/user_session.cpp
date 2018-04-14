@@ -34,6 +34,8 @@ void UserSession::OnAccept(boost::system::error_code ec)
 
 	mState = State::Connected;
 
+	std::cerr << "New client connected" << std::endl;
+
 	DoRead();
 }
 
@@ -66,6 +68,8 @@ void UserSession::OnRead(boost::system::error_code ec, std::size_t bytes_transfe
 
 	mWebSocket.text(mWebSocket.got_text());
 	auto msg = boost::beast::buffers_to_string(mBuffer.data());
+
+	std::cerr << "Incoming message: " << msg << std::endl;
 
 	try
 	{
@@ -136,6 +140,7 @@ void UserSession::Handle(const ChatProtocol::UserLeft&)
 
 void UserSession::SendMessage(const std::string& message)
 {
+	std::cout << "Sending message: " << message << std::endl;
 	auto msg = std::make_shared<std::string>(message);
 	mWebSocket.async_write(
 		boost::asio::buffer(*msg),

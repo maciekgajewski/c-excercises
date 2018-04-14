@@ -21,7 +21,7 @@ void to_json(json& obj, const Handshake& handshake)
 {
 	obj = json{
 		{ "type", "handshake" },
-		{ "username", handshake.Username }
+		{ "name", handshake.Username }
 	};
 
 	if (handshake.UserData)
@@ -32,7 +32,7 @@ void to_json(json& obj, const Handshake& handshake)
 
 void from_json(const json& obj, Handshake& handshake)
 {
-	handshake.Username = obj.at("username").get<std::string>();
+	handshake.Username = obj.at("name").get<std::string>();
 
 	auto userDataIt = obj.find("userdata");
 	if (userDataIt != std::end(obj))
@@ -49,7 +49,8 @@ void to_json(json& obj, const HandshakeReply& handshakeReply)
 
 	for (const auto& user : handshakeReply.Users)
 	{
-		userList.push_back(user);
+		auto userObj = json{ { "name", user } };
+		userList.push_back(userObj);
 	}
 
 	obj["user_list"] = userList;
@@ -59,21 +60,21 @@ void from_json(const json& obj, HandshakeReply& handshakeReply)
 {
 	for (const auto& user : obj["user_list"])
 	{
-		handshakeReply.Users.push_back(user.get<std::string>());
+		handshakeReply.Users.push_back(user.at("name").get<std::string>());
 	}
 }
 
 void to_json(json& obj, const Message& message)
 {
 	obj = json{
-		{ "type", "message" },
-		{ "text", message.Text }
+		{ "type", "send_message" },
+		{ "message", message.Text }
 	};
 }
 
 void from_json(const json& obj, Message& message)
 {
-	message.Text = obj.at("text").get<std::string>();
+	message.Text = obj.at("message").get<std::string>();
 }
 
 void to_json(json& obj, const OnMessage& onMessage)
@@ -81,40 +82,40 @@ void to_json(json& obj, const OnMessage& onMessage)
 	obj = json{
 		{ "type", "on_message" },
 		{ "username", onMessage.Username },
-		{ "text", onMessage.Text }
+		{ "message", onMessage.Text }
 	};
 }
 
 void from_json(const json& obj, OnMessage& onMessage)
 {
 	onMessage.Username = obj.at("username").get<std::string>();
-	onMessage.Text = obj.at("text").get<std::string>();
+	onMessage.Text = obj.at("message").get<std::string>();
 }
 
 void to_json(json& obj, const UserJoined& userJoined)
 {
 	obj = json{
 		{ "type", "user_joined" },
-		{ "username", userJoined.Username}
+		{ "name", userJoined.Username}
 	};
 }
 
 void from_json(const json& obj, UserJoined& userJoined)
 {
-	userJoined.Username = obj.at("username").get<std::string>();
+	userJoined.Username = obj.at("name").get<std::string>();
 }
 
 void to_json(json& obj, const UserLeft& userLeft)
 {
 	obj = json{
 		{ "type", "user_left" },
-		{ "username", userLeft.Username }
+		{ "name", userLeft.Username }
 	};
 }
 
 void from_json(const json& obj, UserLeft& userLeft)
 {
-	userLeft.Username = obj.at("username").get<std::string>();
+	userLeft.Username = obj.at("name").get<std::string>();
 }
 
 void from_json(const json& obj, ProtocolMessage& protocolMessage)
@@ -132,7 +133,7 @@ void from_json(const json& obj, ProtocolMessage& protocolMessage)
 		HandshakeReply h = obj;
 		protocolMessage.Message = h;
 	}
-	else if (type == "message")
+	else if (type == "send_message")
 	{
 		Message h = obj;
 		protocolMessage.Message = h;
