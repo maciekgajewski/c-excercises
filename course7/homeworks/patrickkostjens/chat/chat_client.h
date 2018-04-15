@@ -27,6 +27,6 @@ private:
     websocketpp::lib::thread m_thread;
     websocketpp::connection_hdl m_hdl;
 
-    bool m_open;
-    bool m_is_registered;
+    bool m_open = false;
+    bool m_is_registered = false;
 };
