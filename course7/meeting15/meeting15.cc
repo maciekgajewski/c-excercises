@@ -5,6 +5,7 @@
 #include <string>
 #include <stdexcept>
 
+
 void bar()
 {
 	Fred fred("bar");
@@ -15,5 +16,12 @@ int main(int argc, char** argv)
 {
 	Fred mainFred("main");
 
-	foo();
+	try
+	{
+		foo();
+	}
+	catch(const std::exception& e)
+	{
+		std::cout << "Error: " << e.what() << std::endl;
+	}
 }
