@@ -15,28 +15,33 @@ struct Complex
         mI = i;
     }
 
-    Complex operator+(const Complex& rhs)
+    Complex operator+(const Complex& rhs) const
     {
         return Complex(mR + rhs.mR, mI + rhs.mI);
     }
 
-    Complex operator-(const Complex& rhs)
+    Complex operator-(const Complex& rhs) const
     {
         return Complex(mR - rhs.mR, mI - rhs.mI);
     }
 
-    Complex operator*(const Complex& rhs)
+    Complex operator*(const Complex& rhs) const
     {
         return Complex(mR*rhs.mR - mI*rhs.mI, mR*mI + rhs.mR*rhs.mI);
     }
 
-    Complex operator/(const Complex& rhs)
+    Complex operator/(const Complex& rhs) const
     {
         double denomenator = rhs.mR*rhs.mR + rhs.mI*rhs.mI;
         return Complex((mR*rhs.mR - mI*rhs.mI)/denomenator, (mI*rhs.mR - mR*rhs.mI)/denomenator);
     }
 
-    bool is_real()
+    bool operator==(const Complex& rhs) const
+    {
+        return mR == rhs.mR && mI == rhs.mI;
+    }
+
+    bool is_real() const
     {
         return mI == 0.0;
     }

@@ -1,6 +1,7 @@
 #include "complex.h"
 #include "operation.h"
 #include "parser.h"
+#include "my_linked_list.h"
 #include <boost/filesystem.hpp>
 #include <dlfcn.h>
 #include <map>
@@ -8,12 +9,13 @@
 
 namespace fs = boost::filesystem;
 
-using invoke_command = void (*)(std::stack<Complex>&);
+using Stack = std::stack<Complex, MyComplexLinkedList>;
+using invoke_command = void (*)(Stack&);
 using get_char = char (*)();
 
-std::ostream& operator<<(std::ostream& s, std::stack<Complex>& stack)
+std::ostream& operator<<(std::ostream& s, Stack& stack)
 {
-    std::stack<Complex> tmp_stack;
+    Stack tmp_stack;
     while(!stack.empty()) {
         s << stack.top() << std::endl;
         tmp_stack.push(stack.top());
@@ -58,7 +60,7 @@ std::map<char, invoke_command> load_commands_implementations()
     return command_to_implementation;
 }
 
-bool try_handle_with_plugin(std::stack<Complex>& stack, const std::map<char, invoke_command>& command_to_implementation, const char c)
+bool try_handle_with_plugin(Stack& stack, const std::map<char, invoke_command>& command_to_implementation, const char c)
 {
     auto it = command_to_implementation.find(c);
     if (it == command_to_implementation.end())
@@ -69,7 +71,7 @@ bool try_handle_with_plugin(std::stack<Complex>& stack, const std::map<char, inv
     return true;
 }
 
-void apply_static_handler(std::stack<Complex>& stack, const char command)
+void apply_static_handler(Stack& stack, const char command)
 {
     switch(command) {
     case 'c': // clear
@@ -90,7 +92,7 @@ void apply_static_handler(std::stack<Complex>& stack, const char command)
 int main(int argc, char** argv)
 {
     std::map<char, invoke_command> command_to_implementation = load_commands_implementations();
-    std::stack<Complex> stack;
+    Stack stack;
     Parser parser(std::cin);
 
     while(!parser.eof()) {
